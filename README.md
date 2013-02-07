@@ -3,7 +3,7 @@
 This compontent is responsible for exposing the
 `yui` configuration at the app level using
 `yui.config()` object, as well as per request
-customization. 
+customization.
 
 If the component is plug within `mojito`, it will
 automatically attach the `yui` configuration
