@@ -60,9 +60,8 @@ app.get('/debug', yui.debug());
 // printing runtime information
 app.get('*', function (req, res, next) {
     res.send({
-        server: yui.locals,
-        req: res.locals.yui,
-        runtime: yui.flatten(res.locals.yui)
+        server: yui.config(),
+        expose: yui.expose(req, res)
     });
 });
 
