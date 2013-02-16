@@ -3,7 +3,6 @@
     "description": "Mojito Server YUI Component",
     "version"    : "0.1.0",
     "author"     : "Caridy Patino <caridy@gmail.com> (http://github.com/caridy)",
-    "preferGlobal": true,
 
     "engines": {
         "node": "0.8.x",
