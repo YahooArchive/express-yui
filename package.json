@@ -1,0 +1,27 @@
+{
+    "name"       : "mojito-yui",
+    "description": "Mojito Server YUI Component",
+    "version"    : "0.1.0",
+    "author"     : "Caridy Patino <caridy@gmail.com> (http://github.com/caridy)",
+
+    "engines": {
+        "node": "0.8.x",
+        "npm" : "1.1.x"
+    },
+
+    "dependencies": {
+        "combohandler"       : "latest",
+        "express"            : "3.x",
+        "mime"               : "1.2.9",
+        "yui"                : "3.8.x"
+    },
+
+    "main": "lib/yui",
+
+    "keywords": [
+        "framework",
+        "yui",
+        "mojito"
+    ]
+
+}
