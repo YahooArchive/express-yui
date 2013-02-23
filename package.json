@@ -1,8 +1,8 @@
 {
-    "name"       : "mojito-yui",
-    "description": "Mojito Server YUI Component",
-    "version"    : "0.1.0",
-    "author"     : "Caridy Patino <caridy@gmail.com> (http://github.com/caridy)",
+    "name"       : "modown-yui",
+    "description": "Modown YUI Component",
+    "version"    : "0.0.1",
+    "author"     : "Caridy Patino <caridy@yahoo-inc.com> (http://github.com/caridy)",
 
     "engines": {
         "node": "0.8.x",
@@ -11,17 +11,23 @@
 
     "dependencies": {
         "combohandler"       : "latest",
+        "mime"               : "1.2.9"
+    },
+
+    "devDependencies": {
         "express"            : "3.x",
-        "mime"               : "1.2.9",
+        "express-expose"     : "0.3.x",
+        "express3-handlebars": "0.3.x",
         "yui"                : "3.8.x"
     },
 
-    "main": "lib/yui",
+    "main": "index",
 
     "keywords": [
         "framework",
         "yui",
-        "mojito"
+        "mojito",
+        "modown"
     ]
 
 }
