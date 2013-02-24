@@ -36,7 +36,7 @@ app.get('*', yui.expose, function (req, res, next) {
     res.send({
         app: yui.config(),
         res: res.locals.yui || null,
-        yui_config: res.locals.yui_config,
+        yui_config: res.locals.yui.config,
         yui_seed: res.locals.yui_seed
     });
 });
