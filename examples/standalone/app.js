@@ -16,27 +16,24 @@ yui({
 }, __dirname + '/../../node_modules/yui');
 
 app.configure('development', function () {
-    yui.config({
-        combine: false,
-        debug: true,
-        filter: "debug"
+    yui.debug({
+        combine: false
+    });
+    yui.serveCoreFromCDN({
+        root: yui.version + "/build/"
     });
 });
 
 app.configure('production', function () {
-    yui.config({
-        combine: true,
-        debug: false,
-        filter: "min"
-    });
+    // normally, production is the default configuration
 });
 
 // printing runtime information
-app.get('*', yui.expose, function (req, res, next) {
+app.get('*', yui.expose(), function (req, res, next) {
     res.send({
         app: yui.config(),
         res: res.locals.yui || null,
-        yui_config: res.locals.yui.config,
+        yui_config: res.locals.yui_config,
         yui_seed: res.locals.yui_seed
     });
 });
