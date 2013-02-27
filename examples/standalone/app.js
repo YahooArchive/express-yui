@@ -19,14 +19,18 @@ app.configure('development', function () {
     yui.debug({
         combine: false
     });
-    yui.serveCoreFromCDN({
-        root: yui.version + "/build/"
-    });
 });
 
 app.configure('production', function () {
     // normally, production is the default configuration
 });
+
+app.use(
+    yui.seed(['yui-base', 'loader-base', 'loader-yui3']),
+    yui.serveCoreFromCDN({
+        root: yui.version + "/build/"
+    })
+);
 
 // printing runtime information
 app.get('*', yui.expose(), function (req, res, next) {
