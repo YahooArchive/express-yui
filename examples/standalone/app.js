@@ -3,6 +3,7 @@
 'use strict';
 
 var express = require('express'),
+    exphbs  = require('express3-handlebars'),
     yui     = require('../../'),
     app     = express();
 
@@ -16,8 +17,9 @@ yui({
 }, __dirname + '/../../node_modules/yui');
 
 // by default, the seed will be just `yui-base`, but we can
-// extend the list by adding more modules to the seed constructor
-app.use(yui.seed(['yui-base', 'loader-base', 'loader-yui3']));
+// extend the list by adding more modules to the seed list
+// to speed up the booting process
+app.use(yui.seed(['yui-base', 'loader']));
 
 app.configure('development', function () {
     // when using `yui.debug()` you will get debug,
@@ -41,18 +43,13 @@ app.configure('production', function () {
     });
 });
 
-// printing runtime information
+// template engine
+app.engine('handlebars', exphbs());
+app.set('view engine', 'handlebars');
+
+// creating a page with YUI embeded
 app.get('*', yui.expose(), function (req, res, next) {
-    res.send({
-        // runtime configuration
-        app: yui.config(),
-        // request specific configs
-        res: res.locals.yui || null,
-        // blob built from static configuration
-        yui_config: res.locals.yui_config,
-        // blob built from seed definition statically
-        yui_seed: res.locals.yui_seed
-    });
+    res.render('page');
 });
 
 // listening

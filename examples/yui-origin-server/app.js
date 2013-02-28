@@ -3,6 +3,7 @@
 'use strict';
 
 var express = require('express'),
+    exphbs  = require('express3-handlebars'),
     yui     = require('../../'),
     app     = express();
 
@@ -14,8 +15,6 @@ var express = require('express'),
 yui({
     "allowRollup" : false
 }, __dirname + '/../../node_modules/yui');
-
-yui.plug(app);
 
 app.configure('development', function () {
     // when using `yui.debug()` you will get debug,
@@ -30,18 +29,14 @@ app.configure('production', function () {
     yui.serveCoreFromCDN();
 });
 
-// printing runtime information
-app.get('/', yui.expose(), function (req, res, next) {
-    res.send({
-        // runtime configuration
-        app: yui.config(),
-        // request specific configs
-        res: res.locals.yui || null,
-        // blob built from static configuration
-        yui_config: res.locals.yui_config,
-        // blob built from seed definition statically
-        yui_seed: res.locals.yui_seed
-    });
+
+// template engine
+app.engine('handlebars', exphbs());
+app.set('view engine', 'handlebars');
+
+// creating a page with YUI embeded
+app.get('*', yui.expose(), function (req, res, next) {
+    res.render('page');
 });
 
 // listening
