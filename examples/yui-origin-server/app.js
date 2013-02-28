@@ -23,7 +23,7 @@ app.configure('development', function () {
     yui.debug();
     // using the express app as origin server for
     // yui core modules
-    yui.serveYUIFromAppOrigin();
+    yui.serveCoreFromAppOrigin();
 });
 
 app.configure('production', function () {
