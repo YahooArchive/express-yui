@@ -8,12 +8,16 @@ var express = require('express'),
 
 // you can use a custom version of YUI by
 // specifying a custom path as a second argument,
-// or by installing yui at th app level using npm.
+// or by installing yui at the app level using npm.
 // in this example we are using the yui from
 // npm's devDependencies.
 yui({
     "allowRollup" : false
 }, __dirname + '/../../node_modules/yui');
+
+// by default, the seed will be just `yui-base`, but we can
+// extend the list by adding more modules to the seed constructor
+app.use(yui.seed(['yui-base', 'loader-base', 'loader-yui3']));
 
 app.configure('development', function () {
     // when using `yui.debug()` you will get debug,
@@ -36,10 +40,6 @@ app.configure('production', function () {
         root: yui.version + "/build/"
     });
 });
-
-// by default, the seed will be just `yui-base`, but we can
-// extend the list by adding more modules to the seed constructor
-app.use(yui.seed(['yui-base', 'loader-base', 'loader-yui3']));
 
 // printing runtime information
 app.get('*', yui.expose(), function (req, res, next) {
