@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+
+    <title>stand alone usage of `modown-yui`</title>
+
+</head>
+<body>
+    <div id="content">
+    </div>
+
+    {{{yui_seed}}}
+    <script>
+    YUI({{{yui_config}}}).use('node', function (Y) {
+        Y.one('#content').append('<p>Ready!</p>');
+    });
+    </script>
+</body>
+</html>
