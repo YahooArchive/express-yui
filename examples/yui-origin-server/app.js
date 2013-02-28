@@ -18,17 +18,11 @@ yui({
 
 app.configure('development', function () {
     // when using `yui.debug()` you will get debug,
-    // filter and logLevel set accordingly
+    // filter, combine, and logLevel set accordingly
     app.use(yui.debug());
-    // using the express app as origin server for
-    // yui core modules
-    app.use(yui.serveCoreFromAppOrigin());
 });
 
-app.configure('production', function () {
-    app.use(yui.serveCoreFromCDN());
-});
-
+app.use(yui.serveCoreFromAppOrigin());
 
 // template engine
 app.engine('handlebars', exphbs());
