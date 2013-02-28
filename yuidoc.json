@@ -1,0 +1,10 @@
+{
+  "name": "modown-yui API documentation",
+  "description": "modown-yui API documentation",
+  "version": "0.0.1",
+  "url": "http://git.corp.yahoo.com/modown/modown-yui",
+  "options": {
+    "paths": [ ".", "lib" ],
+    "outdir": "./build/apidocs"
+  }
+}

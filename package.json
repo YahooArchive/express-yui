@@ -18,7 +18,9 @@
         "express"            : "3.x",
         "express-expose"     : "0.3.x",
         "express3-handlebars": "0.3.x",
-        "yui"                : "3.8.x"
+        "yui"                : "3.8.x",
+        "shifter"            : "0.2.x",
+        "yuidocjs"           : "0.3.x"
     },
 
     "main": "index",
@@ -28,6 +30,11 @@
         "yui",
         "mojito",
         "modown"
-    ]
+    ],
+
+    "scripts": {
+        "test": "./scripts/test.sh",
+        "posttest": "./scripts/posttest.sh"
+    }
 
 }
