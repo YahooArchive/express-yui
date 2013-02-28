@@ -22,38 +22,17 @@ yui({
 app.use(yui.seed(['yui-base', 'loader']));
 
 app.configure('development', function () {
-
     // when using `yui.debug()` you will get debug,
     // filter, combined and logLevel set accordingly
     app.use(yui.debug());
-
-    // In development, we can get YUI from app origin
-    // to facilitate development.
-    app.use(yui.serveCoreFromAppOrigin());
-
-    // In development, we can get app modules from
-    // the app origin to facilitate development.
-    app.use(yui.serveModulesFromAppOrigin());
-
 });
 
-app.configure('production', function () {
-
-    // In production, we can get YUI from CDN.
-    app.use(yui.serveCoreFromCDN());
-
-    // In production, we can get app modules from
-    // CDN providing the custom configuration for
-    // amazon S3 CDN for example:
-    app.use(yui.serveModulesFromCDN({
-        combine: '',
-        base: '',
-        comboBase: '',
-        comboSep: '',
-        root: ''
-    }));
-
-});
+// normally, production is the default configuration,
+// but here is an example of forcing to use CDN
+// for yui core modules with a custom root folder
+app.use(yui.serveCoreFromCDN({
+    root: yui.version + "/build/"
+}));
 
 // template engine
 app.engine('handlebars', exphbs());
