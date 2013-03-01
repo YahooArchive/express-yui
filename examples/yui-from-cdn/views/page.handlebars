@@ -8,13 +8,16 @@
 </head>
 <body>
 
+    <h1>header goes here!</h1>
+
     <div id="content">
+        Loading...
     </div>
 
     {{#yui_seed}}<script src="{{{src}}}"></script>{{/yui_seed}}
     <script>
     YUI({{{yui_config}}}).use('node', function (Y) {
-        Y.one('#content').append('<p>Ready!</p>');
+        Y.one('#content').setContent('<p>Ready!</p>');
     });
     </script>
 </body>
