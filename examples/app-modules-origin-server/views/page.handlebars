@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
 
-    <title>serving yui core from cdn</title>
+    <title>app modules from origin server</title>
 
 </head>
 <body>
@@ -16,7 +16,7 @@
 
     {{#yui_seed}}<script src="{{{src}}}"></script>{{/yui_seed}}
     <script>
-    YUI({{{yui_config}}}).use('node', function (Y) {
+    YUI({{{yui_config}}}).use('autocomplete', 'bar', 'xyz', function (Y) {
         Y.one('#content').setContent('<p>Ready!</p>');
     });
     </script>

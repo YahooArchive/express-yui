@@ -33,7 +33,9 @@ app.configure('development', function () {
 
     // In development, we can get app modules from
     // the app origin to facilitate development.
-    app.use(yui.serveModulesFromAppOrigin());
+    app.use(yui.serveGroupFromAppOrigin('app', {
+        modules: {}
+    }));
 
 });
 
@@ -45,7 +47,8 @@ app.configure('production', function () {
     // In production, we can get app modules from
     // CDN providing the custom configuration for
     // amazon S3 CDN for example:
-    app.use(yui.serveModulesFromCDN({
+    app.use(yui.serveGroupFromCDN('app', {
+        modules: {},
         combine: '',
         base: '',
         comboBase: '',
@@ -60,7 +63,7 @@ app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
 // creating a page with YUI embeded
-app.get('*', yui.expose(), function (req, res, next) {
+app.get('/', yui.expose(), function (req, res, next) {
     res.render('page');
 });
 

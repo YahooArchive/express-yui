@@ -13,25 +13,45 @@ var express = require('express'),
 // in this example we are using the yui from
 // npm's devDependencies.
 yui({
-    "allowRollup" : false
+    allowRollup: false
 }, __dirname + '/../../node_modules/yui');
 
-// by default, the seed will be just `yui-base`, but we can
-// extend the list by adding more modules to the seed list
-// to speed up the booting process
-app.use(yui.seed(['yui-base', 'loader']));
-
 app.configure('development', function () {
+
     // when using `yui.debug()` you will get debug,
     // filter, combined and logLevel set accordingly
     app.use(yui.debug());
+
 });
 
-// normally, production is the default configuration,
-// but here is an example of forcing to use CDN
-// for yui core modules with a custom root folder
-app.use(yui.serveCoreFromCDN({
-    root: yui.version + "/build/"
+// getting YUI Core modules from CDN.
+app.use(yui.serveCoreFromAppOrigin());
+
+// we can get app modules from the app origin.
+app.use(yui.serveGroupFromAppOrigin('app', {
+    modules: {
+        foo: {
+            path: "assets/foo.js",
+            fullpath: __dirname + "/assets/foo.js",
+            requires: ["node"]
+        },
+        bar: {
+            path: "bar-hash123.js",
+            fullpath: __dirname + "/assets/bar.js",
+            requires: ["io-base", "foo"]
+        },
+        baz: {
+            path: "baz-123.css",
+            fullpath: __dirname + "/assets/baz.css",
+            type: "css"
+        },
+        xyz: {
+            path: "xyz.css",
+            fullpath: __dirname + "/assets/xyz.css",
+            type: "css",
+            requires: ["baz"]
+        }
+    }
 }));
 
 // template engine

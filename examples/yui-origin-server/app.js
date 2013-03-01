@@ -29,7 +29,7 @@ app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
 // creating a page with YUI embeded
-app.get('*', yui.expose(), function (req, res, next) {
+app.get('/', yui.expose(), function (req, res, next) {
     res.render('page');
 });
 
