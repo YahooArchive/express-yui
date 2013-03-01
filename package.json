@@ -23,7 +23,7 @@
         "express3-handlebars": "0.3.x",
         "yui"                : "3.8.x",
         "yuitest"            : "0.7.x",
-        "yuitestrunner"      : "0.3.x",
+        "ytestrunner"        : "0.3.x",
         "yuidocjs"           : "0.3.x"
     },
 
