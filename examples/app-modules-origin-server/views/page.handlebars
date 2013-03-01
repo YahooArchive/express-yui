@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+
+    <title>app modules from origin server</title>
+
+</head>
+<body>
+
+    <h1>header goes here!</h1>
+
+    <div id="content">
+        Loading...
+    </div>
+
+    {{#yui_seed}}<script src="{{{src}}}"></script>{{/yui_seed}}
+    <script>
+    YUI({{{yui_config}}}).use('autocomplete', 'bar', 'xyz', function (Y) {
+        Y.one('#content').setContent('<p>Ready!</p>');
+    });
+    </script>
+</body>
+</html>
