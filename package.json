@@ -3,6 +3,9 @@
     "description": "Modown YUI Component",
     "version"    : "0.0.1",
     "author"     : "Caridy Patino <caridy@yahoo-inc.com> (http://github.com/caridy)",
+    "contributors": [
+        "alberto chan <albertoc@yahoo-inc.com>"
+    ],
 
     "engines": {
         "node": "0.8.x",
@@ -21,7 +24,6 @@
         "yui"                : "3.8.x",
         "yuitest"            : "0.7.x",
         "yuitestrunner"      : "0.3.x",
-        "shifter"            : "0.2.x",
         "yuidocjs"           : "0.3.x"
     },
 
@@ -35,8 +37,7 @@
     ],
 
     "scripts": {
-        "test": "./node_modules/.bin/ytestrunner --root . -c --istanbul --save-coverage",
-        "posttest": "./scripts/posttest.sh"
+        "test": "ytestrunner -c"
     }
 
 }
