@@ -1,0 +1,23 @@
+{
+    "shared": {
+        "notification_email": "nobody@yahoo-inc.com",
+        "compilers": {
+            "updateversion": {
+                "compiler": "updateversion"
+            }
+        }
+    },
+    "jobs": {
+        "component": {
+            "build": {
+                "custom": {
+                    "compile_commands": [
+                        "updateversion"
+                    ]
+                }
+            }
+        }
+    },
+    "version": 2
+}
+
