@@ -1,17 +1,20 @@
+/*
+* Copyright (c) 2013, Yahoo! Inc. All rights reserved.
+* Copyrights licensed under the New BSD License.
+* See the accompanying LICENSE file for terms.
+*/
 
 /*jslint node:true, nomen:true*/
-/*global YUI, YUITest*/
 
 var YUITest = require('yuitest'),
     A = YUITest.Assert,
     OA = YUITest.ObjectAssert,
-    Y = YUITest,
     suite,
     yui = require('../lib/yui.js');
 
-suite = new Y.TestSuite("yui-test suite");
+suite = new YUITest.TestSuite("yui-test suite");
 
-suite.add(new Y.TestCase({
+suite.add(new YUITest.TestCase({
     name: "yui-test",
 
     "test constructor": function () {
@@ -23,4 +26,4 @@ suite.add(new Y.TestCase({
     }
 }));
 
-Y.TestRunner.add(suite);
+YUITest.TestRunner.add(suite);
