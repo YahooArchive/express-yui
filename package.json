@@ -3,6 +3,9 @@
     "description": "Modown YUI Component",
     "version"    : "0.0.1",
     "author"     : "Caridy Patino <caridy@yahoo-inc.com> (http://github.com/caridy)",
+    "contributors": [
+        "alberto chan <albertoc@yahoo-inc.com>"
+    ],
 
     "engines": {
         "node": "0.8.x",
@@ -18,7 +21,10 @@
         "express"            : "3.x",
         "express-expose"     : "0.3.x",
         "express3-handlebars": "0.3.x",
-        "yui"                : "3.8.x"
+        "yui"                : "3.8.x",
+        "yuitest"            : "0.7.x",
+        "ytestrunner"        : "0.3.x",
+        "yuidocjs"           : "0.3.x"
     },
 
     "main": "index",
@@ -28,6 +34,10 @@
         "yui",
         "mojito",
         "modown"
-    ]
+    ],
+
+    "scripts": {
+        "test": "ytestrunner -c"
+    }
 
 }

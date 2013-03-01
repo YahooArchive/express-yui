@@ -34,3 +34,7 @@ modown.yui({
 });
 app.use(modown.yui.local());
 ```
+
+## How to contribute
+
+See the CONTRIBUTE.md file for info.
