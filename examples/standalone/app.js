@@ -23,9 +23,9 @@ app.use(yui.seed(['yui-base', 'loader']));
 
 app.configure('development', function () {
 
-    // when using `yui.debug()` you will get debug,
-    // filter, combined and logLevel set accordingly
-    app.use(yui.debug());
+    // when using `yui.debugMode()` you will get debug,
+    // filter and logLevel set accordingly
+    app.use(yui.debugMode());
 
     // In development, we can get YUI from app origin
     // to facilitate development.

@@ -17,9 +17,9 @@ yui({
 }, __dirname + '/../../node_modules/yui');
 
 app.configure('development', function () {
-    // when using `yui.debug()` you will get debug,
-    // filter, combine, and logLevel set accordingly
-    app.use(yui.debug());
+    // when using `yui.debugMode()` you will get debug,
+    // filter and logLevel set accordingly
+    app.use(yui.debugMode());
 });
 
 app.use(yui.serveCoreFromAppOrigin());
