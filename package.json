@@ -12,10 +12,7 @@
         "npm" : "1.1.x"
     },
 
-    "dependencies": {
-        "combohandler"       : "latest",
-        "mime"               : "1.2.9"
-    },
+    "dependencies": {},
 
     "devDependencies": {
         "express"            : "3.x",

@@ -19,7 +19,7 @@ yui({
 app.configure('development', function () {
 
     // when using `yui.debug()` you will get debug,
-    // filter, combined and logLevel set accordingly
+    // filter, logLevel set accordingly
     app.use(yui.debug());
 
 });
@@ -53,6 +53,8 @@ app.use(yui.serveGroupFromAppOrigin('app', {
         }
     }
 }));
+
+app.use(yui.serveCombinedFromAppOrigin());
 
 // template engine
 app.engine('handlebars', exphbs());
