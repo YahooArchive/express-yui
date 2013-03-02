@@ -18,13 +18,13 @@ yui({
 
 app.configure('development', function () {
 
-    // when using `yui.debug()` you will get debug,
-    // filter, logLevel set accordingly
-    app.use(yui.debug());
+    // when using `yui.debugMode()` you will get debug,
+    // filter and logLevel set accordingly
+    app.use(yui.debugMode());
 
 });
 
-// getting YUI Core modules from CDN.
+// getting YUI Core modules from the app origin.
 app.use(yui.serveCoreFromAppOrigin());
 
 // we can get app modules from the app origin.
