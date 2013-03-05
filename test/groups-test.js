@@ -22,7 +22,7 @@ suite.add(new YUITest.TestCase({
         A.isNotNull(groups, "groups require failed");
     },
 
-    "test getGroupConfig": function () {
+    "test getGroupConfig (only)": function () {
         A.isFunction(groups.getGroupConfig);
 
         var res,
@@ -43,14 +43,19 @@ suite.add(new YUITest.TestCase({
 
         groups._captureYUIModuleDetails = fn;
     },
-
-    "test captureYUI": function () {
+    
+    "test captureYUIModuleDetails": function () {
         A.isFunction(groups._captureYUIModuleDetails);
+
+        // TODO: add more asserts
+    },
+
+    "test getGroupConfig": function () {
 
         var config;
         config = groups.getGroupConfig(moduleConfigPath);
-        // console.log(config);
 
+        // verify
         A.areEqual('app-module', config.name, 'config.name does not match');
         A.areEqual('0.0.1', config.version, 'config.version does not match');
         A.areEqual('yui-base', config.meta.requires[0], 'yui-base does not match');
