@@ -35,18 +35,37 @@ suite.add(new YUITest.TestCase({
         var res,
             fn,
             fnCalled = false;
+
         fn = groups._captureYUIModuleDetails;
-        groups._captureYUIModuleDetails = function (res, runSandbox) {
+        groups._captureYUIModuleDetails = function (path) {
+            var out;
             fnCalled = true;
-            res.yui = { foo: 'bar' };
+            out = {
+                yui: {
+                    groups: {
+                        name: 'groupName',
+                        modules: [ 'foo1' ]
+                    },
+                    name: 'moduleName',
+                    version: '22',
+                    meta: {
+                        requires: [ 'foo2' ]
+                    }
+                }
+            };
+
+
             A.areEqual(moduleConfigPath,
-                       res.path,
+                       path,
                        'res.path does not match original path');
+            return out;
         };
         res = groups.getGroupConfig(moduleConfigPath);
 
         A.areEqual(true, fnCalled, 'captureFn was not called');
-        // A.areEqual('bar', res.yui.foo, 'res.yui.foo should exists');
+        A.areEqual('moduleName', res.moduleName, 'res.moduleName mismatch');
+        A.areEqual('22', res.moduleVersion, 'res.moduleVersion mismatch');
+
 
         groups._captureYUIModuleDetails = fn;
     },
@@ -57,18 +76,17 @@ suite.add(new YUITest.TestCase({
         config = groups.getGroupConfig(moduleConfigPath);
 
         // verify
-        A.areEqual('app-module', config.name, 'config.name does not match');
-        A.areEqual('0.0.1', config.version, 'config.version does not match');
-        A.areEqual('yui-base', config.meta.requires[0], 'yui-base does not match');
-        A.areEqual('loader-base', config.meta.requires[1], 'loader-base does not match');
-        A.areEqual('loader-yui3', config.meta.requires[2], 'loader-yui3 does not match');
-        A.isNotUndefined(config.groups, 'config.groups undefined');
-        A.areEqual('app', config.groups.name, 'groups name mismatch');
-        A.isNotUndefined(config.groups.modules['module-A'], 'module-A missing');
-        A.isNotUndefined(config.groups.modules['module-B'], 'module-A missing');
+        A.areEqual('app-module', config.moduleName, 'config.name does not match');
+        A.areEqual('0.0.1', config.moduleVersion, 'config.version does not match');
+        A.areEqual('yui-base', config.requires[0], 'yui-base does not match');
+        A.areEqual('loader-base', config.requires[1], 'loader-base does not match');
+        A.areEqual('loader-yui3', config.requires[2], 'loader-yui3 does not match');
+        A.areEqual('app', config.groupName, 'groups name mismatch');
+        A.isNotUndefined(config.modules['module-A'], 'module-A missing');
+        A.isNotUndefined(config.modules['module-B'], 'module-A missing');
 
         A.areEqual('module-B',
-                   config.groups.modules['module-A'].requires[0],
+                   config.modules['module-A'].requires[0],
                    'module-B is a dependency of module-A');
 
     },
@@ -78,46 +96,37 @@ suite.add(new YUITest.TestCase({
         A.isFunction(groups.getGroupConfig);
         var config;
         config = groups.getGroupConfig(moduleConfigPath2);
+        console.log(config);
 
-        A.areEqual('metas', config.name, 'config.name mismatch');
-        A.areEqual('0.0.1', config.version, 'config.version mismatch');
-        A.isNotUndefined(config.groups.modules,
+        A.areEqual('metas', config.moduleName, 'config.name mismatch');
+        A.areEqual('0.0.1', config.moduleVersion, 'config.version mismatch');
+        A.isNotUndefined(config.modules,
                          'config.groups.modules should be set');
         A.areEqual('css',
-                   config.groups.modules.xyz.type,
+                   config.modules.xyz.type,
                    'wrong type');
         A.areEqual('baz',
-                   config.groups.modules.xyz.requires[0],
+                   config.modules.xyz.requires[0],
                    'wrong requires');
     },
 
     "test captureYUIModuleDetails with parse error": function () {
         A.isFunction(groups._captureYUIModuleDetails);
 
-        var out,
-            res;
+        var out;
 
-        res = {
-            path: moduleConfigPath3,
-            yui: {}
-        };
-        out = groups._captureYUIModuleDetails(res);
-        A.isUndefined(res.yui.name, 'name should be undefined');
+        out = groups._captureYUIModuleDetails(moduleConfigPath3);
+        A.isUndefined(out.name, 'name should be undefined');
     },
 
     "test captureYUIModuleDetails with runtime error": function () {
         A.isFunction(groups._captureYUIModuleDetails);
 
-        var out,
-            res;
+        var out;
 
-        res = {
-            path: moduleConfigPath4,
-            yui: {}
-        };
-        out = groups._captureYUIModuleDetails(res);
-        A.isNotUndefined(res.yui.name, 'name should be defined');
-        A.isUndefined(res.yui.groups, 'groups should be undefined');
+        out = groups._captureYUIModuleDetails(moduleConfigPath4);
+        A.isNotUndefined(out.yui.name, 'name should be defined');
+        A.isUndefined(out.yui.groups, 'groups should be undefined');
     }
 
 
