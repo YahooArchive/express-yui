@@ -33,8 +33,8 @@ app.configure('development', function () {
 
     // In development, we can get app modules from
     // the app origin to facilitate development.
-    app.use(yui.serveGroupFromAppOrigin('app', {
-        modules: {}
+    app.use(yui.serveGroupFromAppOrigin('path/app-modules-meta.js', {}, {
+        'path/app-modules-meta.js': __dirname + "/'path/app-modules-meta.js"
     }));
 
 });
@@ -46,14 +46,10 @@ app.configure('production', function () {
 
     // In production, we can get app modules from
     // CDN providing the custom configuration for
-    // amazon S3 CDN for example:
-    app.use(yui.serveGroupFromCDN('app', {
-        modules: {},
-        combine: '',
-        base: '',
-        comboBase: '',
-        comboSep: '',
-        root: ''
+    // github raw for example:
+    app.use(yui.serveGroupFromCDN('path/app-modules-meta.js', {
+        combine: false,
+        base: 'https://rawgithub.com/yui/yui3/master/build/'
     }));
 
 });
