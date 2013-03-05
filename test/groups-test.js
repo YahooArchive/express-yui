@@ -40,11 +40,13 @@ suite.add(new YUITest.TestCase({
         groups._captureYUIModuleDetails = function (path) {
             var out;
             fnCalled = true;
+            // fake the return value
             out = {
                 yui: {
                     groups: {
-                        name: 'groupName',
-                        modules: [ 'foo1' ]
+                        app: {
+                            modules: [ 'foo1' ]
+                        }
                     },
                     name: 'moduleName',
                     version: '22',
@@ -53,7 +55,6 @@ suite.add(new YUITest.TestCase({
                     }
                 }
             };
-
 
             A.areEqual(moduleConfigPath,
                        path,
@@ -65,11 +66,12 @@ suite.add(new YUITest.TestCase({
         A.areEqual(true, fnCalled, 'captureFn was not called');
         A.areEqual('moduleName', res.moduleName, 'res.moduleName mismatch');
         A.areEqual('22', res.moduleVersion, 'res.moduleVersion mismatch');
-
+        A.areEqual('app', res.groupName, 'wrong groupName');
 
         groups._captureYUIModuleDetails = fn;
     },
 
+    // test using fixture app-module.js
     "test getGroupConfig": function () {
 
         var config;
@@ -91,12 +93,13 @@ suite.add(new YUITest.TestCase({
 
     },
 
+    // test using fixture metas.js
     "test metas": function () {
 
         A.isFunction(groups.getGroupConfig);
         var config;
         config = groups.getGroupConfig(moduleConfigPath2);
-        console.log(config);
+        // console.log(config);
 
         A.areEqual('metas', config.moduleName, 'config.name mismatch');
         A.areEqual('0.0.1', config.moduleVersion, 'config.version mismatch');
@@ -110,23 +113,40 @@ suite.add(new YUITest.TestCase({
                    'wrong requires');
     },
 
+    "test createSandbox": function () {
+        A.isFunction(groups._createSandbox);
+
+        var sandbox = groups._createSandbox();
+
+        A.isNotUndefined(sandbox.config, 'sandbox.config missing');
+        A.isNotUndefined(sandbox.modown, 'sandbox.modown missing');
+        A.isFunction(sandbox.merge);
+        A.isFunction(sandbox.applyConfig);
+
+        sandbox.applyConfig({groups: { app: { path: 'foobar' } } });
+        OA.areEqual({ path: 'foobar' },
+                    sandbox.modown.groups.app,
+                    "wrong groups app meta");
+    },
+
     "test captureYUIModuleDetails with parse error": function () {
         A.isFunction(groups._captureYUIModuleDetails);
 
         var out;
 
         out = groups._captureYUIModuleDetails(moduleConfigPath3);
-        A.isUndefined(out.name, 'name should be undefined');
+        A.isUndefined(out.yui.name, 'name should be undefined');
     },
 
     "test captureYUIModuleDetails with runtime error": function () {
         A.isFunction(groups._captureYUIModuleDetails);
 
-        var out;
+        var yui;
 
-        out = groups._captureYUIModuleDetails(moduleConfigPath4);
-        A.isNotUndefined(out.yui.name, 'name should be defined');
-        A.isUndefined(out.yui.groups, 'groups should be undefined');
+        yui = groups._captureYUIModuleDetails(moduleConfigPath4);
+        yui = yui.yui || {};
+        A.isNotUndefined(yui.name, 'name should be defined');
+        A.isUndefined(yui.groups, 'groups should be undefined');
     }
 
 
