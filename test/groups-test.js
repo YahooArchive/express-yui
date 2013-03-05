@@ -10,7 +10,8 @@ var YUITest = require('yuitest'),
     A = YUITest.Assert,
     OA = YUITest.ObjectAssert,
     suite,
-    groups = require('../lib/groups.js');
+    groups = require('../lib/groups.js'),
+    moduleConfigPath = __dirname + '/../fixtures/app-module.js';
 
 suite = new YUITest.TestSuite("group-test suite");
 
@@ -30,15 +31,15 @@ suite.add(new YUITest.TestCase({
         fn = groups._captureYUIModuleDetails;
         groups._captureYUIModuleDetails = function (res, runSandbox) {
             fnCalled = true;
-            res.foo = 'bar';
-            A.areEqual(__dirname + '/app-module.js',
+            res.yui = { foo: 'bar' };
+            A.areEqual(moduleConfigPath,
                        res.path,
                        'res.path does not match original path');
         };
-        res = groups.getGroupConfig(__dirname + '/app-module.js');
+        res = groups.getGroupConfig(moduleConfigPath);
 
         A.areEqual(true, fnCalled, 'captureFn was not called');
-        A.areEqual('bar', res.foo, 'res.foo should exists');
+        // A.areEqual('bar', res.yui.foo, 'res.yui.foo should exists');
 
         groups._captureYUIModuleDetails = fn;
     },
@@ -46,18 +47,24 @@ suite.add(new YUITest.TestCase({
     "test captureYUI": function () {
         A.isFunction(groups._captureYUIModuleDetails);
 
-        var res,
-            sandbox;
+        var config;
+        config = groups.getGroupConfig(moduleConfigPath);
+        // console.log(config);
 
-        res = {
-            path: __dirname + '/app-module.js'
-        };
-        sandbox = { };
-        groups._captureYUIModuleDetails(res, sandbox);
+        A.areEqual('app-module', config.name, 'config.name does not match');
+        A.areEqual('0.0.1', config.version, 'config.version does not match');
+        A.areEqual('yui-base', config.meta.requires[0], 'yui-base does not match');
+        A.areEqual('loader-base', config.meta.requires[1], 'loader-base does not match');
+        A.areEqual('loader-yui3', config.meta.requires[2], 'loader-yui3 does not match');
+        A.isNotUndefined(config.groups, 'config.groups undefined');
+        A.areEqual('app', config.groups.name, 'groups name mismatch');
+        A.isNotUndefined(config.groups.modules['module-A'], 'module-A missing');
+        A.isNotUndefined(config.groups.modules['module-B'], 'module-A missing');
 
-        A.isNotUndefined(res.yui, 'res.yui was not set');
-        console.log(res.yui);
-        require('util').inspect(res.yui);
+        A.areEqual('module-B',
+                   config.groups.modules['module-A'].requires[0],
+                   'module-B is a dependency of module-A');
+
     }
 }));
 
