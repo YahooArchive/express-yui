@@ -1,7 +1,5 @@
 /*
 * Copyright (c) 2013, Yahoo! Inc. All rights reserved.
-* Copyrights licensed under the New BSD License.
-* See the accompanying LICENSE file for terms.
 */
 
 /*jslint node:true, nomen:true*/
@@ -12,7 +10,9 @@ var YUITest = require('yuitest'),
     suite,
     groups = require('../lib/groups.js'),
     moduleConfigPath = __dirname + '/../fixtures/app-module.js',
-    moduleConfigPath2 = __dirname + '/../fixtures/metas.js';
+    moduleConfigPath2 = __dirname + '/../fixtures/metas.js',
+    moduleConfigPath3 = __dirname + '/../fixtures/metas-parsed-error.js',
+    moduleConfigPath4 = __dirname + '/../fixtures/metas-run-error.js';
 
 
 suite = new YUITest.TestSuite("group-test suite");
@@ -22,6 +22,11 @@ suite.add(new YUITest.TestCase({
 
     "test constructor": function () {
         A.isNotNull(groups, "groups require failed");
+    },
+
+    // TODO:
+    "test getGroupConfig with invalid path": function () {
+        A.isFunction(groups.getGroupConfig);
     },
 
     "test getGroupConfig (only)": function () {
@@ -44,12 +49,6 @@ suite.add(new YUITest.TestCase({
         // A.areEqual('bar', res.yui.foo, 'res.yui.foo should exists');
 
         groups._captureYUIModuleDetails = fn;
-    },
-    
-    "test captureYUIModuleDetails": function () {
-        A.isFunction(groups._captureYUIModuleDetails);
-
-        // TODO: add more asserts
     },
 
     "test getGroupConfig": function () {
@@ -90,7 +89,38 @@ suite.add(new YUITest.TestCase({
         A.areEqual('baz',
                    config.groups.modules.xyz.requires[0],
                    'wrong requires');
+    },
+
+    "test captureYUIModuleDetails with parse error": function () {
+        A.isFunction(groups._captureYUIModuleDetails);
+
+        var out,
+            res;
+
+        res = {
+            path: moduleConfigPath3,
+            yui: {}
+        };
+        out = groups._captureYUIModuleDetails(res);
+        A.isUndefined(res.yui.name, 'name should be undefined');
+    },
+
+    "test captureYUIModuleDetails with runtime error": function () {
+        A.isFunction(groups._captureYUIModuleDetails);
+
+        var out,
+            res;
+
+        res = {
+            path: moduleConfigPath4,
+            yui: {}
+        };
+        out = groups._captureYUIModuleDetails(res);
+        A.isNotUndefined(res.yui.name, 'name should be defined');
+        A.isUndefined(res.yui.groups, 'groups should be undefined');
     }
+
+
 }));
 
 YUITest.TestRunner.add(suite);
