@@ -10,7 +10,7 @@ var YUITest = require('yuitest'),
     A = YUITest.Assert,
     OA = YUITest.ObjectAssert,
     suite,
-    yui = require('../lib/yui.js');
+    yui = require('../../lib/yui.js');
 
 suite = new YUITest.TestSuite("yui-test suite");
 
