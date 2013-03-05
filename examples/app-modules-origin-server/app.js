@@ -28,30 +28,21 @@ app.configure('development', function () {
 app.use(yui.serveCoreFromAppOrigin());
 
 // we can get app modules from the app origin.
-app.use(yui.serveGroupFromAppOrigin('app', {
-    modules: {
-        foo: {
-            path: "assets/foo.js",
-            fullpath: __dirname + "/assets/foo.js",
-            requires: ["node"]
-        },
-        bar: {
-            path: "bar-hash123.js",
-            fullpath: __dirname + "/assets/bar.js",
-            requires: ["io-base", "foo"]
-        },
-        baz: {
-            path: "baz-123.css",
-            fullpath: __dirname + "/assets/baz.css",
-            type: "css"
-        },
-        xyz: {
-            path: "xyz.css",
-            fullpath: __dirname + "/assets/xyz.css",
-            type: "css",
-            requires: ["baz"]
-        }
-    }
+app.use(yui.serveGroupFromAppOrigin('assets/metas.js', {
+    // any special group configuration
+}, function (modulePath) {
+    // this is the resolver method
+    // which takes the relative path `modulePath`
+    // from metas, and should transform it into
+    // a filesystem path when serving those modules
+    // from origin server
+    return {
+        "assets/metas.js":  __dirname + "/assets/metas.js",
+        "assets/foo.js":    __dirname + "/assets/foo.js",
+        "bar-hash123.js":   __dirname + "/assets/bar.js",
+        "baz-123.css":      __dirname + "/assets/baz.css",
+        "xyz.css":          __dirname + "/assets/xyz.css"
+    }[modulePath];
 }));
 
 app.use(yui.serveCombinedFromAppOrigin());
