@@ -11,7 +11,9 @@ var YUITest = require('yuitest'),
     OA = YUITest.ObjectAssert,
     suite,
     groups = require('../lib/groups.js'),
-    moduleConfigPath = __dirname + '/../fixtures/app-module.js';
+    moduleConfigPath = __dirname + '/../fixtures/app-module.js',
+    moduleConfigPath2 = __dirname + '/../fixtures/metas.js';
+
 
 suite = new YUITest.TestSuite("group-test suite");
 
@@ -70,6 +72,24 @@ suite.add(new YUITest.TestCase({
                    config.groups.modules['module-A'].requires[0],
                    'module-B is a dependency of module-A');
 
+    },
+
+    "test metas": function () {
+
+        A.isFunction(groups.getGroupConfig);
+        var config;
+        config = groups.getGroupConfig(moduleConfigPath2);
+
+        A.areEqual('metas', config.name, 'config.name mismatch');
+        A.areEqual('0.0.1', config.version, 'config.version mismatch');
+        A.isNotUndefined(config.groups.modules,
+                         'config.groups.modules should be set');
+        A.areEqual('css',
+                   config.groups.modules.xyz.type,
+                   'wrong type');
+        A.areEqual('baz',
+                   config.groups.modules.xyz.requires[0],
+                   'wrong requires');
     }
 }));
 
