@@ -33,7 +33,9 @@ app.configure('development', function () {
 
     // In development, we can get app modules from
     // the app origin to facilitate development.
-    app.use(yui.serveGroupFromAppOrigin('path/app-modules-meta.js', {}));
+    app.use(yui.serveGroupFromAppOrigin('path/app-modules-meta.js', {}, {
+        'path/app-modules-meta.js': __dirname + "/'path/app-modules-meta.js"
+    }));
 
 });
 
