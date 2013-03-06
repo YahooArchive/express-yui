@@ -10,7 +10,9 @@
         "node": "0.8.x",
         "npm": "1.1.x"
     },
-    "dependencies": {},
+    "dependencies": {
+        "modown-static": "latest"
+    },
     "devDependencies": {
         "express": "3.x",
         "express3-handlebars": "0.3.x",
