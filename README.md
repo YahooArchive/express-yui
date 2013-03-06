@@ -4,7 +4,7 @@ This compontent is responsible to expose the `yui_config`
 and `yui_seed` configurations thru `res.locals.yui_config`
 and `res.locals.yui_seed` at the app level, as well as per
 request basis. If the component is plug within `modown`, it
-will automatically expose into the views.
+will automatically expose both of them into the views.
 
 ## Features
 
