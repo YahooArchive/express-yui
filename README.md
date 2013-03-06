@@ -13,9 +13,12 @@ into the runtime object produced by `modown-server`.
 
  * expose yui_config per request basis
  * expose seed files per request basis
- * serve yui core modules when needed from app origin
- * serve app yui modules when needed from app origin
  * provide basic configurations for cdn, debug, and other common conditions
+
+## Other features
+
+ * serve yui core modules from app origin
+ * serve loader group with app modules from app origin
 
 ## Usage as stand alone middleware for express
 
@@ -35,4 +38,4 @@ TBD
 
 ## How to contribute
 
-See the CONTRIBUTE.md file for info.
+See the (CONTRIBUTE.md)[CONTRIBUTE.md] file for info.
