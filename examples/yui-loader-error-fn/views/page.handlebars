@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+
+    <title>using a function in the config to control errors in loader</title>
+
+</head>
+<body>
+
+    <h1>header goes here!</h1>
+
+    <div id="content">
+        Loading...
+    </div>
+
+    {{#yui_seed}}<script src="{{{src}}}"></script>{{/yui_seed}}
+    <script>
+    YUI({{{yui_config}}}).use('node', 'foo', function (Y) {
+        Y.one('#content').setContent('<p>If you see this msg, something is really wrong!</p>');
+    });
+    </script>
+</body>
+</html>
