@@ -1,13 +1,10 @@
 # Modown YUI Component
 
-This compontent is responsible for exposing the
-`yui_config` configuration at the app level using
-`yui.config()` object, as well as per request
-customization.
-
-If the component is plug within `modown`, it will
-automatically attach the `yui_config` configuration
-into the runtime object produced by `modown-server`.
+This compontent is responsible to expose the `yui_config`
+and `yui_seed` configurations thru `res.locals.yui_config`
+and `res.locals.yui_seed` at the app level, as well as per
+request basis. If the component is plug within `modown`, it
+will automatically expose both of them into the views.
 
 ## Features
 
@@ -31,6 +28,13 @@ TBD
 ```
 TBD
 ```
+
+## Dependencies
+
+This npm package requires `modown-static` which is still in development and not
+yet publixhed in NPM registry.
+
+For now, dev will have to explicity install that dependency.
 
 ## TODO
 

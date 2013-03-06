@@ -1,7 +1,7 @@
 {
     "name": "modown-yui",
     "description": "Modown YUI Component",
-    "version": "0.0.1-9",
+    "version": "0.0.1-13",
     "author": "Caridy Patino <caridy@yahoo-inc.com> (http://github.com/caridy)",
     "contributors": [
         "alberto chan <albertoc@yahoo-inc.com>"
@@ -10,7 +10,9 @@
         "node": "0.8.x",
         "npm": "1.1.x"
     },
-    "dependencies": {},
+    "dependencies": {
+        "modown-static": "latest"
+    },
     "devDependencies": {
         "express": "3.x",
         "express3-handlebars": "0.3.x",
