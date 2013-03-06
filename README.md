@@ -31,7 +31,6 @@ TBD
 
 ## TODO
 
- * Seed should rely on the groups to support combo when posible
  * Move lib/static.js into its own package and update the api
 
 ## How to contribute
