@@ -21,6 +21,11 @@ yui({
     },
     onProgress: function (e) {
         var moduleName = e.data[0].name;
+        // We can register non-yui modules as yui dynamically.
+        // In this case, registering any module with prefix
+        // `dust-` under the Y.Dust[name] structure.
+        // More info about this technique here:
+        // https://speakerdeck.com/yaypie/when-not-to-use-yui?slide=80
         if (moduleName.indexOf('dust-') === 0) {
             YUI.add(moduleName, function (Y) {
                 Y.namespace('Dust')[moduleName] = Y.config.win[moduleName];
