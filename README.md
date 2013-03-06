@@ -38,4 +38,4 @@ TBD
 
 ## How to contribute
 
-See the (CONTRIBUTE.md)[CONTRIBUTE.md] file for info.
+See the [CONTRIBUTE.md](CONTRIBUTE.md) file for info.
