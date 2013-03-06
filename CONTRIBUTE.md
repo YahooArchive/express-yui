@@ -1,8 +1,8 @@
-## How to contribute ?
+## Contributing Code to `modown-yui`
 
 - The main source files are located under `lib/`.
-- Test are located under `test/*`.
-- Examples are located under `examples`.
+- Unit tests are located under `tests/units/*`.
+- Examples are located under `examples/`.
 
 To run the unit tests (with coverage by default):
 
