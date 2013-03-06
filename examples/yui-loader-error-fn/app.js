@@ -18,6 +18,14 @@ yui({
         // this code gets executed in the client side
         // reporting: "Missing modules: foo"
         Y.one('#content').setContent(err.msg);
+    },
+    onProgress: function (e) {
+        var moduleName = e.data[0].name;
+        if (moduleName.indexOf('dust-') === 0) {
+            YUI.add(moduleName, function (Y) {
+                Y.namespace('Dust')[moduleName] = Y.config.win[moduleName];
+            });
+        }
     }
 }, __dirname + '/../../node_modules/yui');
 
