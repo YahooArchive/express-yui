@@ -38,6 +38,7 @@ app.use(modown.yui.local());
 * Seed should rely on the groups to support combo when posible
 * Move lib/static.js into its own package and update the api
 * Support functions in the yui_config
+* Proper computation of the core before adding more meta modules
 
 ## How to contribute
 
