@@ -29,6 +29,13 @@ TBD
 TBD
 ```
 
+## Dependencies
+
+This npm package requires `modown-static` which is still in development and not
+yet publixhed in NPM registry.
+
+For now, dev will have to explicity install that dependency.
+
 ## TODO
 
  * Move lib/static.js into its own package and update the api
