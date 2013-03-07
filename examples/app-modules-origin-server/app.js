@@ -7,6 +7,25 @@ var express = require('express'),
     yui     = require('../../'),
     app     = express();
 
+
+// TODO: this should be locator or some other component
+// that knows how to deal with urls.
+function urlResolver(modulePath) {
+    // this is the resolver method
+    // which takes the relative path `modulePath`
+    // from metas, and should transform it into
+    // a filesystem path when serving those modules
+    // from origin server
+    return {
+        "assets/metas.js":  __dirname + "/assets/metas.js",
+        "assets/foo.js":    __dirname + "/assets/foo.js",
+        "bar-hash123.js":   __dirname + "/assets/bar.js",
+        "baz-123.css":      __dirname + "/assets/baz.css",
+        "xyz.css":          __dirname + "/assets/xyz.css"
+    }[modulePath];
+}
+
+
 // you can use a custom version of YUI by
 // specifying a custom path as a second argument,
 // or by installing yui at the app level using npm.
@@ -22,30 +41,44 @@ app.configure('development', function () {
     // filter and logLevel set accordingly
     app.use(yui.debugMode());
 
+    // getting YUI Core modules from the app origin.
+    app.use(yui.serveCoreFromAppOrigin({
+        // any special loader group configuration
+    }, {
+        maxAge: 0 /* no cache */
+    }));
+
+    // we can get app modules from the app origin.
+    app.use(yui.serveGroupFromAppOrigin('assets/metas.js', {
+        // any special loader group configuration
+    }, urlResolver, {
+        maxAge: 0 /* no cache */
+    }));
+
+    app.use(yui.serveCombinedFromAppOrigin({
+        maxAge: 0
+    }));
+
 });
 
-// getting YUI Core modules from the app origin.
-app.use(yui.serveCoreFromAppOrigin());
+app.configure('production', function () {
 
-// we can get app modules from the app origin.
-app.use(yui.serveGroupFromAppOrigin('assets/metas.js', {
-    // any special group configuration
-}, function (modulePath) {
-    // this is the resolver method
-    // which takes the relative path `modulePath`
-    // from metas, and should transform it into
-    // a filesystem path when serving those modules
-    // from origin server
-    return {
-        "assets/metas.js":  __dirname + "/assets/metas.js",
-        "assets/foo.js":    __dirname + "/assets/foo.js",
-        "bar-hash123.js":   __dirname + "/assets/bar.js",
-        "baz-123.css":      __dirname + "/assets/baz.css",
-        "xyz.css":          __dirname + "/assets/xyz.css"
-    }[modulePath];
-}));
+    // getting YUI Core modules from the app origin.
+    app.use(yui.serveCoreFromAppOrigin());
 
-app.use(yui.serveCombinedFromAppOrigin());
+    // when running in production to use a CDN that
+    // will use the app as origin server
+    app.use(yui.serveGroupFromAppOrigin('assets/metas.js', {
+        // special loader group configuration
+        base: 'http://flickrcdn.com/app/',
+        comboBase: 'http://flickrcdn.com/combo?',
+        comboSep: '&',
+        root: 'app/'
+    }, urlResolver));
+
+    app.use(yui.serveCombinedFromAppOrigin());
+
+});
 
 // template engine
 app.engine('handlebars', exphbs());
