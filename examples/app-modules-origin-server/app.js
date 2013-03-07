@@ -42,12 +42,22 @@ app.configure('development', function () {
     app.use(yui.debugMode());
 
     // getting YUI Core modules from the app origin.
-    app.use(yui.serveCoreFromAppOrigin());
+    app.use(yui.serveCoreFromAppOrigin({
+        // any special loader group configuration
+    }, {
+        maxAge: 0 /* no cache */
+    }));
 
     // we can get app modules from the app origin.
     app.use(yui.serveGroupFromAppOrigin('assets/metas.js', {
         // any special loader group configuration
-    }, urlResolver));
+    }, urlResolver, {
+        maxAge: 0 /* no cache */
+    }));
+
+    app.use(yui.serveCombinedFromAppOrigin({
+        maxAge: 0
+    }));
 
 });
 
@@ -66,9 +76,9 @@ app.configure('production', function () {
         root: 'app/'
     }, urlResolver));
 
-});
+    app.use(yui.serveCombinedFromAppOrigin());
 
-app.use(yui.serveCombinedFromAppOrigin());
+});
 
 // template engine
 app.engine('handlebars', exphbs());
