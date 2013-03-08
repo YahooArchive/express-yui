@@ -10,8 +10,8 @@
         "node": "0.8.x",
         "npm": "1.1.x"
     },
-    "futureDependencies": {
-        "modown-static": "latest"
+    "dependencies": {
+        "modown-static": "git+ssh://git@git.corp.yahoo.com:modown/modown-static.git"
     },
     "devDependencies": {
         "express": "3.x",
