@@ -1,7 +1,7 @@
 {
     "name": "modown-yui",
     "description": "Modown YUI Component",
-    "version": "0.0.1-13",
+    "version": "0.0.1-15",
     "author": "Caridy Patino <caridy@yahoo-inc.com> (http://github.com/caridy)",
     "contributors": [
         "alberto chan <albertoc@yahoo-inc.com>"
@@ -10,7 +10,7 @@
         "node": "0.8.x",
         "npm": "1.1.x"
     },
-    "dependencies": {
+    "futureDependencies": {
         "modown-static": "latest"
     },
     "devDependencies": {

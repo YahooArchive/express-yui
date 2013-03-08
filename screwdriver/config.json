@@ -10,10 +10,19 @@
     "jobs": {
         "component": {
             "build": {
+                "test": {
+                    "before": {
+                        "task": "script",
+                        "command": "${SRC_DIR}/scripts/pretest.sh"
+                    }
+                },
                 "custom": {
                     "compile_commands": [
                         "updateversion"
                     ]
+                },
+                "publish": {
+                    "task": "none"
                 }
             }
         }
