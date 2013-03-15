@@ -15,8 +15,9 @@
     </div>
 
     {{#yui_seed}}<script src="{{{src}}}"></script>{{/yui_seed}}
+    <script>{{{yui_config}}}</script>
     <script>
-    YUI({{{yui_config}}}).use('node', 'foo', function (Y) {
+    YUI().use('node', 'foo', function (Y) {
         Y.one('#content').setContent('<p>If you see this msg, something is really wrong!</p>');
     });
     </script>
