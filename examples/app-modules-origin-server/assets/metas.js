@@ -1,27 +1,26 @@
 YUI.add('metas', function (Y, NAME) {
-    Y.applyConfig({
-        groups: {
-            app: Y.merge((Y.config.groups && Y.config.groups.app) || {}, {
-                modules: {
-                    foo: {
-                        path: "assets/foo.js",
-                        requires: ["node"]
-                    },
-                    bar: {
-                        path: "bar-hash123.js",
-                        requires: ["io-base", "foo"]
-                    },
-                    baz: {
-                        path: "baz-123.css",
-                        type: "css"
-                    },
-                    xyz: {
-                        path: "xyz.css",
-                        type: "css",
-                        requires: ["baz"]
-                    }
-                }
-            })
+    YUI.Env[Y.version].modules = YUI.Env[Y.version].modules || {};
+    Y.mix(YUI.Env[Y.version].modules, {
+        foo: {
+            group: "app",
+            path: "assets/foo.js",
+            requires: ["node"]
+        },
+        bar: {
+            group: "app",
+            path: "bar-hash123.js",
+            requires: ["io-base", "foo"]
+        },
+        baz: {
+            group: "app",
+            path: "baz-123.css",
+            type: "css"
+        },
+        xyz: {
+            group: "app",
+            path: "xyz.css",
+            type: "css",
+            requires: ["baz"]
         }
     });
-}, '', {requires: []});
+});

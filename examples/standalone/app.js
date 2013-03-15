@@ -16,10 +16,10 @@ yui({
     "allowRollup" : false
 }, __dirname + '/../../node_modules/yui');
 
-// by default, the seed will be just `yui-base`, but we can
+// by default, the seed will be just `yui`, but we can
 // extend the list by adding more modules to the seed list
 // to speed up the booting process
-app.use(yui.seed(['yui-base', 'loader']));
+app.use(yui.seed(['yui', 'json-stringify']));
 
 app.configure('development', function () {
 
@@ -34,7 +34,9 @@ app.configure('development', function () {
     // In development, we can get app modules from
     // the app origin to facilitate development.
     app.use(yui.serveGroupFromAppOrigin('path/app-modules-meta.js', {}, {
-        'path/app-modules-meta.js': __dirname + "/path/app-modules-meta.js"
+        'path/app-modules-meta.js': __dirname + "/path/app-modules-meta.js",
+        'path/foo.js': __dirname + "/path/foo.js",
+        'path/bar.css': __dirname + "/path/bar.css"
     }));
 
 });

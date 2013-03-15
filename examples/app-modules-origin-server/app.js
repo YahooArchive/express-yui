@@ -44,20 +44,14 @@ app.configure('development', function () {
     // getting YUI Core modules from the app origin.
     app.use(yui.serveCoreFromAppOrigin({
         // any special loader group configuration
-    }, {
-        maxAge: 0 /* no cache */
     }));
 
     // we can get app modules from the app origin.
     app.use(yui.serveGroupFromAppOrigin('assets/metas.js', {
         // any special loader group configuration
-    }, urlResolver, {
-        maxAge: 0 /* no cache */
-    }));
+    }, urlResolver));
 
-    app.use(yui.serveCombinedFromAppOrigin({
-        maxAge: 0
-    }));
+    // app.use(yui.serveCombinedFromAppOrigin());
 
 });
 
