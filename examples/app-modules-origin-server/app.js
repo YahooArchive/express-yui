@@ -51,8 +51,6 @@ app.configure('development', function () {
         // any special loader group configuration
     }, urlResolver));
 
-    // app.use(yui.serveCombinedFromAppOrigin());
-
 });
 
 app.configure('production', function () {
