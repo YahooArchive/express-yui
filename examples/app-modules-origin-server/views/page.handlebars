@@ -15,9 +15,8 @@
     </div>
 
     {{#yui_seed}}<script src="{{{src}}}"></script>{{/yui_seed}}
-    <script>{{{yui_config}}}</script>
     <script>
-    YUI().use('autocomplete', 'bar', 'xyz', 'slider', function (Y) {
+    YUI({{{yui_config}}}).use('autocomplete', 'bar', 'xyz', 'slider', function (Y) {
         Y.one('#content').setContent('<p>Ready!</p>');
     });
     </script>
