@@ -7,25 +7,6 @@ var express = require('express'),
     yui     = require('../../'),
     app     = express();
 
-
-// TODO: this should be locator or some other component
-// that knows how to deal with urls.
-function urlResolver(modulePath) {
-    // this is the resolver method
-    // which takes the relative path `modulePath`
-    // from metas, and should transform it into
-    // a filesystem path when serving those modules
-    // from origin server
-    return {
-        "assets/metas.js":  __dirname + "/assets/metas.js",
-        "assets/foo.js":    __dirname + "/assets/foo.js",
-        "bar-hash123.js":   __dirname + "/assets/bar.js",
-        "baz-123.css":      __dirname + "/assets/baz.css",
-        "xyz.css":          __dirname + "/assets/xyz.css"
-    }[modulePath];
-}
-
-
 // you can use a custom version of YUI by
 // specifying a custom path as a second argument,
 // or by installing yui at the app level using npm.
@@ -34,6 +15,9 @@ function urlResolver(modulePath) {
 yui({
     allowRollup: false
 }, __dirname + '/../../node_modules/yui');
+
+// registering the group information for a group named `metas`
+app.use(yui.registerGroup('metas', './build'));
 
 app.configure('development', function () {
 
@@ -47,9 +31,9 @@ app.configure('development', function () {
     }));
 
     // we can get app modules from the app origin.
-    app.use(yui.serveGroupFromAppOrigin('assets/metas.js', {
+    app.use(yui.serveGroupFromAppOrigin('metas', {
         // any special loader group configuration
-    }, urlResolver));
+    }));
 
 });
 
@@ -60,14 +44,15 @@ app.configure('production', function () {
 
     // when running in production to use a CDN that
     // will use the app as origin server
-    app.use(yui.serveGroupFromAppOrigin('assets/metas.js', {
+    app.use(yui.serveGroupFromAppOrigin('app', {
         // special loader group configuration
         base: 'http://flickrcdn.com/app/',
         comboBase: 'http://flickrcdn.com/combo?',
         comboSep: '&',
         root: 'app/'
-    }, urlResolver));
+    }));
 
+    // in prod we should use the combo
     app.use(yui.serveCombinedFromAppOrigin());
 
 });

@@ -21,6 +21,10 @@ yui({
 // to speed up the booting process
 app.use(yui.seed(['yui', 'json-stringify']));
 
+// registering groups
+app.use(yui.registerGroup('group1', './build-group1'));
+app.use(yui.registerGroup('group2', './build-group2'));
+
 app.configure('development', function () {
 
     // when using `yui.debugMode()` you will get debug,
@@ -33,11 +37,8 @@ app.configure('development', function () {
 
     // In development, we can get app modules from
     // the app origin to facilitate development.
-    app.use(yui.serveGroupFromAppOrigin('path/app-modules-meta.js', {}, {
-        'path/app-modules-meta.js': __dirname + "/path/app-modules-meta.js",
-        'path/foo.js': __dirname + "/path/foo.js",
-        'path/bar.css': __dirname + "/path/bar.css"
-    }));
+    app.use(yui.serveGroupFromAppOrigin('group1'));
+    app.use(yui.serveGroupFromAppOrigin('group2'));
 
 });
 
@@ -49,10 +50,11 @@ app.configure('production', function () {
     // In production, we can get app modules from
     // CDN providing the custom configuration for
     // github raw for example:
-    app.use(yui.serveGroupFromCDN('path/app-modules-meta.js', {
+    app.use(yui.serveGroupFromCDN('group1', {
         combine: false,
         base: 'https://rawgithub.com/yui/yui3/master/build/'
     }));
+    app.use(yui.serveGroupFromAppOrigin('group2'));
 
 });
 
