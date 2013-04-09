@@ -40,20 +40,19 @@ locator.parseBundle(__dirname, {}).then(function (have) {
 
     // we can get all groups from the app origin.
     // TODO: add support for *
-    app.use(yui.serveGroupFromAppOrigin('locator-express-demo', {
+    app.use(yui.serveGroupFromAppOrigin('locator-express', {
         // any special loader configuration for all groups
     }));
 
     // template engine
-    app.engine('handlebars', yui.engine());
+    app.engine('handlebars', yui.engine({ defaultBundle: 'locator-express' }));
     app.set('view engine', 'handlebars');
     app.set('views', __dirname + '/templates');
 
     // creating a page with YUI embeded
     app.get('/', yui.expose(), function (req, res, next) {
         res.render('bar', {
-            something: 'it works',
-            bundle: 'locator-express-demo'
+            something: 'it works'
         });
     });
 
