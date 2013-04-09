@@ -4,7 +4,7 @@
 
 var express = require('express'),
     exphbs  = require('express3-handlebars'),
-    yui     = require('../../'),
+    yui     = require('../../'), // modown-yui
     app     = express();
 
 // you can use a custom version of YUI by
@@ -13,8 +13,8 @@ var express = require('express'),
 // in this example we are using the yui from
 // npm's devDependencies.
 yui({
-    allowRollup: false
-}, __dirname + '/../../node_modules/yui');
+    "allowRollup" : false
+}, __dirname + '/node_modules/yui');
 
 // registering the group information for a group named `metas`
 app.use(yui.registerGroup('metas', './build'));

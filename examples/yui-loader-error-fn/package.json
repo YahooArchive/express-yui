@@ -1,0 +1,15 @@
+{
+  "name": "yui-loader-error-fn",
+  "description": "Modown YUI - Controlling YUI Loader errors.",
+  "version": "0.0.1",
+  "private": true,
+  "main": "app.js",
+  "scripts": {
+    "start": "node app"
+  },
+  "dependencies": {
+    "express": "3.x",
+    "express3-handlebars": "0.3.x",
+    "yui": "3.9.x"
+  }
+}

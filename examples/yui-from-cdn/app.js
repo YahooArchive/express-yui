@@ -4,7 +4,7 @@
 
 var express = require('express'),
     exphbs  = require('express3-handlebars'),
-    yui     = require('../../'),
+    yui     = require('../../'), // modown-yui
     app     = express();
 
 // you can use a custom version of YUI by
@@ -14,7 +14,7 @@ var express = require('express'),
 // npm's devDependencies.
 yui({
     "allowRollup" : false
-}, __dirname + '/../../node_modules/yui');
+}, __dirname + '/node_modules/yui');
 
 // by default, the seed will be just `yui-base`, but we can
 // extend the list by adding more modules to the seed list

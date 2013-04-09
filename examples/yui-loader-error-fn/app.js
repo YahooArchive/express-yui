@@ -4,7 +4,7 @@
 
 var express = require('express'),
     exphbs  = require('express3-handlebars'),
-    yui     = require('../../'),
+    yui     = require('../../'), // modown-yui
     app     = express();
 
 // you can use a custom version of YUI by
@@ -32,7 +32,7 @@ yui({
             });
         }
     }
-}, __dirname + '/../../node_modules/yui');
+}, __dirname + '/node_modules/yui');
 
 app.configure('development', function () {
 

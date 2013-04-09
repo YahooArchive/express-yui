@@ -11,18 +11,15 @@
         "npm": "1.1.x"
     },
     "dependencies": {
-        "modown-static": "git+ssh://git@git.corp.yahoo.com:modown/modown-static.git"
-    },
-    "devDependencies": {
-        "express": "3.x",
-        "express3-handlebars": "0.3.x",
-        "yui": "3.8.x",
-        "yuitest": "0.7.x",
-        "ytestrunner": "0.3.x",
-        "yuidocjs": "0.3.x",
+        "modown-static": "git+ssh://git@git.corp.yahoo.com:modown/modown-static.git",
         "mkdirp": "*",
         "shifter": "*",
         "win-spawn": "*"
+    },
+    "devDependencies": {
+        "yuitest": "0.7.x",
+        "ytestrunner": "0.3.x",
+        "yuidocjs": "0.3.x"
     },
     "main": "index",
     "keywords": [
