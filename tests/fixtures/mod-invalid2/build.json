@@ -1,0 +1,4 @@
+{
+    "name": "yui",
+    "invalid": "because it does not have `builds` member."
+}

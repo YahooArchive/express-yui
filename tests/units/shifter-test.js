@@ -15,6 +15,7 @@ var YUITest = require('yuitest'),
     shifter,
     childMockFn;
 
+// mocking win-spawn
 mockspawn = function () {
     return childMockFn();
 };
@@ -23,6 +24,11 @@ mockery.enable({
     warnOnReplace: false,
     warnOnUnregistered: false
 });
+
+// forcing mode to be development
+process.env.NODE_ENV = 'development';
+
+// requiring component
 shifter = require('../../lib/shifter.js');
 
 suite = new YUITest.TestSuite("shifter-plugin-test suite");
@@ -87,7 +93,7 @@ suite.add(new YUITest.TestCase({
             result;
         YUITest.Mock.expect(shifter, {
             method: 'register',
-            args: ['foo', libpath.join(__dirname, '..', 'fixtures/build.json'), YUITest.Mock.Value.Object],
+            args: ['foo', libpath.join(__dirname, '..', 'fixtures/mod-valid1/build.json'), YUITest.Mock.Value.Object],
             run: function (b, f, mod) {
                 A.isObject(mod.builds);
                 A.isObject(mod.builds.foo);
@@ -100,7 +106,7 @@ suite.add(new YUITest.TestCase({
             file: {
                 bundleName: 'foo',
                 ext: 'json',
-                fullPath: libpath.join(__dirname, '..', 'fixtures', 'build.json')
+                fullPath: libpath.join(__dirname, '..', 'fixtures/mod-valid1/build.json')
             }
         }, {
             getBundle: function (name) {
@@ -214,6 +220,46 @@ suite.add(new YUITest.TestCase({
             }
         });
         A.areSame(1, result);
+    },
+
+    "test plugin with invalid build.json": function () {
+        var plugin = shifter.locatorShifter(),
+            result;
+        result = plugin.fileUpdated({
+            file: {
+                bundleName: 'foo',
+                ext: 'json',
+                fullPath: libpath.join(__dirname, '..', 'fixtures/mod-invalid2/build.json')
+            }
+        }, {
+            getBundle: function (name) {
+                A.areSame('foo', name);
+                return {
+                    buildDirectory: './build'
+                };
+            }
+        });
+        A.isUndefined(result);
+    },
+
+    "test plugin with invalid meta file": function () {
+        var plugin = shifter.locatorShifter(),
+            result;
+        result = plugin.fileUpdated({
+            file: {
+                bundleName: 'foo',
+                ext: 'json',
+                fullPath: libpath.join(__dirname, '..', 'fixtures/mod-invalid1/build.json')
+            }
+        }, {
+            getBundle: function (name) {
+                A.areSame('foo', name);
+                return {
+                    buildDirectory: './build'
+                };
+            }
+        });
+        A.isUndefined(result);
     }
 
 }));
