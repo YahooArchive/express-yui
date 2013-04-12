@@ -1,0 +1,14 @@
+{
+    "name": "yui",
+    "builds": {
+        "foo": {
+            "jsfiles": ["foo.js"],
+            "config": {
+                "requires": ["bar"]
+            }
+        },
+        "bar": {
+            "jsfiles": ["bar.js"]
+        }
+    }
+}
