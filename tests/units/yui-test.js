@@ -68,11 +68,9 @@ suite.add(new YUITest.TestCase({
 
         modown({ }, __dirname + '/../../node_modules/yui');
 
+        A.isNotUndefined(modown.path, 'no path attached to modown');
         A.isNotUndefined(modown.YUI, 'no YUI attached to modown');
         A.isNotUndefined(modown.version, 'no version attached to modown');
-        A.areEqual("/Users/albertoc/fs/stage/ygit/modown/modown-yui/node_modules/yui",
-                   modown.path,
-                   "wrong path");
     },
 
     "test constructor with specified YUI that does not exist": function () {
