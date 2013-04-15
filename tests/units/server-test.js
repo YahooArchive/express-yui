@@ -21,6 +21,31 @@ suite.add(new YUITest.TestCase({
         A.isNotNull(server, "server require failed");
     },
 
+    "test attachModules": function () {
+        server._Env = null;
+        server.attachModules('foo', {
+            'baz': {},
+            'bar': {}
+        });
+        // flagging Env
+        server._Env = {
+            _attached: {
+                baz: true
+            },
+            _loader: {
+                loaded: {},
+                inserted: {}
+            },
+            required: {}
+        };
+        // attaching again
+        server.attachModules('foo', {
+            'baz': {},
+            'xyz': {}
+        });
+        A.isUndefined(server._Env._attached.bar);
+    },
+
     "test getYInstance": function () {
         var clonerTest = {},
             Y = YUITest.Mock(),
@@ -83,6 +108,7 @@ suite.add(new YUITest.TestCase({
         };
         result = server.getYInstance();
         A.areSame(Y, result);
+        A.areSame(Y.Env, server._Env, 'private _Env used by other internal methods was not exposed');
 
         // second pass: without any change in groups
         result = server.getYInstance();
@@ -94,18 +120,12 @@ suite.add(new YUITest.TestCase({
             'baz': {},
             'bar': {}
         });
+
         result = server.getYInstance();
         A.areSame(Y, result);
 
         YUITest.Mock.verify(server);
         YUITest.Mock.verify(Y);
-    },
-
-    "test attachModules": function () {
-        A.isUndefined(server.attachModules('foo', {
-            'baz': {},
-            'bar': {}
-        }));
     }
 
 }));
