@@ -36,6 +36,16 @@ suite = new YUITest.TestSuite("shifter-plugin-test suite");
 suite.add(new YUITest.TestCase({
     name: "yui-test",
 
+    setUp: function () {
+        // nothing
+    },
+
+    tearDown: function () {
+        // unregister mocks
+        delete shifter.on;
+        delete shifter.register;
+    },
+
     "test constructor": function () {
         A.isNotNull(shifter, "shifter require failed");
     },

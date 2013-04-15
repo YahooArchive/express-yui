@@ -17,6 +17,15 @@ suite = new YUITest.TestSuite("modown-yui engine plugin suite");
 suite.add(new YUITest.TestCase({
     name: "engine-test",
 
+    setUp: function () {
+        // nothing
+    },
+
+    tearDown: function () {
+        // unregister mocks
+        delete engine.getYInstance;
+    },
+
     "test constructor": function () {
         A.isNotNull(engine, "engine require failed");
         A.isFunction(engine.engine);

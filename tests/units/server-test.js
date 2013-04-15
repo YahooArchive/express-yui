@@ -17,6 +17,16 @@ suite = new YUITest.TestSuite("modown-yui server suite");
 suite.add(new YUITest.TestCase({
     name: "server-test",
 
+    setUp: function () {
+        // nothing
+    },
+
+    tearDown: function () {
+        // unregister mocks
+        delete server.config;
+        delete server.YUI;
+    },
+
     "test constructor": function () {
         A.isNotNull(server, "server require failed");
     },
