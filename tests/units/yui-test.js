@@ -44,7 +44,6 @@ suite.add(new YUITest.TestCase({
 
     _should: {
         error: {
-            "test config when yui() is not correctly initialized": true,
             "test constructor by calling it twice": true,
             "test constructor with specified YUI that does not exist": true
         },
@@ -149,14 +148,6 @@ suite.add(new YUITest.TestCase({
         modown.config = fn;
     },
 
-    "test config when yui() is not correctly initialized": function () {
-        A.isFunction(modown.config);
-
-        modown.config({ root: '/foo' });
-    },
-
-
-
     "test config": function () {
         A.isFunction(modown.config);
 
@@ -164,6 +155,8 @@ suite.add(new YUITest.TestCase({
 
         // need to initialize
         modown({ root: '/newroot' }, pathToYUI);
+        // default is: { filter: '-debug', base: '/static/' }
+        // console.log(modown.config());
 
         out = modown.config({
             root: '/myroot',
