@@ -21,6 +21,8 @@ suite.add(new YUITest.TestCase({
         seed = require('../../lib/seed.js');
     },
     tearDown: function () {
+        delete seed.config;
+
         seed = "undefined";
     },
 
@@ -52,6 +54,8 @@ suite.add(new YUITest.TestCase({
         A.areEqual('newModuleName',
                    yui_config.extendedCore[0],
                    'wrong extendedCore module');
+
+        // delete seed.config;
     },
 
     "test seed": function () {
@@ -59,6 +63,7 @@ suite.add(new YUITest.TestCase({
 
         var mid,
             yui_config;
+
 
         yui_config = {
             seed: ['yui', 'foo@app', 'bar@app']
@@ -71,6 +76,7 @@ suite.add(new YUITest.TestCase({
 
         A.areEqual(false, mid, 'seed.seed() should return false');
         A.areEqual(1, yui_config.seed.length, 'yui_config should have 1 seed only');
+
     },
 
     "test exposeSeed with no seed": function () {
@@ -87,6 +93,7 @@ suite.add(new YUITest.TestCase({
         middleware = seed.exposeSeed();
         
         A.areEqual(false, middleware, 'exposeSeed() should return false when no default seed is configured');
+
     },
 
     /**

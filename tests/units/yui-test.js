@@ -41,7 +41,6 @@ suite = new YUITest.TestSuite("yui-test suite");
 
 suite.add(new YUITest.TestCase({
     name: "yui-test",
-
     _should: {
         error: {
             "test constructor by calling it twice": true,
@@ -153,6 +152,7 @@ suite.add(new YUITest.TestCase({
 
         var out;
 
+        // console.log(modown.config.toString());
         // need to initialize
         modown({ root: '/newroot' }, pathToYUI);
         // default is: { filter: '-debug', base: '/static/' }
