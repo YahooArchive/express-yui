@@ -131,6 +131,7 @@ suite.add(new YUITest.TestCase({
                 A.isTrue(contents.indexOf('"bar": {') > 0);
                 A.isTrue(contents.indexOf('"baz": {') > 0);
                 A.isTrue(contents.indexOf('"loader-foo": {') > 0);
+                A.isTrue(contents.indexOf('return Y.UA.android') > 0);
                 return {
                     // mocking promise
                     then: function (fn) {
@@ -157,7 +158,10 @@ suite.add(new YUITest.TestCase({
             builds: {
                 bar: {
                     config: {
-                        requires: ['json-stringify']
+                        requires: ['json-stringify'],
+                        condition: {
+                            test: 'tests/fixtures/mod-valid1/meta/condtest.js'
+                        }
                     }
                 },
                 baz: {
