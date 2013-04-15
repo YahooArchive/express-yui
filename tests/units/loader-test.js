@@ -17,6 +17,15 @@ suite = new YUITest.TestSuite("loader-test suite");
 suite.add(new YUITest.TestCase({
     name: "loader-test",
 
+    setUp: function () {
+        // nothing
+    },
+
+    tearDown: function () {
+        // unregister mocks
+        delete loader._bundles;
+    },
+
     "test constructor": function () {
         A.isNotNull(loader, "loader require failed");
     },
@@ -52,15 +61,120 @@ suite.add(new YUITest.TestCase({
     "test plugin without any modules registered": function () {
         var plugin = loader.locatorLoader(),
             result;
-        delete loader._bundles;
+
         result = plugin.bundleUpdated({
             bundle: {
                 name: 'foo'
             }
         }, {});
         A.isUndefined(result);
-    }
+    },
 
+    "test plugin flow": function () {
+        var plugin = loader.locatorLoader(),
+            result,
+            api = YUITest.Mock();
+
+        YUITest.Mock.expect(api, {
+            method: 'writeFileInBundle',
+            args: ['foo', 'loader.js', YUITest.Mock.Value.String],
+            run: function (bundleName, destination_path, contents) {
+                A.isTrue(contents.indexOf('"bar": {') > 0);
+                A.isTrue(contents.indexOf('"baz": {') > 0);
+                A.isTrue(contents.indexOf('"loader-foo": {') > 0);
+                return {
+                    // mocking promise
+                    then: function (fn) {
+                        return fn(__filename);
+                    }
+                };
+            }
+        });
+        // registering groups
+        loader.register('foo', __dirname, {
+            builds: {
+                bar: {
+                    config: {
+                        requires: ['json-stringify']
+                    }
+                },
+                baz: {
+                    config: {
+                        requires: ['json-parse']
+                    }
+                }
+            }
+        });
+        result = plugin.bundleUpdated({
+            bundle: {
+                name: 'foo'
+            }
+        }, api);
+        A.areSame(__filename, result);
+        YUITest.Mock.verify(api);
+    },
+
+    "test plugin flow with register and attach": function () {
+        var plugin = loader.locatorLoader({
+                register: true,
+                attach: true
+            }),
+            result,
+            api = YUITest.Mock();
+
+        YUITest.Mock.expect(api, {
+            method: 'writeFileInBundle',
+            args: ['foo', 'loader.js', YUITest.Mock.Value.String],
+            run: function (bundleName, destination_path, contents) {
+                A.isTrue(contents.indexOf('"bar": {') > 0);
+                A.isTrue(contents.indexOf('"baz": {') > 0);
+                A.isTrue(contents.indexOf('"loader-foo": {') > 0);
+                return {
+                    // mocking promise
+                    then: function (fn) {
+                        return fn(__filename);
+                    }
+                };
+            }
+        });
+        YUITest.Mock.expect(loader, {
+            method: 'registerGroup',
+            args: ['foo', 'path/to/build', __filename],
+            run: function (bundleName, yuiBuildDirectory, newfile) {}
+        });
+        YUITest.Mock.expect(loader, {
+            method: 'attachModules',
+            args: ['foo', YUITest.Mock.Value.Object],
+            run: function (bundleName, obj) {
+                A.areSame('foo', obj.bar.group);
+                A.areSame('json-stringify', obj.bar.requires[0]);
+            }
+        });
+        // registering groups
+        loader.register('foo', __dirname, {
+            builds: {
+                bar: {
+                    config: {
+                        requires: ['json-stringify']
+                    }
+                },
+                baz: {
+                    config: {
+                        requires: ['json-parse']
+                    }
+                }
+            }
+        });
+        result = plugin.bundleUpdated({
+            bundle: {
+                name: 'foo',
+                yuiBuildDirectory: 'path/to/build'
+            }
+        }, api);
+        A.areSame(__filename, result);
+        YUITest.Mock.verify(api);
+        YUITest.Mock.verify(loader);
+    }
 }));
 
 YUITest.TestRunner.add(suite);
