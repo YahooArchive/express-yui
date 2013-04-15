@@ -36,12 +36,6 @@ mockDefaultYUI = {
         version: '2.0'
     }
 };
-mockery.registerMock(pathToYUI, mockYUI);
-mockery.registerMock(pathToDefaultYUI, mockDefaultYUI);
-mockery.enable({
-    warnOnReplace: false,
-    warnOnUnregistered: false
-});
 
 suite = new YUITest.TestSuite("yui-test suite");
 
@@ -60,6 +54,14 @@ suite.add(new YUITest.TestCase({
     },
 
     setUp: function () {
+
+        mockery.registerMock(pathToYUI, mockYUI);
+        mockery.registerMock(pathToDefaultYUI, mockDefaultYUI);
+        mockery.enable({
+            warnOnReplace: false,
+            warnOnUnregistered: false
+        });
+
         modown = require('../../lib/yui.js');
         if (modown.locals) {
             delete modown.locals;
@@ -67,6 +69,10 @@ suite.add(new YUITest.TestCase({
     },
 
     tearDown: function () {
+        mockery.deregisterMock(pathToYUI);
+        mockery.deregisterMock(pathToDefaultYUI);
+        mockery.disable();
+
         modown = null;
     },
 
