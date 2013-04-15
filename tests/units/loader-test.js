@@ -24,6 +24,8 @@ suite.add(new YUITest.TestCase({
     tearDown: function () {
         // unregister mocks
         delete loader._bundles;
+        delete loader.attachModules;
+        delete loader.registerGroup;
     },
 
     "test constructor": function () {
