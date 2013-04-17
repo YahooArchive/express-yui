@@ -282,7 +282,6 @@ suite.add(new YUITest.TestCase({
                 A.areEqual(options.comboBase, o.comboBase, 'wrong config.comboBase');
                 A.areEqual(options.comboSep, o.comboSep, 'wrong config.comboSep');
                 A.areEqual(1024, options.maxURLLength, 'wrong options.maxURLLength');
-                
 
                 return function (req, res, next) {
                 };
