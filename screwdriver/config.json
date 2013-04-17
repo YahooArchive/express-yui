@@ -14,9 +14,6 @@
                     "compile_commands": [
                         "updateversion"
                     ]
-                },
-                "publish": {
-                    "task": "none"
                 }
             }
         }
