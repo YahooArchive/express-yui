@@ -1,5 +1,9 @@
 {
     "bar": {
-        "requires": ["json-parse"]
+        "requires": ["json-parse"],
+        "condition": {
+            "trigger": "foo",
+            "test": "condtest.js"
+        }
     }
 }

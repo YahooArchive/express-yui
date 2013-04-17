@@ -28,10 +28,6 @@ locator.plug({
     attach: true
 }));
 
-locator.plug({
-    extensions: ['js']
-}, yui.locatorShifter());
-
 locator.parseBundle(__dirname, {}).then(function (have) {
 
     app.use(yui.debugMode());

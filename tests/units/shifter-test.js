@@ -13,11 +13,12 @@ var YUITest = require('yuitest'),
     mockery = require('mockery'),
     suite,
     shifter,
-    childMockFn;
+    childMockFn,
+    mockspawn;
 
 // mocking win-spawn
 mockspawn = function () {
-    return childMockFn();
+    return childMockFn.apply(this, arguments);
 };
 mockery.registerMock('win-spawn', mockspawn);
 mockery.enable({
@@ -31,10 +32,10 @@ process.env.NODE_ENV = 'development';
 // requiring component
 shifter = require('../../lib/shifter.js');
 
-suite = new YUITest.TestSuite("shifter-plugin-test suite");
+suite = new YUITest.TestSuite("shifter-test suite");
 
 suite.add(new YUITest.TestCase({
-    name: "yui-test",
+    name: "shifter-test",
 
     setUp: function () {
         // nothing
@@ -42,234 +43,146 @@ suite.add(new YUITest.TestCase({
 
     tearDown: function () {
         // unregister mocks
-        delete shifter.on;
-        delete shifter.register;
     },
 
     "test constructor": function () {
         A.isNotNull(shifter, "shifter require failed");
     },
 
-    "test plugin constructor": function () {
-        var plugin = shifter.locatorShifter();
-        A.isObject(plugin, "failing to create a plugin object");
-        A.isObject(plugin.describe, "missing describe member on plugin instance");
-        A.isFunction(plugin.fileUpdated, "missing updateFile member on plugin instance");
+    "test _checkYUIModule": function () {
+        var result;
+
+        result = shifter._checkYUIModule(libpath.join(__dirname, '..', 'fixtures/app-module.js'));
+        A.isObject(result, 'parsing fixtures/app-module.js');
+        A.isObject(result.builds['app-module'].config.requires, 'reading fixtures/app-module.js');
+
+        result = shifter._checkYUIModule(libpath.join(__dirname, '..', 'fixtures/metas-parsed-error.js'));
+        A.isUndefined(result, 'parsin fixtures/metas-parsed-error.js');
+
+        result = shifter._checkYUIModule(libpath.join(__dirname, '..', 'fixtures/metas.js'));
+        A.isObject(result, 'parsin fixtures/metas.js');
+        A.isObject(result.builds.metas.config.requires, 'reading fixtures/metas.js');
+
+        result = shifter._checkYUIModule(libpath.join(__dirname, '..', 'fixtures/metas-run-error.js'));
+        A.isObject(result, 'parsing fixtures/metas-run-error.js');
+        A.isObject(result.builds.metas.config.requires, 'reading fixtures/metas-run-error.js');
+
+        result = shifter._checkBuildFile(libpath.join(__dirname, '..', 'fixtures/whatever-that-does-not-exist.js'));
+        A.isUndefined(result, 'parsing fixtures/whatever-that-does-not-exist.js');
     },
 
-    "test plugin constructor with custom settings": function () {
-        var plugin = shifter.locatorShifter({
-            summary: 1,
-            extensions: 2,
-            shifterBuildArgs: ['3']
-        });
-        A.isObject(plugin, "failing to create a plugin object");
-        A.isObject(plugin.describe, "missing describe member on plugin instance");
-        A.areSame(1, plugin.describe.summary);
-        A.areSame(2, plugin.describe.extensions);
-        A.areSame('3', plugin.describe.shifterBuildArgs[0]);
+    "test _checkBuildFile": function () {
+        var result;
+
+        result = shifter._checkBuildFile(libpath.join(__dirname, '..', 'fixtures/mod-valid1/build.json'));
+        A.isObject(result, 'parsing fixtures/mod-valid1/build.json');
+        A.areSame("bar", result.builds.foo.config.requires[0], 'reading mod-valid1/build.json');
+        A.areSame("json-parse", result.builds.bar.config.requires[0], 'reading meta/bar.json configs');
+        
+        result = shifter._checkBuildFile(libpath.join(__dirname, '..', 'fixtures/mod-invalid1/build.json'));
+        A.isUndefined(result, 'parsing fixtures/mod-invalid1/build.json');
+
+        result = shifter._checkBuildFile(libpath.join(__dirname, '..', 'fixtures/mod-invalid2/build.json'));
+        A.isUndefined(result, 'parsing fixtures/mod-invalid2/build.json');
+
+        result = shifter._checkBuildFile(libpath.join(__dirname, '..', 'fixtures/whatever-that-does-not-exist.json'));
+        A.isUndefined(result, 'parsing fixtures/whatever-that-does-not-exist.json');
     },
 
-    "test plugin flow": function () {
-        var plugin = shifter.locatorShifter(),
-            result;
-        YUITest.Mock.expect(shifter, {
-            method: 'register',
-            args: ['foo', libpath.join(__dirname, '..', 'fixtures/app-module.js'), YUITest.Mock.Value.Object]
-        });
-        result = plugin.fileUpdated({
-            file: {
-                bundleName: 'foo',
-                ext: 'js',
-                fullPath: libpath.join(__dirname, '..', 'fixtures', 'app-module.js')
-            }
-        }, {
-            getBundle: function (name) {
-                A.areSame('foo', name);
-                return {
-                    buildDirectory: './build'
-                };
-            },
-            promise: function () {
-                return 1;
-            }
-        });
-        A.areSame(1, result);
-        YUITest.Mock.verify(shifter);
-    },
-
-    "test plugin with build.json": function () {
-        var plugin = shifter.locatorShifter(),
-            result;
-        YUITest.Mock.expect(shifter, {
-            method: 'register',
-            args: ['foo', libpath.join(__dirname, '..', 'fixtures/mod-valid1/build.json'), YUITest.Mock.Value.Object],
-            run: function (b, f, mod) {
-                A.isObject(mod.builds);
-                A.isObject(mod.builds.foo);
-                A.isObject(mod.builds.bar);
-                A.areSame('bar', mod.builds.foo.config.requires[0]);
-                A.areSame('json-parse', mod.builds.bar.config.requires[0]);
-            }
-        });
-        result = plugin.fileUpdated({
-            file: {
-                bundleName: 'foo',
-                ext: 'json',
-                fullPath: libpath.join(__dirname, '..', 'fixtures/mod-valid1/build.json')
-            }
-        }, {
-            getBundle: function (name) {
-                A.areSame('foo', name);
-                return {
-                    buildDirectory: './build'
-                };
-            },
-            promise: function () {
-                return 1;
-            }
-        });
-        A.areSame(1, result);
-        YUITest.Mock.verify(shifter);
-    },
-
-    "test plugin with invalid yui module": function () {
-        var result = shifter.locatorShifter().fileUpdated({
-            file: {
-                bundleName: 'foo',
-                ext: 'js',
-                fullPath: __filename
-            }
-        }, {
-            getBundle: function (name) {
-                A.areSame('foo', name);
-            }
-        });
-        A.isUndefined(result);
-    },
-
-    "test plugin with fulfilled promise": function () {
-        var plugin = shifter.locatorShifter(),
-            result,
+    "test shiftFiles without files": function () {
+        var result,
             child = YUITest.Mock();
         YUITest.Mock.expect(child, {
             method: 'on',
+            callCount: 0
+        });
+        childMockFn = function () {
+            return child;
+        };
+        shifter.shiftFiles([], __dirname, [], function (err) {
+            A.isNull(err, 'not error is expected');
+        });
+        YUITest.Mock.verify(child);
+    },
+
+    "test shiftFiles with js files": function () {
+        var child = YUITest.Mock();
+        YUITest.Mock.expect(child, {
+            method: 'on',
             args: ['exit', YUITest.Mock.Value.Function],
+            callCount: 2,
             run: function (evt, fn) {
                 fn();
             }
         });
-        shifter.register = function () {};
-        childMockFn = function () {
+        childMockFn = function (command, args) {
+            A.areSame('something', args[args.length-2]);
+            A.areSame('another', args[args.length-1]);
+            A.isTrue(args.indexOf('--yui-module') >= 0);
             return child;
         };
-        result = plugin.fileUpdated({
-            file: {
-                bundleName: 'foo',
-                ext: 'js',
-                fullPath: libpath.join(__dirname, '..', 'fixtures', 'app-module.js')
-            }
-        }, {
-            getBundle: function (name) {
-                A.areSame('foo', name);
-                return {
-                    buildDirectory: './build'
-                };
-            },
-            promise: function (fn) {
-                fn(function (value) {
-                    YUITest.Mock.verify(child);
-                    A.isUndefined(value);
-                }, function () {
-                    YUITest.Mock.verify(child);
-                    A.fail('The promise should be fulfilled');
-                });
-                return 1;
-            }
+        shifter.shiftFiles(['foo.js', 'bar.js'], __dirname, ['something', 'another'], function (err) {
+            A.isNull(err, 'no error is expected');
         });
-        A.areSame(1, result);
+        YUITest.Mock.verify(child);
     },
 
-    "test plugin with rejected promise": function () {
-        var plugin = shifter.locatorShifter(),
-            result,
-            child = YUITest.Mock();
+    "test shiftFiles with build.json": function () {
+        var child = YUITest.Mock();
         YUITest.Mock.expect(child, {
             method: 'on',
             args: ['exit', YUITest.Mock.Value.Function],
+            callCount: 1,
             run: function (evt, fn) {
-                fn(new Error('trigger to reject the promise'));
+                fn();
             }
         });
-        shifter.register = function () {};
-        childMockFn = function () {
+        childMockFn = function (command, args) {
+            A.areSame('something', args[args.length-2]);
+            A.areSame('another', args[args.length-1]);
+            A.isTrue(args.indexOf('--config') >= 0);
             return child;
         };
-        result = plugin.fileUpdated({
-            file: {
-                bundleName: 'foo',
-                ext: 'js',
-                fullPath: libpath.join(__dirname, '..', 'fixtures', 'app-module.js')
-            }
-        }, {
-            getBundle: function (name) {
-                A.areSame('foo', name);
-                return {
-                    buildDirectory: './build'
-                };
-            },
-            promise: function (fn) {
-                fn(function (value) {
-                    YUITest.Mock.verify(child);
-                    A.fail('The promise should be rejected');
-                }, function (err) {
-                    YUITest.Mock.verify(child);
-                    A.isObject(err);
-                });
-                return 1;
-            }
+        shifter.shiftFiles(['build.json'], __dirname, ['something', 'another'], function (err) {
+            A.isNull(err, 'no error is expected');
         });
-        A.areSame(1, result);
+        YUITest.Mock.verify(child);
     },
 
-    "test plugin with invalid build.json": function () {
-        var plugin = shifter.locatorShifter(),
-            result;
-        result = plugin.fileUpdated({
-            file: {
-                bundleName: 'foo',
-                ext: 'json',
-                fullPath: libpath.join(__dirname, '..', 'fixtures/mod-invalid2/build.json')
-            }
-        }, {
-            getBundle: function (name) {
-                A.areSame('foo', name);
-                return {
-                    buildDirectory: './build'
-                };
+    "test shiftFiles with exit code": function () {
+        var child = YUITest.Mock();
+        YUITest.Mock.expect(child, {
+            method: 'on',
+            args: ['exit', YUITest.Mock.Value.Function],
+            callCount: 1,
+            run: function (evt, fn) {
+                fn(1);
             }
         });
-        A.isUndefined(result);
+        childMockFn = function (command, args) {
+            return child;
+        };
+        shifter.shiftFiles(['foo.js'], __dirname, [], function (err) {
+            A.isObject(err, 'error is expected to bubble up from spawn');
+        });
+        YUITest.Mock.verify(child);
     },
 
-    "test plugin with invalid meta file": function () {
-        var plugin = shifter.locatorShifter(),
-            result;
-        result = plugin.fileUpdated({
-            file: {
-                bundleName: 'foo',
-                ext: 'json',
-                fullPath: libpath.join(__dirname, '..', 'fixtures/mod-invalid1/build.json')
-            }
-        }, {
-            getBundle: function (name) {
-                A.areSame('foo', name);
-                return {
-                    buildDirectory: './build'
-                };
-            }
+    "test BuilderClass": function () {
+        
+        var obj = new (shifter.BuilderClass)({
+                name: 'the-module-name',
+                group: 'the-group-name'
+            }),
+            mods = shifter._checkBuildFile(libpath.join(__dirname, '..', 'fixtures/mod-valid1/build.json'));
+
+        obj.compile({
+            'build.json': mods
         });
-        A.isUndefined(result);
+        A.isTrue(obj.data.js.indexOf('"bar": {') > 0, 'bar module should be in meta');
+        A.isTrue(obj.data.js.indexOf('"foo": {') > 0, 'foo module should be in meta');
+        A.isTrue(obj.data.js.indexOf('"group": "the-group-name"') > 0, 'the group name should be honored');
+        A.isTrue(obj.data.js.indexOf('return Y.UA.android') > 0, 'condition for android should be honored');
     }
 
 }));
