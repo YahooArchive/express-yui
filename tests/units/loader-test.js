@@ -93,6 +93,11 @@ suite.add(new YUITest.TestCase({
             }),
             api = YUITest.Mock();
 
+        var bundle = {
+            name: 'foo',
+            buildDirectory: '/path/to'
+        };
+
         YUITest.Mock.expect(api, {
             method: 'writeFileInBundle',
             args: ['foo', 'loader-foo.js', YUITest.Mock.Value.String],
@@ -110,7 +115,7 @@ suite.add(new YUITest.TestCase({
             method: 'getBundleFiles',
             args: ['foo', YUITest.Mock.Value.Object],
             run: function (bundleName, filters) {
-                return ['bar.js', 'baz.js'];
+                return ['bar.js', 'baz.js', 'path/to/build.json'];
             }
         });
         YUITest.Mock.expect(api, {
@@ -126,26 +131,18 @@ suite.add(new YUITest.TestCase({
         });
         YUITest.Mock.expect(loader, {
             method: '_checkYUIModule',
-            callCount: 2,
+            callCount: 3,
             args: [YUITest.Mock.Value.String],
             run: function () {
-                return {
-                    builds: {
-                        bar: {
-                            config: {
-                                requires: ['json-stringify'],
-                                condition: {
-                                    test: 'tests/fixtures/mod-valid1/meta/condtest.js'
-                                }
-                            }
-                        },
-                        baz: {
-                            config: {
-                                requires: ['json-parse']
-                            }
-                        }
-                    }
-                };
+                return '_checkYUIModule result';
+            }
+        });
+        YUITest.Mock.expect(loader, {
+            method: '_checkBuildFile',
+            callCount: 1,
+            args: [YUITest.Mock.Value.String],
+            run: function () {
+                return '_checkBuildFile result';
             }
         });
         YUITest.Mock.expect(loader, {
@@ -172,15 +169,12 @@ suite.add(new YUITest.TestCase({
                 json: 'json version of loader-foo.js'
             };
         };
-        var bundle = {
-            name: 'foo',
-            buildDirectory: '/path/to'
-        };
         plugin.bundleUpdated({
             bundle: bundle,
             files: {
                 'bar.js': { fullPath: 'bar.js' },
-                'baz.js': { fullPath: 'baz.js' }
+                'baz.js': { fullPath: 'baz.js' },
+                'path/to/something.js': { fullPath: 'path/to/something.js' }
             }
         }, api);
         YUITest.Mock.verify(api);
