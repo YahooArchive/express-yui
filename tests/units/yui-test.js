@@ -11,18 +11,40 @@
 var YUITest = require('yuitest'),
     A = YUITest.Assert,
     OA = YUITest.ObjectAssert,
+    mockery = require('mockery'),
+    pathToYUI = __dirname + '/../../node_modules/yui',
+    pathToDefaultYUI = 'yui',
+    mockYUI,
+    mockDefaultYUI,
     suite,
     modown,
     configFn;
+
+mockYUI = {
+    path: function () {
+        return "/foo/bar";
+    },
+    YUI: {
+        version: '1.0'
+    }
+};
+mockDefaultYUI = {
+    path: function () {
+        return "/default/foo/bar";
+    },
+    YUI: {
+        version: '2.0'
+    }
+};
 
 suite = new YUITest.TestSuite("yui-test suite");
 
 suite.add(new YUITest.TestCase({
     name: "yui-test",
-
     _should: {
         error: {
-            "test config when yui() is not correctly initialized": true
+            "test constructor by calling it twice": true,
+            "test constructor with specified YUI that does not exist": true
         },
         ignore: {
             "test debugMode": false
@@ -30,6 +52,14 @@ suite.add(new YUITest.TestCase({
     },
 
     setUp: function () {
+
+        mockery.registerMock(pathToYUI, mockYUI);
+        mockery.registerMock(pathToDefaultYUI, mockDefaultYUI);
+        mockery.enable({
+            warnOnReplace: false,
+            warnOnUnregistered: false
+        });
+
         modown = require('../../lib/yui.js');
         if (modown.locals) {
             delete modown.locals;
@@ -37,52 +67,42 @@ suite.add(new YUITest.TestCase({
     },
 
     tearDown: function () {
+        mockery.deregisterMock(pathToYUI);
+        mockery.deregisterMock(pathToDefaultYUI);
+        mockery.disable();
+
         modown = null;
     },
 
     "test constructor by calling it twice": function () {
-
-        var errorThrown = false;
-
-        // first time OK
-        modown({ }, __dirname + '/../../node_modules/yui');
-        try {
-            // second time NOT ok. will throw exception
-            modown({ }, __dirname + '/../../node_modules/yui');
-        } catch (e) {
-            errorThrown = true;
-            A.areEqual('Multiple attemps to call `yui()`.Only one `yui` is allow per app.',
-                       e.message,
-                       'wrong error message');
-        }
-
-        A.areEqual(true, errorThrown, 'exception thrown expected');
+        modown({ }, pathToYUI);
+        modown({ }, pathToYUI);
     },
 
     "test constructor using default YUI": function () {
         A.isFunction(modown);
+
+        modown({ });
+        A.areEqual('/default/foo/bar', modown.path, 'wrong path for default YUI');
+        A.areEqual('2.0', modown.version, 'wrong version for default YUI');
     },
 
     "test constructor with specified YUI": function () {
         A.isFunction(modown);
 
-        modown({ }, __dirname + '/../../node_modules/yui');
+        modown({ }, pathToYUI);
 
         A.isNotUndefined(modown.path, 'no path attached to modown');
         A.isNotUndefined(modown.YUI, 'no YUI attached to modown');
         A.isNotUndefined(modown.version, 'no version attached to modown');
+
+        A.areEqual('1.0', modown.version, 'wrong YUI version');
+        A.areEqual('/foo/bar', modown.path, 'wrong YUI version');
     },
 
     "test constructor with specified YUI that does not exist": function () {
         A.isFunction(modown);
-
-        var errorThrown = false;
-        try {
-            modown({ }, __dirname + '/../../fake_node_modules/yui');
-        } catch (e) {
-            errorThrown = true;
-        }
-        A.areEqual(true, errorThrown, 'exception should be thrown');
+        modown({ }, __dirname + '/../../fake_node_modules/yui');
     },
 
     "test debugMode": function () {
@@ -127,23 +147,16 @@ suite.add(new YUITest.TestCase({
         modown.config = fn;
     },
 
-    "test config when yui() is not correctly initialized": function () {
-        A.isFunction(modown.config);
-
-        modown.config({ root: '/foo' });
-    },
-
-
-
     "test config": function () {
         A.isFunction(modown.config);
 
         var out;
 
+        // console.log(modown.config.toString());
         // need to initialize
-        modown({
-            root: '/newroot'
-        }, __dirname + '/../../node_modules/yui');
+        modown({ root: '/newroot' }, pathToYUI);
+        // default is: { filter: '-debug', base: '/static/' }
+        // console.log(modown.config());
 
         out = modown.config({
             root: '/myroot',
