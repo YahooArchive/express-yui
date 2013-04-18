@@ -14,6 +14,16 @@
                     "compile_commands": [
                         "updateversion"
                     ]
+                },
+                "lint": {
+                    "task": "node-lint",
+                    "exclude_paths": [
+                        "examples/app-modules-origin-server/build/",
+                        "examples/standalone/build-group1",
+                        "examples/standalone/build-group2",
+                        "tests/fixtures"
+                    ],
+                    "threshold": 0
                 }
             }
         }
