@@ -78,7 +78,7 @@ suite.add(new YUITest.TestCase({
         A.isObject(result, 'parsing fixtures/mod-valid1/build.json');
         A.areSame("bar", result.builds.foo.config.requires[0], 'reading mod-valid1/build.json');
         A.areSame("json-parse", result.builds.bar.config.requires[0], 'reading meta/bar.json configs');
-        
+
         result = shifter._checkBuildFile(libpath.join(__dirname, '..', 'fixtures/mod-invalid1/build.json'));
         A.isUndefined(result, 'parsing fixtures/mod-invalid1/build.json');
 
@@ -116,8 +116,8 @@ suite.add(new YUITest.TestCase({
             }
         });
         childMockFn = function (command, args) {
-            A.areSame('something', args[args.length-2]);
-            A.areSame('another', args[args.length-1]);
+            A.areSame('something', args[args.length - 2]);
+            A.areSame('another', args[args.length - 1]);
             A.isTrue(args.indexOf('--yui-module') >= 0);
             return child;
         };
@@ -138,8 +138,8 @@ suite.add(new YUITest.TestCase({
             }
         });
         childMockFn = function (command, args) {
-            A.areSame('something', args[args.length-2]);
-            A.areSame('another', args[args.length-1]);
+            A.areSame('something', args[args.length - 2]);
+            A.areSame('another', args[args.length - 1]);
             A.isTrue(args.indexOf('--config') >= 0);
             return child;
         };
@@ -169,7 +169,7 @@ suite.add(new YUITest.TestCase({
     },
 
     "test BuilderClass": function () {
-        
+
         var obj = new (shifter.BuilderClass)({
                 name: 'the-module-name',
                 group: 'the-group-name'

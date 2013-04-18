@@ -1,17 +1,17 @@
 {
     "name": "modown-yui",
     "description": "Modown YUI Component",
-    "version": "0.0.1-43",
+    "version": "0.0.1-52",
     "author": "Caridy Patino <caridy@yahoo-inc.com> (http://github.com/caridy)",
     "contributors": [
         "alberto chan <albertoc@yahoo-inc.com>"
     ],
     "engines": {
         "node": "0.8.x",
-        "npm": "1.1.x"
+        "npm": "*"
     },
     "dependencies": {
-        "modown-static": "git+ssh://git@git.corp.yahoo.com:modown/modown-static.git",
+        "modown-static": "0.0.x",
         "mkdirp": "*",
         "shifter": "*",
         "win-spawn": "*"
@@ -31,5 +31,11 @@
     ],
     "scripts": {
         "test": "./node_modules/ytestrunner/lib/cli.js -c --include tests/units/**/*.js"
+    },
+    "yahoo": {
+        "bugzilla": {
+            "product": "Mojito",
+            "component": "General"
+        }
     }
 }

@@ -91,7 +91,7 @@ suite.add(new YUITest.TestCase({
         };
 
         middleware = seed.exposeSeed();
-        
+
         A.areEqual(false, middleware, 'exposeSeed() should return false when no default seed is configured');
 
     },

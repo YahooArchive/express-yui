@@ -91,12 +91,11 @@ suite.add(new YUITest.TestCase({
                 register: true,
                 attach: true
             }),
-            api = YUITest.Mock();
-
-        var bundle = {
-            name: 'foo',
-            buildDirectory: '/path/to'
-        };
+            api = YUITest.Mock(),
+            bundle = {
+                name: 'foo',
+                buildDirectory: '/path/to'
+            };
 
         YUITest.Mock.expect(api, {
             method: 'writeFileInBundle',
