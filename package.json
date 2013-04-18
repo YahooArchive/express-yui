@@ -31,5 +31,11 @@
     ],
     "scripts": {
         "test": "./node_modules/ytestrunner/lib/cli.js -c --include tests/units/**/*.js"
+    },
+    "yahoo": {
+        "bugzilla": {
+            "product": "Mojito",
+            "component": "General"
+        }
     }
 }
