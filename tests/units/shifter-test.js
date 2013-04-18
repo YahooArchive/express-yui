@@ -6,6 +6,8 @@
 
 /*jslint node:true, nomen:true*/
 
+"use strict";
+
 var YUITest = require('yuitest'),
     A = YUITest.Assert,
     OA = YUITest.ObjectAssert,

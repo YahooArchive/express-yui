@@ -1,4 +1,5 @@
 /*jslint node:true, nomen: true*/
+/*global YUI*/
 
 'use strict';
 

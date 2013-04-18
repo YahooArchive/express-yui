@@ -1,7 +1,7 @@
-
 /*jslint node:true,nomen:true*/
 /*global YUI*/
 YUI.add('metas', function (Y, NAME) {
+    "use strict";
     Y.applyConfig({
         groups: {
             app: Y.merge((Y.config.groups && Y.config.groups.app) || {}, {

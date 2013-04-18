@@ -1,4 +1,6 @@
+/*global YUI*/
 YUI.add('metas', function (Y, NAME) {
+    "use strict";
     YUI.Env[Y.version].modules = YUI.Env[Y.version].modules || {};
     Y.mix(YUI.Env[Y.version].modules, {
         metas: {

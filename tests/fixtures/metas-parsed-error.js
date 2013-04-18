@@ -3,6 +3,7 @@
 /*global YUI*/
 
 YUI.add('metas', function (Y, NAME) {
+    "use strict";
     Y.applyConfig({
         // missing a { here
         groups:

@@ -1,4 +1,7 @@
+
+/*global YUI*/
 YUI.add('group1', function (Y, NAME) {
+    "use strict";
     Y.applyConfig({
         groups: {
             group1: Y.merge((Y.config.groups && Y.config.groups.group1) || {}, {
