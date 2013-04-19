@@ -20,7 +20,8 @@
         "mockery": "1.4.x",
         "yuitest": "0.7.x",
         "ytestrunner": "0.3.x",
-        "yuidocjs": "0.3.x"
+        "yuidocjs": "0.3.x",
+        "tmp": "*"
     },
     "main": "index",
     "keywords": [

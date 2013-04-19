@@ -13,10 +13,22 @@ var YUITest = require('yuitest'),
     OA = YUITest.ObjectAssert,
     libpath = require('path'),
     mockery = require('mockery'),
+    tmp = require('tmp'),
     suite,
     shifter,
     childMockFn,
-    mockspawn;
+    mockspawn,
+    fixture = libpath.join(__dirname, '..', 'fixtures'),
+    tmpFolder = function () {
+        var tmpNames = [ 'TMPDIR', 'TMP', 'TEMP' ],
+            i;
+        for (i = 0; i < tmpNames.length; i += 1) {
+            if (typeof process.env[tmpNames[i]] !== 'undefined') {
+                return process.env[tmpNames[i]];
+            }
+        }
+        return '/tmp'; // fallback to the default
+    };
 
 // mocking win-spawn
 mockspawn = function () {
@@ -54,40 +66,40 @@ suite.add(new YUITest.TestCase({
     "test _checkYUIModule": function () {
         var result;
 
-        result = shifter._checkYUIModule(libpath.join(__dirname, '..', 'fixtures/app-module.js'));
+        result = shifter._checkYUIModule(libpath.join(fixture, 'app-module.js'));
         A.isObject(result, 'parsing fixtures/app-module.js');
         A.isObject(result.builds['app-module'].config.requires, 'reading fixtures/app-module.js');
 
-        result = shifter._checkYUIModule(libpath.join(__dirname, '..', 'fixtures/metas-parsed-error.js'));
+        result = shifter._checkYUIModule(libpath.join(fixture, 'metas-parsed-error.js'));
         A.isUndefined(result, 'parsin fixtures/metas-parsed-error.js');
 
-        result = shifter._checkYUIModule(libpath.join(__dirname, '..', 'fixtures/metas.js'));
+        result = shifter._checkYUIModule(libpath.join(fixture, 'metas.js'));
         A.isObject(result, 'parsin fixtures/metas.js');
         A.isObject(result.builds.metas.config.requires, 'reading fixtures/metas.js');
 
-        result = shifter._checkYUIModule(libpath.join(__dirname, '..', 'fixtures/metas-run-error.js'));
+        result = shifter._checkYUIModule(libpath.join(fixture, 'metas-run-error.js'));
         A.isObject(result, 'parsing fixtures/metas-run-error.js');
         A.isObject(result.builds.metas.config.requires, 'reading fixtures/metas-run-error.js');
 
-        result = shifter._checkBuildFile(libpath.join(__dirname, '..', 'fixtures/whatever-that-does-not-exist.js'));
+        result = shifter._checkBuildFile(libpath.join(fixture, 'whatever-that-does-not-exist.js'));
         A.isUndefined(result, 'parsing fixtures/whatever-that-does-not-exist.js');
     },
 
     "test _checkBuildFile": function () {
         var result;
 
-        result = shifter._checkBuildFile(libpath.join(__dirname, '..', 'fixtures/mod-valid1/build.json'));
+        result = shifter._checkBuildFile(libpath.join(fixture, 'mod-valid1/build.json'));
         A.isObject(result, 'parsing fixtures/mod-valid1/build.json');
         A.areSame("bar", result.builds.foo.config.requires[0], 'reading mod-valid1/build.json');
         A.areSame("json-parse", result.builds.bar.config.requires[0], 'reading meta/bar.json configs');
 
-        result = shifter._checkBuildFile(libpath.join(__dirname, '..', 'fixtures/mod-invalid1/build.json'));
+        result = shifter._checkBuildFile(libpath.join(fixture, 'mod-invalid1/build.json'));
         A.isUndefined(result, 'parsing fixtures/mod-invalid1/build.json');
 
-        result = shifter._checkBuildFile(libpath.join(__dirname, '..', 'fixtures/mod-invalid2/build.json'));
+        result = shifter._checkBuildFile(libpath.join(fixture, 'mod-invalid2/build.json'));
         A.isUndefined(result, 'parsing fixtures/mod-invalid2/build.json');
 
-        result = shifter._checkBuildFile(libpath.join(__dirname, '..', 'fixtures/whatever-that-does-not-exist.json'));
+        result = shifter._checkBuildFile(libpath.join(fixture, 'whatever-that-does-not-exist.json'));
         A.isUndefined(result, 'parsing fixtures/whatever-that-does-not-exist.json');
     },
 
@@ -101,14 +113,15 @@ suite.add(new YUITest.TestCase({
         childMockFn = function () {
             return child;
         };
-        shifter.shiftFiles([], __dirname, [], function (err) {
+        shifter.shiftFiles([], { buildDir: tmpFolder() }, function (err) {
             A.isNull(err, 'not error is expected');
         });
         YUITest.Mock.verify(child);
     },
 
     "test shiftFiles with js files": function () {
-        var child = YUITest.Mock();
+        var child = YUITest.Mock(),
+            files = [libpath.join(fixture, 'app-module.js'), libpath.join(fixture, 'metas.js')];
         YUITest.Mock.expect(child, {
             method: 'on',
             args: ['exit', YUITest.Mock.Value.Function],
@@ -123,14 +136,18 @@ suite.add(new YUITest.TestCase({
             A.isTrue(args.indexOf('--yui-module') >= 0);
             return child;
         };
-        shifter.shiftFiles(['foo.js', 'bar.js'], __dirname, ['something', 'another'], function (err) {
+        shifter.shiftFiles(files, {
+            buildDir: tmpFolder(),
+            args: ['something', 'another']
+        }, function (err) {
             A.isNull(err, 'no error is expected');
         });
         YUITest.Mock.verify(child);
     },
 
     "test shiftFiles with build.json": function () {
-        var child = YUITest.Mock();
+        var child = YUITest.Mock(),
+            files = [libpath.join(fixture, 'mod-valid1/build.json')];
         YUITest.Mock.expect(child, {
             method: 'on',
             args: ['exit', YUITest.Mock.Value.Function],
@@ -145,7 +162,10 @@ suite.add(new YUITest.TestCase({
             A.isTrue(args.indexOf('--config') >= 0);
             return child;
         };
-        shifter.shiftFiles(['build.json'], __dirname, ['something', 'another'], function (err) {
+        shifter.shiftFiles(files, {
+            buildDir: tmpFolder(),
+            args: ['something', 'another']
+        }, function (err) {
             A.isNull(err, 'no error is expected');
         });
         YUITest.Mock.verify(child);
@@ -164,10 +184,28 @@ suite.add(new YUITest.TestCase({
         childMockFn = function (command, args) {
             return child;
         };
-        shifter.shiftFiles(['foo.js'], __dirname, [], function (err) {
+        shifter.shiftFiles([libpath.join(fixture, 'app-module.js')], { buildDir: tmpFolder() }, function (err) {
             A.isObject(err, 'error is expected to bubble up from spawn');
         });
         YUITest.Mock.verify(child);
+    },
+
+    "test _isCached": function () {
+        var self = this;
+
+        // creating a unique and temporary folder to validate the cache mechanism
+        tmp.dir(function (err, path) {
+            self.resume(function () {
+                if (err || !path) {
+                    A.fail('unable to create a temporary folder to test');
+                }
+                A.isFalse(shifter._isCached(libpath.join(fixture, 'app-module.js'), path), 'first call');
+                A.isTrue(shifter._isCached(libpath.join(fixture, 'app-module.js'), path), 'second call after caching it');
+                A.isFalse(shifter._isCached(libpath.join(fixture, 'mod-valid1/build.json'), path), 'first call for a json file');
+                A.isFalse(shifter._isCached(libpath.join(fixture, 'mod-valid1/build.json'), path), 'second call for a json ile');
+            });
+        });
+        this.wait();
     },
 
     "test BuilderClass": function () {
@@ -176,7 +214,7 @@ suite.add(new YUITest.TestCase({
                 name: 'the-module-name',
                 group: 'the-group-name'
             }),
-            mods = shifter._checkBuildFile(libpath.join(__dirname, '..', 'fixtures/mod-valid1/build.json'));
+            mods = shifter._checkBuildFile(libpath.join(fixture, 'mod-valid1/build.json'));
 
         obj.compile({
             'build.json': mods

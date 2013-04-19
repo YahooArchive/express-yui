@@ -43,14 +43,14 @@ suite.add(new YUITest.TestCase({
         A.isObject(plugin, "failing to create a plugin object");
         A.isObject(plugin.describe, "missing describe member on plugin instance");
         A.isFunction(plugin.bundleUpdated, "missing bundleUpdated member on plugin instance");
-        A.isArray(plugin.describe.shifterBuildArgs, "default shifter options should be honored");
+        A.isArray(plugin.describe.args, "default shifter options should be honored");
     },
 
     "test plugin constructor with custom settings": function () {
         var plugin = loader.locatorLoader({
             summary: 1,
             types: 2,
-            shifterBuildArgs: ['4'],
+            args: ['4'],
             more: 3
         });
         A.isObject(plugin, "failing to create a plugin object");
@@ -58,7 +58,7 @@ suite.add(new YUITest.TestCase({
         A.areSame(1, plugin.describe.summary);
         A.areSame(2, plugin.describe.types);
         A.areSame(3, plugin.describe.more);
-        A.areSame('4', plugin.describe.shifterBuildArgs[0]);
+        A.areSame('4', plugin.describe.args[0]);
     },
 
     "test register": function () {
@@ -156,8 +156,8 @@ suite.add(new YUITest.TestCase({
         });
         YUITest.Mock.expect(loader, {
             method: 'shiftFiles',
-            args: [YUITest.Mock.Value.Any, YUITest.Mock.Value.String, YUITest.Mock.Value.Any, YUITest.Mock.Value.Function],
-            run: function (files, yuiBuildDirectory, shifterBuildArgs, callback) {
+            args: [YUITest.Mock.Value.Any, YUITest.Mock.Value.Object, YUITest.Mock.Value.Function],
+            run: function (files, options, callback) {
                 callback();
             }
         });
