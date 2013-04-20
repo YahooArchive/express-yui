@@ -12,7 +12,8 @@ var YUITest = require('yuitest'),
     A = YUITest.Assert,
     OA = YUITest.ObjectAssert,
     suite,
-    server = require('../../lib/server.js');
+    server = require('../../lib/server.js'),
+    original = server.getYInstance;
 
 suite = new YUITest.TestSuite("modown-yui server suite");
 
@@ -20,13 +21,14 @@ suite.add(new YUITest.TestCase({
     name: "server-test",
 
     setUp: function () {
-        // nothing
+        server.getYInstance = original;
     },
 
     tearDown: function () {
         // unregister mocks
         delete server.config;
         delete server.YUI;
+        delete server._Y;
     },
 
     "test constructor": function () {
@@ -34,28 +36,43 @@ suite.add(new YUITest.TestCase({
     },
 
     "test attachModules": function () {
-        server._Env = null;
+        // attaching for the first time
         server.attachModules('foo', {
             'baz': {},
             'bar': {}
         });
         // flagging Env
-        server._Env = {
-            _attached: {
-                baz: true
-            },
-            _loader: {
-                loaded: {},
-                inserted: {}
-            },
-            required: {}
+        server._Y = {
+            Env: {
+                _attached: {
+                    baz: true
+                },
+                _used: {},
+                _loader: {
+                    loaded: {},
+                    inserted: {},
+                    required: {}
+                }
+            }
+        };
+        server.YUI = {
+            version: '1',
+            Env: {
+                _loaded: {
+                    '1': {
+                        baz: true
+                    }
+                },
+                mods: {}
+            }
         };
         // attaching again
         server.attachModules('foo', {
             'baz': {},
-            'xyz': {}
+            'bar': {}
         });
-        A.isUndefined(server._Env._attached.bar);
+        A.isUndefined(server._Y.Env._attached.baz, 'Y.Env was not correctly cleaned up');
+        A.isUndefined(server.YUI.Env._loaded['1'].baz, 'YUI.Env was not correctly cleaned up');
     },
 
     "test getYInstance": function () {
@@ -120,7 +137,7 @@ suite.add(new YUITest.TestCase({
         };
         result = server.getYInstance();
         A.areSame(Y, result);
-        A.areSame(Y.Env, server._Env, 'private _Env used by other internal methods was not exposed');
+        A.areSame(Y, server._Y, 'private _Y used by other internal methods was not exposed');
 
         // second pass: without any change in groups
         result = server.getYInstance();

@@ -8,18 +8,20 @@
 </head>
 <body>
 
-    <h1>header goes here for the handlebar template!</h1>
+    <h1>header goes here for the micro template!</h1>
 
-    <p>Tagline: {{tagline}}<p>
+    <p>Tagline: <%= data.tagline %><p>
 
     <div id="content">
         Loading...
     </div>
 
-    {{#yui_seed}}<script src="{{{src}}}"></script>{{/yui_seed}}
+    <% Y.Array.each(data.yui_seed, function (seed) { %>
+    <script src="<%== seed.src %>"></script>
+    <% }); %>
 
     <script>
-    YUI({{{yui_config}}}).use('alerts-model', 'node', function (Y) {
+    YUI(<%== this.yui_config %>).use('alerts-model', 'node', function (Y) {
         Y.one('#content').setContent('<p>Ready!</p>');
     });
     </script>

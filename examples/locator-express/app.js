@@ -4,22 +4,27 @@
 
 var express = require('express'),
     // modown components
-    yui           = require('../../'), // modown-yui
+    yui = require('../../'), // modown-yui
     BundleLocator = require('modown-locator'),
-    handlebars    = require('modown-handlebars'),
     // getting app ready
-    app     = express(),
-    locator = new BundleLocator({
-        buildDirectory: 'build'
-    });
+    app = express(),
+    locator;
 
 yui({
     "allowRollup" : false
-}, __dirname + '/node_modules/yui');
+}, __dirname + '/node_modules/yui/debug');
+
+locator = new BundleLocator({
+    buildDirectory: 'build'
+});
 
 locator.plug({
     extensions: ['handlebars']
-}, handlebars.plugin);
+}, require('modown-handlebars').plugin);
+
+locator.plug({
+    extensions: ['micro']
+}, require('modown-micro').plugin);
 
 locator.plug({
     types: ['*']
@@ -29,6 +34,8 @@ locator.plug({
 }));
 
 locator.parseBundle(__dirname, {}).then(function (have) {
+
+    app.set('view', yui.view({ defaultBundle: 'locator-express' }));
 
     app.use(yui.debugMode());
 
@@ -40,17 +47,22 @@ locator.parseBundle(__dirname, {}).then(function (have) {
         // any special loader configuration for all groups
     }));
 
-    // template engine
-    app.engine('handlebars', yui.engine({ defaultBundle: 'locator-express' }));
-    app.set('view engine', 'handlebars');
-    app.set('views', __dirname + '/templates');
-
     // creating a page with YUI embeded
-    app.get('/', yui.expose(), function (req, res, next) {
+    app.get('/bar', yui.expose(), function (req, res, next) {
         res.render('bar', {
-            something: 'it works'
+            tagline: 'testing with some data for template bar'
         });
     });
+
+    // creating a page with YUI embeded
+    app.get('/foo', yui.expose(), function (req, res, next) {
+        res.render('foo', {
+            tagline: 'testing some data for template foo'
+        });
+    });
+
+    // watching the source folder for live changes
+    locator.watch(__dirname);
 
     // listening
     app.set('port', process.env.PORT || 8666);

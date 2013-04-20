@@ -12,12 +12,12 @@ var YUITest = require('yuitest'),
     A = YUITest.Assert,
     OA = YUITest.ObjectAssert,
     suite,
-    engine = require('../../lib/engine.js');
+    view = require('../../lib/view.js');
 
-suite = new YUITest.TestSuite("modown-yui engine plugin suite");
+suite = new YUITest.TestSuite("modown-yui view plugin suite");
 
 suite.add(new YUITest.TestCase({
-    name: "engine-test",
+    name: "view-test",
 
     setUp: function () {
         // nothing
@@ -25,29 +25,27 @@ suite.add(new YUITest.TestCase({
 
     tearDown: function () {
         // unregister mocks
-        delete engine.getYInstance;
+        delete view.getYInstance;
+        delete view.YUI;
     },
 
     "test constructor": function () {
-        A.isNotNull(engine, "engine require failed");
-        A.isFunction(engine.engine);
+        A.isNotNull(view, "view require failed");
+        A.isFunction(view.view);
     },
 
-    "test engine": function () {
-        YUITest.Mock.expect(engine, {
+    "test view": function () {
+        YUITest.Mock.expect(view, {
             method: 'getYInstance',
-            args: [],
-            run: function () {
-                return {};
-            }
+            callCount: 0 // we should get Y in lazy mode when calling render
         });
-        var fn = engine.engine();
+        var fn = view.view();
         A.isObject(fn);
-        YUITest.Mock.verify(engine);
+        YUITest.Mock.verify(view);
     },
 
     "test render": function () {
-        engine.getYInstance = function () {
+        view.getYInstance = function () {
             return {
                 bundleName: {
                     templates: {
@@ -58,9 +56,9 @@ suite.add(new YUITest.TestCase({
                 }
             };
         };
-        var fn = engine.engine(),
+        var ViewClass = view.view(),
             value;
-        fn('foo', {
+        new ViewClass('foo').render({
             bundle: 'bundleName'
         }, function (err, data) {
             A.isNull(err);
@@ -70,7 +68,7 @@ suite.add(new YUITest.TestCase({
     },
 
     "test layout": function () {
-        engine.getYInstance = function () {
+        view.getYInstance = function () {
             return {
                 bundleName: {
                     templates: {
@@ -84,12 +82,12 @@ suite.add(new YUITest.TestCase({
                 }
             };
         };
-        var fn = engine.engine({
+        var ViewClass = view.view({
                 defaultBundle: 'bundleName',
                 defaultLayout: 'bar'
             }),
             value;
-        fn('foo', function (err, data) {
+        new ViewClass('foo').render({}, function (err, data) {
             A.isNull(err);
             value = data;
         });
@@ -97,18 +95,18 @@ suite.add(new YUITest.TestCase({
     },
 
     "test invalid template": function () {
-        engine.getYInstance = function () {
+        view.getYInstance = function () {
             return {};
         };
-        var fn = engine.engine(),
-            value;
-        fn('foo', {
-            bundle: 'bundleName'
-        }, function (err, data) {
-            A.isObject(err);
-            value = data;
+        var ViewClass = view.view({});
+        A.throwsError('Failed to lookup view "foo"', function () {
+            new ViewClass('foo').render({
+                bundle: 'bundleName'
+            }, function (err, data) {
+                A.isObject(err);
+                A.isUndefined(data);
+            });
         });
-        A.isUndefined(value);
     }
 
 }));
