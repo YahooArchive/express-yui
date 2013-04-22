@@ -27,7 +27,10 @@ locator.plug(yui.plugin({
 
 locator.parseBundle(__dirname, {}).then(function (have) {
 
-    app.set('view', yui.view({ defaultBundle: 'locator-express' }));
+    app.set('view', yui.view({
+        defaultBundle: 'locator-express',
+        defaultLayout: 'index'
+    }));
 
     app.use(yui.debugMode());
 
@@ -42,14 +45,16 @@ locator.parseBundle(__dirname, {}).then(function (have) {
     // creating a page with YUI embeded
     app.get('/bar', yui.expose(), function (req, res, next) {
         res.render('bar', {
-            tagline: 'testing with some data for template bar'
+            tagline: 'testing with some data for template bar',
+            tellme: 'but miami is awesome!'
         });
     });
 
     // creating a page with YUI embeded
     app.get('/foo', yui.expose(), function (req, res, next) {
         res.render('foo', {
-            tagline: 'testing some data for template foo'
+            tagline: 'testing some data for template foo',
+            tellme: 'san francisco is nice!'
         });
     });
 
