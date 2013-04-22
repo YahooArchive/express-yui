@@ -39,7 +39,7 @@ suite.add(new YUITest.TestCase({
     },
 
     "test plugin constructor": function () {
-        var plugin = loader.locatorLoader();
+        var plugin = loader.plugin();
         A.isObject(plugin, "failing to create a plugin object");
         A.isObject(plugin.describe, "missing describe member on plugin instance");
         A.isFunction(plugin.bundleUpdated, "missing bundleUpdated member on plugin instance");
@@ -47,7 +47,7 @@ suite.add(new YUITest.TestCase({
     },
 
     "test plugin constructor with custom settings": function () {
-        var plugin = loader.locatorLoader({
+        var plugin = loader.plugin({
             summary: 1,
             types: 2,
             args: ['4'],
@@ -70,7 +70,7 @@ suite.add(new YUITest.TestCase({
     },
 
     "test plugin without any modules registered": function () {
-        var plugin = loader.locatorLoader(),
+        var plugin = loader.plugin(),
             api = YUITest.Mock();
 
         YUITest.Mock.expect(api, {
@@ -89,7 +89,7 @@ suite.add(new YUITest.TestCase({
     },
 
     "test plugin flow with register and attach": function () {
-        var plugin = loader.locatorLoader({
+        var plugin = loader.plugin({
                 register: true,
                 attach: true
             }),

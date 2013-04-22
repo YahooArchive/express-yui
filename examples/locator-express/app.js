@@ -18,17 +18,9 @@ locator = new BundleLocator({
     buildDirectory: 'build'
 });
 
-locator.plug({
-    extensions: ['handlebars']
-}, require('modown-handlebars').plugin);
-
-locator.plug({
-    extensions: ['micro']
-}, require('modown-micro').plugin);
-
-locator.plug({
-    types: ['*']
-}, yui.locatorLoader({
+locator.plug(require('modown-handlebars').plugin());
+locator.plug(require('modown-micro').plugin());
+locator.plug(yui.plugin({
     register: true,
     attach: true
 }));
