@@ -14,9 +14,16 @@
         "modown-static": "0.0.x",
         "mkdirp": "*",
         "shifter": "*",
-        "win-spawn": "*"
+        "win-spawn": "*",
+        "debug": "*"
+    },
+    "peerDependencies": {
+        "express": "3.x",
+        "yui": "3.x"
     },
     "devDependencies": {
+        "express": "3.x",
+        "yui": "3.x",
         "mockery": "1.4.x",
         "yuitest": "0.7.x",
         "ytestrunner": "0.3.x",
