@@ -42,14 +42,19 @@ app.configure('development', function () {
 });
 
 // getting YUI Core modules from CDN.
-app.use(app.yui.serveCoreFromCDN());
+app.yui.serveCoreFromCDN();
 
 // template engine
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
+// serving static yui modules
+app.use(yui['static']({
+    maxAge: 100
+}));
+
 // creating a page with YUI embeded
-app.get('/', app.yui.expose(), function (req, res, next) {
+app.get('/', yui.expose(), function (req, res, next) {
     res.render('page');
 });
 

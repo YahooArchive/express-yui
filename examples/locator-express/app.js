@@ -26,17 +26,19 @@ locator.plug(require('modown-handlebars').plugin())
         }));
 
         app.yui.debugMode();
-
-        app.use(app.yui.serveCoreFromAppOrigin());
-
-        // we can get all groups from the app origin.
+        app.yui.serveCoreFromAppOrigin();
         // TODO: add support for *
-        app.use(app.yui.serveGroupFromAppOrigin('locator-express', {
+        app.yui.serveGroupFromAppOrigin('locator-express', {
             // any special loader configuration for all groups
+        });
+
+        // serving static yui modules
+        app.use(yui['static']({
+            maxAge: 100
         }));
 
         // creating a page with YUI embeded
-        app.get('/bar', app.yui.expose(), function (req, res, next) {
+        app.get('/bar', yui.expose(), function (req, res, next) {
             res.render('bar', {
                 tagline: 'testing with some data for template bar',
                 tellme: 'but miami is awesome!'
@@ -44,7 +46,7 @@ locator.plug(require('modown-handlebars').plugin())
         });
 
         // creating a page with YUI embeded
-        app.get('/foo', app.yui.expose(), function (req, res, next) {
+        app.get('/foo', yui.expose(), function (req, res, next) {
             res.render('foo', {
                 tagline: 'testing some data for template foo',
                 tellme: 'san francisco is nice!'

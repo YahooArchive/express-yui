@@ -17,34 +17,34 @@ app.configure('development', function () {
     app.yui.debugMode();
 
     // getting YUI Core modules from the app origin.
-    app.use(app.yui.serveCoreFromAppOrigin({
+    app.yui.serveCoreFromAppOrigin({
         // any special loader group configuration
-    }));
+    });
 
     // we can get app modules from the app origin.
-    app.use(app.yui.serveGroupFromAppOrigin('metas', {
+    app.yui.serveGroupFromAppOrigin('metas', {
         // any special loader group configuration
-    }));
+    });
 
 });
 
 app.configure('production', function () {
 
     // getting YUI Core modules from the app origin.
-    app.use(app.yui.serveCoreFromAppOrigin());
+    app.yui.serveCoreFromAppOrigin();
 
     // when running in production to use a CDN that
     // will use the app as origin server
-    app.use(app.yui.serveGroupFromAppOrigin('app', {
+    app.yui.serveGroupFromAppOrigin('app', {
         // special loader group configuration
         base: 'http://flickrcdn.com/app/',
         comboBase: 'http://flickrcdn.com/combo?',
         comboSep: '&',
         root: 'app/'
-    }));
+    });
 
     // in prod we should use the combo
-    app.use(app.yui.serveCombinedFromAppOrigin());
+    app.yui.serveCombinedFromAppOrigin();
 
 });
 
@@ -52,8 +52,13 @@ app.configure('production', function () {
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
+// serving static yui modules
+app.use(yui['static']({
+    maxAge: 100
+}));
+
 // creating a page with YUI embeded
-app.get('/', app.yui.expose(), function (req, res, next) {
+app.get('/', yui.expose(), function (req, res, next) {
     res.render('page');
 });
 

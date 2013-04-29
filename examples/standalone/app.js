@@ -24,28 +24,28 @@ app.configure('development', function () {
 
     // In development, we can get YUI from app origin
     // to facilitate development.
-    app.use(app.yui.serveCoreFromAppOrigin());
+    app.yui.serveCoreFromAppOrigin();
 
     // In development, we can get app modules from
     // the app origin to facilitate development.
-    app.use(app.yui.serveGroupFromAppOrigin('group1'));
-    app.use(app.yui.serveGroupFromAppOrigin('group2'));
+    app.yui.serveGroupFromAppOrigin('group1');
+    app.yui.serveGroupFromAppOrigin('group2');
 
 });
 
 app.configure('production', function () {
 
     // In production, we can get YUI from CDN.
-    app.use(app.yui.serveCoreFromCDN());
+    app.yui.serveCoreFromCDN();
 
     // In production, we can get app modules from
     // CDN providing the custom configuration for
     // github raw for example:
-    app.use(app.yui.serveGroupFromCDN('group1', {
+    app.yui.serveGroupFromCDN('group1', {
         combine: false,
         base: 'https://rawgithub.com/yui/yui3/master/build/'
-    }));
-    app.use(app.yui.serveGroupFromAppOrigin('group2'));
+    });
+    app.yui.serveGroupFromAppOrigin('group2');
 
 });
 
@@ -53,8 +53,13 @@ app.configure('production', function () {
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
+// serving static yui modules
+app.use(yui['static']({
+    maxAge: 100
+}));
+
 // creating a page with YUI embeded
-app.get('/', app.yui.expose(), function (req, res, next) {
+app.get('/', yui.expose(), function (req, res, next) {
     res.render('page');
 });
 

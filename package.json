@@ -28,6 +28,10 @@
         "yuitest": "0.7.x",
         "ytestrunner": "0.3.x",
         "yuidocjs": "0.3.x",
+        "express3-handlebars": "0.3.x",
+        "modown-micro": "git+ssh://git@git.corp.yahoo.com:modown/modown-micro.git",
+        "modown-handlebars": "git+ssh://git@git.corp.yahoo.com:modown/modown-handlebars.git",
+        "modown-locator": "git+ssh://git@git.corp.yahoo.com:modown/modown-locator.git",
         "tmp": "*"
     },
     "main": "index",

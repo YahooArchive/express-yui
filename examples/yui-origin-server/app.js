@@ -13,14 +13,19 @@ app.configure('development', function () {
     app.yui.debugMode();
 });
 
-app.use(app.yui.serveCoreFromAppOrigin());
+app.yui.serveCoreFromAppOrigin();
 
 // template engine
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
+// serving static yui modules
+app.use(yui['static']({
+    maxAge: 100
+}));
+
 // creating a page with YUI embeded
-app.get('/', app.yui.expose(), function (req, res, next) {
+app.get('/', yui.expose(), function (req, res, next) {
     res.render('page');
 });
 
