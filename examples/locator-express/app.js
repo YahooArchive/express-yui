@@ -22,7 +22,7 @@ locator.plug(require('modown-handlebars').plugin())
 
         app.set('view', app.yui.view({
             defaultBundle: 'locator-express',
-            defaultLayout: 'index'
+            defaultLayout: 'templates/layouts/index'
         }));
 
         app.yui.debugMode();
@@ -39,7 +39,7 @@ locator.plug(require('modown-handlebars').plugin())
 
         // creating a page with YUI embeded
         app.get('/bar', yui.expose(), function (req, res, next) {
-            res.render('bar', {
+            res.render('templates/bar', {
                 tagline: 'testing with some data for template bar',
                 tellme: 'but miami is awesome!'
             });
@@ -47,7 +47,7 @@ locator.plug(require('modown-handlebars').plugin())
 
         // creating a page with YUI embeded
         app.get('/foo', yui.expose(), function (req, res, next) {
-            res.render('foo', {
+            res.render('templates/foo', {
                 tagline: 'testing some data for template foo',
                 tellme: 'san francisco is nice!'
             });
