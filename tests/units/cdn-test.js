@@ -11,10 +11,8 @@
 var YUITest = require('yuitest'),
     A = YUITest.Assert,
     OA = YUITest.ObjectAssert,
-    mockery = require('mockery'),
     suite,
-    cdn,
-    mockUtils;
+    cdn = require('../../lib/cdn');
 
 suite = new YUITest.TestSuite("cdn-test suite");
 
@@ -22,95 +20,75 @@ suite.add(new YUITest.TestCase({
     name: "cdn-test",
 
     setUp: function () {
-        mockery.enable({
-            useCleanCache: true,
-            warnOnReplace: false,
-            warnOnUnregistered: false
-        });
     },
     tearDown: function () {
-        mockUtils = null;
-        mockery.disable();
+        delete cdn.config;
+        delete cdn.version;
     },
 
     "test serveCoreFromCDN": function () {
         var mid,
-            configCalled = false;
+            c = {
+                baz: 1
+            };
 
-        cdn = require('../../lib/cdn');
         A.isFunction(cdn.serveCoreFromCDN);
 
         cdn.version = '3.9'; // from yui()
         cdn.config = function () {
-            var args = Array.prototype.slice.call(arguments);
-            configCalled = true;
-
-            A.areEqual(2, args.length, 'utils.extend() expects only 2 arguments');
-            OA.areEqual({
-                base: 'http://yui.yahooapis.com/3.9/',
-                comboBase: 'http://yui.yahooapis.com/combo?',
-                comboSep: '&',
-                root: '3.9/'
-            }, args[0], 'wrong args[0]');
-            OA.areEqual({foo: 'bar'}, args[1], 'wrong loaderConfig');
+            return c;
         };
 
         mid = cdn.serveCoreFromCDN({
             foo: 'bar'
         });
 
-        A.areEqual(true, configCalled, 'yui.config() was not called');
-        A.areEqual(false, mid, 'cdn.serveCoreFromCDN() should return false');
+        OA.areEqual({
+            baz: 1,
+            foo: 'bar',
+            base: 'http://yui.yahooapis.com/3.9/',
+            comboBase: 'http://yui.yahooapis.com/combo?',
+            comboSep: '&',
+            root: '3.9/'
+        }, c, 'wrong loader config');
 
-        delete cdn.config;
-        delete cdn.version;
+        A.areEqual(cdn, mid, 'cdn.serveCoreFromCDN() should be chainable');
     },
 
     "test serveGroupFromCDN": function () {
         var mid,
-            extendCalled = false;
-
-        mockUtils = {
-            extend: function () {
-                var args = Array.prototype.slice.call(arguments);
-                extendCalled = true;
-
-                A.areEqual(3, args.length, 'utils.extend() expects only 3 arguments');
-                OA.areEqual({foo: 'foo'}, args[0], 'wrong args[0]');
-                OA.areEqual({combine: false}, args[1], 'wrong args[1]');
-                OA.areEqual({foo: 'bar'}, args[2], 'wrong loaderConfig');
-
-                return {};
-            }
-        };
-
-        mockery.registerMock('./utils', mockUtils);
-        cdn = require('../../lib/cdn');
-        A.isFunction(cdn.serveGroupFromCDN);
-
-
-        cdn.config = function () {
-            return {
+            c = {
                 foz: 'baz',
-                combine: false,
+                combine: true,
                 groups: {
                     app: {
                         foo: 'foo'
                     }
                 }
             };
+
+        A.isFunction(cdn.serveGroupFromCDN);
+
+        cdn.config = function () {
+            return c;
         };
 
         mid = cdn.serveGroupFromCDN('app', {
             foo: 'bar'
         });
 
-        A.areEqual(true, extendCalled, 'utils.extend() was not called');
-        mockery.deregisterMock('./utils');
+        A.areEqual(JSON.stringify({
+            "foz": "baz",
+            "combine": true,
+            "groups": {
+                "app": {
+                    "foo": "bar",
+                    "combine": true
+                }
+            }
+        }), JSON.stringify(c), 'wrong loader config');
 
-        A.areEqual(false, mid, 'cdn.serveGroupFromCDN() should return false');
-
-        delete cdn.config;
+        A.areEqual(cdn, mid, 'cdn.serveGroupFromCDN() should be chainable');
     }
 
 }));
