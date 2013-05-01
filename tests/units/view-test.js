@@ -25,7 +25,7 @@ suite.add(new YUITest.TestCase({
 
     tearDown: function () {
         // unregister mocks
-        delete view.getYInstance;
+        delete view.use;
         delete view.YUI;
     },
 
@@ -36,7 +36,7 @@ suite.add(new YUITest.TestCase({
 
     "test view": function () {
         YUITest.Mock.expect(view, {
-            method: 'getYInstance',
+            method: 'use',
             callCount: 0 // we should get Y in lazy mode when calling render
         });
         var fn = view.view();
@@ -45,12 +45,12 @@ suite.add(new YUITest.TestCase({
     },
 
     "test render": function () {
-        view.getYInstance = function () {
+        view.use = function () {
             return {
-                bundleName: {
-                    templates: {
-                        foo: function () {
-                            return 'output';
+                Template: {
+                    _cache: {
+                        'bundleName/foo': function (ctx, callback) {
+                            callback(null, 'output');
                         }
                     }
                 }
@@ -68,15 +68,15 @@ suite.add(new YUITest.TestCase({
     },
 
     "test layout": function () {
-        view.getYInstance = function () {
+        view.use = function () {
             return {
-                bundleName: {
-                    templates: {
-                        foo: function () {
-                            return 'output';
+                Template: {
+                    _cache: {
+                        'bundleName/foo': function (ctx, callback) {
+                            callback(null, 'output');
                         },
-                        bar: function (data, ctx) {
-                            return data.body + '+layout';
+                        'bundleName/bar': function (ctx, callback) {
+                            callback(null, ctx.body + '+layout');
                         }
                     }
                 }
@@ -95,7 +95,7 @@ suite.add(new YUITest.TestCase({
     },
 
     "test invalid template": function () {
-        view.getYInstance = function () {
+        view.use = function () {
             return {};
         };
         var ViewClass = view.view({});
