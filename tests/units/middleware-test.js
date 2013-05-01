@@ -119,7 +119,7 @@ suite.add(new YUITest.TestCase({
             return folders.shift().apply(this, arguments);
         };
 
-        mid = middleware.static(options);
+        mid = middleware['static'](options);
 
         mid(req, res, function (err, data) {
             counter += 1;
