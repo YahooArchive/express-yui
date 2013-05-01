@@ -15,7 +15,7 @@ var YUITest = require('yuitest'),
     mockYUI,
     mockExpress,
     suite,
-    modown,
+    Modown,
     configFn;
 
 mockYUI = {
@@ -44,7 +44,7 @@ suite.add(new YUITest.TestCase({
             warnOnReplace: false,
             warnOnUnregistered: false
         });
-        modown = require('../../lib/yui.js');
+        Modown = require('../../lib/yui.js');
     },
 
     tearDown: function () {
@@ -54,15 +54,14 @@ suite.add(new YUITest.TestCase({
     },
 
     "test constructor": function () {
-        var obj = new modown({});
+        var obj = new Modown({});
         A.areEqual('/foo/bar', obj.path, 'wrong path of YUI');
         A.areEqual('1.0', obj.version, 'wrong version of YUI');
     },
 
     "test config": function () {
-        var out;
-
-        var obj = new modown({});
+        var out,
+            obj = new Modown({});
 
         out = obj.config({
             root: '/myroot',
@@ -93,7 +92,7 @@ suite.add(new YUITest.TestCase({
     },
 
     "test debugMode": function () {
-        var obj = new modown({}),
+        var obj = new Modown({}),
             out;
 
         A.areSame(obj, obj.debugMode(), 'debugMode should be chainable');
@@ -102,7 +101,7 @@ suite.add(new YUITest.TestCase({
         A.areEqual('debug', out.filter);
         A.areEqual('debug', out.logLevel);
         A.isTrue(out.useBrowserConsole);
-        
+
         obj.debugMode({debug: false, filter: 'raw'});
         out = obj.config();
         A.isFalse(out.debug, 'debug should be overrulled');
@@ -110,7 +109,7 @@ suite.add(new YUITest.TestCase({
     },
 
     "test applyConfig": function () {
-        var obj = new modown({});
+        var obj = new Modown({});
 
         A.areSame(obj, obj.applyConfig({foo: 'bar'}), 'applyConfig should be chainable');
 

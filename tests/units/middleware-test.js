@@ -38,6 +38,7 @@ suite.add(new YUITest.TestCase({
         mockery.registerMock('modown-static', mockStatic);
         middleware = require('../../lib/middleware.js');
     },
+
     tearDown: function () {
         mockStatic = null;
         middleware = null;
@@ -87,7 +88,7 @@ suite.add(new YUITest.TestCase({
             combineCalled = true;
             A.areEqual(1, o.foo, 'options should be propagated');
             return function (req, res, next) {
-                counter++;
+                counter += 1;
                 next();
             };
         };
@@ -99,7 +100,7 @@ suite.add(new YUITest.TestCase({
             A.areEqual(1, o.foo, 'options should be propagated');
 
             return function (req, res, next) {
-                counter++;
+                counter += 1;
                 next();
             };
         }, function (groupName, groupPath, o) {
@@ -107,14 +108,13 @@ suite.add(new YUITest.TestCase({
             A.areEqual('testgroup', groupName, 'testgroup group should be added to static.folder()');
             A.areEqual('testgroup/bar/baz', groupPath, 'testgroup path should be collected from _groupFolderMap');
             A.areEqual(1, o.foo, 'options should be propagated');
-            
 
             return function (req, res, next) {
-                counter++;
+                counter += 1;
                 next();
             };
         }];
-        
+
         mockStatic.folder = function () {
             return folders.shift().apply(this, arguments);
         };
@@ -122,9 +122,9 @@ suite.add(new YUITest.TestCase({
         mid = middleware.static(options);
 
         mid(req, res, function (err, data) {
-            counter++;
+            counter += 1;
         });
-        
+
         A.areEqual(true, combineCalled, 'static.combine() was not called');
         A.isFunction(mid, 'static() should return a middleware');
         A.areEqual(4, counter, 'not all middleware were called');
