@@ -11,6 +11,11 @@ will automatically expose both of them into the views.
  * expose yui_config per request basis
  * expose seed files per request basis
  * provide basic configurations for cdn, debug, and other common conditions
+ * extend express by adding `req.app.yui` object that holds all information about yui
+ * provide basic middleware to server yui core and groups as static assets
+ * provide basic middleware to expose yui_config and yui_seed into the view engine
+ * provide basic express engine to rely on the Y instance computed as the server side
+to resolve compiled templates.
 
 ## Other features
 
