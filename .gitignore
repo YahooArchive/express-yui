@@ -1,3 +1,4 @@
+examples/locator-express/build
 artifacts/*
 build/*
 coverage/*

@@ -7,26 +7,22 @@ var express = require('express'),
     yui     = require('../../'), // modown-yui
     app     = express();
 
-// you can use a custom version of YUI by
-// specifying a custom path as a second argument,
-// or by installing yui at th app level using npm.
-// in this example we are using the yui from
-// npm's devDependencies.
-yui({
-    "allowRollup" : false
-}, __dirname + '/node_modules/yui');
-
 app.configure('development', function () {
-    // when using `yui.debugMode()` you will get debug,
+    // when using `app.yui.debugMode()` you will get debug,
     // filter and logLevel set accordingly
-    app.use(yui.debugMode());
+    app.yui.debugMode();
 });
 
-app.use(yui.serveCoreFromAppOrigin());
+app.yui.serveCoreFromAppOrigin();
 
 // template engine
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
+
+// serving static yui modules
+app.use(yui['static']({
+    maxAge: 100
+}));
 
 // creating a page with YUI embeded
 app.get('/', yui.expose(), function (req, res, next) {

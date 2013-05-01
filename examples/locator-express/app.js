@@ -3,73 +3,66 @@
 'use strict';
 
 var express = require('express'),
-    // modown components
-    yui = require('../../'), // modown-yui
-    BundleLocator = require('modown-locator'),
-    // getting app ready
+    // modown-yui
+    yui = require('../../'),
+    // creating app
     app = express(),
-    locator;
+    // modown-locator
+    locator = new (require('modown-locator'))({
+        buildDirectory: 'build'
+    });
 
-yui({
-    "allowRollup" : false
-}, __dirname + '/node_modules/yui/debug');
+locator.plug(require('modown-handlebars').plugin())
+    .plug(require('modown-micro').plugin())
+    .plug(app.yui.plugin({
+        register: true,
+        attach: true
+    }))
+    .parseBundle(__dirname, {}).then(function (have) {
 
-locator = new BundleLocator({
-    buildDirectory: 'build'
-});
+        app.set('view', app.yui.view({
+            defaultBundle: 'locator-express',
+            defaultLayout: 'templates/layouts/index'
+        }));
 
-locator.plug(require('modown-handlebars').plugin());
-locator.plug(require('modown-micro').plugin());
-locator.plug(yui.plugin({
-    register: true,
-    attach: true
-}));
-
-locator.parseBundle(__dirname, {}).then(function (have) {
-
-    app.set('view', yui.view({
-        defaultBundle: 'locator-express',
-        defaultLayout: 'index'
-    }));
-
-    app.use(yui.debugMode());
-
-    app.use(yui.serveCoreFromAppOrigin());
-
-    // we can get all groups from the app origin.
-    // TODO: add support for *
-    app.use(yui.serveGroupFromAppOrigin('locator-express', {
-        // any special loader configuration for all groups
-    }));
-
-    // creating a page with YUI embeded
-    app.get('/bar', yui.expose(), function (req, res, next) {
-        res.render('bar', {
-            tagline: 'testing with some data for template bar',
-            tellme: 'but miami is awesome!'
+        app.yui.debugMode();
+        app.yui.serveCoreFromAppOrigin();
+        // TODO: add support for *
+        app.yui.serveGroupFromAppOrigin('locator-express', {
+            // any special loader configuration for all groups
         });
-    });
 
-    // creating a page with YUI embeded
-    app.get('/foo', yui.expose(), function (req, res, next) {
-        res.render('foo', {
-            tagline: 'testing some data for template foo',
-            tellme: 'san francisco is nice!'
+        // serving static yui modules
+        app.use(yui['static']({
+            maxAge: 100
+        }));
+
+        // creating a page with YUI embeded
+        app.get('/bar', yui.expose(), function (req, res, next) {
+            res.render('templates/bar', {
+                tagline: 'testing with some data for template bar',
+                tellme: 'but miami is awesome!'
+            });
         });
+
+        // creating a page with YUI embeded
+        app.get('/foo', yui.expose(), function (req, res, next) {
+            res.render('templates/foo', {
+                tagline: 'testing some data for template foo',
+                tellme: 'san francisco is nice!'
+            });
+        });
+
+        // watching the source folder for live changes
+        locator.watch(__dirname);
+
+        // listening
+        app.set('port', process.env.PORT || 8666);
+        app.listen(app.get('port'), function () {
+            console.log("Server listening on port " +
+                app.get('port') + " in " + app.get('env') + " mode");
+        });
+
+    }, function () {
+        console.log('error: ', arguments);
     });
-
-    // watching the source folder for live changes
-    locator.watch(__dirname);
-
-    // listening
-    app.set('port', process.env.PORT || 8666);
-    app.listen(app.get('port'), function () {
-        console.log("Server listening on port " +
-            app.get('port') + " in " + app.get('env') + " mode");
-    });
-
-}, function () {
-
-    console.log('error: ', arguments);
-
-});

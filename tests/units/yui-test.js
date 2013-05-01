@@ -12,10 +12,8 @@ var YUITest = require('yuitest'),
     A = YUITest.Assert,
     OA = YUITest.ObjectAssert,
     mockery = require('mockery'),
-    pathToYUI = __dirname + '/../../node_modules/yui',
-    pathToDefaultYUI = 'yui',
     mockYUI,
-    mockDefaultYUI,
+    mockExpress,
     suite,
     modown,
     configFn;
@@ -28,12 +26,9 @@ mockYUI = {
         version: '1.0'
     }
 };
-mockDefaultYUI = {
-    path: function () {
-        return "/default/foo/bar";
-    },
-    YUI: {
-        version: '2.0'
+mockExpress = {
+    application: {
+        defaultConfiguration: function () {}
     }
 };
 
@@ -41,194 +36,85 @@ suite = new YUITest.TestSuite("yui-test suite");
 
 suite.add(new YUITest.TestCase({
     name: "yui-test",
-    _should: {
-        error: {
-            "test constructor by calling it twice": true,
-            "test constructor with specified YUI that does not exist": true
-        },
-        ignore: {
-            "test debugMode": false
-        }
-    },
 
     setUp: function () {
-
-        mockery.registerMock(pathToYUI, mockYUI);
-        mockery.registerMock(pathToDefaultYUI, mockDefaultYUI);
+        mockery.registerMock('yui', mockYUI);
+        mockery.registerMock('express', mockExpress);
         mockery.enable({
             warnOnReplace: false,
             warnOnUnregistered: false
         });
-
         modown = require('../../lib/yui.js');
-        if (modown.locals) {
-            delete modown.locals;
-        }
     },
 
     tearDown: function () {
-        mockery.deregisterMock(pathToYUI);
-        mockery.deregisterMock(pathToDefaultYUI);
+        mockery.deregisterMock('yui');
+        mockery.deregisterMock('express');
         mockery.disable();
-
-        modown = null;
     },
 
-    "test constructor by calling it twice": function () {
-        modown({ }, pathToYUI);
-        modown({ }, pathToYUI);
-    },
-
-    "test constructor using default YUI": function () {
-        A.isFunction(modown);
-
-        modown({ });
-        A.areEqual('/default/foo/bar', modown.path, 'wrong path for default YUI');
-        A.areEqual('2.0', modown.version, 'wrong version for default YUI');
-    },
-
-    "test constructor with specified YUI": function () {
-        A.isFunction(modown);
-
-        modown({ }, pathToYUI);
-
-        A.isNotUndefined(modown.path, 'no path attached to modown');
-        A.isNotUndefined(modown.YUI, 'no YUI attached to modown');
-        A.isNotUndefined(modown.version, 'no version attached to modown');
-
-        A.areEqual('1.0', modown.version, 'wrong YUI version');
-        A.areEqual('/foo/bar', modown.path, 'wrong YUI version');
-    },
-
-    "test constructor with specified YUI that does not exist": function () {
-        A.isFunction(modown);
-        modown({ }, __dirname + '/../../fake_node_modules/yui');
-    },
-
-    "test debugMode": function () {
-        A.isFunction(modown.debugMode);
-
-        var fn,
-            called;
-
-        fn = modown.config;
-        modown.config = function () {
-            var args = Array.prototype.slice.call(arguments);
-
-            OA.areEqual({
-                debug: true,
-                filter: 'debug',
-                logLevel: 'debug',
-                useBrowserConsole: true
-            }, args[0],
-                        'wrong default config');
-            OA.areEqual({
-                debug: false,
-                filter: 'raw'
-            }, args[1],
-                        'wrong provided config');
-        };
-
-        modown.debugMode({debug: false, filter: 'raw'});
-        modown.config = fn;
-    },
-
-    "test applyConfig": function () {
-        A.isFunction(modown.applyConfig);
-
-        var fn,
-            called;
-
-        fn = modown.config;
-        modown.config = function () { called = true; };
-        modown.applyConfig({foo: 'bar'});
-
-        A.areEqual(true, called, 'modown.config() was not called');
-        modown.config = fn;
+    "test constructor": function () {
+        var obj = new modown({});
+        A.areEqual('/foo/bar', obj.path, 'wrong path of YUI');
+        A.areEqual('1.0', obj.version, 'wrong version of YUI');
     },
 
     "test config": function () {
-        A.isFunction(modown.config);
-
         var out;
 
-        // console.log(modown.config.toString());
-        // need to initialize
-        modown({ root: '/newroot' }, pathToYUI);
-        // default is: { filter: '-debug', base: '/static/' }
-        // console.log(modown.config());
+        var obj = new modown({});
 
-        out = modown.config({
+        out = obj.config({
             root: '/myroot',
             base: '/mybase',
             comboBase: '/mycombobase',
             comboSep: '$'
         });
-        // console.log(out);
-
         A.areEqual('/myroot', out.root, 'wrong root');
         A.areEqual('/mybase', out.base, 'wrong base');
         A.areEqual('/mycombobase', out.comboBase, 'wrong comboBase');
         A.areEqual('$', out.comboSep, 'wrong comboSep');
-    },
 
-    "test exposeConfig": function () {
-        A.isFunction(modown.exposeConfig);
+        // just get
+        out = obj.config();
+        A.areEqual('/myroot', out.root, 'wrong root, should be preserved');
+        A.areEqual('/mybase', out.base, 'wrong base, should be preserved');
+        A.areEqual('/mycombobase', out.comboBase, 'wrong comboBase, should be preserved');
+        A.areEqual('$', out.comboSep, 'wrong comboSep, should be preserved');
 
-        var req,
-            res,
-            fixture,
-            configFn,
-            out,
-            called = false;
-
-        fixture = '(function(){YUI.Env.core.push.apply(YUI.Env.core,["my-module"]);YUI.applyConfig({"root":"/foo/bar","extendedCore":["my-module"]});}())';
-        configFn = modown.config;
-        modown.config = function () {
-            return {
-                root: '/foo/bar',
-                extendedCore: [ 'my-module' ]
-            };
-        };
-        req = { };
-        res = { locals: { yui: { } } };
-
-
-        out = modown.exposeConfig();
-        out(req, res, function () {
-            called = true;
-
-            // console.log(res.locals.yui_config);
-            A.isNotUndefined(res.locals.yui_config, 'res.locals.yui_config should be defined');
-            A.areEqual(fixture,
-                       res.locals.yui_config,
-                       'unexpected yui_config');
+        // customizing values
+        out = obj.config({
+            root: '/anotherroot'
         });
-
-        A.isFunction(out, 'return value should be a middleware');
-        A.areEqual(true, called, 'next() was not called');
-
-        modown.config = configFn;
+        A.areEqual('/anotherroot', out.root, 'wrong root, should be overruled');
+        A.areEqual('/mybase', out.base, 'wrong base, should not be overruled');
+        A.areEqual('/mycombobase', out.comboBase, 'wrong comboBase, should not be overruled');
+        A.areEqual('$', out.comboSep, 'wrong comboSep, should not be overruled');
     },
 
-    "test expose": function () {
-        A.isFunction(modown.expose);
-
-        var fn1,
-            fn2,
+    "test debugMode": function () {
+        var obj = new modown({}),
             out;
 
-        fn1 = modown.exposeConfig;
-        fn2 = modown.exposeSeed;
-        modown.exposeConfig = function () { return 'A'; };
-        modown.exposeSeed  = function () { return 'B'; };
+        A.areSame(obj, obj.debugMode(), 'debugMode should be chainable');
+        out = obj.config();
+        A.isTrue(out.debug);
+        A.areEqual('debug', out.filter);
+        A.areEqual('debug', out.logLevel);
+        A.isTrue(out.useBrowserConsole);
+        
+        obj.debugMode({debug: false, filter: 'raw'});
+        out = obj.config();
+        A.isFalse(out.debug, 'debug should be overrulled');
+        A.areEqual('raw', out.filter, 'filter should be overrulled');
+    },
 
-        out = modown.expose();
+    "test applyConfig": function () {
+        var obj = new modown({});
 
-        // console.log(out);
+        A.areSame(obj, obj.applyConfig({foo: 'bar'}), 'applyConfig should be chainable');
 
-        modown.exposeConfig = fn1;
-        modown.exposeSeed = fn2;
+        A.areEqual('bar', obj.config().foo, 'applyConfig should set config.foo');
     }
 
 }));

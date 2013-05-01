@@ -4,16 +4,6 @@
     "version": "0.0.1",
     "private": true,
     "main": "app.js",
-    "scripts": {
-        "start": "node app"
-    },
-    "dependencies": {
-        "modown-micro": "git+ssh://git@git.corp.yahoo.com:modown/modown-micro.git",
-        "modown-handlebars": "git+ssh://git@git.corp.yahoo.com:modown/modown-handlebars.git",
-        "modown-locator": "git+ssh://git@git.corp.yahoo.com:modown/modown-locator.git",
-        "express": "3.x",
-        "yui": "3.9.x"
-    },
     "modown": {
         "ruleset": "touchdown-package"
     }

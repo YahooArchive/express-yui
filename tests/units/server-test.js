@@ -29,6 +29,7 @@ suite.add(new YUITest.TestCase({
         delete server.config;
         delete server.YUI;
         delete server._Y;
+        delete server.version;
     },
 
     "test constructor": function () {
@@ -56,7 +57,6 @@ suite.add(new YUITest.TestCase({
             }
         };
         server.YUI = {
-            version: '1',
             Env: {
                 _loaded: {
                     '1': {
@@ -66,6 +66,7 @@ suite.add(new YUITest.TestCase({
                 mods: {}
             }
         };
+        server.version = '1';
         // attaching again
         server.attachModules('foo', {
             'baz': {},
@@ -75,7 +76,7 @@ suite.add(new YUITest.TestCase({
         A.isUndefined(server.YUI.Env._loaded['1'].baz, 'YUI.Env was not correctly cleaned up');
     },
 
-    "test getYInstance": function () {
+    "test use": function () {
         var clonerTest = {},
             Y = YUITest.Mock(),
             result;
@@ -135,12 +136,12 @@ suite.add(new YUITest.TestCase({
         server._groupFolderMap = {
             'foo': __dirname
         };
-        result = server.getYInstance();
+        result = server.use();
         A.areSame(Y, result);
         A.areSame(Y, server._Y, 'private _Y used by other internal methods was not exposed');
 
         // second pass: without any change in groups
-        result = server.getYInstance();
+        result = server.use();
         A.areSame(Y, result);
 
         // third pass: with change in groups
@@ -150,7 +151,7 @@ suite.add(new YUITest.TestCase({
             'bar': {}
         });
 
-        result = server.getYInstance();
+        result = server.use();
         A.areSame(Y, result);
 
         YUITest.Mock.verify(server);
