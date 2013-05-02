@@ -39,6 +39,7 @@ suite.add(new YUITest.TestCase({
 
     setUp: function () {
         mockery.registerMock('yui', mockYUI);
+        mockery.registerMock('yui/debug', mockYUI);
         mockery.registerMock('express', mockExpress);
         mockery.enable({
             warnOnReplace: false,
@@ -49,6 +50,7 @@ suite.add(new YUITest.TestCase({
 
     tearDown: function () {
         mockery.deregisterMock('yui');
+        mockery.deregisterMock('yui/debug');
         mockery.deregisterMock('express');
         mockery.disable();
     },
