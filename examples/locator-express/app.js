@@ -33,9 +33,7 @@ locator.plug(require('modown-handlebars').plugin())
         });
 
         // serving static yui modules
-        app.use(yui['static']({
-            maxAge: 100
-        }));
+        app.use(yui['static']());
 
         // creating a page with YUI embeded
         app.get('/bar', yui.expose(), function (req, res, next) {
