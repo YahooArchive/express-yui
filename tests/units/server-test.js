@@ -38,7 +38,24 @@ suite.add(new YUITest.TestCase({
 
     "test attachModules": function () {
         // attaching for the first time
-        server.attachModules('foo', {
+        server.attachModules('foo', ['baz', 'bar']);
+        // flagging Env
+        server._Y = YUITest.Mock();
+        YUITest.Mock.expect(server._Y, {
+            method: 'use',
+            args: [YUITest.Mock.Value.Any],
+            callCount: 1,
+            run: function (modules) {
+                A.areEqual(4, modules.length, 'provision of 2 modules failed');
+            }
+        });
+        // attaching again
+        A.areSame(server, server.attachModules('foo', ['baz', 'bar']), 'server.attachModules should be chainable');
+    },
+
+    "test registerModules": function () {
+        // attaching for the first time
+        server.registerModules('foo', {
             'baz': {},
             'bar': {}
         });
@@ -68,7 +85,7 @@ suite.add(new YUITest.TestCase({
         };
         server.version = '1';
         // attaching again
-        server.attachModules('foo', {
+        server.registerModules('foo', {
             'baz': {},
             'bar': {}
         });
@@ -128,10 +145,11 @@ suite.add(new YUITest.TestCase({
 
         // first pass
         // setting up groups
-        server.attachModules('foo', {
+        server.registerModules('foo', {
             'baz': {},
             'bar': {}
         });
+        server.attachModules('foo', ['baz', 'bar']);
         // other mocks
         server._groupFolderMap = {
             'foo': __dirname
@@ -146,10 +164,11 @@ suite.add(new YUITest.TestCase({
 
         // third pass: with change in groups
         // more groups
-        server.attachModules('foo', {
+        server.registerModules('foo', {
             'baz': {},
             'bar': {}
         });
+        server.attachModules('foo', ['baz', 'bar']);
 
         result = server.use();
         A.areSame(Y, result);

@@ -90,8 +90,9 @@ suite.add(new YUITest.TestCase({
 
     "test plugin flow with register and attach": function () {
         var plugin = loader.plugin({
-                register: true,
-                attach: true
+                registerGroup: true,
+                registerServerModules: true,
+                useServerModules: true
             }),
             api = YUITest.Mock(),
             bundle = {
@@ -151,8 +152,19 @@ suite.add(new YUITest.TestCase({
             args: ['foo', '/path/to/yui-build', __filename]
         });
         YUITest.Mock.expect(loader, {
+            method: 'registerModules',
+            args: ['foo', YUITest.Mock.Value.Object],
+            run: function (name, modules) {
+                A.areEqual('json version of loader-foo.js', modules.mod1, 'mod1 was not registered');
+            }
+        });
+        YUITest.Mock.expect(loader, {
             method: 'attachModules',
-            args: ['foo', 'json version of loader-foo.js']
+            args: ['foo', YUITest.Mock.Value.Any],
+            run: function (name, modules) {
+                A.areEqual(1, modules.length, 'mod1 was not attached');
+                A.areEqual('mod1', modules[0], 'mod1 was not attached');
+            }
         });
         YUITest.Mock.expect(loader, {
             method: 'shiftFiles',
@@ -167,7 +179,9 @@ suite.add(new YUITest.TestCase({
             };
             this.data = {
                 js: 'content of loader-foo.js',
-                json: 'json version of loader-foo.js'
+                json: {
+                    mod1: 'json version of loader-foo.js'
+                }
             };
         };
         plugin.bundleUpdated({

@@ -15,8 +15,9 @@ var express = require('express'),
 locator.plug(require('modown-handlebars').plugin())
     .plug(require('modown-micro').plugin())
     .plug(app.yui.plugin({
-        register: true,
-        attach: true
+        registerGroup: true,
+        registerServerModules: true,
+        useServerModules: true
     }))
     .parseBundle(__dirname, {}).then(function (have) {
 
