@@ -74,6 +74,7 @@ suite.add(new YUITest.TestCase({
             comboBase: "/samba~",
             comboSep: "$",
             local: true,
+            combine: true,
             groups: {
                 "testgroup": {
                     root: "http://foo.yahoo.com",

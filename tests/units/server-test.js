@@ -4,7 +4,7 @@
 * See the accompanying LICENSE file for terms.
 */
 
-/*jslint node:true, nomen:true*/
+/*jslint node:true, nomen:true, stupid: true*/
 
 "use strict";
 
@@ -135,13 +135,13 @@ suite.add(new YUITest.TestCase({
         YUITest.Mock.expect(server, {
             method: 'YUI',
             callCount: 1,
-            args: [YUITest.Mock.Value.Object, YUITest.Mock.Value.Object, YUITest.Mock.Value.Object],
-            run: function (originalConfig, defaultConfig, groupConfig) {
-                A.areNotEqual(clonerTest, originalConfig.ref, 'original config should be cloned');
-                A.areSame(1, groupConfig.groups.foo.more, 'group config from original should be mix with groupConfig');
+            args: [YUITest.Mock.Value.Object],
+            run: function (c) {
+                A.isTrue(c.useSync, 'useSync is required when running on the server');
                 return Y;
             }
         });
+        server.YUI.applyConfig = function () {};
 
         // first pass
         // setting up groups
