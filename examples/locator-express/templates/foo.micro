@@ -1,0 +1,1 @@
+<p>Micro template body content: <%= data.tellme %><p>

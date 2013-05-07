@@ -15,8 +15,13 @@
                         "updateversion"
                     ]
                 },
-                "publish": {
-                    "task": "none"
+                "lint": {
+                    "task": "node-lint",
+                    "exclude_paths": [
+                        "examples/standalone/build-group2/bar",
+                        "tests/fixtures"
+                    ],
+                    "threshold": 0
                 }
             }
         }

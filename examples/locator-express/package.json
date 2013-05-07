@@ -1,0 +1,10 @@
+{
+    "name": "locator-express",
+    "description": "Modown YUI - Locator and Express Integration Example.",
+    "version": "0.0.1",
+    "private": true,
+    "main": "app.js",
+    "modown": {
+        "ruleset": "touchdown-package"
+    }
+}
