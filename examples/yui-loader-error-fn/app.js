@@ -42,7 +42,7 @@ app.configure('development', function () {
 });
 
 // getting YUI Core modules from CDN.
-app.yui.serveCoreFromCDN();
+app.yui.setCoreFromCDN();
 
 // template engine
 app.engine('handlebars', exphbs());

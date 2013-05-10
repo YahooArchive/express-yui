@@ -24,28 +24,28 @@ app.configure('development', function () {
 
     // In development, we can get YUI from app origin
     // to facilitate development.
-    app.yui.serveCoreFromAppOrigin();
+    app.yui.setCoreFromAppOrigin();
 
-    // In development, we can get app modules from
+    // In development, get app modules from
     // the app origin to facilitate development.
-    app.yui.serveGroupFromAppOrigin('group1');
-    app.yui.serveGroupFromAppOrigin('group2');
+    app.yui.setGroupFromAppOrigin('group1');
+    app.yui.setGroupFromAppOrigin('group2');
 
 });
 
 app.configure('production', function () {
 
-    // In production, we can get YUI from CDN.
-    app.yui.serveCoreFromCDN();
+    // In production, get YUI from CDN.
+    app.yui.setCoreFromCDN();
 
-    // In production, we can get app modules from
+    // In production, get app modules from
     // CDN providing the custom configuration for
     // github raw for example:
-    app.yui.serveGroupFromCDN('group1', {
+    app.yui.setGroupFromCDN('group1', {
         combine: false,
         base: 'https://rawgithub.com/yui/yui3/master/build/'
     });
-    app.yui.serveGroupFromAppOrigin('group2');
+    app.yui.setGroupFromAppOrigin('group2');
 
 });
 

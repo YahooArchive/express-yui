@@ -27,9 +27,9 @@ locator.plug(require('modown-handlebars').plugin())
         }));
 
         app.yui.debugMode();
-        app.yui.serveCoreFromAppOrigin();
+        app.yui.setCoreFromAppOrigin();
         // TODO: add support for *
-        app.yui.serveGroupFromAppOrigin('locator-express', {
+        app.yui.setGroupFromAppOrigin('locator-express', {
             // any special loader configuration for all groups
         });
 

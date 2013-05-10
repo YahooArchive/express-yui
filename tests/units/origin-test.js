@@ -21,7 +21,7 @@ suite.add(new YUITest.TestCase({
 
     _should: {
         error: {
-            "test serveGroupFromAppOrigin with group not registered": true,
+            "test setGroupFromAppOrigin with group not registered": true,
             "test registerGroup with invalid / missing group config": true,
             "test registerGroup with groupName mismatch": true
         }
@@ -42,11 +42,11 @@ suite.add(new YUITest.TestCase({
         delete origin._app;
     },
 
-    "test serveCoreFromAppOrigin": function () {
-        A.isFunction(origin.serveCoreFromAppOrigin);
+    "test setCoreFromAppOrigin": function () {
+        A.isFunction(origin.setCoreFromAppOrigin);
     },
 
-    "test serveCoreFromAppOrigin result": function () {
+    "test setCoreFromAppOrigin result": function () {
 
         var mid,
             c = {
@@ -56,7 +56,7 @@ suite.add(new YUITest.TestCase({
         origin.config = function () {
             return c;
         };
-        mid = origin.serveCoreFromAppOrigin({ foo: 'bar' });
+        mid = origin.setCoreFromAppOrigin({ foo: 'bar' });
 
         OA.areEqual({
             "bar": 2,
@@ -68,22 +68,22 @@ suite.add(new YUITest.TestCase({
             "root": "/yui/",
             "local": true
         }, c, 'wrong loader config');
-        A.areSame(origin, mid, 'origin.serveCoreFromAppOrigin() should be chainable');
+        A.areSame(origin, mid, 'origin.setCoreFromAppOrigin() should be chainable');
     },
 
-    "test serveGroupFromAppOrigin": function () {
-        A.isFunction(origin.serveGroupFromAppOrigin);
+    "test setGroupFromAppOrigin": function () {
+        A.isFunction(origin.setGroupFromAppOrigin);
     },
 
-    // registerGroup() was not called prior to serveGroupFromAppOrigin()
-    "test serveGroupFromAppOrigin with group not registered": function () {
+    // registerGroup() was not called prior to setGroupFromAppOrigin()
+    "test setGroupFromAppOrigin with group not registered": function () {
         origin.config = function () { };
         // this should throw
-        origin.serveGroupFromAppOrigin('app', {});
+        origin.setGroupFromAppOrigin('app', {});
     },
 
     // group 'app' has been registered OK using yui.registerGroup()
-    "test serveGroupFromAppOrigin with valid group": function () {
+    "test setGroupFromAppOrigin with valid group": function () {
         var mid,
             c = {
                 bar: 3
@@ -107,7 +107,7 @@ suite.add(new YUITest.TestCase({
         // { app: '/build' }
         // console.log(origin._groupFolderMap);
         mid = origin.registerGroup('app', '/build');
-        mid = origin.serveGroupFromAppOrigin('app', {});
+        mid = origin.setGroupFromAppOrigin('app', {});
 
         A.areEqual(JSON.stringify({
             "bar": 3,
@@ -122,7 +122,7 @@ suite.add(new YUITest.TestCase({
                 }
             }
         }), JSON.stringify(c), 'wrong loader configuration');
-        A.areSame(origin, mid, 'origin.serveGroupFromAppOrigin() should be chainable');
+        A.areSame(origin, mid, 'origin.setGroupFromAppOrigin() should be chainable');
     },
 
     "test registerGroup with invalid / missing group config": function () {
@@ -188,7 +188,7 @@ suite.add(new YUITest.TestCase({
         A.areSame(origin, mid, 'origin.registerGroup() should be chainable');
     },
 
-    "test serveCombinedFromAppOrigin": function () {
+    "test combineGroups": function () {
 
         var mid,
             options,
@@ -214,12 +214,12 @@ suite.add(new YUITest.TestCase({
             }
         };
 
-        A.isFunction(origin.serveCombinedFromAppOrigin);
+        A.isFunction(origin.combineGroups);
         origin.config = function () {
             return config;
         };
 
-        mid = origin.serveCombinedFromAppOrigin(options);
+        mid = origin.combineGroups(options);
 
         A.areEqual(true, config.combine, 'config.combine should be true');
         A.areEqual(true, config.groups.testgroup.combine,
@@ -241,7 +241,7 @@ suite.add(new YUITest.TestCase({
             "combine": true
         }), JSON.stringify(config), 'wrong loader config');
 
-        A.areSame(origin, mid, 'origin.serveCombinedFromAppOrigin() should be chainable');
+        A.areSame(origin, mid, 'origin.combineGroups() should be chainable');
     }
 }));
 

@@ -33,28 +33,47 @@ $ npm install express-yui
 ```
 
 
-Usage
------
+Features
+--------
 
 ## Features
 
- * expose `yui_config` per request basis
- * expose seed files per request basis
+ * expose yui config per request
+ * expose seed files per request
  * provide basic configurations for cdn, debug, and other common conditions
- * extend express by adding `req.app.yui` object that holds all information about yui
- * provide basic middleware to server yui core and groups as static assets
- * provide basic middleware to expose `yui_config` and `yui_seed` into the view engine
- * provide basic express engine to rely on the Y instance computed as the server side
-to resolve compiled templates.
+ * provide basic middleware to server `static` assets from origin server, including
+combo capabilities built-in.
+ * provide basic middleware to `expose` `yui_config` and `yui_seed` into the view engine
+so they can be used in the templates to boot YUI in the client side.
 
 ## Other features
 
- * serve yui core modules from app origin
- * serve loader group with app modules from app origin
+ * work with modown-locator to produce a build process by shifting any yui module
+in the application bundle or any other bundle.
+ * provide basic express view engine to rely on views registered at the server side
+thru the `app.yui.use()` as compiled templates.
 
-API
----
 
+Usage
+-----
+
+## Serving static assets from app origin
+
+```
+app.yui.setCoreFromAppOrigin();
+app.yui.setGroupFromAppOrigin('group-name');
+app.use(yui.static());
+```
+
+If you plan to define a prefix for all static assets, then make sure you set that
+before defining any group, so loader can know about it. Here is the example:
+
+```
+app.set('yui static prefix', '/static');
+app.yui.setCoreFromAppOrigin();
+app.yui.setGroupFromAppOrigin('group-name');
+app.use('/static', yui.static());
+```
 
 License
 -------

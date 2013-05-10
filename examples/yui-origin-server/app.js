@@ -13,7 +13,7 @@ app.configure('development', function () {
     app.yui.debugMode();
 });
 
-app.yui.serveCoreFromAppOrigin();
+app.yui.setCoreFromAppOrigin();
 
 // template engine
 app.engine('handlebars', exphbs());
