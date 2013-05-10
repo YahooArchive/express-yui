@@ -3,7 +3,7 @@
 'use strict';
 
 var express = require('express'),
-    // modown-yui
+    // express-yui
     yui = require('../../'),
     // creating app
     app = express(),

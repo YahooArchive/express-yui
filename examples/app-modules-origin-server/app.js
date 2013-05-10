@@ -4,7 +4,7 @@
 
 var express = require('express'),
     exphbs  = require('express3-handlebars'),
-    yui     = require('../../'), // modown-yui
+    yui     = require('../../'), // express-yui
     app     = express();
 
 // registering the group information for a group named `metas`
@@ -44,7 +44,7 @@ app.configure('production', function () {
     });
 
     // in prod we should use the combo
-    app.yui.serveCombinedFromAppOrigin();
+    app.yui.combineGroups();
 
 });
 

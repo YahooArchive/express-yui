@@ -1,24 +1,14 @@
 {
     "shared": {
-        "notification_email": "nobody@yahoo-inc.com",
-        "compilers": {
-            "updateversion": {
-                "compiler": "updateversion"
-            }
-        }
+        "notification_email": "nobody@yahoo-inc.com"
     },
     "jobs": {
         "component": {
             "build": {
-                "custom": {
-                    "compile_commands": [
-                        "updateversion"
-                    ]
-                },
                 "lint": {
                     "task": "node-lint",
                     "exclude_paths": [
-                        "examples/standalone/build-group2/bar",
+                        "examples",
                         "tests/fixtures"
                     ],
                     "threshold": 0
@@ -28,4 +18,3 @@
     },
     "version": 2
 }
-

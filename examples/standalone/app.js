@@ -4,7 +4,7 @@
 
 var express = require('express'),
     exphbs  = require('express3-handlebars'),
-    yui     = require('../../'), // modown-yui
+    yui     = require('../../'), // express-yui
     app     = express();
 
 // by default, the seed will be just `yui`, but we can
