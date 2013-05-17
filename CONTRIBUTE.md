@@ -14,8 +14,9 @@ To run the unit tests (with coverage by default):
 
 To generate the API docs under `build/apidocs/index.html`:
 
-    ./scripts/docs.sh
+    rm -rf ./build/apidocs && mkdir -p ./build/apidocs
+    npm run docs
 
 To lint the app lib folder:
 
-    ./scripts/lint.sh
+    npm run lint
