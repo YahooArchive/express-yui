@@ -50,7 +50,7 @@ suite.add(new YUITest.TestCase({
                 Template: {
                     _cache: {
                         'bundleName/foo': function (ctx, callback) {
-                            callback(null, 'output');
+                            return 'output';
                         }
                     }
                 }
@@ -73,10 +73,10 @@ suite.add(new YUITest.TestCase({
                 Template: {
                     _cache: {
                         'bundleName/foo': function (ctx, callback) {
-                            callback(null, 'output');
+                            return 'output';
                         },
                         'bundleName/bar': function (ctx, callback) {
-                            callback(null, ctx.body + '+layout');
+                            return ctx.body + '+layout';
                         }
                     }
                 }
