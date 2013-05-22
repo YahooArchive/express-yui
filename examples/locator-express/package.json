@@ -1,10 +1,15 @@
 {
     "name": "locator-express",
-    "description": "Modown YUI - Locator and Express Integration Example.",
+    "description": "Express YUI - Locator Integration Example.",
     "version": "0.0.1",
     "private": true,
     "main": "app.js",
     "modown": {
         "ruleset": "touchdown-package"
+    },
+    "devDependencies": {
+        "modown-micro": "git+ssh://git@git.corp.yahoo.com:modown/modown-micro.git",
+        "modown-handlebars": "git+ssh://git@git.corp.yahoo.com:modown/modown-handlebars.git",
+        "modown-locator": "0.1.x"
     }
 }
