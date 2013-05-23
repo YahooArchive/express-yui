@@ -8,8 +8,8 @@
         "alberto chan <albertoc@yahoo-inc.com>"
     ],
     "engines": {
-        "node": "0.8.x",
-        "npm": "*"
+        "node": ">=0.8.x",
+        "npm" : ">=1.2.10"
     },
     "dependencies": {
         "modown-static": "0.0.x",
