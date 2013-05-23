@@ -12,7 +12,7 @@
         "npm" : ">=1.2.10"
     },
     "dependencies": {
-        "modown-static": "0.0.x",
+        "express-combo": "0.0.x",
         "mkdirp": "*",
         "shifter": "*",
         "win-spawn": "*",
