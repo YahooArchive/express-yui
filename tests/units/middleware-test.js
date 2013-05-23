@@ -24,7 +24,7 @@ suite.add(new YUITest.TestCase({
 
     _should: {
         error: {
-            "test serveCoreFromAppOrigin without calling yui()": true
+            "test setCoreFromAppOrigin without calling yui()": true
         }
     },
 

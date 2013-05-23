@@ -26,20 +26,20 @@ suite.add(new YUITest.TestCase({
         delete cdn.version;
     },
 
-    "test serveCoreFromCDN": function () {
+    "test setCoreFromCDN": function () {
         var mid,
             c = {
                 baz: 1
             };
 
-        A.isFunction(cdn.serveCoreFromCDN);
+        A.isFunction(cdn.setCoreFromCDN);
 
         cdn.version = '3.9'; // from yui()
         cdn.config = function () {
             return c;
         };
 
-        mid = cdn.serveCoreFromCDN({
+        mid = cdn.setCoreFromCDN({
             foo: 'bar'
         });
 
@@ -52,10 +52,10 @@ suite.add(new YUITest.TestCase({
             root: '3.9/'
         }, c, 'wrong loader config');
 
-        A.areEqual(cdn, mid, 'cdn.serveCoreFromCDN() should be chainable');
+        A.areEqual(cdn, mid, 'cdn.setCoreFromCDN() should be chainable');
     },
 
-    "test serveGroupFromCDN": function () {
+    "test setGroupFromCDN": function () {
         var mid,
             c = {
                 foz: 'baz',
@@ -67,13 +67,13 @@ suite.add(new YUITest.TestCase({
                 }
             };
 
-        A.isFunction(cdn.serveGroupFromCDN);
+        A.isFunction(cdn.setGroupFromCDN);
 
         cdn.config = function () {
             return c;
         };
 
-        mid = cdn.serveGroupFromCDN('app', {
+        mid = cdn.setGroupFromCDN('app', {
             foo: 'bar'
         });
 
@@ -88,7 +88,7 @@ suite.add(new YUITest.TestCase({
             }
         }), JSON.stringify(c), 'wrong loader config');
 
-        A.areEqual(cdn, mid, 'cdn.serveGroupFromCDN() should be chainable');
+        A.areEqual(cdn, mid, 'cdn.setGroupFromCDN() should be chainable');
     }
 
 }));

@@ -1,7 +1,8 @@
 {
-    "name": "modown-yui",
-    "description": "Modown YUI Component",
-    "version": "0.1.0-10",
+    "name": "express-yui",
+    "description": "Express extension for YUI Applications",
+    "version": "0.2.0",
+    "homepage": "https://github.com/yahoo/express-yui",
     "author": "Caridy Patino <caridy@yahoo-inc.com> (http://github.com/caridy)",
     "contributors": [
         "alberto chan <albertoc@yahoo-inc.com>"
@@ -39,8 +40,21 @@
         "framework",
         "yui",
         "mojito",
-        "modown"
+        "modown",
+        "javascript",
+        "express"
     ],
+    "directories": {
+        "lib"    : "./lib",
+        "example": "./examples"
+    },
+    "repository": {
+        "type": "git",
+        "url" : "https://github.com/yahoo/express-yui.git"
+    },
+    "bugs": {
+        "url": "https://github.com/yahoo/express-yui/issues"
+    },
     "scripts": {
         "test": "./node_modules/ytestrunner/lib/cli.js -c --include tests/units/**/*.js"
     },

@@ -4,7 +4,7 @@
 
 var express = require('express'),
     exphbs  = require('express3-handlebars'),
-    yui     = require('../../'), // modown-yui
+    yui     = require('../../'), // express-yui
     app     = express();
 
 // by default, the seed will be just `yui-base`, but we can
@@ -21,7 +21,7 @@ app.configure('development', function () {
 // normally, production is the default configuration,
 // but here is an example of forcing to use CDN
 // for yui core modules with a custom root folder
-app.yui.serveCoreFromCDN({
+app.yui.setCoreFromCDN({
     root: app.yui.version + "/build/"
 });
 

@@ -4,7 +4,7 @@
 
 var express = require('express'),
     exphbs  = require('express3-handlebars'),
-    yui     = require('../../'), // modown-yui
+    yui     = require('../../'), // express-yui
     app     = express();
 
 // registering the group information for a group named `metas`
@@ -16,13 +16,13 @@ app.configure('development', function () {
     // filter and logLevel set accordingly
     app.yui.debugMode();
 
-    // getting YUI Core modules from the app origin.
-    app.yui.serveCoreFromAppOrigin({
+    // to get YUI Core modules from the app origin.
+    app.yui.setCoreFromAppOrigin({
         // any special loader group configuration
     });
 
-    // we can get app modules from the app origin.
-    app.yui.serveGroupFromAppOrigin('metas', {
+    // get app modules from the app origin.
+    app.yui.setGroupFromAppOrigin('metas', {
         // any special loader group configuration
     });
 
@@ -30,12 +30,12 @@ app.configure('development', function () {
 
 app.configure('production', function () {
 
-    // getting YUI Core modules from the app origin.
-    app.yui.serveCoreFromAppOrigin();
+    // to get YUI Core modules from the app origin.
+    app.yui.setCoreFromAppOrigin();
 
     // when running in production to use a CDN that
-    // will use the app as origin server
-    app.yui.serveGroupFromAppOrigin('app', {
+    // uses the app as origin server
+    app.yui.setGroupFromAppOrigin('app', {
         // special loader group configuration
         base: 'http://flickrcdn.com/app/',
         comboBase: 'http://flickrcdn.com/combo?',
@@ -44,7 +44,7 @@ app.configure('production', function () {
     });
 
     // in prod we should use the combo
-    app.yui.serveCombinedFromAppOrigin();
+    app.yui.combineGroups();
 
 });
 

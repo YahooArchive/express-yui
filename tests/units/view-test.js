@@ -14,7 +14,7 @@ var YUITest = require('yuitest'),
     suite,
     view = require('../../lib/view.js');
 
-suite = new YUITest.TestSuite("modown-yui view plugin suite");
+suite = new YUITest.TestSuite("express-yui view plugin suite");
 
 suite.add(new YUITest.TestCase({
     name: "view-test",
