@@ -4,7 +4,7 @@
 
 var express = require('express'),
     exphbs  = require('express3-handlebars'),
-    yui     = require('../../'), // modown-yui
+    yui     = require('../../'), // express-yui
     app     = express();
 
 app.configure('development', function () {
@@ -13,7 +13,7 @@ app.configure('development', function () {
     app.yui.debugMode();
 });
 
-app.yui.serveCoreFromAppOrigin();
+app.yui.setCoreFromAppOrigin();
 
 // template engine
 app.engine('handlebars', exphbs());

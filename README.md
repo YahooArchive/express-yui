@@ -1,50 +1,98 @@
-# Modown YUI Component
+Express YUI
+=============
 
-This compontent is responsible to expose the `yui_config`
-and `yui_seed` configurations thru `res.locals.yui_config`
-and `res.locals.yui_seed` at the app level, as well as per
-request basis. If the component is plug within `modown`, it
-will automatically expose both of them into the views.
+[Express][] extension for YUI Applications.
+
+[![Build Status](https://travis-ci.org/yahoo/express-yui.png?branch=master)][Build Status]
+
+
+[Express]: https://github.com/visionmedia/express
+[Build Status]: https://travis-ci.org/yahoo/express-yui
+
+
+Goals & Design
+--------------
+
+This compontent extends express by adding a new member to the
+express application thru `app.yui`. This object is responsible
+for exposing the `yui_config` and `yui_seed` configurations into
+the view engine. Also, it provides a set of runtime
+utilities that can be used to customize the YUI config for
+the client side, creates a Y instance on the server side when
+needed to provide access to the registered modules on the server
+side, and provides a set of middleware to expose data into the
+runtime and the client side.
+
+Installation
+------------
+
+Install using npm:
+
+```shell
+$ npm install express-yui
+```
+
+
+Features
+--------
 
 ## Features
 
- * expose yui_config per request basis
- * expose seed files per request basis
+ * expose yui config per request
+ * expose seed files per request
  * provide basic configurations for cdn, debug, and other common conditions
- * extend express by adding `req.app.yui` object that holds all information about yui
- * provide basic middleware to server yui core and groups as static assets
- * provide basic middleware to expose yui_config and yui_seed into the view engine
- * provide basic express engine to rely on the Y instance computed as the server side
-to resolve compiled templates.
+ * provide basic middleware to server `static` assets from origin server, including
+combo capabilities built-in.
+ * provide basic middleware to `expose` `yui_config` and `yui_seed` into the view engine
+so they can be used in the templates to boot YUI in the client side.
 
 ## Other features
 
- * serve yui core modules from app origin
- * serve loader group with app modules from app origin
+ * work with modown-locator to produce a build process by shifting any yui module
+in the application bundle or any other bundle.
+ * provide basic express view engine to rely on views registered at the server side
+thru the `app.yui.use()` as compiled templates.
 
-## Usage as stand alone middleware for express
+
+Usage
+-----
+
+## Serving static assets from app origin
 
 ```
-TBD
+app.yui.setCoreFromAppOrigin();
+app.yui.setGroupFromAppOrigin('group-name');
+app.use(yui.static());
 ```
 
-## Usage as a modown plugin
+If you plan to define a prefix for all static assets, then make sure you set that
+before defining any group, so loader can know about it. Here is the example:
 
 ```
-TBD
+app.set('yui static prefix', '/static');
+app.yui.setCoreFromAppOrigin();
+app.yui.setGroupFromAppOrigin('group-name');
+app.use('/static', yui.static());
 ```
 
-## Dependencies
+License
+-------
+
+This software is free to use under the Yahoo! Inc. BSD license.
+See the [LICENSE file][] for license text and copyright information.
+
+[LICENSE file]: https://github.com/yahoo/express-yui/blob/master/LICENSE
+
+
+Dependencies
+------------
 
 This npm package requires `modown-static` which is still in development and not
-yet publixhed in NPM registry.
+yet published in NPM registry.
 
-For now, dev will have to explicity install that dependency.
+Contribute
+----------
 
-## TODO
+See the [CONTRIBUTE file][] for info.
 
- * Move lib/static.js into its own package and update the api
-
-## How to contribute
-
-See the [CONTRIBUTE.md](CONTRIBUTE.md) file for info.
+[CONTRIBUTE file]: https://github.com/yahoo/express-yui/blob/master/CONTRIBUTE

@@ -5,7 +5,7 @@
 
 var express = require('express'),
     exphbs  = require('express3-handlebars'),
-    yui     = require('../../'), // modown-yui
+    yui     = require('../../'), // express-yui
     app     = express();
 
 // you can set custom configurations for YUI by
@@ -42,7 +42,7 @@ app.configure('development', function () {
 });
 
 // getting YUI Core modules from CDN.
-app.yui.serveCoreFromCDN();
+app.yui.setCoreFromCDN();
 
 // template engine
 app.engine('handlebars', exphbs());

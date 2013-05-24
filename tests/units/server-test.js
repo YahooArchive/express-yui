@@ -15,7 +15,7 @@ var YUITest = require('yuitest'),
     server = require('../../lib/server.js'),
     original = server.getYInstance;
 
-suite = new YUITest.TestSuite("modown-yui server suite");
+suite = new YUITest.TestSuite("expres-yui server suite");
 
 suite.add(new YUITest.TestCase({
     name: "server-test",

@@ -1,10 +1,10 @@
 {
-  "name": "modown-yui API documentation",
-  "description": "modown-yui API documentation",
-  "version": "0.0.1",
-  "url": "http://git.corp.yahoo.com/modown/modown-yui",
+  "name": "express-yui API documentation",
+  "description": "express-yui API documentation",
+  "version": "0.2.0",
+  "url": "https://github.com/yahoo/express-yui",
   "options": {
-    "paths": [ ".", "lib" ],
+    "paths": [ "lib" ],
     "outdir": "./build/apidocs"
   }
 }
