@@ -84,12 +84,6 @@ See the [LICENSE file][] for license text and copyright information.
 [LICENSE file]: https://github.com/yahoo/express-yui/blob/master/LICENSE.md
 
 
-Dependencies
-------------
-
-This npm package requires `modown-static` which is still in development and not
-yet published in NPM registry.
-
 Contribute
 ----------
 

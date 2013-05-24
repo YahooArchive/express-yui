@@ -12,7 +12,7 @@ var YUITest = require('yuitest'),
     A = YUITest.Assert,
     OA = YUITest.ObjectAssert,
     suite,
-    modown = require('../../lib/utils.js');
+    utils = require('../../lib/utils.js');
 
 suite = new YUITest.TestSuite("utils-test suite");
 
@@ -20,7 +20,7 @@ suite.add(new YUITest.TestCase({
     name: "utils-test",
 
     "test tokenizeFunctions": function () {
-        A.isFunction(modown.tokenizeFunctions);
+        A.isFunction(utils.tokenizeFunctions);
 
         var src,
             dest,
@@ -32,7 +32,7 @@ suite.add(new YUITest.TestCase({
             b: function () { }
         };
 
-        dest = modown.tokenizeFunctions(src, hash, 'foo-');
+        dest = utils.tokenizeFunctions(src, hash, 'foo-');
         // console.log(hash);
         // { '@foo-.b@': [Function] }
         OA.hasKey('@foo-.b@', hash, 'expected key: @foo-.b@');
@@ -40,7 +40,7 @@ suite.add(new YUITest.TestCase({
     },
 
     "test serialize": function () {
-        A.isFunction(modown.serialize);
+        A.isFunction(utils.serialize);
 
         var fixture,
             dest,
@@ -55,14 +55,14 @@ suite.add(new YUITest.TestCase({
             e: [ { foo: 'bar' }, { bar: 'foo' } ]
         };
 
-        dest = modown.serialize(src);
+        dest = utils.serialize(src);
         // console.log(dest);
         A.areEqual(fixture, dest, 'unexpected seralized string');
 
     },
 
     "test clone": function () {
-        A.isFunction(modown.clone);
+        A.isFunction(utils.clone);
 
         var dest,
             src;
@@ -80,7 +80,7 @@ suite.add(new YUITest.TestCase({
             ]
         };
 
-        dest = modown.clone(src);
+        dest = utils.clone(src);
 
         A.areNotEqual(src, dest, 'cloned value should not point to the original object reference');
         A.areEqual(src, src, 'src should not point to the original object reference');

@@ -14,7 +14,7 @@ var YUITest = require('yuitest'),
     mockery = require('mockery'),
     middleware,
     suite,
-    mockStatic,
+    expressCombo,
     origin;
 
 suite = new YUITest.TestSuite("middleware-test suite");
@@ -34,13 +34,13 @@ suite.add(new YUITest.TestCase({
             warnOnReplace: false,
             warnOnUnregistered: false
         });
-        mockStatic = {};
-        mockery.registerMock('modown-static', mockStatic);
+        expressCombo = {};
+        mockery.registerMock('express-combo', expressCombo);
         middleware = require('../../lib/middleware.js');
     },
 
     tearDown: function () {
-        mockStatic = null;
+        expressCombo = null;
         middleware = null;
         mockery.disable();
     },
@@ -85,7 +85,7 @@ suite.add(new YUITest.TestCase({
             }
         };
 
-        mockStatic.combine = function (o) {
+        expressCombo.combine = function (o) {
             combineCalled = true;
             A.areEqual(1, o.foo, 'options should be propagated');
             return function (req, res, next) {
@@ -116,7 +116,7 @@ suite.add(new YUITest.TestCase({
             };
         }];
 
-        mockStatic.folder = function () {
+        expressCombo.folder = function () {
             return folders.shift().apply(this, arguments);
         };
 
