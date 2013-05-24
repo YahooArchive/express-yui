@@ -88,6 +88,43 @@ suite.add(new YUITest.TestCase({
         YUITest.Mock.verify(api);
     },
 
+    "test plugin with filter": function () {
+        var filterObj = YUITest.Mock();
+        YUITest.Mock.expect(filterObj, {
+            method: 'filter',
+            callCount: 3,
+            args: [YUITest.Mock.Value.Object, YUITest.Mock.Value.String],
+            run: function (bundle, relativePath) {
+                A.areSame('foo', bundle.name, 'bundle object should be provided');
+                return false; // denying all files
+            }
+        });
+        var plugin = loader.plugin({
+            filter: filterObj.filter
+        });
+        var api = YUITest.Mock();
+
+        YUITest.Mock.expect(api, {
+            method: 'getBundleFiles',
+            args: ['foo', YUITest.Mock.Value.Object],
+            run: function (bundleName, filters) {
+                return [];
+            }
+        });
+        A.isUndefined(plugin.bundleUpdated({
+            bundle: {
+                name: 'foo'
+            },
+            files: {
+                'bar.js': { fullPath: __dirname + '/bar.js', relativePath: 'bar.js' },
+                'baz.js': { fullPath: __dirname + '/baz.js', relativePath: 'baz.js' },
+                'path/to/something.js': { fullPath: __dirname + '/path/to/something.js', relativePath: 'path/to/something.js' }
+            }
+        }, api), 'all files should be filtered out');
+        YUITest.Mock.verify(filterObj);
+        YUITest.Mock.verify(api);
+    },
+
     "test plugin flow with register and attach": function () {
         var plugin = loader.plugin({
                 registerGroup: true,
