@@ -80,11 +80,12 @@ suite.add(new YUITest.TestCase({
                 return [];
             }
         });
-        plugin.bundleUpdated({
+        A.isUndefined(plugin.bundleUpdated({
             bundle: {
-                name: 'foo'
+                name: 'foo',
+                buildDirectory: __dirname
             }
-        }, api);
+        }, api));
         YUITest.Mock.verify(api);
     },
 
@@ -113,7 +114,8 @@ suite.add(new YUITest.TestCase({
         });
         A.isUndefined(plugin.bundleUpdated({
             bundle: {
-                name: 'foo'
+                name: 'foo',
+                buildDirectory: __dirname
             },
             files: {
                 'bar.js': { fullPath: __dirname + '/bar.js', relativePath: 'bar.js' },
