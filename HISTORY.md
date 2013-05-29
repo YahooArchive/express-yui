@@ -1,6 +1,11 @@
 Express YUI Change History
 ==========================
 
+0.3.2 (2013-05-29)
+------------------
+
+* bugfix for filter that was producing relative path for shifter instead of fullpath.
+
 0.3.1 (2013-05-24)
 ------------------
 
