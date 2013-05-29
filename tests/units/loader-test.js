@@ -12,7 +12,8 @@ var YUITest = require('yuitest'),
     A = YUITest.Assert,
     OA = YUITest.ObjectAssert,
     suite,
-    loader = require('../../lib/loader.js');
+    loader = require('../../lib/loader.js'),
+    _buildsInBundle = loader._buildsInBundle;
 
 suite = new YUITest.TestSuite("loader-test suite");
 
@@ -32,6 +33,7 @@ suite.add(new YUITest.TestCase({
         delete loader._checkYUIModule;
         delete loader._checkBuildFile;
         delete loader.BuilderClass;
+        loader._buildsInBundle = _buildsInBundle;
     },
 
     "test constructor": function () {
@@ -97,7 +99,7 @@ suite.add(new YUITest.TestCase({
             args: [YUITest.Mock.Value.Object, YUITest.Mock.Value.String],
             run: function (bundle, relativePath) {
                 A.areSame('foo', bundle.name, 'bundle object should be provided');
-                return false; // denying all files
+                return relativePath === 'bar.js'; // denying all except bar.js
             }
         });
         var plugin = loader.plugin({
@@ -109,6 +111,15 @@ suite.add(new YUITest.TestCase({
             method: 'getBundleFiles',
             args: ['foo', YUITest.Mock.Value.Object],
             run: function (bundleName, filters) {
+                return [];
+            }
+        });
+        YUITest.Mock.expect(loader, {
+            method: '_buildsInBundle',
+            args: ['foo', YUITest.Mock.Value.Any, YUITest.Mock.Value.Any],
+            run: function (bundleName, modifiedFiles) {
+                A.areSame(1, modifiedFiles.length, 'only bar.js shuould pass the filter');
+                A.areSame(__dirname + '/bar.js', modifiedFiles[0], 'fullpath for bar.js should be produced');
                 return [];
             }
         });
