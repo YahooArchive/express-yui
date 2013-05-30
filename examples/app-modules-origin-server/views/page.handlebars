@@ -14,9 +14,9 @@
         Loading...
     </div>
 
-    {{#yui_seed}}<script src="{{{src}}}"></script>{{/yui_seed}}
+    <script>{{{state}}}</script>
     <script>
-    YUI({{{yui_config}}}).use('autocomplete', 'bar', 'xyz', 'slider', function (Y) {
+    app.yui.use('autocomplete', 'bar', 'xyz', 'slider', function (Y) {
         Y.one('#content').setContent('<p>Ready!</p>');
     });
     </script>
