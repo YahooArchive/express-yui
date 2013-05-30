@@ -1,6 +1,11 @@
 Express YUI Change History
 ==========================
 
+0.3.3 (2013-05-30)
+------------------
+
+* Cleaning up the cache entry when shifter fails to process a file to avoid successive runs to hide failures due to cached entries.
+
 0.3.2 (2013-05-29)
 ------------------
 
