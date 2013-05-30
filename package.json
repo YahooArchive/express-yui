@@ -12,7 +12,7 @@
         "npm" : ">=1.2.10"
     },
     "dependencies": {
-        "express-combo": "0.1.x",
+        "express-combo": "git+ssh://git@github.com:yahoo/express-combo.git",
         "mkdirp": "*",
         "shifter": "*",
         "win-spawn": "*",
