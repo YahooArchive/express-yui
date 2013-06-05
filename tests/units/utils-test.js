@@ -19,48 +19,6 @@ suite = new YUITest.TestSuite("utils-test suite");
 suite.add(new YUITest.TestCase({
     name: "utils-test",
 
-    "test tokenizeFunctions": function () {
-        A.isFunction(utils.tokenizeFunctions);
-
-        var src,
-            dest,
-            hash = { },
-            fixture;
-
-        src = {
-            a: 'A',
-            b: function () { }
-        };
-
-        dest = utils.tokenizeFunctions(src, hash, 'foo-');
-        // console.log(hash);
-        // { '@foo-.b@': [Function] }
-        OA.hasKey('@foo-.b@', hash, 'expected key: @foo-.b@');
-        A.isFunction(hash['@foo-.b@'], 'value should be a function');
-    },
-
-    "test serialize": function () {
-        A.isFunction(utils.serialize);
-
-        var fixture,
-            dest,
-            src;
-
-        fixture = '{\"a\":\"A\",\"b\":function () { var foo = \'bar\'; },\"c\":[\"1\",2,\"a\"],\"d\":{\"foo\":\"bar\"},\"e\":[{\"foo\":\"bar\"},{\"bar\":\"foo\"}]}';
-        src = {
-            a: 'A',
-            b: function () { var foo = 'bar'; },
-            c: [ '1', 2, 'a'],
-            d: { foo: 'bar' },
-            e: [ { foo: 'bar' }, { bar: 'foo' } ]
-        };
-
-        dest = utils.serialize(src);
-        // console.log(dest);
-        A.areEqual(fixture, dest, 'unexpected seralized string');
-
-    },
-
     "test clone": function () {
         A.isFunction(utils.clone);
 
