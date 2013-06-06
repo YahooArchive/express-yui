@@ -21,7 +21,6 @@ suite.add(new YUITest.TestCase({
 
     _should: {
         error: {
-            "test setGroupFromAppOrigin with group not registered": true,
             "test registerGroup with invalid / missing group config": true,
             "test registerGroup with groupName mismatch": true
         }
@@ -77,13 +76,32 @@ suite.add(new YUITest.TestCase({
 
     // registerGroup() was not called prior to setGroupFromAppOrigin()
     "test setGroupFromAppOrigin with group not registered": function () {
-        origin.config = function () { };
-        // this should throw
-        origin.setGroupFromAppOrigin('app', {});
+        var mid,
+            c = {
+                bar: 3
+            };
+
+        origin.config = function () { return c; };
+        mid = origin.setGroupFromAppOrigin('app', {});
+
+        A.areEqual(JSON.stringify({
+            "bar": 3,
+            "groups": {
+                "app": {
+                    "maxURLLength": 1024,
+                    "comboBase": "/combo~",
+                    "comboSep": "~",
+                    "base": "/app/",
+                    "root": "/app/",
+                    "local": true
+                }
+            }
+        }), JSON.stringify(c), 'wrong loader configuration');
+        A.areSame(origin, mid, 'origin.setGroupFromAppOrigin() should be chainable');
     },
 
     // group 'app' has been registered OK using yui.registerGroup()
-    "test setGroupFromAppOrigin with valid group": function () {
+    "test setGroupFromAppOrigin with group registered": function () {
         var mid,
             c = {
                 bar: 3

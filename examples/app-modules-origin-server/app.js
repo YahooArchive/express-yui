@@ -21,11 +21,6 @@ app.configure('development', function () {
         // any special loader group configuration
     });
 
-    // get app modules from the app origin.
-    app.yui.setGroupFromAppOrigin('metas', {
-        // any special loader group configuration
-    });
-
 });
 
 app.configure('production', function () {
@@ -35,7 +30,7 @@ app.configure('production', function () {
 
     // when running in production to use a CDN that
     // uses the app as origin server
-    app.yui.setGroupFromAppOrigin('app', {
+    app.yui.setGroupFromAppOrigin('metas', {
         // special loader group configuration
         base: 'http://flickrcdn.com/app/',
         comboBase: 'http://flickrcdn.com/combo?',
