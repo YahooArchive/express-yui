@@ -12,10 +12,6 @@ var express = require('express'),
 // to speed up the booting process
 app.yui.seed(['yui', 'json-stringify']);
 
-// registering groups
-app.yui.registerGroup('group1', './build-group1');
-app.yui.registerGroup('group2', './build-group2');
-
 app.configure('development', function () {
 
     // when using `app.yui.debugMode()` you will get debug,
@@ -46,6 +42,10 @@ app.configure('production', function () {
     });
 
 });
+
+// registering groups
+app.yui.registerGroup('group1', './build-group1');
+app.yui.registerGroup('group2', './build-group2');
 
 // template engine
 app.engine('handlebars', exphbs());

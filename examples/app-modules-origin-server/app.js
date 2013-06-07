@@ -7,9 +7,6 @@ var express = require('express'),
     yui     = require('../../'), // express-yui
     app     = express();
 
-// registering the group information for a group named `metas`
-app.yui.registerGroup('metas', './build');
-
 app.configure('development', function () {
 
     // when using `app.yui.debugMode()` you will get debug,
@@ -28,9 +25,9 @@ app.configure('production', function () {
     // to get YUI Core modules from the app origin.
     app.yui.setCoreFromAppOrigin();
 
-    // when running in production to use a CDN that
+    // when running in production to use a custom CDN that
     // uses the app as origin server
-    app.yui.setGroupFromAppOrigin('metas', {
+    app.yui.setGroupConfig('metas', {
         // special loader group configuration
         base: 'http://flickrcdn.com/app/',
         comboBase: 'http://flickrcdn.com/combo?',
@@ -38,10 +35,10 @@ app.configure('production', function () {
         root: 'app/'
     });
 
-    // in prod we should use the combo
-    app.yui.combineGroups();
-
 });
+
+// registering the group information for a group named `metas`
+app.yui.registerGroup('metas', './build');
 
 // template engine
 app.engine('handlebars', exphbs());

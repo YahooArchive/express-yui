@@ -82,7 +82,7 @@ suite.add(new YUITest.TestCase({
         origin.config = function () { return c; };
 
         // first group
-        mid = origin.setGroupFromAppOrigin('app', {bar: 2});
+        mid = origin.setGroupConfig('app', {bar: 2});
         A.areEqual(JSON.stringify({
             "foo": 1,
             "groups": {
@@ -91,10 +91,10 @@ suite.add(new YUITest.TestCase({
                 }
             }
         }), JSON.stringify(c), 'first groups should be supported by honoring old data');
-        A.areSame(origin, mid, 'origin.setGroupFromAppOrigin() should be chainable');
+        A.areSame(origin, mid, 'origin.setGroupConfig() should be chainable');
 
         // second group
-        mid = origin.setGroupFromAppOrigin('second', {baz: 3});
+        mid = origin.setGroupConfig('second', {baz: 3});
         A.areEqual(JSON.stringify({
             "foo": 1,
             "groups": {
@@ -106,10 +106,10 @@ suite.add(new YUITest.TestCase({
                 }
             }
         }), JSON.stringify(c), 'second groups should be supported by honoring old data');
-        A.areSame(origin, mid, 'origin.setGroupFromAppOrigin() should be chainable');
+        A.areSame(origin, mid, 'origin.setGroupConfig() should be chainable');
 
         // modifying group
-        mid = origin.setGroupFromAppOrigin('second', {baz: 4, xyz: 5});
+        mid = origin.setGroupConfig('second', {baz: 4, xyz: 5});
         A.areEqual(JSON.stringify({
             "foo": 1,
             "groups": {
@@ -122,7 +122,7 @@ suite.add(new YUITest.TestCase({
                 }
             }
         }), JSON.stringify(c), 'reconfiguruing groups should be supported by honoring old data');
-        A.areSame(origin, mid, 'origin.setGroupFromAppOrigin() should be chainable');
+        A.areSame(origin, mid, 'origin.setGroupConfig() should be chainable');
     },
 
     "test registerGroup with invalid / missing group config": function () {
@@ -194,6 +194,8 @@ suite.add(new YUITest.TestCase({
                     "base": "/testgroup-a.b.c/",
                     "root": "/testgroup-a.b.c/",
                     "local": true,
+                    "combine": true,
+                    "filter": "min",
                     "maxURLLength": 1024,
                     "comboBase": "/combo~",
                     "comboSep": "~"
@@ -253,6 +255,8 @@ suite.add(new YUITest.TestCase({
                     "base": "/path/to/app-x.y.z/",
                     "root": "folder/app-x.y.z/",
                     "local": true,
+                    "combine": true,
+                    "filter": "min",
                     "maxURLLength": 1024,
                     "comboBase": "/combo~",
                     "comboSep": "~",
@@ -300,69 +304,16 @@ suite.add(new YUITest.TestCase({
                     "base": "http://custom/base/with/token/app-x.y.z/string",
                     "root": "custom/root/withou/token",
                     "local": false,
+                    "combine": true,
+                    "filter": "min",
                     "maxURLLength": 1024,
                     "comboBase": "/combo~",
                     "comboSep": "~"
                 }
             }
         }), JSON.stringify(config), 'wrong loader configuration for new group');
-    },
-
-    "test combineGroups": function () {
-
-        var mid,
-            options,
-            config,
-            combineCalled = false;
-
-        options = {
-            maxURLLength: 1024,
-            comboBase: "/samba~",
-            comboSep: "$"
-        };
-        config = {
-            root: "http://foo.yahoo.com",
-            comboBase: "/samba~",
-            comboSep: "$",
-            groups: {
-                "testgroup": {
-                    root: "http://foo.yahoo.com",
-                    comboBase: "/samba~",
-                    comboSep: "$"
-                },
-                "cdngroup": {}
-            }
-        };
-
-        A.isFunction(origin.combineGroups);
-        origin.config = function () {
-            return config;
-        };
-
-        mid = origin.combineGroups(options);
-
-        A.areEqual(true, config.combine, 'config.combine should be true');
-        A.areEqual(true, config.groups.testgroup.combine,
-                   'combine should be true since the group share same base as options');
-
-        A.areEqual(JSON.stringify({
-            "root": "http://foo.yahoo.com",
-            "comboBase": "/samba~",
-            "comboSep": "$",
-            "groups": {
-                "testgroup": {
-                    "root": "http://foo.yahoo.com",
-                    "comboBase": "/samba~",
-                    "comboSep": "$",
-                    "combine": true
-                },
-                "cdngroup": {}
-            },
-            "combine": true
-        }), JSON.stringify(config), 'wrong loader config');
-
-        A.areSame(origin, mid, 'origin.combineGroups() should be chainable');
     }
+
 }));
 
 YUITest.TestRunner.add(suite);
