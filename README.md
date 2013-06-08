@@ -69,8 +69,9 @@ TBD
 
 ```
 app.yui.setCoreFromAppOrigin();
+app.yui.registerGroup('foo', 'path/to/foo-1.2.3'); // if you use locator, this is not needed
 app.use(yui.static());
-``
+```
 
 With this configuration, a group called `foo` with version `1.2.3`, and `yui` version `3.10.2`, it will produce urls like these:
 
@@ -84,6 +85,7 @@ If you plan to serve the build folder from CDN, then make sure you set that
 before registering any group, so loader can know about it. Here is the example:
 
 ```
+app.yui.setCoreFromCDN();
 app.set('yui combo config', {
     comboBase: 'http://mycdn.com/path/to/combo?',
     comboSep: '&',
@@ -91,6 +93,7 @@ app.set('yui combo config', {
 });
 app.set('yui default base', 'http://mycdn.com/path/to/static/{{groupDir}}/');
 app.set('yui default root', 'static/{{groupDir}}/');
+app.yui.registerGroup('foo', 'path/to/foo-1.2.3'); // if you use locator, this is not needed
 ```
 
 in which case you don't need to use `yui.static` middleware since you are not
