@@ -55,11 +55,13 @@ suite.add(new YUITest.TestCase({
                 app: {
                     yui: {
                         _groupFolderMap: {
-                            'testgroup': 'testgroup/bar/baz'
+                            'testgroup': 'path/to/testgroup-1.2.3'
                         },
-                        path: 'yui/foo/bar',
+                        path: 'path/to/yui',
+                        version: 'a.b.c',
                         config: function () { return config; }
-                    }
+                    },
+                    set: function () {}
                 }
             },
             res = {},
@@ -94,20 +96,20 @@ suite.add(new YUITest.TestCase({
             };
         };
 
-        folders = [function (groupName, groupPath, o) {
+        folders = [function (name, path, o) {
             // console.log(o);
-            A.areEqual('yui', groupName, 'yui group should be added to static.folder()');
-            A.areEqual('yui/foo/bar', groupPath, 'yui path should be collected from app.yui.version');
+            A.areEqual('yui-a.b.c', name, 'yui group should be added to static.folder()');
+            A.areEqual('path/to/yui', path, 'yui path should be collected from app.yui.version');
             A.areEqual(1, o.foo, 'options should be propagated');
 
             return function (req, res, next) {
                 counter += 1;
                 next();
             };
-        }, function (groupName, groupPath, o) {
+        }, function (name, path, o) {
             // console.log(o);
-            A.areEqual('testgroup', groupName, 'testgroup group should be added to static.folder()');
-            A.areEqual('testgroup/bar/baz', groupPath, 'testgroup path should be collected from _groupFolderMap');
+            A.areEqual('testgroup-1.2.3', name, 'testgroup group should be added to static.folder()');
+            A.areEqual('path/to/testgroup-1.2.3', path, 'testgroup path should be collected from _groupFolderMap basename value');
             A.areEqual(1, o.foo, 'options should be propagated');
 
             return function (req, res, next) {

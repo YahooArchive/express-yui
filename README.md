@@ -57,23 +57,52 @@ thru the `app.yui.use()` as compiled templates.
 Usage
 -----
 
+## Exposing app state into client
+
+TBD
+
+## Using yui modules on the server side
+
+TBD
+
 ## Serving static assets from app origin
 
 ```
 app.yui.setCoreFromAppOrigin();
-app.yui.setGroupFromAppOrigin('group-name');
+app.yui.registerGroup('foo', 'path/to/foo-1.2.3'); // if you use locator, this is not needed
 app.use(yui.static());
 ```
 
-If you plan to define a prefix for all static assets, then make sure you set that
-before defining any group, so loader can know about it. Here is the example:
+With this configuration, a group called `foo` with version `1.2.3`, and `yui` version `3.10.2`, it will produce urls like these:
+
+  * /combo~/yui-3.10.2/yui-base/yui-base-min.js~/foo-1.2.3/bar/bar-min.js~/foo-1.2.3/baz/baz-min.js
+  * /yui-3.10.2/yui-base/yui-base-min.js
+  * /foo-1.2.3/bar/bar-min.js
+
+## Serving static assets from CDN
+
+If you plan to serve the build folder from CDN, then make sure you set that
+before registering any group, so loader can know about it. Here is the example:
 
 ```
-app.set('yui static prefix', '/static');
-app.yui.setCoreFromAppOrigin();
-app.yui.setGroupFromAppOrigin('group-name');
-app.use('/static', yui.static());
+app.yui.setCoreFromCDN();
+app.set('yui combo config', {
+    comboBase: 'http://mycdn.com/path/to/combo?',
+    comboSep: '&',
+    maxURLLength: 1024
+});
+app.set('yui default base', 'http://mycdn.com/path/to/static/{{groupDir}}/');
+app.set('yui default root', 'static/{{groupDir}}/');
+app.yui.registerGroup('foo', 'path/to/foo-1.2.3'); // if you use locator, this is not needed
 ```
+
+in which case you don't need to use `yui.static` middleware since you are not
+serving local files.
+
+With this configuration, a group called `foo` with version `1.2.3` will produce urls like these:
+
+  * http://mycdn.com/path/to/combo?static/foo-1.2.3/bar/bar-min.js&static/foo-1.2.3/baz/baz-min.js
+  * http://mycdn.com/path/to/static/foo-1.2.3/bar/bar-min.js
 
 License
 -------
