@@ -32,12 +32,12 @@ app.configure('production', function () {
     // In production, get group1 modules from
     // CDN providing the custom configuration for
     // github raw for example:
-    app.yui.setGroupConfig('group1', {
+    app.yui.applyGroupConfig('group1', {
         combine: false,
         base: 'https://rawgithub.com/yui/yui3/master/build/'
     });
     // while still use the app origin for group2, but with a custom setting
-    app.yui.setGroupConfig('group2', {
+    app.yui.applyGroupConfig('group2', {
         combine: false
     });
 

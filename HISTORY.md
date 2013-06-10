@@ -8,8 +8,8 @@ Express YUI Change History
 * introducing `app.set('yui default base', 'http://path/to/cdn/{{groupDir}}/');`
 * introducing `app.set('yui default root', 'something/{{groupDir}}/')'`
 * introducing `app.set('yui combo config', { comboBase: '/combo?', comboSep: '?', maxURLLength: 1024})`
-* removing `app.yui.setGroupFromCDN()`, use `setGroupConfig` instead.
-* removing `app.yui.setGroupFromAppOrigin()`, that's the new default behavior and you can use `setGroupConfig` if you need more granularity.
+* removing `app.yui.setGroupFromCDN()`, use `applyGroupConfig` instead.
+* removing `app.yui.setGroupFromAppOrigin()`, that's the new default behavior and you can use `applyGroupConfig` if you need more granularity.
 * removing `app.yui.combineGroups()`, it will inherit from the top level `combine` value.
 * from now on, the folder that represents the build directory for the bundle will be used as the `root` for loader, so the version of the bundle will be included.
 * `combine` is now inherited by default from top level or defaults to `true`

@@ -27,7 +27,7 @@ app.configure('production', function () {
 
     // when running in production to use a custom CDN that
     // uses the app as origin server
-    app.yui.setGroupConfig('metas', {
+    app.yui.applyGroupConfig('metas', {
         // special loader group configuration
         base: 'http://flickrcdn.com/app/',
         comboBase: 'http://flickrcdn.com/combo?',

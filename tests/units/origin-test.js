@@ -72,8 +72,8 @@ suite.add(new YUITest.TestCase({
         A.areSame(origin, mid, 'origin.setCoreFromAppOrigin() should be chainable');
     },
 
-    "test setGroupConfig": function () {
-        A.isFunction(origin.setGroupConfig);
+    "test applyGroupConfig": function () {
+        A.isFunction(origin.applyGroupConfig);
         var mid,
             c = {
                 foo: 1
@@ -82,7 +82,7 @@ suite.add(new YUITest.TestCase({
         origin.config = function () { return c; };
 
         // first group
-        mid = origin.setGroupConfig('app', {bar: 2});
+        mid = origin.applyGroupConfig('app', {bar: 2});
         A.areEqual(JSON.stringify({
             "foo": 1,
             "groups": {
@@ -91,10 +91,10 @@ suite.add(new YUITest.TestCase({
                 }
             }
         }), JSON.stringify(c), 'first groups should be supported by honoring old data');
-        A.areSame(origin, mid, 'origin.setGroupConfig() should be chainable');
+        A.areSame(origin, mid, 'origin.applyGroupConfig() should be chainable');
 
         // second group
-        mid = origin.setGroupConfig('second', {baz: 3});
+        mid = origin.applyGroupConfig('second', {baz: 3});
         A.areEqual(JSON.stringify({
             "foo": 1,
             "groups": {
@@ -106,10 +106,10 @@ suite.add(new YUITest.TestCase({
                 }
             }
         }), JSON.stringify(c), 'second groups should be supported by honoring old data');
-        A.areSame(origin, mid, 'origin.setGroupConfig() should be chainable');
+        A.areSame(origin, mid, 'origin.applyGroupConfig() should be chainable');
 
         // modifying group
-        mid = origin.setGroupConfig('second', {baz: 4, xyz: 5});
+        mid = origin.applyGroupConfig('second', {baz: 4, xyz: 5});
         A.areEqual(JSON.stringify({
             "foo": 1,
             "groups": {
@@ -122,7 +122,7 @@ suite.add(new YUITest.TestCase({
                 }
             }
         }), JSON.stringify(c), 'reconfiguruing groups should be supported by honoring old data');
-        A.areSame(origin, mid, 'origin.setGroupConfig() should be chainable');
+        A.areSame(origin, mid, 'origin.applyGroupConfig() should be chainable');
     },
 
     "test registerGroup with invalid / missing group config": function () {
