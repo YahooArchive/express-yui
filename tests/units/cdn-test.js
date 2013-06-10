@@ -53,42 +53,6 @@ suite.add(new YUITest.TestCase({
         }, c, 'wrong loader config');
 
         A.areEqual(cdn, mid, 'cdn.setCoreFromCDN() should be chainable');
-    },
-
-    "test setGroupFromCDN": function () {
-        var mid,
-            c = {
-                foz: 'baz',
-                combine: true,
-                groups: {
-                    app: {
-                        foo: 'foo'
-                    }
-                }
-            };
-
-        A.isFunction(cdn.setGroupFromCDN);
-
-        cdn.config = function () {
-            return c;
-        };
-
-        mid = cdn.setGroupFromCDN('app', {
-            foo: 'bar'
-        });
-
-        A.areEqual(JSON.stringify({
-            "foz": "baz",
-            "combine": true,
-            "groups": {
-                "app": {
-                    "foo": "bar",
-                    "combine": true
-                }
-            }
-        }), JSON.stringify(c), 'wrong loader config');
-
-        A.areEqual(cdn, mid, 'cdn.setGroupFromCDN() should be chainable');
     }
 
 }));
