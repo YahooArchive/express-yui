@@ -60,7 +60,8 @@ suite.add(new YUITest.TestCase({
                         path: 'path/to/yui',
                         version: 'a.b.c',
                         config: function () { return config; }
-                    }
+                    },
+                    set: function () {}
                 }
             },
             res = {},

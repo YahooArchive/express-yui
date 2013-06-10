@@ -66,8 +66,7 @@ suite.add(new YUITest.TestCase({
             "comboSep": "~",
             "foo": "bar",
             "base": "/yui-a.b.c/",
-            "root": "/yui-a.b.c/",
-            "local": true
+            "root": "/yui-a.b.c/"
         }, c, 'wrong loader config');
         A.areSame(origin, mid, 'origin.setCoreFromAppOrigin() should be chainable');
     },
@@ -193,7 +192,6 @@ suite.add(new YUITest.TestCase({
                 "testgroup": {
                     "base": "/testgroup-a.b.c/",
                     "root": "/testgroup-a.b.c/",
-                    "local": true,
                     "combine": true,
                     "filter": "min",
                     "maxURLLength": 1024,
@@ -254,7 +252,6 @@ suite.add(new YUITest.TestCase({
                 "app": {
                     "base": "/path/to/app-x.y.z/",
                     "root": "folder/app-x.y.z/",
-                    "local": true,
                     "combine": true,
                     "filter": "min",
                     "maxURLLength": 1024,
@@ -303,7 +300,6 @@ suite.add(new YUITest.TestCase({
                 "app": {
                     "base": "http://custom/base/with/token/app-x.y.z/string",
                     "root": "custom/root/withou/token",
-                    "local": false,
                     "combine": true,
                     "filter": "min",
                     "maxURLLength": 1024,
