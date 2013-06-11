@@ -147,7 +147,7 @@ suite.add(new YUITest.TestCase({
             api = YUITest.Mock(),
             bundle = {
                 name: 'foo',
-                buildDirectory: '/path/to'
+                buildDirectory: '/path/to/foo-a.b.c'
             };
 
         YUITest.Mock.expect(api, {
@@ -199,7 +199,7 @@ suite.add(new YUITest.TestCase({
         });
         YUITest.Mock.expect(loader, {
             method: 'registerGroup',
-            args: ['foo', '/path/to/yui-build', __filename]
+            args: ['foo', '/path/to/foo-a.b.c', __filename]
         });
         YUITest.Mock.expect(loader, {
             method: 'registerModules',

@@ -21,7 +21,6 @@ suite.add(new YUITest.TestCase({
 
     _should: {
         error: {
-            "test setGroupFromAppOrigin with group not registered": true,
             "test registerGroup with invalid / missing group config": true,
             "test registerGroup with groupName mismatch": true
         }
@@ -40,6 +39,7 @@ suite.add(new YUITest.TestCase({
         delete origin.addModuleToSeed;
         delete origin.getGroupConfig;
         delete origin._app;
+        delete origin.version;
     },
 
     "test setCoreFromAppOrigin": function () {
@@ -53,6 +53,7 @@ suite.add(new YUITest.TestCase({
                 bar: 2
             };
 
+        origin.version = 'a.b.c';
         origin.config = function () {
             return c;
         };
@@ -64,65 +65,63 @@ suite.add(new YUITest.TestCase({
             "comboBase": "/combo~",
             "comboSep": "~",
             "foo": "bar",
-            "base": "/yui/",
-            "root": "/yui/",
-            "local": true
+            "base": "/yui-a.b.c/",
+            "root": "/yui-a.b.c/"
         }, c, 'wrong loader config');
         A.areSame(origin, mid, 'origin.setCoreFromAppOrigin() should be chainable');
     },
 
-    "test setGroupFromAppOrigin": function () {
-        A.isFunction(origin.setGroupFromAppOrigin);
-    },
-
-    // registerGroup() was not called prior to setGroupFromAppOrigin()
-    "test setGroupFromAppOrigin with group not registered": function () {
-        origin.config = function () { };
-        // this should throw
-        origin.setGroupFromAppOrigin('app', {});
-    },
-
-    // group 'app' has been registered OK using yui.registerGroup()
-    "test setGroupFromAppOrigin with valid group": function () {
+    "test applyGroupConfig": function () {
+        A.isFunction(origin.applyGroupConfig);
         var mid,
             c = {
-                bar: 3
+                foo: 1
             };
 
-        // mocks for registerGroup
-        origin.addModuleToSeed = function () { };
-        origin.getGroupConfig = function (metaFile) {
-            // console.log('metaFile: ' + metaFile);
-            return {
-                moduleName: 'testModule',
-                groupName: 'app',
-                modules: [ ]
-            };
-        };
-        // mock yui.config
-        origin.config = function () {
-            return c;
-        };
-        // set origin._groupFolderMap:
-        // { app: '/build' }
-        // console.log(origin._groupFolderMap);
-        mid = origin.registerGroup('app', '/build');
-        mid = origin.setGroupFromAppOrigin('app', {});
+        origin.config = function () { return c; };
 
+        // first group
+        mid = origin.applyGroupConfig('app', {bar: 2});
         A.areEqual(JSON.stringify({
-            "bar": 3,
+            "foo": 1,
             "groups": {
                 "app": {
-                    "maxURLLength": 1024,
-                    "comboBase": "/combo~",
-                    "comboSep": "~",
-                    "base": "/app/",
-                    "root": "/app/",
-                    "local": true
+                    "bar": 2
                 }
             }
-        }), JSON.stringify(c), 'wrong loader configuration');
-        A.areSame(origin, mid, 'origin.setGroupFromAppOrigin() should be chainable');
+        }), JSON.stringify(c), 'first groups should be supported by honoring old data');
+        A.areSame(origin, mid, 'origin.applyGroupConfig() should be chainable');
+
+        // second group
+        mid = origin.applyGroupConfig('second', {baz: 3});
+        A.areEqual(JSON.stringify({
+            "foo": 1,
+            "groups": {
+                "app": {
+                    "bar": 2
+                },
+                "second": {
+                    "baz": 3
+                }
+            }
+        }), JSON.stringify(c), 'second groups should be supported by honoring old data');
+        A.areSame(origin, mid, 'origin.applyGroupConfig() should be chainable');
+
+        // modifying group
+        mid = origin.applyGroupConfig('second', {baz: 4, xyz: 5});
+        A.areEqual(JSON.stringify({
+            "foo": 1,
+            "groups": {
+                "app": {
+                    "bar": 2
+                },
+                "second": {
+                    "baz": 4,
+                    "xyz": 5
+                }
+            }
+        }), JSON.stringify(c), 'reconfiguruing groups should be supported by honoring old data');
+        A.areSame(origin, mid, 'origin.applyGroupConfig() should be chainable');
     },
 
     "test registerGroup with invalid / missing group config": function () {
@@ -145,7 +144,7 @@ suite.add(new YUITest.TestCase({
         origin.registerGroup('foo', '/build');
     },
 
-    "test registerGroup": function () {
+    "test registerGroup with no previous settings for group": function () {
         A.isFunction(origin.registerGroup);
 
         var getGroupConfigCalled = false,
@@ -157,7 +156,7 @@ suite.add(new YUITest.TestCase({
         config = {
         };
         origin.getGroupConfig = function (metaFile) {
-            A.areEqual('/origin/build/testgroup/testgroup.js', metaFile, 'wrong metaFile');
+            A.areEqual('/origin/testgroup-a.b.c/testgroup/testgroup.js', metaFile, 'wrong metaFile');
             getGroupConfigCalled = true;
             return {
                 // fake group
@@ -177,72 +176,140 @@ suite.add(new YUITest.TestCase({
             addModuleToSeedCalled = true;
         };
 
-        mid = origin.registerGroup('testgroup', '/origin/build');
+        mid = origin.registerGroup('testgroup', '/origin/testgroup-a.b.c');
 
-        A.areEqual('/origin/build',
+        A.areEqual('/origin/testgroup-a.b.c',
                    origin._groupFolderMap.testgroup,
                    'wrong groupRoot');
         A.areEqual(true, getGroupConfigCalled, 'getGroupConfig was not called');
         A.areEqual(true, addModuleToSeedCalled, 'addModuleToSeed was not called');
 
         A.areSame(origin, mid, 'origin.registerGroup() should be chainable');
+
+        // testing the configuration of the new group
+        A.areEqual(JSON.stringify({
+            "groups": {
+                "testgroup": {
+                    "base": "/testgroup-a.b.c/",
+                    "root": "/testgroup-a.b.c/",
+                    "combine": true,
+                    "filter": "min",
+                    "maxURLLength": 1024,
+                    "comboBase": "/combo~",
+                    "comboSep": "~"
+                }
+            }
+        }), JSON.stringify(config), 'wrong loader configuration for new group');
     },
 
-    "test combineGroups": function () {
+    "test registerGroup with previous settings for group": function () {
+        A.isFunction(origin.registerGroup);
 
-        var mid,
-            options,
-            config,
-            combineCalled = false;
+        var getGroupConfigCalled = false,
+            addModuleToSeedCalled = false,
+            mid,
+            config;
 
-        options = {
-            maxURLLength: 1024,
-            comboBase: "/samba~",
-            comboSep: "$"
-        };
+        // config returned by yui.config()
         config = {
-            root: "http://foo.yahoo.com",
-            comboBase: "/samba~",
-            comboSep: "$",
+            bar: 2,
             groups: {
-                "testgroup": {
-                    root: "http://foo.yahoo.com",
-                    comboBase: "/samba~",
-                    comboSep: "$"
-                },
-                "cdngroup": {}
+                app: {
+                    foo: 1,
+                    base: "/path/to/{{groupDir}}/",
+                    root: "folder/{{groupDir}}/"
+                }
             }
         };
-
-        A.isFunction(origin.combineGroups);
+        origin.getGroupConfig = function (metaFile) {
+            return {
+                // fake group
+                moduleName: 'app-meta',
+                moduleVersion: '',
+                moduleConfig: { },
+                groupName: 'app',
+                modules: { }
+            };
+        };
         origin.config = function () {
             return config;
         };
+        origin.addModuleToSeed = function (moduleName, groupName) {
+            A.areEqual('app-meta', moduleName, 'wrong moduleName');
+            A.areEqual('app', groupName, 'wrong groupName');
+        };
 
-        mid = origin.combineGroups(options);
+        mid = origin.registerGroup('app', 'path/to/app-x.y.z');
 
-        A.areEqual(true, config.combine, 'config.combine should be true');
-        A.areEqual(true, config.groups.testgroup.combine,
-                   'combine should be true since the group share same base as options');
+        A.areEqual('path/to/app-x.y.z',
+                   origin._groupFolderMap.app,
+                   'wrong groupRoot');
 
+        // testing the configuration of the new group
         A.areEqual(JSON.stringify({
-            "root": "http://foo.yahoo.com",
-            "comboBase": "/samba~",
-            "comboSep": "$",
+            "bar": 2,
             "groups": {
-                "testgroup": {
-                    "root": "http://foo.yahoo.com",
-                    "comboBase": "/samba~",
-                    "comboSep": "$",
-                    "combine": true
-                },
-                "cdngroup": {}
-            },
-            "combine": true
-        }), JSON.stringify(config), 'wrong loader config');
+                "app": {
+                    "base": "/path/to/app-x.y.z/",
+                    "root": "folder/app-x.y.z/",
+                    "combine": true,
+                    "filter": "min",
+                    "maxURLLength": 1024,
+                    "comboBase": "/combo~",
+                    "comboSep": "~",
+                    "foo": 1
+                }
+            }
+        }), JSON.stringify(config), 'wrong loader configuration for new group');
+    },
 
-        A.areSame(origin, mid, 'origin.combineGroups() should be chainable');
+    "test registerGroup with custom default yui settings": function () {
+        var mid,
+            config;
+
+        // config returned by yui.config()
+        config = {};
+        origin.getGroupConfig = function (metaFile) {
+            return {
+                // fake group
+                moduleName: 'app-meta',
+                moduleVersion: '',
+                moduleConfig: { },
+                groupName: 'app',
+                modules: { }
+            };
+        };
+        origin.config = function () {
+            return config;
+        };
+        origin.addModuleToSeed = function (moduleName, groupName) {};
+        origin._app = {
+            // express app
+            set: function (name) {
+                return {
+                    'yui default base': "http://custom/base/with/token/{{groupDir}}/string",
+                    'yui default root': 'custom/root/withou/token'
+                }[name];
+            }
+        };
+        mid = origin.registerGroup('app', 'path/to/app-x.y.z');
+
+        // testing the configuration of the new group
+        A.areEqual(JSON.stringify({
+            "groups": {
+                "app": {
+                    "base": "http://custom/base/with/token/app-x.y.z/string",
+                    "root": "custom/root/withou/token",
+                    "combine": true,
+                    "filter": "min",
+                    "maxURLLength": 1024,
+                    "comboBase": "/combo~",
+                    "comboSep": "~"
+                }
+            }
+        }), JSON.stringify(config), 'wrong loader configuration for new group');
     }
+
 }));
 
 YUITest.TestRunner.add(suite);
