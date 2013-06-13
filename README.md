@@ -57,6 +57,44 @@ thru the `app.yui.use()` as compiled templates.
 Usage
 -----
 
+## Extending express functionalities
+
+`express-yui` is a conventional `express` extension, which means it will extend
+the functionalities provided on `express` by augmenting the express app instance
+with a new member called `yui`. At the same time, `express-yui` provides a set of
+static methods that you can call directly off the `express-yui` module, those
+methods are utility methods and express middleware.
+
+Aside from that, `express-yui` will try to extend the `express` peer dependency to
+augment the app instance automatically everytime you call `express()` to create a
+brand new instance. This is useful, and in most cases just enough. Here is an example:
+
+```
+var express = require('express'),
+    yui = require('express-yui'),
+    app = express();
+
+app.yui.applyConfig({ foo: 'something' });
+```
+
+As you can see in the example above, the `yui` member is now available for the app, and
+the only thing you have to keep in mind is the order of the `require` statements.
+
+But this is not always the case. Sometimes you have a 3rd party module that is requiring
+`express`, and even creating the app under the hood, in which case you can just augment
+an existing express app instance by doing this:
+
+```
+var yui = require('express-yui'),
+    express = require('express'),
+    app = express();
+
+// calling a yui static method to augment the `express` app instance
+yui.augment(app);
+
+app.yui.applyConfig({ foo: 'something' });
+```
+
 ## Exposing app state into client
 
 TBD
