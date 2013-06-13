@@ -1,6 +1,12 @@
 Express YUI Change History
 ==========================
 
+0.4.1 (2013-06-13)
+------------------
+
+* exposing `yui.augment(app)` as a static method to augment an existing express app instance
+* exposing `yui.extend(express)` as a static method to extend express module.
+
 0.4.0 (2013-06-07)
 ------------------
 
