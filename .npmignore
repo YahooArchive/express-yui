@@ -2,3 +2,5 @@ artifacts/*
 build/*
 coverage/*
 examples/*
+conf/*
+tests/*
