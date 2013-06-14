@@ -1,6 +1,17 @@
 Express YUI Change History
 ==========================
 
+0.4.2 (2013-06-13)
+------------------
+
+* avoid executing arbitrary scripts while trying to detect yui modules in all files by using a custom context that does not have `require` or `module`. this enforces the use of `YUI.add()` to wrap everything into the function that defines the module.
+
+0.4.1 (2013-06-13)
+------------------
+
+* exposing `yui.augment(app)` as a static method to augment an existing express app instance
+* exposing `yui.extend(express)` as a static method to extend express module.
+
 0.4.0 (2013-06-07)
 ------------------
 
