@@ -149,7 +149,7 @@ With this configuration, a group called `foo` with version `1.2.3` will produce 
 API Docs
 --------
 
-You can find the [API Docs][] as under the `apidocs` folder in github, and you can browse it thru this url:
+You can find the [API Docs][] under `apidocs` folder, and you can browse it thru this url:
 
 http://rawgithub.com/yahoo/express-yui/master/apidocs/index.html
 
