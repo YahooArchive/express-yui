@@ -103,6 +103,10 @@ TBD
 
 TBD
 
+## Using the locator plugin to build the app
+
+TBD
+
 ## Serving static assets from app origin
 
 ```

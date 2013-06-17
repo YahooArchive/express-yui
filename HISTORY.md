@@ -1,6 +1,12 @@
 Express YUI Change History
 ==========================
 
+0.4.3 (2013-06-17)
+------------------
+
+* adding custom options for `app.yui.plugin()` to control the `lint`, `coverage`, `silence` and `quiet` arguments used by shifter. by default, the plugin will print out shifter output
+when `process.env.NODE_ENV` is `development`.
+
 0.4.2 (2013-06-13)
 ------------------
 
