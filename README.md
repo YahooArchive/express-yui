@@ -146,6 +146,15 @@ With this configuration, a group called `foo` with version `1.2.3` will produce 
   * http://mycdn.com/path/to/combo?static/foo-1.2.3/bar/bar-min.js&static/foo-1.2.3/baz/baz-min.js
   * http://mycdn.com/path/to/static/foo-1.2.3/bar/bar-min.js
 
+API Docs
+--------
+
+You can find the [API Docs][] as under the `apidocs` folder in github, and you can browse it thru this url:
+
+https://rawgithub.com/yahoo/express-yui/master/apidocs/
+
+[API Docs]: https://github.com/yahoo/express-yui/tree/master/apidocs
+
 License
 -------
 
