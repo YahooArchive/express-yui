@@ -151,7 +151,7 @@ API Docs
 
 You can find the [API Docs][] as under the `apidocs` folder in github, and you can browse it thru this url:
 
-https://rawgithub.com/yahoo/express-yui/master/apidocs/
+http://rawgithub.com/yahoo/express-yui/master/apidocs/index.html
 
 [API Docs]: https://github.com/yahoo/express-yui/tree/master/apidocs
 
