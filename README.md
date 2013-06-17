@@ -103,6 +103,10 @@ TBD
 
 TBD
 
+## Using the locator plugin to build the app
+
+TBD
+
 ## Serving static assets from app origin
 
 ```
@@ -141,6 +145,15 @@ With this configuration, a group called `foo` with version `1.2.3` will produce 
 
   * http://mycdn.com/path/to/combo?static/foo-1.2.3/bar/bar-min.js&static/foo-1.2.3/baz/baz-min.js
   * http://mycdn.com/path/to/static/foo-1.2.3/bar/bar-min.js
+
+API Docs
+--------
+
+You can find the [API Docs][] under `apidocs` folder, and you can browse it thru this url:
+
+http://rawgithub.com/yahoo/express-yui/master/apidocs/index.html
+
+[API Docs]: https://github.com/yahoo/express-yui/tree/master/apidocs
 
 License
 -------

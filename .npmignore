@@ -1,5 +1,6 @@
 artifacts/*
 build/*
+apidocs/*
 coverage/*
 examples/*
 conf/*

@@ -60,11 +60,5 @@
         "unit": "node ./node_modules/ytestrunner/lib/cli.js --include tests/units/**/*.js",
         "lint": "node ./node_modules/.bin/jshint --config ./node_modules/yui-lint/jshint.json ./lib/*.js",
         "docs": "node ./node_modules/.bin/yuidoc --config ./conf/yuidoc.json ./lib"
-    },
-    "yahoo": {
-        "bugzilla": {
-            "product": "Mojito",
-            "component": "General"
-        }
     }
 }

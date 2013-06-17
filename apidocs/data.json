@@ -1,0 +1,1693 @@
+{
+    "project": {
+        "name": "express-yui API documentation",
+        "description": "express-yui API documentation",
+        "version": "0.2.0",
+        "url": "https://github.com/yahoo/express-yui"
+    },
+    "files": {
+        "lib/cdn.js": {
+            "name": "lib/cdn.js",
+            "modules": {
+                "cdn": 1
+            },
+            "classes": {
+                "cdn": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/groups.js": {
+            "name": "lib/groups.js",
+            "modules": {
+                "groups": 1
+            },
+            "classes": {
+                "groups": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/loader.js": {
+            "name": "lib/loader.js",
+            "modules": {
+                "loader": 1
+            },
+            "classes": {
+                "loader": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/middleware.js": {
+            "name": "lib/middleware.js",
+            "modules": {
+                "middleware": 1
+            },
+            "classes": {
+                "middleware": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/origin.js": {
+            "name": "lib/origin.js",
+            "modules": {
+                "origin": 1
+            },
+            "classes": {
+                "origin": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/seed.js": {
+            "name": "lib/seed.js",
+            "modules": {
+                "seed": 1
+            },
+            "classes": {
+                "seed": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/server.js": {
+            "name": "lib/server.js",
+            "modules": {
+                "server": 1
+            },
+            "classes": {
+                "server": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/shifter.js": {
+            "name": "lib/shifter.js",
+            "modules": {
+                "shifter": 1
+            },
+            "classes": {
+                "shifter": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/utils.js": {
+            "name": "lib/utils.js",
+            "modules": {
+                "utils": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/view.js": {
+            "name": "lib/view.js",
+            "modules": {
+                "view": 1
+            },
+            "classes": {
+                "View": 1,
+                "view": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/yui.js": {
+            "name": "lib/yui.js",
+            "modules": {
+                "express-yui": 1
+            },
+            "classes": {
+                "yui": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "yui": {
+            "name": "yui",
+            "submodules": {
+                "cdn": 1,
+                "groups": 1,
+                "loader": 1,
+                "origin": 1,
+                "seed": 1,
+                "server": 1,
+                "shifter": 1,
+                "view": 1
+            },
+            "classes": {
+                "cdn": 1,
+                "groups": 1,
+                "loader": 1,
+                "origin": 1,
+                "seed": 1,
+                "server": 1,
+                "shifter": 1,
+                "View": 1,
+                "view": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "file": "lib/view.js",
+            "line": 87
+        },
+        "cdn": {
+            "name": "cdn",
+            "submodules": {},
+            "classes": {
+                "cdn": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "yui",
+            "namespace": "",
+            "file": "lib/cdn.js",
+            "line": 23,
+            "description": "The `yui.cdn` extension that provides some basic configuration\nthat will facilitate the configuration of YUI to be served from\nCDN as well as custom groups to be configured to be served from\nand alternative CDN as well."
+        },
+        "groups": {
+            "name": "groups",
+            "submodules": {},
+            "classes": {
+                "groups": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "yui",
+            "namespace": "",
+            "file": "lib/groups.js",
+            "line": 34,
+            "description": "The `yui.groups` extension provides a set of utilities\nanalyze meta modules and group metada."
+        },
+        "loader": {
+            "name": "loader",
+            "submodules": {},
+            "classes": {
+                "loader": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "yui",
+            "namespace": "",
+            "file": "lib/loader.js",
+            "line": 23,
+            "description": "The `yui.loader` extension exposes a locator plugin to build and register yui meta modules\nfrom shifter module metadata."
+        },
+        "express-yui": {
+            "name": "express-yui",
+            "submodules": {
+                "middleware": 1,
+                "utils": 1
+            },
+            "classes": {
+                "middleware": 1,
+                "yui": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "lib/yui.js",
+            "line": 39,
+            "description": "The `express-yui` middleware provides the foundation and some basic\nfeatures to attach information into the `res.locals` object\nthat could be used to boot `YUI` in the client runtime."
+        },
+        "middleware": {
+            "name": "middleware",
+            "submodules": {},
+            "classes": {
+                "middleware": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "express-yui",
+            "namespace": "",
+            "file": "lib/middleware.js",
+            "line": 33,
+            "description": "The `express-yui` exports few middleware that provide some basic\nfeatures to attach information into the `res.locals` object\nthat could be used to boot `YUI` in the client runtime."
+        },
+        "origin": {
+            "name": "origin",
+            "submodules": {},
+            "classes": {
+                "origin": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "yui",
+            "namespace": "",
+            "file": "lib/origin.js",
+            "line": 23,
+            "description": "The `express-yui.origin` extension that provides a set of features\nto mutate the express app into an origin server for yui\nmodules and static assets."
+        },
+        "seed": {
+            "name": "seed",
+            "submodules": {},
+            "classes": {
+                "seed": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "yui",
+            "namespace": "",
+            "file": "lib/seed.js",
+            "line": 21,
+            "description": "The `express-yui.seed` extension that provides a set of features\nto construct the yui seed structure which contains the url\nto fetch the initial piece of the library before\ncalling `YUI().use()` in the client runtime."
+        },
+        "server": {
+            "name": "server",
+            "submodules": {},
+            "classes": {
+                "server": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "yui",
+            "namespace": "",
+            "file": "lib/server.js",
+            "line": 24,
+            "description": "The `express-yui.server` extension that provides a set of features\nto control a YUI instance on the server side."
+        },
+        "shifter": {
+            "name": "shifter",
+            "submodules": {},
+            "classes": {
+                "shifter": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "yui",
+            "namespace": "",
+            "file": "lib/shifter.js",
+            "line": 184,
+            "description": "The `express-yui.shifter` extension exposes a set of utilities to build yui modules\nfrom *.js or build.json files."
+        },
+        "utils": {
+            "name": "utils",
+            "submodules": {},
+            "classes": {},
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "express-yui",
+            "namespace": "",
+            "file": "lib/utils.js",
+            "line": 11,
+            "description": "Utility functions used across `express-yui` components."
+        },
+        "view": {
+            "name": "view",
+            "submodules": {},
+            "classes": {
+                "View": 1,
+                "view": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "yui",
+            "namespace": "",
+            "file": "lib/view.js",
+            "line": 87,
+            "description": "The `express-yui.view` extension exposes an express view class that relies on all templates\nexposed by all modules that are registered on the server side thru Loader, those\ntemplates should be using Y.Template."
+        }
+    },
+    "classes": {
+        "cdn": {
+            "name": "cdn",
+            "shortname": "cdn",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [
+                "yui",
+                "yui"
+            ],
+            "module": "yui",
+            "submodule": "cdn",
+            "namespace": "",
+            "file": "lib/cdn.js",
+            "line": 23,
+            "description": "The `yui.cdn` extension that provides some basic configuration\nthat will facilitate the configuration of YUI to be served from\nCDN.\n\nWhen the `\"cdn\"` sub-module is used by `yui` middleware, it\nwill allow you to explicitly ask for booting YUI from YUI CDN\nin the client runtime. In the following example you can see how\nto force yui to load from CDN. This is the default behavior, but\nin some cases, when defining a custom base and root for all groups\nyou might want to set YUI straight to the original YUI CDN.\n\n    // Creates a new express app.\n    var app = express();\n    app.yui.setCoreFromCDN();",
+            "static": 1,
+            "uses": [
+                "utils"
+            ]
+        },
+        "groups": {
+            "name": "groups",
+            "shortname": "groups",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [
+                "yui"
+            ],
+            "module": "yui",
+            "submodule": "groups",
+            "namespace": "",
+            "file": "lib/groups.js",
+            "line": 34,
+            "description": "The `yui.groups` extension provides a set of utilities\nanalyze meta modules and group metada.",
+            "static": 1,
+            "uses": [
+                "utils",
+                "*fs",
+                "*path",
+                "*vm"
+            ],
+            "extension": "for yui"
+        },
+        "loader": {
+            "name": "loader",
+            "shortname": "loader",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [
+                "yui",
+                "shifter",
+                "yui"
+            ],
+            "module": "yui",
+            "submodule": "loader",
+            "namespace": "",
+            "file": "lib/loader.js",
+            "line": 23,
+            "description": "The `yui.loader` extension exposes a locator plugin to build and register yui modules\nand metadata.\n\nHere is an example:\n\n    var plugin = app.yui.plugin();\n\nYou can also specify whether or not the bundles should be registered as a group on loader\nand modules in a bundle should be attached into a Y instance created for the server side,\nas well as a bunch of custom settings. Here is another example:\n\n    var plugin = app.yui.plugin({\n        registerGroup: true,\n        registerServerModules: true,\n        useServerModules: true,\n        lint: true,\n        coverage: true,\n        silence: false\n    });",
+            "static": 1,
+            "uses": [
+                "*path",
+                "utils",
+                "shifter",
+                "*debug"
+            ]
+        },
+        "middleware": {
+            "name": "middleware",
+            "shortname": "middleware",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [
+                "yui"
+            ],
+            "module": "express-yui",
+            "submodule": "middleware",
+            "namespace": "",
+            "file": "lib/middleware.js",
+            "line": 33,
+            "description": "The `express-yui` exports few middleware that provide some basic\nfeatures to attach information into the `res.locals` object\nthat could be used to boot `YUI` in the client runtime.\n\n    var app = express();\n    app.yui.applyConfig({ fetchCSS: false });\n    app.use(yui.expose());",
+            "static": 1,
+            "uses": [
+                "utils",
+                "*path",
+                "*debug",
+                "*express-combo"
+            ]
+        },
+        "origin": {
+            "name": "origin",
+            "shortname": "origin",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [
+                "yui",
+                "yui"
+            ],
+            "module": "yui",
+            "submodule": "origin",
+            "namespace": "",
+            "file": "lib/origin.js",
+            "line": 23,
+            "description": "The `express-yui.origin` extension that provides some basic configuration\nthat will facilitate the configuration of YUI Core modules and other\ngroups to be served from the express app in a form of origin server.\n\nThis is not recommended for production and instead you should use the\n`cdn` module, but it is a very useful feature for development of offline\napplications.\n\n    // Creates a new express app.\n    var app = express();\n\n    // getting YUI Core modules from the app origin.\n    app.yui.setCoreFromAppOrigin();\n\n    // registering a group `app` based on a folder generated by `shifter` module\n    app.yui.registerGroup('app', '/path/to/foo/yui-build');\n\n    app.use(yui.static());",
+            "static": 1,
+            "uses": [
+                "utils",
+                "*path"
+            ]
+        },
+        "seed": {
+            "name": "seed",
+            "shortname": "seed",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [
+                "yui",
+                "yui"
+            ],
+            "module": "yui",
+            "submodule": "seed",
+            "namespace": "",
+            "file": "lib/seed.js",
+            "line": 21,
+            "description": "The `express-yui.seed` middleware extension that provides a set of features\nto configure and construct the yui seed object which\ncontains the urls to be used to fetch the initial pieces\nof the yui library, plus any app specific modules\nbefore calling `YUI().use()` in the client runtime.\n\nWhen the `\"seed\"` sub-module is used by `yui` middleware, it\nwill automatically mix itself into `app.yui.expose()`, and it\nexposes an array of object with the information to build\nthe script tag or tags that forms the seed:\n\nThe following is an example of how these features can be used:\n\n    // Creates a new express app.\n    var app = express();\n    // adjust the seed modules\n    app.yui.seed(['yui-base', 'loader']);\n\n    // Call expose middleware when a route match.\n    app.get('/index.html', app.yui.expose(), anotherRoute);\n\nIn the example above, the array of objects with the seed information\nwill be exposed thru `res.locals.yui_seed`, which means you\ncan use it in your templates by doing something like this if\nusing handlebars templates:\n\n    {{#yui_seed}}\n    <script src=\"{{{src}}}\"></script>\n    {{/yui_seed}}",
+            "static": 1
+        },
+        "server": {
+            "name": "server",
+            "shortname": "server",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [
+                "yui",
+                "view",
+                "yui"
+            ],
+            "module": "yui",
+            "submodule": "server",
+            "namespace": "",
+            "file": "lib/server.js",
+            "line": 24,
+            "description": "The `express-yui.server` extension that provides a set of features\nto control a YUI instance on the server side.",
+            "static": 1,
+            "uses": [
+                "*path",
+                "utils"
+            ]
+        },
+        "shifter": {
+            "name": "shifter",
+            "shortname": "shifter",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [
+                "yui",
+                "loader",
+                "shifter",
+                "yui"
+            ],
+            "module": "yui",
+            "submodule": "shifter",
+            "namespace": "",
+            "file": "lib/shifter.js",
+            "line": 184,
+            "description": "The `express-yui.shifter` extension exposes a locator plugin to build yui modules\nfrom *.js or build.json files.\n\nHere is an example:\n\n    var plugin = app.yui.locatorShifter({});\n\nYou can also specify a custom yui build directory, by doing:\n\n    var plugin = app.yui.locatorShifter({\n        yuiBuildDirectory: '/path/to/folder'\n    });",
+            "static": 1,
+            "uses": [
+                "*path",
+                "*fs",
+                "*module",
+                "*vm",
+                "win-spawn",
+                "shifter",
+                "loader"
+            ]
+        },
+        "View": {
+            "name": "View",
+            "shortname": "View",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "yui",
+            "submodule": "view",
+            "namespace": "",
+            "file": "lib/view.js",
+            "line": 21,
+            "description": "Initialize a new `View` with the given `name`.",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "the name of the view",
+                    "type": "String"
+                },
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "static": 1,
+            "is_constructor": 1,
+            "api": "private"
+        },
+        "view": {
+            "name": "view",
+            "shortname": "view",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [
+                "yui",
+                "yui"
+            ],
+            "module": "yui",
+            "submodule": "view",
+            "namespace": "",
+            "file": "lib/view.js",
+            "line": 87,
+            "description": "The `express-yui.view` extension exposes an express view class that relies on all templates\nexposed by all modules that are registered on the server side thru Loader, those\ntemplates should be using Y.Template.\n\nHere is an example:\n\n    app.set('view', app.yui.view({ defaultBundle: 'locator-express' })",
+            "static": 1,
+            "uses": [
+                "utils",
+                "server"
+            ]
+        },
+        "yui": {
+            "name": "yui",
+            "shortname": "yui",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "express-yui",
+            "namespace": "",
+            "file": "lib/yui.js",
+            "line": 39,
+            "description": "The `express-yui` extension provides the foundation and some basic\nfeatures to attach information into the `res.locals` object\nthat could be used to boot `YUI` in the client runtime.\n\nWhen the `\"seed\"` sub-module is used, it will automatically\nmix itself into `app.yui.expose()`, and it exposes a local variable\nin a form of an array of object with the information to\nbuild the script tag or tags that forms the seed:\n\nThe following is an example of how these features can be used:\n\n    // Creates a new express app.\n    var app = express();\n\n    // Set some basic configs\n    app.yui.applyConfig({\n        fetchCSS: false\n    });\n\n    // Use helpers to do advanced configurations\n    app.yui.debugMode());\n\n    // Call expose middleware when a route match.\n    app.get('/index.html', app.yui.expose(), anotherRoute);\n\nIn the example above, the few things will be exposed\nthru `res.locals.*`, which means you can use it in your\ntemplates by doing something like this:\n\n    <script>\n    YUI({{{yui_config}}}).use('node', function (Y) {\n        Y.one('#content').setContent('<p>Ready!</p>');\n    });\n    </script>\n\nIn this particular case, `yui_config` will hold all the\nappropiated settings generated by `yui` middleware and\nits extensions.",
+            "static": 1,
+            "is_constructor": 1,
+            "uses": [
+                "*express",
+                "*express-expose",
+                "utils",
+                "cdn",
+                "seed",
+                "origin",
+                "groups",
+                "shifter",
+                "loader",
+                "server",
+                "view"
+            ]
+        }
+    },
+    "classitems": [
+        {
+            "file": "lib/cdn.js",
+            "line": 46,
+            "description": "Set up a default group in loader that represents the\ncore yui modules to be loaded from YUI CDN.\n\n    app.yui.setCoreFromCDN();",
+            "itemtype": "method",
+            "name": "setCoreFromCDN",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "loaderConfig",
+                    "description": "Optional loader configuration\nobjects that, if passed, will be mix with the default\nconfiguration for yui CDN.",
+                    "type": "Object"
+                }
+            ],
+            "chainable": 1,
+            "class": "cdn",
+            "module": "yui",
+            "submodule": "cdn"
+        },
+        {
+            "file": "lib/groups.js",
+            "line": 46,
+            "description": "Extracts information from a meta module. This information includes\nthe details about the meta module in the YUI registry plus all the\ninfo about the groups that are part of the meta module, along with\nall the modules per group. This method is used by `origin` to\nanalyze each group before serving them.\n\n    var path,\n        config;\n    path = __dirname + '/assets/js/metas.js';\n    config = app.yui.groups.getGroupConfig(path);",
+            "itemtype": "method",
+            "name": "getGroupConfig",
+            "access": "protected",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "path",
+                    "description": "the filesystem path to the meta module",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "modules the modules meta for the group",
+                "type": "Object"
+            },
+            "class": "groups",
+            "module": "yui",
+            "submodule": "groups"
+        },
+        {
+            "file": "lib/groups.js",
+            "line": 108,
+            "description": "Creates a new sandbox instance in which to run the YUI module.\n\nDefault sandbox supports:\n<ul>\n  <li>Y.config</li>\n  <li>Y.applyConfig</li>\n  <li>Y.mix</li>\n  <li>Y.merge</li>\n  <li>Y.version</li>\n</ul>",
+            "itemtype": "method",
+            "name": "_createSandbox",
+            "access": "private",
+            "tagname": "",
+            "return": {
+                "description": "the mock to extract the metas from the meta module",
+                "type": "Object"
+            },
+            "class": "groups",
+            "module": "yui",
+            "submodule": "groups"
+        },
+        {
+            "file": "lib/groups.js",
+            "line": 144,
+            "description": "Given a path to a meta YUI module, parse the module name and\nspecific group app module configuration.",
+            "itemtype": "method",
+            "name": "_captureYUIModuleDetails",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "path",
+                    "description": "absolute path to the meta module",
+                    "type": "String"
+                },
+                {
+                    "name": "sandbox",
+                    "description": "a sandbox instance in which to run the YUI\n                        module. if not provided, a default one will\n                        be used.",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "configuration with meta details",
+                "type": "Object"
+            },
+            "class": "groups",
+            "module": "yui",
+            "submodule": "groups"
+        },
+        {
+            "file": "lib/groups.js",
+            "line": 198,
+            "description": "Y.applyConfig({\n    groups: {\n        app: Y.merge((Y.config.groups && Y.config.groups.app) || {}, {\n            modules: { @modules@ }\n        })\n    }\n});",
+            "class": "groups",
+            "module": "yui",
+            "submodule": "groups"
+        },
+        {
+            "file": "lib/groups.js",
+            "line": 209,
+            "description": "Support for:\nYUI.Env[Y.version].modules = YUI.Env[Y.version].modules || {};\nY.mix(YUI.Env[Y.version].modules, { @modules@ };",
+            "class": "groups",
+            "module": "yui",
+            "submodule": "groups"
+        },
+        {
+            "file": "lib/loader.js",
+            "line": 51,
+            "description": "Registers information about modules that will be used\nto generate the bundle meta.",
+            "itemtype": "method",
+            "name": "register",
+            "access": "protected",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "bundleName",
+                    "description": "The bundle name to be registered.",
+                    "type": "String"
+                },
+                {
+                    "name": "cacheKey",
+                    "description": "The cache key for the file that generates mod.",
+                    "type": "String"
+                },
+                {
+                    "name": "mod",
+                    "description": "The module information generated by the shifter module.",
+                    "type": "Object"
+                }
+            ],
+            "class": "loader",
+            "module": "yui",
+            "submodule": "loader"
+        },
+        {
+            "file": "lib/loader.js",
+            "line": 67,
+            "description": "Creates a locator plugin that can analyze locator bundles, build modules\nand build loader metadata for all yui modules within the bundle.",
+            "itemtype": "method",
+            "name": "plugin",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "Optional plugin configuration\nobjects that, if passed, will be mix with the default\nconfiguration of the plugin.",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "registerGroup",
+                            "description": "Whether or not the bundle should be \n        registered as a loader group to be used from the client and server.\n        Default to false.",
+                            "type": "Boolean"
+                        },
+                        {
+                            "name": "registerServerModules",
+                            "description": "Whether or not server\n        modules should be provisioned to be loaded thru `app.yui.use()` on the\n        server side. Default to false.",
+                            "type": "Boolean|Function"
+                        },
+                        {
+                            "name": "useServerModules",
+                            "description": "Whether or not server modules\n        should be automatically used thru `Y.use()` whenever `app.yui.use()` is called.",
+                            "type": "Boolean|Function"
+                        },
+                        {
+                            "name": "cache",
+                            "description": "Whether or not the shifting process should be cached\n        to speed up the build process. By default, it is true.",
+                            "type": "Boolean"
+                        },
+                        {
+                            "name": "buildDir",
+                            "description": "Optional custom filesystem path for the output\n        folder of the shifter. Default to an internal computation based on `locator.buildDir`.",
+                            "type": "String"
+                        },
+                        {
+                            "name": "args",
+                            "description": "Optional custom shifter cli arguments. This will overrule\n        custom `options` that are translated into shifter arguments.",
+                            "type": "Object"
+                        },
+                        {
+                            "name": "lint",
+                            "description": "Optional enable linting in shifter.",
+                            "type": "Object"
+                        },
+                        {
+                            "name": "coverage",
+                            "description": "Optional generate `-coverage.js` version of modules in shifter.",
+                            "type": "Object"
+                        },
+                        {
+                            "name": "silent",
+                            "description": "Optional run shifter in silent mode.",
+                            "type": "Object"
+                        },
+                        {
+                            "name": "quiet",
+                            "description": "Optional run shifter in quiet mode.",
+                            "type": "Object"
+                        }
+                    ]
+                },
+                {
+                    "name": "filter",
+                    "description": "optional regular express or function to execute\n        for each `evt.files`. If no `filter` is supplied, all modified files will be\n        shifted. If the regular express is provided, it will be tested against every\n        `evn.files`, testing the relative path to determine if the file should be\n        shifted or not. In a function if provided, the function will be called for\n        every `evt.files` with the following arguments:",
+                    "type": "RegExp|Function",
+                    "props": [
+                        {
+                            "name": "bundle",
+                            "description": "the current bundle to where the file belongs to",
+                            "type": "Object"
+                        },
+                        {
+                            "name": "relativePath",
+                            "description": "the relative path to the file from the bundle",
+                            "type": "Object"
+                        },
+                        {
+                            "name": "return",
+                            "description": "Return true to indicate that the\n        file should be shifted. Otherise the file will be skipped.",
+                            "type": "Boolean"
+                        }
+                    ]
+                }
+            ],
+            "return": {
+                "description": "locator plugin",
+                "type": "Object"
+            },
+            "class": "loader",
+            "module": "yui",
+            "submodule": "loader"
+        },
+        {
+            "file": "lib/loader.js",
+            "line": 299,
+            "description": "Analyze modified files and build.json files to infer the list of files that\nshould be shifted.",
+            "itemtype": "method",
+            "name": "_buildsInBundle",
+            "access": "protected",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "bundleName",
+                    "description": "The bundle name to be registered.",
+                    "type": "String"
+                },
+                {
+                    "name": "modifiedFiles",
+                    "description": "The filesystem path for all modified files in bundle.",
+                    "type": "Array"
+                },
+                {
+                    "name": "jsonFiles",
+                    "description": "The filesystem path for all json files in bundle.",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "The filesystem path for all files that should be shifted using shifter",
+                "type": "Array"
+            },
+            "class": "loader",
+            "module": "yui",
+            "submodule": "loader"
+        },
+        {
+            "file": "lib/middleware.js",
+            "line": 49,
+            "description": "Exposes `res.locals.yui_config` string with the serialized\nconfiguration computed based on all the calls to `app.yui.*`\nmethods. This middleware will be invoked by `express-yui.expose` middleware\nautomatically, which means you should not call it directly.",
+            "itemtype": "method",
+            "name": "exposeConfig",
+            "access": "protected",
+            "tagname": "",
+            "return": {
+                "description": "express middleware",
+                "type": "Function"
+            },
+            "class": "middleware",
+            "module": "express-yui",
+            "submodule": "middleware"
+        },
+        {
+            "file": "lib/middleware.js",
+            "line": 93,
+            "description": "Expose the seed information to the client.\nUsually, `yui.expose()` will take care of calling\n`yui.exposeSeed()`, although you can do it directly.\n\nThis method will expose an array through\n`res.locals.yui_seed` with the following format:\n\n    [\n        {src: \"path/to/yui.js\"},\n        {src: \"path/to/another.js\"}\n    ]\n\nIn your template (assuming using handlebars):\n\n    {{#yui_seed}}\n    &lt;script src=\"{{{src}}}\"&gt;&lt;/script&gt;\n    {{/yui_seed}}\n\nAdjust the format if using a different template engine.",
+            "itemtype": "method",
+            "name": "exposeSeed",
+            "access": "protected",
+            "tagname": "",
+            "return": {
+                "description": "express middleware",
+                "type": "Function"
+            },
+            "class": "middleware",
+            "module": "express-yui",
+            "submodule": "middleware"
+        },
+        {
+            "file": "lib/middleware.js",
+            "line": 221,
+            "description": "Exposes different data structures thru `res.locals.*`,\nall of them will be prefixed with `yui_` to avoid collitions.\nE.g: `res.locals.yui_seed` and `res.locals.yui_config`.\nEach of these structures could be string, array or object.",
+            "itemtype": "method",
+            "name": "expose",
+            "access": "public",
+            "tagname": "",
+            "return": {
+                "description": "express middleware collection",
+                "type": "Function[]"
+            },
+            "class": "middleware",
+            "module": "express-yui",
+            "submodule": "middleware"
+        },
+        {
+            "file": "lib/middleware.js",
+            "line": 237,
+            "description": "Serves YUI Modules as static assets. All registered groups and core will be\nserved from app origin.\n\n    app.use(yui.static());",
+            "itemtype": "method",
+            "name": "static",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "express static handler options",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "express middleware",
+                "type": "Function"
+            },
+            "class": "middleware",
+            "module": "express-yui",
+            "submodule": "middleware"
+        },
+        {
+            "file": "lib/origin.js",
+            "line": 50,
+            "description": "Set YUI Core Modules from the same origin as to where the application\nis hosted.\n\nHere is an example on how to use it:\n\n    app.yui.setCoreFromAppOrigin({});",
+            "itemtype": "method",
+            "name": "setCoreFromAppOrigin",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "loaderConfig",
+                    "description": "optional loader configuration for the core",
+                    "type": "Object"
+                }
+            ],
+            "chainable": 1,
+            "class": "origin",
+            "module": "yui",
+            "submodule": "origin"
+        },
+        {
+            "file": "lib/origin.js",
+            "line": 87,
+            "description": "Set a custom loader configuration for the group.\n\nHere is an example of how to use it.\n\n    app.yui.applyGroupConfig('app', {\n        maxURLLength: 2048,\n        comboBase: \"/combo?\"\n        comboSep: \"&\"\n    });",
+            "itemtype": "method",
+            "name": "applyGroupConfig",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "groupName",
+                    "description": "the name of the group used by loader.",
+                    "type": "String"
+                },
+                {
+                    "name": "loaderConfig",
+                    "description": "custom loader configuration\nfor the group.",
+                    "type": "Object"
+                }
+            ],
+            "chainable": 1,
+            "class": "origin",
+            "module": "yui",
+            "submodule": "origin"
+        },
+        {
+            "file": "lib/origin.js",
+            "line": 120,
+            "description": "Register a group and its modules by analyzing the meta file and defining the\ngroup configuration for the loader. Groups can be served from origin app or\nfrom CDN by calling `applyGroupConfig` or by setting `yui default base`,\n`yui default root` and `yui combo config` thru `app.set()`.\n\nHere is an example on how to use it, assuming that the YUI metadata are\nlocated in the `build` directory under the app root.\n\n    app.yui.registerGroup('app', __dirname + '/build');",
+            "itemtype": "method",
+            "name": "registerGroup",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "groupName",
+                    "description": "the name of the group used by loader.",
+                    "type": "String"
+                },
+                {
+                    "name": "groupRoot",
+                    "description": "filesystem path for the group. This will be used to\nanalyze all modules in the group.",
+                    "type": "String"
+                },
+                {
+                    "name": "metaFile",
+                    "description": "optional filesystem path for the yui module that holds\nthe metas for the group. Default value: `<groupRoot>/<groupName>/<groupName>.js`",
+                    "type": "String"
+                }
+            ],
+            "chainable": 1,
+            "class": "origin",
+            "module": "yui",
+            "submodule": "origin"
+        },
+        {
+            "file": "lib/seed.js",
+            "line": 58,
+            "description": "Gets the default list of module names that should\nbe part of the seed files.",
+            "itemtype": "method",
+            "name": "getDefaultSeed",
+            "pretected": "",
+            "return": {
+                "description": "list of modules in seed",
+                "type": "Array"
+            },
+            "class": "seed",
+            "module": "yui",
+            "submodule": "seed"
+        },
+        {
+            "file": "lib/seed.js",
+            "line": 70,
+            "description": "Adds a yui module name into the `core` YUI configuration\nwhich is used by loader to identify the pieces that are\nalready part of the seed and should be attached to Y\nautomatically.",
+            "itemtype": "method",
+            "name": "addModuleToSeed",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "moduleName",
+                    "description": "the yui module name",
+                    "type": "String"
+                },
+                {
+                    "name": "groupName",
+                    "description": "the group name for the module",
+                    "type": "String"
+                }
+            ],
+            "chainable": 1,
+            "class": "seed",
+            "module": "yui",
+            "submodule": "seed"
+        },
+        {
+            "file": "lib/seed.js",
+            "line": 100,
+            "description": "Specify a list of modules to use as seed. This\nmethod extends the yui static configuration,\nspecifically setting the `app.yui.config().seed` value.\n\n    app.yui.seed([\"yui-base\", \"loader\"]);",
+            "itemtype": "method",
+            "name": "seed",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "modules",
+                    "description": "list of modules to use",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "express middleware",
+                "type": "Function"
+            },
+            "chainable": 1,
+            "class": "seed",
+            "module": "yui",
+            "submodule": "seed"
+        },
+        {
+            "file": "lib/server.js",
+            "line": 35,
+            "description": "Add a group and its modules into the server Y instance or\nupdates the current Y instance by re-adding them.",
+            "itemtype": "method",
+            "name": "registerModules",
+            "access": "protected",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "groupName",
+                    "description": "The bundle/group name to be attached.",
+                    "type": "String"
+                },
+                {
+                    "name": "groupModules",
+                    "description": "The modules meta for the group.",
+                    "type": "Object"
+                }
+            ],
+            "chainable": 1,
+            "class": "server",
+            "module": "yui",
+            "submodule": "server"
+        },
+        {
+            "file": "lib/server.js",
+            "line": 78,
+            "description": "Use modules in the server Y instance. This is equivalent to call\n`req.app.yui.use(moduleName)` for every module in `modules`.",
+            "itemtype": "method",
+            "name": "attachModules",
+            "access": "protected",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "groupName",
+                    "description": "The bundle/group name to be attached.",
+                    "type": "String"
+                },
+                {
+                    "name": "mods",
+                    "description": "The list of modules to be attached.",
+                    "type": "Array"
+                }
+            ],
+            "chainable": 1,
+            "class": "server",
+            "module": "yui",
+            "submodule": "server"
+        },
+        {
+            "file": "lib/server.js",
+            "line": 108,
+            "description": "Creates a YUI Instance and attaches all registered modules for all registered\ngroups into it, and optional attaches some more modules my mimicing the original\nYUI.use method.",
+            "itemtype": "method",
+            "name": "use",
+            "access": "protected",
+            "tagname": "",
+            "return": {
+                "description": "Y instance",
+                "type": "Object"
+            },
+            "class": "server",
+            "module": "yui",
+            "submodule": "server"
+        },
+        {
+            "file": "lib/shifter.js",
+            "line": 205,
+            "description": "Shift yui modules using shifter cli.",
+            "itemtype": "method",
+            "name": "shiftFiles",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "files",
+                    "description": "filesystem paths for all files to be shifted",
+                    "type": "Array"
+                },
+                {
+                    "name": "options",
+                    "description": "configuration",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "buildDir",
+                            "description": "custom path for the output of the shifter",
+                            "type": "String"
+                        },
+                        {
+                            "name": "cache",
+                            "description": "whether or not we should apply cache to speed up\n        the shifting process. If true, it will create the folder `.cache` and generate\n        some hash to prevent shifting the same *.js files if there is not change in\n        the source.",
+                            "type": "Boolean"
+                        },
+                        {
+                            "name": "args",
+                            "description": "shifter cli build arguments, it defaults to `[]`",
+                            "type": "Array"
+                        }
+                    ]
+                },
+                {
+                    "name": "callback",
+                    "description": "the callback method to signal the end of the operation",
+                    "type": "Function"
+                }
+            ],
+            "class": "shifter",
+            "module": "yui",
+            "submodule": "shifter"
+        },
+        {
+            "file": "lib/shifter.js",
+            "line": 283,
+            "description": "Analyze a build.json file to extract all the important metadata associted with it.",
+            "itemtype": "method",
+            "name": "_checkBuildFile",
+            "access": "protected",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "file",
+                    "description": "The filesystem path for the build.json file to be analyzed",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "The parsed and augmented content of the build.json file",
+                "type": "Object"
+            },
+            "class": "shifter",
+            "module": "yui",
+            "submodule": "shifter"
+        },
+        {
+            "file": "lib/shifter.js",
+            "line": 344,
+            "description": "Analyze a javascript file, if it is a yui module, it extracts all the important metadata\nassocited with it.",
+            "itemtype": "method",
+            "name": "_checkYUIModule",
+            "access": "protected",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "file",
+                    "description": "The filesystem path for the yui module to be analyzed",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "The parsed and augmented metadata from the yui module",
+                "type": "Object"
+            },
+            "class": "shifter",
+            "module": "yui",
+            "submodule": "shifter"
+        },
+        {
+            "file": "lib/shifter.js",
+            "line": 386,
+            "description": "Verifies if a source file was already processed by analyzing its content against an\ninternal cache mechanism. JSON files (*.json) are an exception, and they will not be\ncached since they might includes other files that might change and affects the result\nof the build so we can't rely on the source file alone. If the file is not in cache,\nit will be included automatically.\n\nWhy? This method is just an artifact to avoid spawning a process to execute shifter, which\nis very expensive. It is also the main artifact to avoid shifting files when in production,\nif the build process includes the build folder, specially because manhattan does not\nsupport spawn. Finally, it is just a noop artifact to avoid calling shifter, it does not\nneed to cache the response of the shifter process, just opt out for the next call to shift\nthe same file with the same content.",
+            "itemtype": "method",
+            "name": "_isCached",
+            "access": "protected",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "file",
+                    "description": "The filesystem path for the file to be cached",
+                    "type": "String"
+                },
+                {
+                    "name": "buildDir",
+                    "description": "The filesystem path for the build folder",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "`true` if the file and its content matches the internal cache, otherwise `false`.",
+                "type": "Boolean"
+            },
+            "class": "shifter",
+            "module": "yui",
+            "submodule": "shifter"
+        },
+        {
+            "file": "lib/shifter.js",
+            "line": 421,
+            "description": "Removes the cache entry for a particular file.\n\nWhy? This method is just an artifact to invalidate the cache entry created by\n`_isCached` when a shifter error is detected because the cache entry is premature\ncreated before spawing to shifter.",
+            "itemtype": "method",
+            "name": "_clearCached",
+            "access": "protected",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "file",
+                    "description": "The filesystem path for the file to be cached",
+                    "type": "String"
+                },
+                {
+                    "name": "buildDir",
+                    "description": "The filesystem path for the build folder",
+                    "type": "String"
+                }
+            ],
+            "class": "shifter",
+            "module": "yui",
+            "submodule": "shifter"
+        },
+        {
+            "file": "lib/utils.js",
+            "line": 20,
+            "description": "Extends object with properties from other objects.\n\n    var a = { foo: 'bar' }\n      , b = { bar: 'baz' }\n      , c = { baz: 'xyz' };\n\n    utils.extends(a, b, c);\n    // a => { foo: 'bar', bar: 'baz', baz: 'xyz' }",
+            "itemtype": "method",
+            "name": "extend",
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "the receiver object to be extended",
+                    "type": "Object"
+                },
+                {
+                    "name": "supplier",
+                    "description": "objects",
+                    "type": "Object*"
+                }
+            ],
+            "return": {
+                "description": "The extended object",
+                "type": "Object"
+            },
+            "class": "View",
+            "module": "express-yui",
+            "submodule": "utils"
+        },
+        {
+            "file": "lib/utils.js",
+            "line": 51,
+            "description": "Walks `obj` recursively looking for functions and replacing\nthose functions with a token that will be added to the `hash`\nobject. This is useful when you try to stringify an object\nthat helds references to functions. This method will modify\n`obj` and `hash` parameters.",
+            "itemtype": "method",
+            "name": "tokenizeFunctions",
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "the object to be tokenized",
+                    "type": "Object"
+                },
+                {
+                    "name": "hash",
+                    "description": "the object to store tokenized functions",
+                    "type": "Object"
+                },
+                {
+                    "name": "ns",
+                    "description": "namespace for the tokens",
+                    "type": "String"
+                }
+            ],
+            "class": "View",
+            "module": "express-yui",
+            "submodule": "utils"
+        },
+        {
+            "file": "lib/utils.js",
+            "line": 82,
+            "description": "Serializes an object, which is similar to `JSON.stringify` but\nwith the peculiarity that function refences will be allowed,\nwith means you can fully bake a javascript structure to be\nreconstructed in the client runtime. In this method, the\noriginal object will not be modified.",
+            "itemtype": "method",
+            "name": "serialize",
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "the object to be serialized",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "the serialized object",
+                "type": "String"
+            },
+            "class": "View",
+            "module": "express-yui",
+            "submodule": "utils"
+        },
+        {
+            "file": "lib/utils.js",
+            "line": 112,
+            "description": "Deep clone of an object.",
+            "itemtype": "method",
+            "name": "clone",
+            "params": [
+                {
+                    "name": "oldObj",
+                    "description": "the origal object to be cloned",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "The cloned object",
+                "type": "Object"
+            },
+            "class": "View",
+            "module": "express-yui",
+            "submodule": "utils"
+        },
+        {
+            "file": "lib/utils.js",
+            "line": 146,
+            "description": "Test if `fn` is a function. This is useful to distinguish functions from objects.",
+            "itemtype": "method",
+            "name": "isFunction",
+            "params": [
+                {
+                    "name": "fn",
+                    "description": "the function to be tested",
+                    "type": "Object|Function"
+                }
+            ],
+            "return": {
+                "description": "`true` if `fn` is a function, `false` otherwise",
+                "type": "Boolean"
+            },
+            "class": "View",
+            "module": "express-yui",
+            "submodule": "utils"
+        },
+        {
+            "file": "lib/utils.js",
+            "line": 157,
+            "description": "Test if `re` is a regular expression.",
+            "itemtype": "method",
+            "name": "isRegExp",
+            "params": [
+                {
+                    "name": "re",
+                    "description": "the regular express to be tested",
+                    "type": "Object|Function"
+                }
+            ],
+            "return": {
+                "description": "`true` if `re` is a regular express, `false` otherwise",
+                "type": "Boolean"
+            },
+            "class": "View",
+            "module": "express-yui",
+            "submodule": "utils"
+        },
+        {
+            "file": "lib/utils.js",
+            "line": 168,
+            "description": "The default combo handler configuration for app origin.",
+            "itemtype": "property",
+            "name": "DEFAULT_COMBO_CONFIG",
+            "type": "{Object}",
+            "class": "View",
+            "module": "express-yui",
+            "submodule": "utils"
+        },
+        {
+            "file": "lib/view.js",
+            "line": 37,
+            "description": "Lookup view by the given `name`.\nThis method is supposed to be shimmed by yui to bind it to the Y instance on the server.",
+            "itemtype": "method",
+            "name": "lookup",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "the view name which is the first argument when calling `res.render()`",
+                    "type": "String"
+                },
+                {
+                    "name": "options",
+                    "description": "the `options` passed as the second argument when calling `res.render()`",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "the compiled view or null.",
+                "type": "Function"
+            },
+            "api": "private",
+            "class": "View",
+            "module": "yui",
+            "submodule": "view"
+        },
+        {
+            "file": "lib/view.js",
+            "line": 51,
+            "description": "Lookup layout view.\nThis method is supposed to be shimmed by yui to bind it to the Y instance on the server.",
+            "itemtype": "method",
+            "name": "layout",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "the `options` passed as the second argument when calling `res.render()`",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "the compiled layout view or null.",
+                "type": "Function"
+            },
+            "api": "private",
+            "class": "View",
+            "module": "yui",
+            "submodule": "view"
+        },
+        {
+            "file": "lib/view.js",
+            "line": 64,
+            "description": "Render with the given `options` and callback `fn(err, str)`.",
+            "itemtype": "method",
+            "name": "render",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "the `options` passed as the second argument when calling `res.render()`",
+                    "type": "Object"
+                },
+                {
+                    "name": "fn",
+                    "description": "the callback function.",
+                    "type": "Function"
+                }
+            ],
+            "api": "private",
+            "class": "View",
+            "module": "yui",
+            "submodule": "view"
+        },
+        {
+            "file": "lib/view.js",
+            "line": 103,
+            "description": "Expose a View class for express.\n\n    app.set('view', app.yui.view({ defaultBundle: 'app-name' });",
+            "itemtype": "method",
+            "name": "view",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "config",
+                    "description": "The default configuration of the view engine.",
+                    "type": "Object"
+                },
+                {
+                    "name": "defaultBundle",
+                    "description": "The default group or bundle to lookup the template name.",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "the express view class",
+                "type": "Function"
+            },
+            "class": "view",
+            "module": "yui",
+            "submodule": "view"
+        },
+        {
+            "file": "lib/yui.js",
+            "line": 110,
+            "description": "Turns on debug mode for YUI Loader by setting\n`debug=true`, `logLevel=\"debug\"`, `combine=false` and `filter=\"debug\"`\ninto the static configuration. More available settings\n[in the YUI API Docs](http://yuilibrary.com/yui/docs/api/classes/config.html).\n\n    app.yui.debug({});",
+            "itemtype": "method",
+            "name": "debugMode",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "config",
+                    "description": "optional object to overrule\nspecific settings when in debug mode.",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "combine",
+                            "description": "default to `false`",
+                            "type": "Boolean"
+                        },
+                        {
+                            "name": "debug",
+                            "description": "default to `true`",
+                            "type": "Boolean"
+                        },
+                        {
+                            "name": "logLevel",
+                            "description": "default to `\"debug\"`",
+                            "type": "String"
+                        },
+                        {
+                            "name": "filter",
+                            "description": "default to `\"debug\"`",
+                            "type": "String"
+                        }
+                    ]
+                }
+            ],
+            "chainable": 1,
+            "class": "yui",
+            "module": "express-yui"
+        },
+        {
+            "file": "lib/yui.js",
+            "line": 144,
+            "description": "Extends the static configuration with the supplier\nobject(s). You can use it like this:\n\n    // Disable CSS computations\n    app.yui.applyConfig({\n        fetchCSS: false\n    });",
+            "itemtype": "method",
+            "name": "applyConfig",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "supplier",
+                    "description": "objects to be mixed with the\nstatic configuration. All available settings\n[from the YUI API Docs](http://yuilibrary.com/yui/docs/api/classes/config.html).\ncan be used here.",
+                    "type": "Object*"
+                }
+            ],
+            "chainable": 1,
+            "class": "yui",
+            "module": "express-yui"
+        },
+        {
+            "file": "lib/yui.js",
+            "line": 166,
+            "description": "Extends the static configuration with the supplier object(s)\nor returns the current static configuration reference. This\nconfiguration is static, and attached to the server object.\nOnce you call `yui.expose()` middleware for the first time,\nthis configuration becomes inmutable.",
+            "itemtype": "method",
+            "name": "config",
+            "access": "protected",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "supplier",
+                    "description": "Optional supplier objects\nthat, if passed, will be mix with the static configuration.",
+                    "type": "Object*"
+                }
+            ],
+            "return": {
+                "description": "static configuration",
+                "type": "Object"
+            },
+            "class": "yui",
+            "module": "express-yui"
+        },
+        {
+            "file": "lib/yui.js",
+            "line": 200,
+            "description": "Augment an express application instance with `express-yui` functionalities.\nBy default, `express-yui` will augment the `express`'s app prototype to include\nthe `yui` member, but if you want to augment an existing `app` instance, you can\nuse this method.",
+            "itemtype": "method",
+            "name": "augment",
+            "static": 1,
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "app",
+                    "description": "express app instance to be augmented with the `yui` member.",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "express app instance",
+                "type": "Object"
+            },
+            "class": "yui",
+            "module": "express-yui"
+        },
+        {
+            "file": "lib/yui.js",
+            "line": 224,
+            "description": "Extends the express module prototype with `express-yui` functionalities.\nBy default, `express-yui` will extend the `express`'s app prototype to include\nthe `yui` member, but if you want to extend a custom express reference, you can\nuse this method.",
+            "itemtype": "method",
+            "name": "extend",
+            "static": 1,
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "express",
+                    "description": "the express module to be extended.",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "express module",
+                "type": "Function"
+            },
+            "class": "yui",
+            "module": "express-yui"
+        }
+    ],
+    "warnings": [
+        {
+            "message": "unknown tag: pretected",
+            "line": " lib/seed.js:58"
+        },
+        {
+            "message": "unknown tag: api",
+            "line": " lib/view.js:21"
+        },
+        {
+            "message": "unknown tag: api",
+            "line": " lib/view.js:37"
+        },
+        {
+            "message": "unknown tag: api",
+            "line": " lib/view.js:51"
+        },
+        {
+            "message": "unknown tag: api",
+            "line": " lib/view.js:64"
+        },
+        {
+            "message": "Missing item type\nY.applyConfig({\n    groups: {\n        app: Y.merge((Y.config.groups && Y.config.groups.app) || {}, {\n            modules: { @modules@ }\n        })\n    }\n});",
+            "line": " lib/groups.js:198"
+        },
+        {
+            "message": "Missing item type\nSupport for:\nYUI.Env[Y.version].modules = YUI.Env[Y.version].modules || {};\nY.mix(YUI.Env[Y.version].modules, { @modules@ };",
+            "line": " lib/groups.js:209"
+        }
+    ]
+}
