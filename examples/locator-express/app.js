@@ -39,7 +39,7 @@ app.get('/foo', yui.expose(), function (req, res, next) {
 });
 
 // locator initialiation
-locator = new (require('modown-locator'))({
+locator = new (require('locator'))({
     buildDirectory: 'build'
 });
 
