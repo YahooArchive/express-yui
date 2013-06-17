@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>lib/view.js - express-yui API documentation</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../assets/css/logo.png" title="express-yui API documentation"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 0.2.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/cdn.html">cdn</a></li>
+            
+                <li><a href="../classes/groups.html">groups</a></li>
+            
+                <li><a href="../classes/loader.html">loader</a></li>
+            
+                <li><a href="../classes/middleware.html">middleware</a></li>
+            
+                <li><a href="../classes/origin.html">origin</a></li>
+            
+                <li><a href="../classes/seed.html">seed</a></li>
+            
+                <li><a href="../classes/server.html">server</a></li>
+            
+                <li><a href="../classes/shifter.html">shifter</a></li>
+            
+                <li><a href="../classes/View.html">View</a></li>
+            
+                <li><a href="../classes/view.html">view</a></li>
+            
+                <li><a href="../classes/yui.html">yui</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="../modules/cdn.html">cdn</a></li>
+            
+                <li><a href="../modules/express-yui.html">express-yui</a></li>
+            
+                <li><a href="../modules/groups.html">groups</a></li>
+            
+                <li><a href="../modules/loader.html">loader</a></li>
+            
+                <li><a href="../modules/middleware.html">middleware</a></li>
+            
+                <li><a href="../modules/origin.html">origin</a></li>
+            
+                <li><a href="../modules/seed.html">seed</a></li>
+            
+                <li><a href="../modules/server.html">server</a></li>
+            
+                <li><a href="../modules/shifter.html">shifter</a></li>
+            
+                <li><a href="../modules/utils.html">utils</a></li>
+            
+                <li><a href="../modules/view.html">view</a></li>
+            
+                <li><a href="../modules/yui.html">yui</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: lib/view.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+/*
+ * Copyright (c) 2013, Yahoo! Inc.  All rights reserved.
+ * Copyrights licensed under the New BSD License.
+ * See the accompanying LICENSE file for terms.
+ */
+
+/*jslint node: true, nomen: true */
+
+/**
+The &#x60;express-yui.view&#x60; extension exposes an express view class that relies on all templates
+exposed by all modules that are registered on the server side thru Loader, those
+templates should be using Y.Template.
+
+@module yui
+@submodule view
+**/
+
+&quot;use strict&quot;;
+var utils = require(&#x27;./utils&#x27;);
+
+/**
+ * Initialize a new &#x60;View&#x60; with the given &#x60;name&#x60;.
+ *
+ * @class View
+ * @param {String} name the name of the view
+ * @param {Object} options
+ * @static
+ * @constructor
+ * @api private
+ */
+function View(name, options) {
+    options = options || {};
+    this.name = name;
+    this.path = name;
+}
+
+/**
+ * Lookup view by the given &#x60;name&#x60;.
+ * This method is supposed to be shimmed by yui to bind it to the Y instance on the server.
+ *
+ * @method lookup
+ * @param {String} name the view name which is the first argument when calling &#x60;res.render()&#x60;
+ * @param {Object} options the &#x60;options&#x60; passed as the second argument when calling &#x60;res.render()&#x60;
+ * @return {function} the compiled view or null.
+ * @api private
+ */
+View.prototype.lookup = function () {
+    return null;
+};
+
+/**
+ * Lookup layout view.
+ * This method is supposed to be shimmed by yui to bind it to the Y instance on the server.
+ *
+ * @method layout
+ * @param {Object} options the &#x60;options&#x60; passed as the second argument when calling &#x60;res.render()&#x60;
+ * @return {function} the compiled layout view or null.
+ * @api private
+ */
+View.prototype.layout = function () {
+    return null;
+};
+
+/**
+ * Render with the given &#x60;options&#x60; and callback &#x60;fn(err, str)&#x60;.
+ *
+ * @method render
+ * @param {Object} options the &#x60;options&#x60; passed as the second argument when calling &#x60;res.render()&#x60;
+ * @param {Function} fn the callback function.
+ * @api private
+ */
+View.prototype.render = function (options, fn) {
+    var template = this.lookup(this.path, options),
+        layout = this.layout(options);
+
+    if (!template) {
+        throw new Error(&#x27;Failed to lookup view &quot;&#x27; + this.path + &#x27;&quot;&#x27;);
+    }
+    if (layout) {
+        // rendering the layout
+        options = utils.extend({}, options, { body: template(options) });
+        template = layout;
+    }
+    fn(null, template(options || {}));
+};
+
+/**
+The &#x60;express-yui.view&#x60; extension exposes an express view class that relies on all templates
+exposed by all modules that are registered on the server side thru Loader, those
+templates should be using Y.Template.
+
+Here is an example:
+
+    app.set(&#x27;view&#x27;, app.yui.view({ defaultBundle: &#x27;locator-express&#x27; })
+
+@class view
+@static
+@uses utils, server
+@extensionfor yui
+*/
+module.exports = {
+
+    /**
+    Expose a View class for express.
+
+        app.set(&#x27;view&#x27;, app.yui.view({ defaultBundle: &#x27;app-name&#x27; });
+
+    @method view
+    @public
+    @param {object} config The default configuration of the view engine.
+
+        @param {object} defaultBundle The default group or bundle to lookup the template name.
+
+    @return {function} the express view class
+    **/
+    view: function (config) {
+
+        var self = this;
+
+        config = config || {};
+
+        utils.extend(View.prototype, {
+            // augmenting the lookup mechanism to use the Y registered at the server side
+            lookup: function (templateName, options) {
+                var bundleName = (options &amp;&amp; options.bundle) || config.defaultBundle,
+                    Y = bundleName &amp;&amp; self.use();
+                return Y &amp;&amp; Y.Template &amp;&amp; Y.Template._cache &amp;&amp; Y.Template._cache[bundleName + &#x27;/&#x27; + templateName];
+            },
+            layout: function (options) {
+                var layoutName = (options &amp;&amp; options.layout) || config.defaultLayout;
+                return layoutName &amp;&amp; this.lookup(layoutName, options);
+            }
+        });
+
+        return View;
+
+    }
+
+};
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

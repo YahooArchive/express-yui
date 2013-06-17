@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>lib/utils.js - express-yui API documentation</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../assets/css/logo.png" title="express-yui API documentation"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 0.2.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/cdn.html">cdn</a></li>
+            
+                <li><a href="../classes/groups.html">groups</a></li>
+            
+                <li><a href="../classes/loader.html">loader</a></li>
+            
+                <li><a href="../classes/middleware.html">middleware</a></li>
+            
+                <li><a href="../classes/origin.html">origin</a></li>
+            
+                <li><a href="../classes/seed.html">seed</a></li>
+            
+                <li><a href="../classes/server.html">server</a></li>
+            
+                <li><a href="../classes/shifter.html">shifter</a></li>
+            
+                <li><a href="../classes/View.html">View</a></li>
+            
+                <li><a href="../classes/view.html">view</a></li>
+            
+                <li><a href="../classes/yui.html">yui</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="../modules/cdn.html">cdn</a></li>
+            
+                <li><a href="../modules/express-yui.html">express-yui</a></li>
+            
+                <li><a href="../modules/groups.html">groups</a></li>
+            
+                <li><a href="../modules/loader.html">loader</a></li>
+            
+                <li><a href="../modules/middleware.html">middleware</a></li>
+            
+                <li><a href="../modules/origin.html">origin</a></li>
+            
+                <li><a href="../modules/seed.html">seed</a></li>
+            
+                <li><a href="../modules/server.html">server</a></li>
+            
+                <li><a href="../modules/shifter.html">shifter</a></li>
+            
+                <li><a href="../modules/utils.html">utils</a></li>
+            
+                <li><a href="../modules/view.html">view</a></li>
+            
+                <li><a href="../modules/yui.html">yui</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: lib/utils.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+/*
+ * Copyright (c) 2013, Yahoo! Inc.  All rights reserved.
+ * Copyrights licensed under the New BSD License.
+ * See the accompanying LICENSE file for terms.
+ */
+
+/*jslint node:true, nomen: true */
+
+&#x27;use strict&#x27;;
+
+/**
+Utility functions used across &#x60;express-yui&#x60; components.
+
+@module express-yui
+@submodule utils
+**/
+
+var NODE_ENV   = process.env.NODE_ENV || &#x27;development&#x27;;
+
+/**
+Extends object with properties from other objects.
+
+    var a = { foo: &#x27;bar&#x27; }
+      , b = { bar: &#x27;baz&#x27; }
+      , c = { baz: &#x27;xyz&#x27; };
+
+    utils.extends(a, b, c);
+    // a =&gt; { foo: &#x27;bar&#x27;, bar: &#x27;baz&#x27;, baz: &#x27;xyz&#x27; }
+
+@method extend
+@param {Object} obj the receiver object to be extended
+@param {Object*} supplier objects
+@return {Object} The extended object
+**/
+exports.extend = function (obj) {
+    Array.prototype.slice.call(arguments, 1).forEach(function (source) {
+        var key;
+
+        if (!source) { return; }
+
+        for (key in source) {
+            if (source.hasOwnProperty(key)) {
+                obj[key] = source[key];
+            }
+        }
+    });
+
+    return obj;
+};
+
+/**
+Walks &#x60;obj&#x60; recursively looking for functions and replacing
+those functions with a token that will be added to the &#x60;hash&#x60;
+object. This is useful when you try to stringify an object
+that helds references to functions. This method will modify
+&#x60;obj&#x60; and &#x60;hash&#x60; parameters.
+
+@method tokenizeFunctions
+@param {Object} obj the object to be tokenized
+@param {Object} hash the object to store tokenized functions
+@param {string} ns namespace for the tokens
+**/
+exports.tokenizeFunctions = function (obj, hash, ns) {
+    var key,
+        token;
+
+    if (!obj) { return; }
+
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            if (typeof obj[key] === &#x27;function&#x27;) {
+                token = &#x27;@&#x27; + ns + &#x27;.&#x27; + key + &#x27;@&#x27;;
+                hash[token] = obj[key];
+                obj[key] = token;
+            } else if (typeof obj[key] === &#x27;object&#x27;) {
+                exports.tokenizeFunctions(obj[key], hash, ns + &#x27;.&#x27; + key);
+            }
+        }
+    }
+};
+
+/**
+Serializes an object, which is similar to &#x60;JSON.stringify&#x60; but
+with the peculiarity that function refences will be allowed,
+with means you can fully bake a javascript structure to be
+reconstructed in the client runtime. In this method, the
+original object will not be modified.
+
+@method serialize
+@param {Object} obj the object to be serialized
+@return {string} the serialized object
+**/
+exports.serialize = function (obj) {
+    var token,
+        hash = {},
+        str;
+
+    obj = exports.clone(obj);
+    // tokenizing functions within the obj structure
+    exports.tokenizeFunctions(obj, hash, &#x27;*&#x27;);
+    str = JSON.stringify(obj);
+
+    for (token in hash) {
+        if (hash.hasOwnProperty(token)) {
+            str = str.replace(&#x27;&quot;&#x27; + token + &#x27;&quot;&#x27;, hash[token].toString());
+        }
+    }
+
+    return str;
+};
+
+/**
+Deep clone of an object.
+
+@method clone
+@param {Object} oldObj the origal object to be cloned
+@return {Object} The cloned object
+**/
+exports.clone = function clone(oldObj) {
+    var newObj,
+        key,
+        len;
+
+    if (!oldObj || typeof oldObj !== &#x27;object&#x27;) {
+        return oldObj;
+    }
+
+    if (Array.isArray(oldObj)) {
+        newObj = [];
+        len = oldObj.length;
+        for (key = 0; key &lt; len; key += 1) {
+            newObj[key] = clone(oldObj[key]);
+        }
+        return newObj;
+    }
+
+    newObj = {};
+    for (key in oldObj) {
+        if (oldObj.hasOwnProperty(key)) {
+            newObj[key] = clone(oldObj[key]);
+        }
+    }
+    return newObj;
+};
+
+/**
+Test if &#x60;fn&#x60; is a function. This is useful to distinguish functions from objects.
+
+@method isFunction
+@param {Object|Function} fn the function to be tested
+@return {Boolean} &#x60;true&#x60; if &#x60;fn&#x60; is a function, &#x60;false&#x60; otherwise
+**/
+exports.isFunction = function (fn) {
+    return !!(fn &amp;&amp; (Object.prototype.toString.call(fn) === &#x27;[object Function]&#x27;) &amp;&amp; fn.toString);
+};
+
+/**
+Test if &#x60;re&#x60; is a regular expression.
+
+@method isRegExp
+@param {Object|Function} re the regular express to be tested
+@return {Boolean} &#x60;true&#x60; if &#x60;re&#x60; is a regular express, &#x60;false&#x60; otherwise
+**/
+exports.isRegExp = function (re) {
+   return !!(re &amp;&amp; (Object.prototype.toString.call(re) === &#x27;[object RegExp]&#x27;));
+};
+
+/**
+The default combo handler configuration for app origin.
+
+@property DEFAULT_COMBO_CONFIG
+@type {Object}
+**/
+exports.DEFAULT_COMBO_CONFIG = {
+    maxURLLength: 1024,
+    comboBase: &quot;/combo~&quot;,
+    comboSep: &quot;~&quot;
+};
+
+exports.debugMode = (NODE_ENV === &#x27;development&#x27;);
+
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>
