@@ -36,7 +36,7 @@ Features
 
  * expose yui config and seed files per request
  * provide basic configurations for cdn, debug, and other common conditions in yui
- * provide middleware to server `static` assets from origin server, including
+ * provide middleware to serve `static` assets from origin server, including
 combo capabilities built-in.
  * provide middleware to `expose` the app state and the yui config into the
  view engine to be used in the templates to boot YUI and the app in the client side.
@@ -126,7 +126,7 @@ And this is really the only thing you should do in your templates to get YUI rea
 
 ### Using the locator plugin to build the app
 
-`express-yui` provides many features, but the real power of this package can be seeing when
+`express-yui` provides many features, but the real power of this package can be seen when
 using it in conjunction with [locator][] component.
 
 ```
@@ -182,7 +182,7 @@ app.get('/forecast', yui.expose(), function (req, res, next) {
 });
 ```
 
-_note: remember that `req.app` holds a reference to the `app` object for conviniece._
+_note: remember that `req.app` holds a reference to the `app` object for convenience._
 
 
 ### Registering yui groups manually
