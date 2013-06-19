@@ -1,6 +1,11 @@
 Express YUI Change History
 ==========================
 
+0.4.4 (2013-06-19)
+------------------
+
+* adding a hook for locator plugins to force attaching a yui module thru `evt.bundle.useServerModules` array. this is useful for compiled templates and other basic yui modules.
+
 0.4.3 (2013-06-17)
 ------------------
 
