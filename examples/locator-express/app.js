@@ -43,8 +43,8 @@ locator = new (require('locator'))({
     buildDirectory: 'build'
 });
 
-locator.plug(require('modown-handlebars').plugin())
-    .plug(require('modown-micro').plugin())
+locator//.plug(require('locator-handlebars').yui())
+    .plug(require('locator-micro').yui())
     .plug(app.yui.plugin({
         registerGroup: true,
         registerServerModules: true,

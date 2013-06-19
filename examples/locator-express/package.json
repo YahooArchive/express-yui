@@ -5,8 +5,8 @@
     "private": true,
     "main": "app.js",
     "devDependencies": {
-        "modown-micro": "git+ssh://git@git.corp.yahoo.com:modown/modown-micro.git",
-        "modown-handlebars": "git+ssh://git@git.corp.yahoo.com:modown/modown-handlebars.git",
+        "locator-micro": "git+ssh://git@git.corp.yahoo.com:modown/locator-micro.git",
+        "locator-handlebars": "git+ssh://git@git.corp.yahoo.com:modown/locator-handlebars.git",
         "locator": "~0.3.0"
     }
 }
