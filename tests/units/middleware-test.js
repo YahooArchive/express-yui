@@ -133,56 +133,32 @@ suite.add(new YUITest.TestCase({
         A.areEqual(4, counter, 'not all middleware were called');
     },
 
-    /**
-    Test exposeSeed with:
-    - custom seed
-    - default filter
-    - combine is true core, but not for custom group
-    - root '/app/' for combo request
-    **/
-    "test exposeSeed with combine": function () {
+    "test exposeSeed": function () {
         var mid,
-            req = {
-                app: {
-                    yui: {
-                        config: function () {
-                            return {
-                                seed: ['yui', 'test@app'],
-                                // filter: '-raw',
-                                base: 'static/',
-                                combine: true,
-                                root: '/app/',
-                                comboBase: 'http://foo.bar/combo?',
-                                comboSep: '~',
-                                groups: {
-                                    app: {
-                                        base: '/app-base/',
-                                        root: '/app-root/'
-                                    }
-                                }
-                            };
-                        },
-                        getDefaultSeed: function () {
-                            return ['yui'];
-                        }
-                    }
-                }
-            },
+            req = { app: { yui: { } } },
             res = { locals: { } },
             nextCalled = false;
+
+        YUITest.Mock.expect(req.app.yui, {
+            method: 'getSeedUrls',
+            args: [],
+            run: function () {
+                return ['url1', 'url2'];
+            }
+        });
 
         YUITest.Mock.expect(res, {
             method: 'expose',
             args: [YUITest.Mock.Value.Any, 'window.YUI_config.seed'],
             run: function (seed) {
-                // [ 'http://foo.bar/combo?/app/yui/yui-min.js',
-                //      '/app-base/test/test-min.js' ]
+                // [ 'url1',
+                //      'url2' ]
                 // console.log(seed);
                 A.areEqual(2, seed.length, 'only 2 seed expected');
-                A.areEqual('http://foo.bar/combo?/app/yui/yui-min.js',
+                A.areEqual('url1',
                             seed[0],
                             'seed[0] does not match');
-                A.areEqual('/app-base/test/test-min.js',
+                A.areEqual('url2',
                             seed[1],
                             'seed[1] does not match');
             }
@@ -196,56 +172,7 @@ suite.add(new YUITest.TestCase({
         A.isFunction(mid, 'middleware should be a function');
         A.areEqual(true, nextCalled, 'next() was not called from the middleware');
 
-        YUITest.Mock.verify(res);
-    },
-
-    /**
-    Test exposeSeed with:
-    - default seed
-    - filter '-debug'
-    - base '/static/' for non combo request
-    **/
-    "test exposeSeed": function () {
-        var mid,
-            req = {
-                app: {
-                    yui: {
-                        config: function () {
-                            return {
-                                // no seed, force getDefaultSeed to be called
-                                filter: '-debug',
-                                base: '/static/'
-                            };
-                        },
-                        getDefaultSeed: function () {
-                            return ['yui'];
-                        }
-                    }
-                }
-            },
-            res = { locals: { } },
-            nextCalled = false;
-
-        YUITest.Mock.expect(res, {
-            method: 'expose',
-            args: [YUITest.Mock.Value.Any, 'window.YUI_config.seed'],
-            run: function (seed) {
-                // [ '/static/yui/yui-min.js' ]
-                A.areEqual(1, seed.length, 'only 1 seed expected');
-                A.areEqual('/static/yui/yui-min.js',
-                            seed[0],
-                            'seed does not match');
-            }
-        });
-
-        mid = middleware.exposeSeed();
-        mid(req, res, function () {
-            nextCalled = true;
-        });
-
-        A.isFunction(mid, 'middleware should be a function');
-        A.areEqual(true, nextCalled, 'next() was not called from the middleware');
-
+        YUITest.Mock.verify(req.app.yui);
         YUITest.Mock.verify(res);
     },
 
