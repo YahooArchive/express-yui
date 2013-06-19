@@ -43,7 +43,7 @@ locator = new (require('locator'))({
     buildDirectory: 'build'
 });
 
-locator//.plug(require('locator-handlebars').yui())
+locator.plug(require('locator-handlebars').yui())
     .plug(require('locator-micro').yui())
     .plug(app.yui.plugin({
         registerGroup: true,
