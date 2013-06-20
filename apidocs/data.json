@@ -17,6 +17,15 @@
             "fors": {},
             "namespaces": {}
         },
+        "lib/client.js": {
+            "name": "lib/client.js",
+            "modules": {
+                "client": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
         "lib/groups.js": {
             "name": "lib/groups.js",
             "modules": {
@@ -132,6 +141,7 @@
             "name": "yui",
             "submodules": {
                 "cdn": 1,
+                "client": 1,
                 "groups": 1,
                 "loader": 1,
                 "origin": 1,
@@ -170,6 +180,19 @@
             "file": "lib/cdn.js",
             "line": 23,
             "description": "The `yui.cdn` extension that provides some basic configuration\nthat will facilitate the configuration of YUI to be served from\nCDN as well as custom groups to be configured to be served from\nand alternative CDN as well."
+        },
+        "client": {
+            "name": "client",
+            "submodules": {},
+            "classes": {},
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "yui",
+            "namespace": "",
+            "file": "lib/client.js",
+            "line": 9,
+            "description": "The `express-yui.client` extension that provides a set of features\nto control a YUI instance on the client side. This module will be\nserialized and sent to the client side thru `res.expose()` and available\nin the client side thru `window.app.yui`."
         },
         "groups": {
             "name": "groups",
@@ -215,7 +238,7 @@
             "namespaces": {},
             "tag": "module",
             "file": "lib/yui.js",
-            "line": 39,
+            "line": 36,
             "description": "The `express-yui` middleware provides the foundation and some basic\nfeatures to attach information into the `res.locals` object\nthat could be used to boot `YUI` in the client runtime."
         },
         "middleware": {
@@ -230,7 +253,7 @@
             "module": "express-yui",
             "namespace": "",
             "file": "lib/middleware.js",
-            "line": 33,
+            "line": 28,
             "description": "The `express-yui` exports few middleware that provide some basic\nfeatures to attach information into the `res.locals` object\nthat could be used to boot `YUI` in the client runtime."
         },
         "origin": {
@@ -260,7 +283,7 @@
             "module": "yui",
             "namespace": "",
             "file": "lib/seed.js",
-            "line": 21,
+            "line": 24,
             "description": "The `express-yui.seed` extension that provides a set of features\nto construct the yui seed structure which contains the url\nto fetch the initial piece of the library before\ncalling `YUI().use()` in the client runtime."
         },
         "server": {
@@ -411,7 +434,7 @@
             "submodule": "middleware",
             "namespace": "",
             "file": "lib/middleware.js",
-            "line": 33,
+            "line": 28,
             "description": "The `express-yui` exports few middleware that provide some basic\nfeatures to attach information into the `res.locals` object\nthat could be used to boot `YUI` in the client runtime.\n\n    var app = express();\n    app.yui.applyConfig({ fetchCSS: false });\n    app.use(yui.expose());",
             "static": 1,
             "uses": [
@@ -459,9 +482,12 @@
             "submodule": "seed",
             "namespace": "",
             "file": "lib/seed.js",
-            "line": 21,
+            "line": 24,
             "description": "The `express-yui.seed` middleware extension that provides a set of features\nto configure and construct the yui seed object which\ncontains the urls to be used to fetch the initial pieces\nof the yui library, plus any app specific modules\nbefore calling `YUI().use()` in the client runtime.\n\nWhen the `\"seed\"` sub-module is used by `yui` middleware, it\nwill automatically mix itself into `app.yui.expose()`, and it\nexposes an array of object with the information to build\nthe script tag or tags that forms the seed:\n\nThe following is an example of how these features can be used:\n\n    // Creates a new express app.\n    var app = express();\n    // adjust the seed modules\n    app.yui.seed(['yui-base', 'loader']);\n\n    // Call expose middleware when a route match.\n    app.get('/index.html', app.yui.expose(), anotherRoute);\n\nIn the example above, the array of objects with the seed information\nwill be exposed thru `res.locals.yui_seed`, which means you\ncan use it in your templates by doing something like this if\nusing handlebars templates:\n\n    {{#yui_seed}}\n    <script src=\"{{{src}}}\"></script>\n    {{/yui_seed}}",
-            "static": 1
+            "static": 1,
+            "uses": [
+                "utils"
+            ]
         },
         "server": {
             "name": "server",
@@ -581,7 +607,7 @@
             "module": "express-yui",
             "namespace": "",
             "file": "lib/yui.js",
-            "line": 39,
+            "line": 36,
             "description": "The `express-yui` extension provides the foundation and some basic\nfeatures to attach information into the `res.locals` object\nthat could be used to boot `YUI` in the client runtime.\n\nWhen the `\"seed\"` sub-module is used, it will automatically\nmix itself into `app.yui.expose()`, and it exposes a local variable\nin a form of an array of object with the information to\nbuild the script tag or tags that forms the seed:\n\nThe following is an example of how these features can be used:\n\n    // Creates a new express app.\n    var app = express();\n\n    // Set some basic configs\n    app.yui.applyConfig({\n        fetchCSS: false\n    });\n\n    // Use helpers to do advanced configurations\n    app.yui.debugMode());\n\n    // Call expose middleware when a route match.\n    app.get('/index.html', app.yui.expose(), anotherRoute);\n\nIn the example above, the few things will be exposed\nthru `res.locals.*`, which means you can use it in your\ntemplates by doing something like this:\n\n    <script>\n    YUI({{{yui_config}}}).use('node', function (Y) {\n        Y.one('#content').setContent('<p>Ready!</p>');\n    });\n    </script>\n\nIn this particular case, `yui_config` will hold all the\nappropiated settings generated by `yui` middleware and\nits extensions.",
             "static": 1,
             "is_constructor": 1,
@@ -620,6 +646,45 @@
             "class": "cdn",
             "module": "yui",
             "submodule": "cdn"
+        },
+        {
+            "file": "lib/client.js",
+            "line": 21,
+            "description": "This method is meant to be serialized and sent to the client side to boot\nthe application in the browser. Please, do not modify if you don't know\nwhat you're doing it.",
+            "class": "groups",
+            "module": "yui",
+            "submodule": "client"
+        },
+        {
+            "file": "lib/client.js",
+            "line": 138,
+            "description": "Attaches the seed into the head, then creates a YUI Instance and attaches\n`modules` into it. This is equivalent to `YUI().use()` after getting the seed\nready. This method is a bootstrap implementation for the library, and the way\nyou use this in your templates, is by doing this:\n\n    <script>{{{state}}}</script>\n    <script>\n    app.yui.use('foo', 'bar', function (Y) {\n        // do something!\n    });\n    </script>\n\nWhere `state` defines the state of the express app, and `app.yui` defines\nthe helpers that `express-yui` brings into the client side.",
+            "itemtype": "method",
+            "name": "use",
+            "access": "public",
+            "tagname": "",
+            "class": "groups",
+            "module": "yui",
+            "submodule": "client"
+        },
+        {
+            "file": "lib/client.js",
+            "line": 159,
+            "description": "Boots the application, rehydrate the app state and calls back to notify the\n`ready` state of the app.\n\n    <script>{{{state}}}</script>\n    <script>\n    app.yui.ready(function () {\n        // do something!\n    });\n    </script>",
+            "itemtype": "method",
+            "name": "ready",
+            "params": [
+                {
+                    "name": "callback",
+                    "description": "when the app is ready",
+                    "type": "Function"
+                }
+            ],
+            "access": "public",
+            "tagname": "",
+            "class": "groups",
+            "module": "yui",
+            "submodule": "client"
         },
         {
             "file": "lib/groups.js",
@@ -832,7 +897,7 @@
         },
         {
             "file": "lib/loader.js",
-            "line": 299,
+            "line": 307,
             "description": "Analyze modified files and build.json files to infer the list of files that\nshould be shifted.",
             "itemtype": "method",
             "name": "_buildsInBundle",
@@ -865,7 +930,7 @@
         },
         {
             "file": "lib/middleware.js",
-            "line": 49,
+            "line": 44,
             "description": "Exposes `res.locals.yui_config` string with the serialized\nconfiguration computed based on all the calls to `app.yui.*`\nmethods. This middleware will be invoked by `express-yui.expose` middleware\nautomatically, which means you should not call it directly.",
             "itemtype": "method",
             "name": "exposeConfig",
@@ -881,7 +946,7 @@
         },
         {
             "file": "lib/middleware.js",
-            "line": 93,
+            "line": 78,
             "description": "Expose the seed information to the client.\nUsually, `yui.expose()` will take care of calling\n`yui.exposeSeed()`, although you can do it directly.\n\nThis method will expose an array through\n`res.locals.yui_seed` with the following format:\n\n    [\n        {src: \"path/to/yui.js\"},\n        {src: \"path/to/another.js\"}\n    ]\n\nIn your template (assuming using handlebars):\n\n    {{#yui_seed}}\n    &lt;script src=\"{{{src}}}\"&gt;&lt;/script&gt;\n    {{/yui_seed}}\n\nAdjust the format if using a different template engine.",
             "itemtype": "method",
             "name": "exposeSeed",
@@ -897,7 +962,7 @@
         },
         {
             "file": "lib/middleware.js",
-            "line": 221,
+            "line": 123,
             "description": "Exposes different data structures thru `res.locals.*`,\nall of them will be prefixed with `yui_` to avoid collitions.\nE.g: `res.locals.yui_seed` and `res.locals.yui_config`.\nEach of these structures could be string, array or object.",
             "itemtype": "method",
             "name": "expose",
@@ -913,7 +978,7 @@
         },
         {
             "file": "lib/middleware.js",
-            "line": 237,
+            "line": 139,
             "description": "Serves YUI Modules as static assets. All registered groups and core will be\nserved from app origin.\n\n    app.use(yui.static());",
             "itemtype": "method",
             "name": "static",
@@ -1011,7 +1076,7 @@
         },
         {
             "file": "lib/seed.js",
-            "line": 58,
+            "line": 62,
             "description": "Gets the default list of module names that should\nbe part of the seed files.",
             "itemtype": "method",
             "name": "getDefaultSeed",
@@ -1026,7 +1091,7 @@
         },
         {
             "file": "lib/seed.js",
-            "line": 70,
+            "line": 74,
             "description": "Adds a yui module name into the `core` YUI configuration\nwhich is used by loader to identify the pieces that are\nalready part of the seed and should be attached to Y\nautomatically.",
             "itemtype": "method",
             "name": "addModuleToSeed",
@@ -1051,7 +1116,7 @@
         },
         {
             "file": "lib/seed.js",
-            "line": 100,
+            "line": 104,
             "description": "Specify a list of modules to use as seed. This\nmethod extends the yui static configuration,\nspecifically setting the `app.yui.config().seed` value.\n\n    app.yui.seed([\"yui-base\", \"loader\"]);",
             "itemtype": "method",
             "name": "seed",
@@ -1312,54 +1377,6 @@
         {
             "file": "lib/utils.js",
             "line": 51,
-            "description": "Walks `obj` recursively looking for functions and replacing\nthose functions with a token that will be added to the `hash`\nobject. This is useful when you try to stringify an object\nthat helds references to functions. This method will modify\n`obj` and `hash` parameters.",
-            "itemtype": "method",
-            "name": "tokenizeFunctions",
-            "params": [
-                {
-                    "name": "obj",
-                    "description": "the object to be tokenized",
-                    "type": "Object"
-                },
-                {
-                    "name": "hash",
-                    "description": "the object to store tokenized functions",
-                    "type": "Object"
-                },
-                {
-                    "name": "ns",
-                    "description": "namespace for the tokens",
-                    "type": "String"
-                }
-            ],
-            "class": "View",
-            "module": "express-yui",
-            "submodule": "utils"
-        },
-        {
-            "file": "lib/utils.js",
-            "line": 82,
-            "description": "Serializes an object, which is similar to `JSON.stringify` but\nwith the peculiarity that function refences will be allowed,\nwith means you can fully bake a javascript structure to be\nreconstructed in the client runtime. In this method, the\noriginal object will not be modified.",
-            "itemtype": "method",
-            "name": "serialize",
-            "params": [
-                {
-                    "name": "obj",
-                    "description": "the object to be serialized",
-                    "type": "Object"
-                }
-            ],
-            "return": {
-                "description": "the serialized object",
-                "type": "String"
-            },
-            "class": "View",
-            "module": "express-yui",
-            "submodule": "utils"
-        },
-        {
-            "file": "lib/utils.js",
-            "line": 112,
             "description": "Deep clone of an object.",
             "itemtype": "method",
             "name": "clone",
@@ -1380,7 +1397,28 @@
         },
         {
             "file": "lib/utils.js",
-            "line": 146,
+            "line": 85,
+            "description": "Minify the body of a function by removing spaces, tabs, comments, breaklines, etc.\nThis is specially useful to optimize the function before serializing it to send\nit to the client side as a js blob.",
+            "itemtype": "method",
+            "name": "minifyFunction",
+            "params": [
+                {
+                    "name": "fn",
+                    "description": "the function to minify",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "the minified function",
+                "type": "Function"
+            },
+            "class": "View",
+            "module": "express-yui",
+            "submodule": "utils"
+        },
+        {
+            "file": "lib/utils.js",
+            "line": 110,
             "description": "Test if `fn` is a function. This is useful to distinguish functions from objects.",
             "itemtype": "method",
             "name": "isFunction",
@@ -1401,7 +1439,7 @@
         },
         {
             "file": "lib/utils.js",
-            "line": 157,
+            "line": 121,
             "description": "Test if `re` is a regular expression.",
             "itemtype": "method",
             "name": "isRegExp",
@@ -1422,11 +1460,44 @@
         },
         {
             "file": "lib/utils.js",
-            "line": 168,
+            "line": 132,
             "description": "The default combo handler configuration for app origin.",
             "itemtype": "property",
             "name": "DEFAULT_COMBO_CONFIG",
             "type": "{Object}",
+            "class": "View",
+            "module": "express-yui",
+            "submodule": "utils"
+        },
+        {
+            "file": "lib/utils.js",
+            "line": 144,
+            "description": "The default mapping for suffix based on the config `filter` value.",
+            "itemtype": "property",
+            "name": "FILTERS_MAP",
+            "type": "{Object}",
+            "class": "View",
+            "module": "express-yui",
+            "submodule": "utils"
+        },
+        {
+            "file": "lib/utils.js",
+            "line": 156,
+            "description": "The default filter suffix for yui modules urls.",
+            "itemtype": "property",
+            "name": "DEFAULT_FILTER",
+            "type": "{String}",
+            "class": "View",
+            "module": "express-yui",
+            "submodule": "utils"
+        },
+        {
+            "file": "lib/utils.js",
+            "line": 164,
+            "description": "Whether the app is running in debug mode or not. True if nodejs is running\nin development mode.",
+            "itemtype": "property",
+            "name": "debugMode",
+            "type": "{Boolean}",
             "class": "View",
             "module": "express-yui",
             "submodule": "utils"
@@ -1533,7 +1604,7 @@
         },
         {
             "file": "lib/yui.js",
-            "line": 110,
+            "line": 108,
             "description": "Turns on debug mode for YUI Loader by setting\n`debug=true`, `logLevel=\"debug\"`, `combine=false` and `filter=\"debug\"`\ninto the static configuration. More available settings\n[in the YUI API Docs](http://yuilibrary.com/yui/docs/api/classes/config.html).\n\n    app.yui.debug({});",
             "itemtype": "method",
             "name": "debugMode",
@@ -1574,7 +1645,7 @@
         },
         {
             "file": "lib/yui.js",
-            "line": 144,
+            "line": 142,
             "description": "Extends the static configuration with the supplier\nobject(s). You can use it like this:\n\n    // Disable CSS computations\n    app.yui.applyConfig({\n        fetchCSS: false\n    });",
             "itemtype": "method",
             "name": "applyConfig",
@@ -1593,7 +1664,7 @@
         },
         {
             "file": "lib/yui.js",
-            "line": 166,
+            "line": 164,
             "description": "Extends the static configuration with the supplier object(s)\nor returns the current static configuration reference. This\nconfiguration is static, and attached to the server object.\nOnce you call `yui.expose()` middleware for the first time,\nthis configuration becomes inmutable.",
             "itemtype": "method",
             "name": "config",
@@ -1615,7 +1686,7 @@
         },
         {
             "file": "lib/yui.js",
-            "line": 200,
+            "line": 198,
             "description": "Augment an express application instance with `express-yui` functionalities.\nBy default, `express-yui` will augment the `express`'s app prototype to include\nthe `yui` member, but if you want to augment an existing `app` instance, you can\nuse this method.",
             "itemtype": "method",
             "name": "augment",
@@ -1638,7 +1709,7 @@
         },
         {
             "file": "lib/yui.js",
-            "line": 224,
+            "line": 222,
             "description": "Extends the express module prototype with `express-yui` functionalities.\nBy default, `express-yui` will extend the `express`'s app prototype to include\nthe `yui` member, but if you want to extend a custom express reference, you can\nuse this method.",
             "itemtype": "method",
             "name": "extend",
@@ -1663,7 +1734,7 @@
     "warnings": [
         {
             "message": "unknown tag: pretected",
-            "line": " lib/seed.js:58"
+            "line": " lib/seed.js:62"
         },
         {
             "message": "unknown tag: api",
@@ -1680,6 +1751,10 @@
         {
             "message": "unknown tag: api",
             "line": " lib/view.js:64"
+        },
+        {
+            "message": "Missing item type\nThis method is meant to be serialized and sent to the client side to boot\nthe application in the browser. Please, do not modify if you don't know\nwhat you're doing it.",
+            "line": " lib/client.js:21"
         },
         {
             "message": "Missing item type\nY.applyConfig({\n    groups: {\n        app: Y.merge((Y.config.groups && Y.config.groups.app) || {}, {\n            modules: { @modules@ }\n        })\n    }\n});",

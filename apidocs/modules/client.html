@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>middleware - express-yui API documentation</title>
+    <title>client - express-yui API documentation</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -128,7 +128,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>middleware Module</h1>
+                        <h1>client Module</h1>
 <div class="box clearfix meta">
     
 
@@ -136,7 +136,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/lib_middleware.js.html#l28"><code>lib&#x2F;middleware.js:28</code></a>
+            Defined in: <a href="../files/lib_client.js.html#l9"><code>lib&#x2F;client.js:9</code></a>
         </div>
     
 
@@ -146,27 +146,16 @@
 
 
 <div class="box intro">
-    <p>The <code>express-yui</code> exports few middleware that provide some basic
-features to attach information into the <code>res.locals</code> object
-that could be used to boot <code>YUI</code> in the client runtime.</p>
+    <p>The <code>express-yui.client</code> extension that provides a set of features
+to control a YUI instance on the client side. This module will be
+serialized and sent to the client side thru <code>res.expose()</code> and available
+in the client side thru <code>window.app.yui</code>.</p>
 </div>
 
 
 
 <div class="yui3-g">
     <div class="yui3-u-1-2">
-        
-            <p>This module provides the following classes:</p>
-
-            <ul class="module-classes">
-            
-                <li class="module-class">
-                    <a href="../classes/middleware.html">
-                        middleware
-                    </a>
-                </li>
-            
-            </ul>
         
     </div>
 

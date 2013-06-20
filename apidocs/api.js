@@ -15,6 +15,7 @@ YUI.add("yuidoc-meta", function(Y) {
     ],
     "modules": [
         "cdn",
+        "client",
         "express-yui",
         "groups",
         "loader",
@@ -32,6 +33,11 @@ YUI.add("yuidoc-meta", function(Y) {
             "displayName": "cdn",
             "name": "cdn",
             "description": "The `yui.cdn` extension that provides some basic configuration\nthat will facilitate the configuration of YUI to be served from\nCDN as well as custom groups to be configured to be served from\nand alternative CDN as well."
+        },
+        {
+            "displayName": "client",
+            "name": "client",
+            "description": "The `express-yui.client` extension that provides a set of features\nto control a YUI instance on the client side. This module will be\nserialized and sent to the client side thru `res.expose()` and available\nin the client side thru `window.app.yui`."
         },
         {
             "displayName": "express-yui",

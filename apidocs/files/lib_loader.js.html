@@ -69,6 +69,8 @@
             
                 <li><a href="../modules/cdn.html">cdn</a></li>
             
+                <li><a href="../modules/client.html">client</a></li>
+            
                 <li><a href="../modules/express-yui.html">express-yui</a></li>
             
                 <li><a href="../modules/groups.html">groups</a></li>
@@ -398,6 +400,14 @@ module.exports = {
                                     yui.attachModules(bundleName, (utils.isFunction(options.useServerModules) ?
                                             options.useServerModules(bundleName, Object.keys(server.data.json)) :
                                             Object.keys(server.data.json)));
+                                }
+
+                                // if not all modules should be attached automatically, then try to
+                                // automatically attach any module added to &#x60;bundle.useServerModules&#x60; by
+                                // any plugin. this is very useful for plugins that compile templates
+                                // and those templates should be attached automatically
+                                if (!options.useServerModules &amp;&amp; bundle.useServerModules) {
+                                    yui.attachModules(bundleName, bundle.useServerModules);
                                 }
 
                             }

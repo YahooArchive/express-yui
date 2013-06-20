@@ -69,6 +69,8 @@
             
                 <li><a href="../modules/cdn.html">cdn</a></li>
             
+                <li><a href="../modules/client.html">client</a></li>
+            
                 <li><a href="../modules/express-yui.html">express-yui</a></li>
             
                 <li><a href="../modules/groups.html">groups</a></li>
@@ -150,6 +152,9 @@ calling &#x60;YUI().use()&#x60; in the client runtime.
 
 &#x27;use strict&#x27;;
 
+var debug = require(&#x27;debug&#x27;)(&#x27;express:yui:seed&#x27;),
+    utils = require(&#x27;./utils&#x27;);
+
 /**
 The &#x60;express-yui.seed&#x60; middleware extension that provides a set of features
 to configure and construct the yui seed object which
@@ -183,6 +188,7 @@ using handlebars templates:
 
 @class seed
 @static
+@uses utils
 @extensionfor yui
 */
 module.exports = {
@@ -255,6 +261,85 @@ module.exports = {
 
         return this;
 
+    },
+
+    getSeedUrls: function () {
+        // getting static config
+        var config = this.config(),
+            modules = config.seed || this.getDefaultSeed(),
+            urls = [],
+            groups = config.groups || {},
+            prevGroup,
+            stack = [],
+            groupName,
+            groupConfig,
+            path,
+            filter,
+            i,
+            m,
+            moduleName;
+
+        function flush() {
+            if (stack.length &gt; 0) {
+                urls.push(prevGroup.comboBase + stack.join(prevGroup.comboSep));
+            }
+            stack = [];
+        }
+
+        function isSimilarGroup(newGroup) {
+            return newGroup &amp;&amp; newGroup.combine &amp;&amp; prevGroup &amp;&amp; prevGroup.combine &amp;&amp;
+                newGroup.comboBase === prevGroup.comboBase &amp;&amp;
+                newGroup.comboSep === prevGroup.comboSep;
+        }
+
+        // producing an array of objects with the src
+        // for each file in the seed.
+        for (i = 0; i &lt; modules.length; i += 1) {
+            // a module in the list might have a suffix with the group name denotated as @&lt;groupname&gt;
+            m = modules[i].split(&#x27;@&#x27;);
+            moduleName  = m[0];
+            if (m[1]) {
+                groupName   = m[1];
+                groupConfig = groups[groupName]; // group config
+            } else {
+                groupName   = &#x27;yui&#x27;;
+                groupConfig = config; // core config
+            }
+
+            // computing the default filter for yui core modules
+            // default is always -min
+            filter = groupConfig.filter || config.filter; // inheriting from yui config
+            filter = filter &amp;&amp; utils.FILTERS_MAP.hasOwnProperty(filter) ?
+                    utils.FILTERS_MAP[filter] : utils.DEFAULT_FILTER;
+
+            // just build the url as loader will do at the client side.
+            path = moduleName + &#x27;/&#x27; + moduleName + filter + &#x27;.js&#x27;;
+
+            if (groupConfig) {
+
+                if (!isSimilarGroup(groupConfig)) {
+                    flush(groupConfig);
+                }
+                if (groupConfig.combine) {
+                    stack.push(groupConfig.root + path);
+                } else {
+                    urls.push(groupConfig.base + path);
+                }
+                prevGroup = groupConfig;
+
+            } else {
+
+                debug(&#x27;Skipping module [&#x27; + moduleName + &#x27;] form &#x27; +
+                    &#x27;seed due to invalid group resolution.&#x27;);
+
+            }
+
+        }
+
+        // flushing any remaining piece in stack
+        flush();
+
+        return urls;
     }
 
 };

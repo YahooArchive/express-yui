@@ -69,6 +69,8 @@
             
                 <li><a href="../modules/cdn.html">cdn</a></li>
             
+                <li><a href="../modules/client.html">client</a></li>
+            
                 <li><a href="../modules/express-yui.html">express-yui</a></li>
             
                 <li><a href="../modules/groups.html">groups</a></li>
@@ -161,9 +163,6 @@ var express = require(&#x27;express&#x27;),
     server  = require(&#x27;./server&#x27;),
     view    = require(&#x27;./view&#x27;),
 
-    // constants
-    NODE_ENV   = process.env.NODE_ENV || &#x27;development&#x27;,
-
     // utilities
     utils = require(&#x27;./utils&#x27;),
     debug = require(&#x27;debug&#x27;)(&#x27;express:yui&#x27;);
@@ -220,7 +219,7 @@ function ExpressYUIExtension(app) {
     this._config = {};
 
     try {
-        YUI = require(&#x27;yui&#x27; + (NODE_ENV === &#x27;development&#x27; ? &#x27;/debug&#x27; : &#x27;&#x27;));
+        YUI = require(&#x27;yui&#x27; + (utils.debugMode ? &#x27;/debug&#x27; : &#x27;&#x27;));
     } catch (e) {
         throw new Error(&#x27;Error trying to require(&quot;yui&quot;). &#x27; +
             &#x27;&#x60;express&#x60;, &#x60;express-yui&#x60; and &#x60;yui&#x60; are peerDependencies.&#x27;);
@@ -229,7 +228,8 @@ function ExpressYUIExtension(app) {
     this.YUI  = YUI.YUI;
     this.version = YUI.YUI.version;
     this.path = YUI.path();
-    debug(&#x27;Using yui@&#x27; + this.version + &#x27; from [&#x27; + this.path + &#x27;] in &#x27; + NODE_ENV + &#x27; mode.&#x27;);
+    debug(&#x27;Using yui@&#x27; + this.version + &#x27; from [&#x27; + this.path + &#x27;] in &#x27; +
+            (utils.debugMode ? &#x27;debug&#x27; : &#x27;production&#x27;) + &#x27; mode.&#x27;);
 
     // for better readibility, we expose the version
     this._config = {
