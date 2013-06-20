@@ -1,7 +1,7 @@
 {
     "name": "express-yui",
     "description": "Express extension for YUI Applications",
-    "version": "0.4.4",
+    "version": "0.5.0",
     "homepage": "https://github.com/yahoo/express-yui",
     "author": "Caridy Patino <caridy@yahoo-inc.com> (http://github.com/caridy)",
     "contributors": [
@@ -13,6 +13,7 @@
     },
     "dependencies": {
         "express-combo": "0.1.x",
+        "express-state": "0.0.x",
         "mkdirp": "*",
         "shifter": "*",
         "win-spawn": "*",
@@ -59,11 +60,5 @@
         "unit": "node ./node_modules/ytestrunner/lib/cli.js --include tests/units/**/*.js",
         "lint": "node ./node_modules/.bin/jshint --config ./node_modules/yui-lint/jshint.json ./lib/*.js",
         "docs": "node ./node_modules/.bin/yuidoc --config ./conf/yuidoc.json ./lib"
-    },
-    "yahoo": {
-        "bugzilla": {
-            "product": "Mojito",
-            "component": "General"
-        }
     }
 }
