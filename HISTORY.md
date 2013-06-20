@@ -1,6 +1,15 @@
 Express YUI Change History
 ==========================
 
+0.5.0 (2013-06-19)
+------------------
+
+* refactor to integrate with `express-state`.
+* using `app.yui.*` api on server and client.
+* bootstrap to load `seed` files in paralell and non-blocking.
+* integration with the new `locator`
+* many bugfixes and reorganization of the code
+
 0.4.4 (2013-06-19)
 ------------------
 

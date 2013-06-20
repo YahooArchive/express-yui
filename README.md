@@ -148,9 +148,7 @@ new (require('locator'))({
     // provision any yui module to be available on the client side
     registerGroup: true,
     // only needed if you want yui modules available on the server runtime as well
-    registerServerModules: true,
-    // only needed if you want yui modules to be attached automatically on the server runtime
-    useServerModules: true
+    registerServerModules: true
 })).parseBundle(__dirname, {});
 
 app.listen(8080);
