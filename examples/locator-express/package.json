@@ -4,12 +4,9 @@
     "version": "0.0.1",
     "private": true,
     "main": "app.js",
-    "modown": {
-        "ruleset": "touchdown-package"
-    },
     "devDependencies": {
-        "modown-micro": "git+ssh://git@git.corp.yahoo.com:modown/modown-micro.git",
-        "modown-handlebars": "git+ssh://git@git.corp.yahoo.com:modown/modown-handlebars.git",
-        "modown-locator": "0.1.x"
+        "locator-micro": "git+ssh://git@git.corp.yahoo.com:modown/locator-micro.git",
+        "locator-handlebars": "git+ssh://git@git.corp.yahoo.com:modown/locator-handlebars.git",
+        "locator": "~0.3.0"
     }
 }

@@ -74,6 +74,64 @@ suite.add(new YUITest.TestCase({
         A.areSame(seed, mid, 'seed.addModuleToSeed() should be chainable');
         A.areEqual(1, yui_config.seed.length, 'yui_config should have 1 seed only');
 
+    },
+
+    "test getSeedUrls() with combine": function () {
+        var yui_config;
+
+        yui_config = {
+            seed: ['yui', 'test@app'],
+            // filter: '-raw',
+            base: 'static/',
+            combine: true,
+            root: '/app/',
+            comboBase: 'http://foo.bar/combo?',
+            comboSep: '~',
+            groups: {
+                app: {
+                    base: '/app-base/',
+                    root: '/app-root/'
+                }
+            }
+        };
+        seed.config = function () {
+            return yui_config;
+        };
+
+        var urls = seed.getSeedUrls();
+
+        // [ 'http://foo.bar/combo?/app/yui/yui-min.js',
+        //      '/app-base/test/test-min.js' ]
+        // console.log(urls);
+        A.areEqual(2, urls.length, 'only 2 seed expected');
+        A.areEqual('http://foo.bar/combo?/app/yui/yui-min.js',
+                    urls[0],
+                    'urls[0] does not match');
+        A.areEqual('/app-base/test/test-min.js',
+                    urls[1],
+                    'urls[1] does not match');
+    },
+
+    "test getSeedUrls()": function () {
+        var yui_config;
+
+        yui_config = {
+            // no seed, force getDefaultSeed to be called
+            filter: '-debug',
+            base: '/static/'
+        };
+
+        seed.config = function () {
+            return yui_config;
+        };
+
+        var urls = seed.getSeedUrls();
+
+        // [ '/static/yui/yui-min.js' ]
+        A.areEqual(1, urls.length, 'only 1 seed expected');
+        A.areEqual('/static/yui/yui-min.js',
+                    urls[0],
+                    'urls[0] does not match');
     }
 
 }));

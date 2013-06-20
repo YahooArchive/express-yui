@@ -14,10 +14,9 @@
         Loading...
     </div>
 
-    {{#yui_seed}}<script src="{{{src}}}"></script>{{/yui_seed}}
-    <script>{{{yui_config}}}</script>
+    <script>{{{state}}}</script>
     <script>
-    YUI().use('foo', 'bar', function (Y) {
+    app.yui.use('foo', 'bar', function (Y) {
         Y.one('#content').setContent('<p>Ready!</p>');
     });
     </script>

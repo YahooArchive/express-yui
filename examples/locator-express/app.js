@@ -39,12 +39,12 @@ app.get('/foo', yui.expose(), function (req, res, next) {
 });
 
 // locator initialiation
-locator = new (require('modown-locator'))({
+locator = new (require('locator'))({
     buildDirectory: 'build'
 });
 
-locator.plug(require('modown-handlebars').plugin())
-    .plug(require('modown-micro').plugin())
+locator.plug(require('locator-handlebars').yui())
+    .plug(require('locator-micro').yui())
     .plug(app.yui.plugin({
         registerGroup: true,
         registerServerModules: true,
