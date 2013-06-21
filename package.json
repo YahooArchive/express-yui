@@ -21,7 +21,7 @@
     },
     "peerDependencies": {
         "express": "3.x",
-        "yui": "3.x"
+        "yui": "~3.10.1"
     },
     "devDependencies": {
         "express": "3.x",
