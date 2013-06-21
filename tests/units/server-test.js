@@ -175,6 +175,76 @@ suite.add(new YUITest.TestCase({
 
         YUITest.Mock.verify(server);
         YUITest.Mock.verify(Y);
+    },
+
+    "test use multi-groups": function () {
+        var Y = YUITest.Mock(),
+            result,
+            groupFoo,
+            groupBar;
+
+        YUITest.Mock.expect(server, {
+            method: 'config',
+            args: [],
+            run: function () {
+                return {
+                    groups: {
+                        'foo': {},
+                        'bar': {}
+                    }
+                };
+            }
+        });
+        YUITest.Mock.expect(Y, {
+            method: 'use',
+            args: [YUITest.Mock.Value.Any],
+            run: function (modules) {
+                A.isArray(modules);
+                A.areSame('baz', modules[0]);
+                A.areSame('xyz', modules[1]);
+            }
+        });
+        YUITest.Mock.expect(server, {
+            method: 'YUI',
+            callCount: 1,
+            args: [YUITest.Mock.Value.Object],
+            run: function (c) {
+                A.isTrue(c.useSync, 'useSync is required when running on the server');
+                return Y;
+            }
+        });
+        YUITest.Mock.expect(server.YUI, {
+            method: 'applyConfig',
+            args: [YUITest.Mock.Value.Object],
+            run: function (c) {
+                console.log(c);
+                groupFoo = (c.groups && c.groups.foo) || groupFoo;
+                groupBar = (c.groups && c.groups.bar) || groupBar;
+                return Y;
+            }
+        });
+
+        // setting up groups
+        server.registerModules('foo', {
+            'baz': {}
+        });
+        server.registerModules('bar', {
+            'xyz': {}
+        });
+        server.attachModules('foo', ['baz']);
+        server.attachModules('bar', ['zyx']);
+        // other mocks
+        server._groupFolderMap = {
+            'foo': __dirname,
+            'bar': __dirname
+        };
+        result = server.use();
+
+        A.isObject(groupFoo, 'foo group is not defined');
+        A.isObject(groupBar, 'bar group is not defined');
+
+        YUITest.Mock.verify(server);
+        YUITest.Mock.verify(Y);
     }
 
 }));
