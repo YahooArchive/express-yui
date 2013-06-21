@@ -1,6 +1,13 @@
 Express YUI Change History
 ==========================
 
+0.5.1 (2013-06-20)
+------------------
+
+* all groups registered are now provisioned on the server side
+* yui is now locked down to 3.10.x
+* adding better error reporting when loader fails to load a module on the server side
+
 0.5.0 (2013-06-19)
 ------------------
 
