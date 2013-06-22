@@ -12,11 +12,15 @@
 
     <p>Tagline: {{tagline}}<p>
 
-    {{{body}}}
+    {{{outlet}}}
 
     <div id="content">
         Loading...
     </div>
+
+    <h3>Support for partials:</h3>
+    <p>Partials will work, but they are template language specific, just like helpers, which means each compiler will have to take care of the details. Here is an example of a handlebars partial:</p>
+    <ul>{{>baz}}</ul>
 
     <script>{{{state}}}</script>
     <script>
