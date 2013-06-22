@@ -191,14 +191,25 @@ For that, you just need to hook `app.yui.view()` into express, by doing this:
 
 ```
 app.set('view', app.yui.view({
-    defaultBundle: 'package-name',
-    defaultLayout: 'index' // optional template name to be used as layout
+    defaultBundle: 'demo-app', // usually the name in package.json for the app
 }));
 ```
 
-With the code above, there is not need to define anything else in express in terms of engine, or paths to views, or anything, all that is irrelevant since `express-yui` will completely take over the express's template resolution process, and will drive it thru `Y.Template`. If you use `locator` component with other plugins to precompile templates to YUI Modules, then when calling `res.render('foo')`, `express-yui` will try to find `foo` template within the `Y.Template` registration mechanism, and call for render if the exists.
+With the code above, there is not need to define anything else in express in terms of engine, or path to views, or anything else, all that is irrelevant since `express-yui` will completely take over the `express`'s template resolution process, and will drive it thru `Y.Template`, which means you can call `res.render('foo')` in your middleware, and `express-yui` will resolve `foo` on the default `bundle`. `express-yui` will try to find `foo` template within the `Y.Template` internal cache, and call for render if the exists.
 
-Since templates are not longer files in the filesystem, but YUI modules attached to Y in a form of a javascript function, there are not contrainst in terms of mixing templates with different template languages. Templates are just functions in memory that are referenced by a name that we call view name, and that's all. Check this example to see `app.yui.view()` in action:
+You can also specify custom values for `bundle` and `layout` options thru `res.render()`, here is how:
+
+```
+res.render('bar', {
+    title: 'by happy!',
+    bundle: 'dependency-library-name',
+    layout: 'narrow-layout'
+});
+```
+
+If you use layout as above, or just by providing a default layout value thru `defaultLayout` when calling `app.yui.view()`, `express-yui` will resolve the `view`, render it, and the result of that operation will be passed into the layout render thru a context variable called `outlet`, this is similar to `emberjs`.
+
+If you use `locator` component with other plugins to precompile templates into YUI Modules, then when calling `res.render('foo'). Since templates are not longer files in the filesystem, but YUI modules attached to Y in a form of a javascript function, there are not constraints in terms of mixing views based on different template languages. Templates are just functions in memory that are referenced by a name that we call view name, and that's all. Check this example to see `app.yui.view()` in action:
 
  * https://github.com/yahoo/express-yui/tree/master/examples/locator-express
 
