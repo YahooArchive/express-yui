@@ -76,7 +76,7 @@ suite.add(new YUITest.TestCase({
                             return 'output';
                         },
                         'bundleName/bar': function (ctx, callback) {
-                            return ctx.body + '+layout';
+                            return ctx.outlet + '+layout';
                         }
                     }
                 }

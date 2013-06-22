@@ -7,6 +7,7 @@ Express YUI Change History
 * removing prefix `templates/` when calling for `res.render()`, this is not needed anymore.
 * adding support for partials, which are language specific.
 * better error reporting when loader fails to load a template without bundle
+* using `outlet` instead of `body` to inject the result of the view into the selected layout.
 
 0.5.1 (2013-06-20)
 ------------------
