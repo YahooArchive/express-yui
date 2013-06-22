@@ -209,7 +209,7 @@ res.render('bar', {
 
 If you use layout as above, or just by providing a default layout value thru `defaultLayout` when calling `app.yui.view()`, `express-yui` will resolve the `view`, render it, and the result of that operation will be passed into the layout render thru a context variable called `outlet`, this is similar to `emberjs`.
 
-If you use `locator` component with other plugins to precompile templates into YUI Modules, then when calling `res.render('foo'). Since templates are not longer files in the filesystem, but YUI modules attached to Y in a form of a javascript function, there are not constraints in terms of mixing views based on different template languages. Templates are just functions in memory that are referenced by a name that we call view name, and that's all. Check this example to see `app.yui.view()` in action:
+If you use `locator` component plus other plugins like `locator-handlebars` to precompile templates into YUI Modules, then when calling `res.render('foo')`, `express-yui` can resolve `foo` automatically based on the compiled version. Check this example to see `app.yui.view()` in action:
 
  * https://github.com/yahoo/express-yui/tree/master/examples/locator-express
 
