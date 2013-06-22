@@ -12,7 +12,7 @@ var express = require('express'),
 
 app.set('view', app.yui.view({
     defaultBundle: 'locator-express',
-    defaultLayout: 'templates/layouts/index'
+    defaultLayout: 'index'
 }));
 app.set('port', process.env.PORT || 8666);
 
@@ -24,7 +24,7 @@ app.use(yui['static']());
 
 // creating a page with YUI embeded
 app.get('/bar', yui.expose(), function (req, res, next) {
-    res.render('templates/bar', {
+    res.render('bar', {
         tagline: 'testing with some data for template bar',
         tellme: 'but miami is awesome!'
     });
@@ -32,7 +32,7 @@ app.get('/bar', yui.expose(), function (req, res, next) {
 
 // creating a page with YUI embeded
 app.get('/foo', yui.expose(), function (req, res, next) {
-    res.render('templates/foo', {
+    res.render('foo', {
         tagline: 'testing some data for template foo',
         tellme: 'san francisco is nice!'
     });
@@ -51,9 +51,6 @@ locator.plug(require('locator-handlebars').yui())
         useServerModules: true
     }))
     .parseBundle(__dirname, {}).then(function (have) {
-
-        // watching the source folder for live changes
-        locator.watch(__dirname);
 
         // listening for traffic only after locator finishes the walking process
         app.listen(app.get('port'), function () {

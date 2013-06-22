@@ -99,7 +99,7 @@ suite.add(new YUITest.TestCase({
             return {};
         };
         var ViewClass = view.view({});
-        A.throwsError('Failed to lookup view "foo"', function () {
+        A.throwsError('Error trying to access template `foo` from bundle `bundleName`; make sure the template was compiled correctly.', function () {
             new ViewClass('foo').render({
                 bundle: 'bundleName'
             }, function (err, data) {
