@@ -103,7 +103,7 @@ var yui = require('express-yui'),
     app = express();
 
 app.get('/foo', yui.expose(), function (req, res, next) {
-    res.render('templates/foo');
+    res.render('foo');
 });
 ```
 
@@ -138,7 +138,7 @@ var express = require('express'),
 app.use(yui.static());
 
 app.get('/foo', yui.expose(), function (req, res, next) {
-    res.render('templates/foo');
+    res.render('foo');
 });
 
 // using locator to analyze the app and its dependencies
@@ -172,7 +172,7 @@ app.get('/forecast', yui.expose(), function (req, res, next) {
     req.app.yui.use('yql', function (Y) {
         Y.YQL('select * from weather.forecast where location=90210', function(r) {
             // r contains the result of the YQL Query
-            res.render('templates/forecast', {
+            res.render('forecast', {
                 result: r
             });
         });
@@ -181,6 +181,41 @@ app.get('/forecast', yui.expose(), function (req, res, next) {
 ```
 
 _note: remember that `req.app` holds a reference to the `app` object for convenience._
+
+
+### Using Y.Template on the server side
+
+`express-yui` ships with a custom `express` view class implementation which allows to control `res.render()` calls. Normally, `express` along with some specific view engine can do the work of compiling and rendering templates on the server side, but `express-yui` is striking for bringing parity between server and client, and for that, it supports the use of compiled-to-javascript templates that can be used on the server and client alike.
+
+For that, you just need to hook `app.yui.view()` into express, by doing this:
+
+```
+app.set('view', app.yui.view({
+    defaultBundle: 'demo-app', // usually the name in package.json for the app
+}));
+```
+
+With the code above, there is not need to define anything else in express in terms of engine, or path to views, or anything else, all that is irrelevant since `express-yui` will completely take over the `express`'s template resolution process, and will drive it thru `Y.Template`, which means you can call `res.render('foo')` in your middleware, and `express-yui` will resolve `foo` on the default `bundle`. `express-yui` will try to find `foo` template within the `Y.Template` internal cache, and call for render if the exists.
+
+You can also specify custom values for `bundle` and `layout` options thru `res.render()`, here is how:
+
+```
+res.render('bar', {
+    title: 'by happy!',
+    bundle: 'dependency-library-name',
+    layout: 'narrow-layout'
+});
+```
+
+If you use layout as above, or just by providing a default layout value thru `defaultLayout` when calling `app.yui.view()`, `express-yui` will resolve the `view`, render it, and the result of that operation will be passed into the layout render thru a context variable called `outlet`, this is similar to `emberjs`.
+
+If you use `locator` component plus other plugins like `locator-handlebars` to precompile templates into YUI Modules, then when calling `res.render('foo')`, `express-yui` can resolve `foo` automatically based on the compiled version. Check this example to see `app.yui.view()` in action:
+
+ * https://github.com/yahoo/express-yui/tree/master/examples/locator-express
+
+More information about this new feature in express here:
+
+ * http://caridy.name/blog/2013/05/bending-express-to-support-synthetic-views/
 
 
 ### Registering yui groups manually
@@ -247,7 +282,7 @@ API Docs
 
 You can find the [API Docs][] under `apidocs` folder, and you can browse it thru this url:
 
-http://rawgithub.com/yahoo/express-yui/master/apidocs/index.html
+* http://rawgithub.com/yahoo/express-yui/master/apidocs/index.html
 
 [API Docs]: https://github.com/yahoo/express-yui/tree/master/apidocs
 
