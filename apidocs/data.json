@@ -298,7 +298,7 @@
             "module": "yui",
             "namespace": "",
             "file": "lib/server.js",
-            "line": 24,
+            "line": 25,
             "description": "The `express-yui.server` extension that provides a set of features\nto control a YUI instance on the server side."
         },
         "shifter": {
@@ -505,7 +505,7 @@
             "submodule": "server",
             "namespace": "",
             "file": "lib/server.js",
-            "line": 24,
+            "line": 25,
             "description": "The `express-yui.server` extension that provides a set of features\nto control a YUI instance on the server side.",
             "static": 1,
             "uses": [
@@ -1140,7 +1140,7 @@
         },
         {
             "file": "lib/server.js",
-            "line": 35,
+            "line": 36,
             "description": "Add a group and its modules into the server Y instance or\nupdates the current Y instance by re-adding them.",
             "itemtype": "method",
             "name": "registerModules",
@@ -1165,7 +1165,7 @@
         },
         {
             "file": "lib/server.js",
-            "line": 78,
+            "line": 79,
             "description": "Use modules in the server Y instance. This is equivalent to call\n`req.app.yui.use(moduleName)` for every module in `modules`.",
             "itemtype": "method",
             "name": "attachModules",
@@ -1190,7 +1190,7 @@
         },
         {
             "file": "lib/server.js",
-            "line": 108,
+            "line": 109,
             "description": "Creates a YUI Instance and attaches all registered modules for all registered\ngroups into it, and optional attaches some more modules my mimicing the original\nYUI.use method.",
             "itemtype": "method",
             "name": "use",

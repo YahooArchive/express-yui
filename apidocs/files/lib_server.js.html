@@ -152,6 +152,7 @@ to control a YUI instance on the server side.
 
 var libpath = require(&#x27;path&#x27;),
     utils = require(&#x27;./utils&#x27;),
+    debug = require(&#x27;debug&#x27;)(&#x27;express:yui:server&#x27;),
     groupsQueue = {},
     modulesQueue = [];
 
@@ -258,7 +259,9 @@ module.exports = {
 
         for (groupName in groupsQueue) {
             if (groupsQueue.hasOwnProperty(groupName) &amp;&amp; (config.groups &amp;&amp; config.groups.hasOwnProperty(groupName))) {
-                obj = { groups: {}, useSync: true };
+                // we don&#x27;t want obj to be set if we are not sure we have
+                // at least one group config to be applied
+                obj = obj || { groups: {}, useSync: true };
                 obj.groups[groupName] = utils.extend(groupsQueue[groupName], utils.clone(config.groups[groupName]), {
                     base: libpath.join(this._groupFolderMap[groupName], &#x27;/&#x27;),
                     combine: false
@@ -275,9 +278,18 @@ module.exports = {
                 combine: false
             });
             this.YUI.applyConfig(obj);
-            // TODO: control loading issues
             Y = this._Y = this.YUI({
-                useSync: true
+                useSync: true,
+                loadErrorFn: function (Y, i, o) {
+                    debug(&#x27;--&gt; Something really bad happened when trying to load yui modules on the server side&#x27;);
+                    debug(&#x27;--&gt; &#x27; + o.msg);
+                    if (Y.config.modules) {
+                        debug(&#x27;--&gt; Y.config.modules = &#x27; + JSON.stringify(Y.config.modules));
+                    }
+                    if (Y.config.groups) {
+                        debug(&#x27;--&gt; Y.config.groups = &#x27; + JSON.stringify(Y.config.groups));
+                    }
+                }
             });
         } else if (obj) {
             this.YUI.applyConfig(obj);

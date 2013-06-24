@@ -212,7 +212,7 @@ View.prototype.render = function (options, fn) {
     }
     if (layout) {
         // rendering the layout
-        options = utils.extend({}, options, { body: template(options) });
+        options = utils.extend({}, options, { outlet: template(options) });
         template = layout;
     }
     fn(null, template(options || {}));
@@ -257,8 +257,22 @@ module.exports = {
             // augmenting the lookup mechanism to use the Y registered at the server side
             lookup: function (templateName, options) {
                 var bundleName = (options &amp;&amp; options.bundle) || config.defaultBundle,
-                    Y = bundleName &amp;&amp; self.use();
-                return Y &amp;&amp; Y.Template &amp;&amp; Y.Template._cache &amp;&amp; Y.Template._cache[bundleName + &#x27;/&#x27; + templateName];
+                    Y = self.use(),
+                    template;
+
+                if (!bundleName) {
+                    throw new Error(&#x27;Invalid bundle name when looking up for template: &#x27; + templateName +
+                        &#x27;; make sure you set &#x60;defaultBundle&#x60; or you use &#x27; +
+                        &#x27;&#x60;res.render(templateName, { bundle: bundleName })&#x60; to specify the bundle name.&#x27;);
+                }
+
+                try {
+                    template = Y.Template._cache[bundleName + &#x27;/&#x27; + templateName];
+                } catch (e) {
+                    throw new Error(&#x27;Error trying to access template &#x60;&#x27; + templateName + &#x27;&#x60;&#x27; +
+                        &#x27; from bundle &#x60;&#x27; + bundleName + &#x27;&#x60;; make sure the template was compiled correctly.&#x27;);
+                }
+                return template;
             },
             layout: function (options) {
                 var layoutName = (options &amp;&amp; options.layout) || config.defaultLayout;
