@@ -1,4 +1,6 @@
-artifacts/*
-build/*
-coverage/*
-examples/*
+artifacts
+apidocs
+coverage
+examples
+conf
+tests

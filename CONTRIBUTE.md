@@ -26,9 +26,8 @@ To run the unit tests (with coverage by default):
 
     npm test
 
-To generate the API docs under `build/apidocs/index.html`:
+To generate the API docs under `apidocs/index.html`:
 
-    rm -rf ./build/apidocs && mkdir -p ./build/apidocs
     npm run docs
 
 To lint the app lib folder:

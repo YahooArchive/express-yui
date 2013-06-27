@@ -3,48 +3,45 @@
 'use strict';
 
 var express = require('express'),
-    // express-yui
-    yui = require('../../'),
-    // creating app
-    app = express(),
-    // modown-locator
-    locator;
+    YUI = require('express-yui'),
+    Locator = require('locator'),
+    LocatorHandlebars = require('locator-handlebars'),
+    LocatorMicro = require('locator-micro'),
+    app = express();
 
 app.set('view', app.yui.view({
-    defaultBundle: 'locator-express',
-    defaultLayout: 'templates/layouts/index'
+    defaultBundle: 'demo',
+    defaultLayout: 'index'
 }));
-app.set('port', process.env.PORT || 8666);
 
 app.yui.debugMode();
 app.yui.setCoreFromAppOrigin();
 
 // serving static yui modules
-app.use(yui['static']());
+app.use(YUI['static']());
 
 // creating a page with YUI embeded
-app.get('/bar', yui.expose(), function (req, res, next) {
-    res.render('templates/bar', {
+app.get('/bar', YUI.expose(), function (req, res, next) {
+    res.render('bar', {
         tagline: 'testing with some data for template bar',
         tellme: 'but miami is awesome!'
     });
 });
 
 // creating a page with YUI embeded
-app.get('/foo', yui.expose(), function (req, res, next) {
-    res.render('templates/foo', {
+app.get('/foo', YUI.expose(), function (req, res, next) {
+    res.render('foo', {
         tagline: 'testing some data for template foo',
         tellme: 'san francisco is nice!'
     });
 });
 
 // locator initialiation
-locator = new (require('modown-locator'))({
+new Locator({
     buildDirectory: 'build'
-});
-
-locator.plug(require('modown-handlebars').plugin())
-    .plug(require('modown-micro').plugin())
+})
+    .plug(LocatorHandlebars.yui())
+    .plug(LocatorMicro.yui())
     .plug(app.yui.plugin({
         registerGroup: true,
         registerServerModules: true,
@@ -52,13 +49,9 @@ locator.plug(require('modown-handlebars').plugin())
     }))
     .parseBundle(__dirname, {}).then(function (have) {
 
-        // watching the source folder for live changes
-        locator.watch(__dirname);
-
         // listening for traffic only after locator finishes the walking process
-        app.listen(app.get('port'), function () {
-            console.log("Server listening on port " +
-                app.get('port') + " in " + app.get('env') + " mode");
+        app.listen(3000, function () {
+            console.log("Server listening on port 3000");
         });
 
     }, function () {

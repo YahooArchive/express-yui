@@ -1,10 +1,19 @@
 /*jslint */
 /*global YUI, console*/
 YUI.add('binder-index', function (Y) {
+
     "use strict";
-    console.warn('if you see this in the server side console, then something is really wrong here!');
-    Y.one('body').append('<p>binder is in place!</p>');
+
+    Y.Binders = {
+        index: {
+            update: function (node, data) {
+                var fooContent = Y.Template._cache['demo/foo'](data);
+                node.setContent(fooContent);
+            }
+        }
+    };
+
 }, '', {
-    requires: ['node'],
+    requires: ['node', 'demo-templates-foo'],
     affinity: 'client'
 });

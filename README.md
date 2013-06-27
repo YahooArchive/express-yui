@@ -1,5 +1,5 @@
 Express YUI
-=============
+===========
 
 [Express][] extension for YUI Applications.
 
@@ -13,15 +13,11 @@ Express YUI
 Goals & Design
 --------------
 
-This compontent extends express by adding a new member to the
-express application thru `app.yui`. This object is responsible
-for exposing the `yui_config` and `yui_seed` configurations into
-the view engine. Also, it provides a set of runtime
-utilities that can be used to customize the YUI config for
-the client side, creates a Y instance on the server side when
-needed to provide access to the registered modules on the server
-side, and provides a set of middleware to expose data into the
-runtime and the client side.
+This compontent extends express by adding a new member `app.yui` to the
+express application. It is responsible for controlling and exposing the yui
+configuration and the app state into the client side as well has controlling
+the yui instance on the server.
+
 
 Installation
 ------------
@@ -36,40 +32,213 @@ $ npm install express-yui
 Features
 --------
 
-## Features
+### Features
 
- * expose yui config per request
- * expose seed files per request
- * provide basic configurations for cdn, debug, and other common conditions
- * provide basic middleware to server `static` assets from origin server, including
+ * expose yui config and seed files per request
+ * provide basic configurations for cdn, debug, and other common conditions in yui
+ * provide middleware to serve `static` assets from origin server, including
 combo capabilities built-in.
- * provide basic middleware to `expose` `yui_config` and `yui_seed` into the view engine
-so they can be used in the templates to boot YUI in the client side.
+ * provide middleware to `expose` the app state and the yui config into the
+ view engine to be used in the templates to boot YUI and the app in the client side.
 
-## Other features
 
- * work with modown-locator to produce a build process by shifting any yui module
-in the application bundle or any other bundle.
- * provide basic express view engine to rely on views registered at the server side
-thru the `app.yui.use()` as compiled templates.
+### Other features
+
+ * built-in integration with [locator][] component to analyze and build applications and dependencies using [shifter][].
+ * provide basic express view engine to rely on views registered at the server side thru the `app.yui.use()` as compiled templates.
+
+[locator]: https://github.com/yahoo/locator
+[shifter]: https://github.com/yui/shifter
 
 
 Usage
 -----
 
-## Exposing app state into client
+### Extending express functionalities
 
-TBD
+`express-yui` is a conventional `express` extension, which means it will extend
+the functionalities provided on `express` by augmenting the express app instance
+with a new member called `yui`. At the same time, `express-yui` provides a set of
+static methods that you can call directly off the `express-yui` module, those
+methods are utility methods and express middleware.
 
-## Using yui modules on the server side
+Aside from that, `express-yui` will try to extend the `express` peer dependency to
+augment the app instance automatically everytime you call `express()` to create a
+brand new instance. This is useful, and in most cases, it is just enough. Here is an example:
 
-TBD
+```
+var express = require('express'),
+    yui = require('express-yui'),
+    app = express();
 
-## Serving static assets from app origin
+app.yui.applyConfig({ fetchCSS: false });
+```
+
+As you can see in the example above, the `yui` member is available off the app instance.
+But this is not always the case, sometimes you have a 3rd party module that is requiring
+`express`, and even creating the app under the hood, in which case you can just augment
+an existing express app instance by using the static utility `augment`, this is how:
+
+```
+var yui = require('express-yui'),
+    express = require('express'),
+    app = express();
+
+// calling a yui static method to augment the `express` app instance
+yui.augment(app);
+
+app.yui.applyConfig({ fetchCSS: false });
+```
+
+
+### Exposing app state into client
+
+To expose the state of the app, which includes the yui configuration computed based
+on the configuration defined thru the express app instance, you can call the `expose`
+middleware for any particular route:
+
+```
+var yui = require('express-yui'),
+    express = require('express'),
+    app = express();
+
+app.get('/foo', yui.expose(), function (req, res, next) {
+    res.render('foo');
+});
+```
+
+By doing `yui.expose()`, `express-yui` will provision a property call `state` that
+can be use in your templates as a `javascript` blob that sets up the page to run
+YUI with some very specific settings coming from the server. If you use `handlebars`
+you will do this:
+
+```
+<script>{{{state}}}</script>
+<script>
+app.yui.use('node', function (Y) {
+    Y.one('body').setContent('<p>Ready!</p>');
+});
+</script>
+```
+
+And this is really the only thing you should do in your templates to get YUI ready to roll!
+
+
+### Using the locator plugin to build the app
+
+`express-yui` provides many features, but the real power of this package can be seen when
+using it in conjunction with [locator][] component.
+
+```
+var express = require('express'),
+    yui = require('express-yui'),
+    app = express();
+
+// serving static yui modules built by locator
+app.use(yui.static());
+
+app.get('/foo', yui.expose(), function (req, res, next) {
+    res.render('foo');
+});
+
+// using locator to analyze the app and its dependencies
+new (require('locator'))({
+    buildDirectory: 'build'
+}).plug(app.yui.plugin({
+    // provision any yui module to be available on the client side
+    registerGroup: true,
+    // only needed if you want yui modules available on the server runtime as well
+    registerServerModules: true
+})).parseBundle(__dirname, {});
+
+app.listen(8080);
+```
+
+As a result, any yui module under `__dirname` folder or any npm dependency marked as
+a locator bundle will be built by the `express-yui`'s locator plugin, and automatically
+become available on the client, and potentially on the server as well. This means you
+no longer need to manually define loader metadata or any kind of yui config to load those
+modules, and `express-yui` will be capable to handle almost everthing for you.
+
+
+### Using yui modules on the server side
+
+Using modules on the server is exactly the same that using them on the client thru
+`app.yui.use()` statement. Here is an example of the use of yql module to load the
+weather forecast and passing the result into the template:
+
+```
+app.get('/forecast', yui.expose(), function (req, res, next) {
+    req.app.yui.use('yql', function (Y) {
+        Y.YQL('select * from weather.forecast where location=90210', function(r) {
+            // r contains the result of the YQL Query
+            res.render('forecast', {
+                result: r
+            });
+        });
+    });
+});
+```
+
+_note: remember that `req.app` holds a reference to the `app` object for convenience._
+
+
+### Using Y.Template on the server side
+
+`express-yui` ships with a custom `express` view class implementation which allows to control `res.render()` calls. Normally, `express` along with some specific view engine can do the work of compiling and rendering templates on the server side, but `express-yui` is striking for bringing parity between server and client, and for that, it supports the use of compiled-to-javascript templates that can be used on the server and client alike.
+
+For that, you just need to hook `app.yui.view()` into express, by doing this:
+
+```
+app.set('view', app.yui.view({
+    defaultBundle: 'demo-app', // usually the name in package.json for the app
+}));
+```
+
+With the code above, there is not need to define anything else in express in terms of engine, or path to views, or anything else, all that is irrelevant since `express-yui` will completely take over the `express`'s template resolution process, and will drive it thru `Y.Template`, which means you can call `res.render('foo')` in your middleware, and `express-yui` will resolve `foo` on the default `bundle`. `express-yui` will try to find `foo` template within the `Y.Template` internal cache, and call for render if the exists.
+
+You can also specify custom values for `bundle` and `layout` options thru `res.render()`, here is how:
+
+```
+res.render('bar', {
+    title: 'by happy!',
+    bundle: 'dependency-library-name',
+    layout: 'narrow-layout'
+});
+```
+
+If you use layout as above, or just by providing a default layout value thru `defaultLayout` when calling `app.yui.view()`, `express-yui` will resolve the `view`, render it, and the result of that operation will be passed into the layout render thru a context variable called `outlet`, this is similar to `emberjs`.
+
+If you use `locator` component plus other plugins like `locator-handlebars` to precompile templates into YUI Modules, then when calling `res.render('foo')`, `express-yui` can resolve `foo` automatically based on the compiled version. Check this example to see `app.yui.view()` in action:
+
+ * https://github.com/yahoo/express-yui/tree/master/examples/locator-express
+
+More information about this new feature in express here:
+
+ * http://caridy.name/blog/2013/05/bending-express-to-support-synthetic-views/
+
+
+### Registering yui groups manually
+
+
+If you are not using [locator][] component for whatever reason, you will be responsible
+for building yui modules, grouping them into yui groups and registering them thru
+`app.yui.registerGroup` method. Here is how you register a folder that has the build
+result with all yui modules compiled thru [shifter][]:
+
+```
+app.yui.registerGroup('foo', 'path/to/foo-1.2.3');
+```
+
+Again, this is absolutely not needed if you use [locator][].
+
+### Serving static assets from app origin
+
+Ideally, you will use a CDN to serve all static assets for your application, but your
+express app is perfectly capable to do so, and even serve as origin server for your CDN.
 
 ```
 app.yui.setCoreFromAppOrigin();
-app.yui.registerGroup('foo', 'path/to/foo-1.2.3'); // if you use locator, this is not needed
 app.use(yui.static());
 ```
 
@@ -79,13 +248,17 @@ With this configuration, a group called `foo` with version `1.2.3`, and `yui` ve
   * /yui-3.10.2/yui-base/yui-base-min.js
   * /foo-1.2.3/bar/bar-min.js
 
-## Serving static assets from CDN
+Any of those urls will be valid because `express-yui` static middleware will serve them and
+combo them when needed based on the configuration of yui.
 
-If you plan to serve the build folder from CDN, then make sure you set that
-before registering any group, so loader can know about it. Here is the example:
+### Serving static assets from CDN
+
+If you plan to serve the `build` folder, generated by [locator][], from your CDN, then make
+sure you set the proper configuration for all groups so loader can know about them.
+Here is the example:
 
 ```
-app.yui.setCoreFromCDN();
+app.yui.setCoreFromCDN(); // this is the default config btw
 app.set('yui combo config', {
     comboBase: 'http://mycdn.com/path/to/combo?',
     comboSep: '&',
@@ -93,16 +266,26 @@ app.set('yui combo config', {
 });
 app.set('yui default base', 'http://mycdn.com/path/to/static/{{groupDir}}/');
 app.set('yui default root', 'static/{{groupDir}}/');
-app.yui.registerGroup('foo', 'path/to/foo-1.2.3'); // if you use locator, this is not needed
 ```
 
-in which case you don't need to use `yui.static` middleware since you are not
-serving local files.
+In this case you don't need to use `yui.static` middleware since you are not
+serving local files, unless the app should work as origin server.
 
 With this configuration, a group called `foo` with version `1.2.3` will produce urls like these:
 
   * http://mycdn.com/path/to/combo?static/foo-1.2.3/bar/bar-min.js&static/foo-1.2.3/baz/baz-min.js
   * http://mycdn.com/path/to/static/foo-1.2.3/bar/bar-min.js
+
+
+API Docs
+--------
+
+You can find the [API Docs][] under `apidocs` folder, and you can browse it thru this url:
+
+* http://rawgithub.com/yahoo/express-yui/master/apidocs/index.html
+
+[API Docs]: https://github.com/yahoo/express-yui/tree/master/apidocs
+
 
 License
 -------

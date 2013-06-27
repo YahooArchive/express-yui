@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>lib/shifter.js - express-yui API documentation</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../assets/css/logo.png" title="express-yui API documentation"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 0.2.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/cdn.html">cdn</a></li>
+            
+                <li><a href="../classes/groups.html">groups</a></li>
+            
+                <li><a href="../classes/loader.html">loader</a></li>
+            
+                <li><a href="../classes/middleware.html">middleware</a></li>
+            
+                <li><a href="../classes/origin.html">origin</a></li>
+            
+                <li><a href="../classes/seed.html">seed</a></li>
+            
+                <li><a href="../classes/server.html">server</a></li>
+            
+                <li><a href="../classes/shifter.html">shifter</a></li>
+            
+                <li><a href="../classes/View.html">View</a></li>
+            
+                <li><a href="../classes/view.html">view</a></li>
+            
+                <li><a href="../classes/yui.html">yui</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="../modules/cdn.html">cdn</a></li>
+            
+                <li><a href="../modules/client.html">client</a></li>
+            
+                <li><a href="../modules/express-yui.html">express-yui</a></li>
+            
+                <li><a href="../modules/groups.html">groups</a></li>
+            
+                <li><a href="../modules/loader.html">loader</a></li>
+            
+                <li><a href="../modules/middleware.html">middleware</a></li>
+            
+                <li><a href="../modules/origin.html">origin</a></li>
+            
+                <li><a href="../modules/seed.html">seed</a></li>
+            
+                <li><a href="../modules/server.html">server</a></li>
+            
+                <li><a href="../modules/shifter.html">shifter</a></li>
+            
+                <li><a href="../modules/utils.html">utils</a></li>
+            
+                <li><a href="../modules/view.html">view</a></li>
+            
+                <li><a href="../modules/yui.html">yui</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: lib/shifter.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+/*
+ * Copyright (c) 2013, Yahoo! Inc.  All rights reserved.
+ * Copyrights licensed under the New BSD License.
+ * See the accompanying LICENSE file for terms.
+ */
+
+/*jslint node: true, nomen: true */
+
+/**
+The &#x60;express-yui.shifter&#x60; extension exposes a set of utilities to build yui modules
+from *.js or build.json files.
+
+@module yui
+@submodule shifter
+**/
+
+&#x27;use strict&#x27;;
+
+var libfs = require(&#x27;fs&#x27;),
+    libmkdirp = require(&#x27;mkdirp&#x27;),
+    libpath = require(&#x27;path&#x27;),
+    existsSync = libfs.existsSync || libpath.existsSync,
+    vm = require(&#x27;vm&#x27;),
+    spawn = require(&#x27;win-spawn&#x27;),
+    shifterCLI = libpath.join(__dirname, &#x27;../node_modules/shifter/bin/shifter&#x27;),
+    NODE_ENV   = process.env.NODE_ENV || &#x27;development&#x27;,
+    contextForRunInContext = vm.createContext({
+        require: null,
+        module: null,
+        console: null,
+        window: null,
+        document: null
+    }),
+    TEMPLATE_TOKEN = &#x27;{ /* METAGEN */ }&#x27;,
+    crypto = require(&#x27;crypto&#x27;),
+    md5 = function (str) {
+        var md5sum = crypto.createHash(&#x27;md5&#x27;);
+        md5sum.update(str);
+        return md5sum.digest(&#x27;hex&#x27;);
+    },
+    debug = require(&#x27;debug&#x27;)(&#x27;express:yui:shifter&#x27;);
+
+function isFunction(fn) {
+    return !!(fn &amp;&amp; (Object.prototype.toString.call(fn) === &#x27;[object Function]&#x27;) &amp;&amp; fn.toString);
+}
+
+function Builder(options) {
+    this.name = options.name;
+    this.group = options.group;
+    this.data = {
+        json: {},
+        conds: {},
+        files: null,
+        mods: []
+    };
+}
+
+Builder.prototype = {
+    compile: function (mods) {
+        this.process(mods);
+        this.produceJSON();
+        this.conditionals();
+        this.produceJS();
+    },
+    process: function (mods) {
+        var self = this;
+        Object.keys(mods).forEach(function (key) {
+            var mod = mods[key],
+                i;
+            for (i in mod.builds) {
+                if (mod.builds.hasOwnProperty(i)) {
+                    self.parseData(i, mod.builds[i].config || {}, mod.buildfile);
+                }
+            }
+        });
+    },
+    parseData: function (name, data, file) {
+        var i, o;
+        for (i in data) {
+            if (data.hasOwnProperty(i)) {
+                if (i === &#x27;submodules&#x27; || i === &#x27;plugins&#x27;) {
+                    for (o in data[i]) {
+                        if (data[i].hasOwnProperty(o)) {
+                            this.parseData(o, data[i][o], file);
+                        }
+                    }
+                    delete data[i];
+                }
+                if (i === &#x27;condition&#x27;) {
+                    if (data[i].test &amp;&amp; (isFunction(data[i].test) || libpath.extname(data[i].test) === &#x27;.js&#x27;)) {
+                        this.data.conds[name] = data[i].test;
+                    }
+                    data[i].name = name;
+                    data[i] = this.sortObject(data[i]);
+                }
+            }
+        }
+        if (this.group) {
+            data.group = this.group;
+        }
+        this.data.json[name] = this.sortObject(data);
+    },
+    sortObject: function (data) {
+        var keys = Object.keys(data).sort(),
+            d = {};
+        keys.forEach(function (k) {
+            d[k] = data[k];
+        });
+        return d;
+    },
+    conditionals: function () {
+        var tests = [],
+            allTests = [],
+            jsonStr,
+            self = this;
+
+        Object.keys(this.data.json).forEach(function (name) {
+            var mod = self.data.json[name],
+                cond,
+                cName,
+                test;
+            if (mod.condition) {
+                cond = self.sortObject(mod.condition);
+                if (self.data.conds[mod.condition.name]) {
+                    cName = mod.condition.name;
+                    test = self.data.conds[cName];
+                    if (test &amp;&amp; isFunction(test)) {
+                        mod.condition.test = md5(mod.condition.name);
+                        cond.test = test.toString();
+                        tests.push({ key: mod.condition.test, test: cond.test });
+                    } else if (existsSync(test)) {
+                        mod.condition.test = md5(mod.condition.name);
+                        // TODO: make this async and remove the stupid flag
+                        cond.test = test = libfs.readFileSync(test, &#x27;utf8&#x27;);
+                        tests.push({ key: mod.condition.test, test: cond.test });
+                    } else {
+                        throw new Error(&#x27;Failed to locate test file: &#x27; + test);
+                    }
+                }
+                allTests.push(cond);
+            }
+        });
+
+        jsonStr = JSON.stringify(this.data.json, null, 4);
+
+        tests.forEach(function (info) {
+            jsonStr = jsonStr.replace(&#x27;&quot;&#x27; + info.key + &#x27;&quot;&#x27;, info.test);
+        });
+
+        jsonStr = jsonStr.replace(/\}\n,/g, &#x27;},&#x27;).replace(/\}\n\n,/g, &#x27;},&#x27;);
+
+        this.data.jsonStr = jsonStr;
+        this.data.tests = allTests;
+
+    },
+    produceJSON: function () {
+        this.data.json = this.sortObject(this.data.json);
+    },
+    produceJS: function () {
+        this.data.js = this.header().replace(TEMPLATE_TOKEN, this.data.jsonStr);
+    },
+    header: function () {
+        var str = [
+            &#x27;/* This file is auto-generated by locator plugin express-yui for bundle &#x27; + this.group + &#x27; */&#x27;,
+            &#x27;&#x27;,
+            &#x27;/*jshint maxlen:900, eqeqeq: false */&#x27;,
+            &#x27;&#x27;,
+            &#x27;/**&#x27;,
+            &#x27; * YUI 3 module metadata&#x27;,
+            &#x27; * @module &#x27; + this.name,
+            &#x27; */&#x27;
+        ];
+
+        str.push(&#x27;YUI.Env[Y.version].modules = YUI.Env[Y.version].modules || {};&#x27;);
+        str.push(&#x27;Y.mix(YUI.Env[Y.version].modules, { /* METAGEN */ });&#x27;);
+
+        str.unshift(&#x27;YUI.add(&quot;&#x27; + this.name + &#x27;&quot;, function(Y, NAME) {&#x27;);
+        str.push(&#x27;}, &quot;&quot;, {requires: [&quot;loader-base&quot;]});&#x27;);
+
+        return str.join(&#x27;\n&#x27;);
+    }
+};
+
+/**
+The &#x60;express-yui.shifter&#x60; extension exposes a locator plugin to build yui modules
+from *.js or build.json files.
+
+Here is an example:
+
+    var plugin = app.yui.locatorShifter({});
+
+You can also specify a custom yui build directory, by doing:
+
+    var plugin = app.yui.locatorShifter({
+        yuiBuildDirectory: &#x27;/path/to/folder&#x27;
+    });
+
+@class shifter
+@static
+@uses *path, *fs, *module, *vm, win-spawn, shifter, loader
+@extensionfor yui
+*/
+module.exports = {
+
+    /**
+    Shift yui modules using shifter cli.
+
+    @method shiftFiles
+    @public
+    @param {array} files filesystem paths for all files to be shifted
+    @param {object} options configuration
+
+        @param {string} options.buildDir custom path for the output of the shifter
+        @param {boolean} options.cache whether or not we should apply cache to speed up
+            the shifting process. If true, it will create the folder &#x60;.cache&#x60; and generate
+            some hash to prevent shifting the same *.js files if there is not change in
+            the source.
+        @param {array}  options.args shifter cli build arguments, it defaults to &#x60;[]&#x60;
+
+    @param {function} callback the callback method to signal the end of the operation
+    **/
+    shiftFiles: function (files, options, callback) {
+
+        var self = this,
+            queue = [].concat(files),
+            args,
+            child;
+
+        if (NODE_ENV === &quot;production&quot;) {
+            debug(&#x27;skipping shifter in production environments.&#x27;);
+            if (callback) { callback(null); }
+            return;
+        }
+
+        options = options || {};
+
+        function next() {
+
+            var file = queue.shift();
+
+            if (file) {
+
+                debug(&#x27;shifting &#x27; + file);
+
+                if (options.cache &amp;&amp; self._isCached(file, options.buildDir)) {
+                    next();
+                    return;
+                }
+
+                args = [
+                    shifterCLI,
+                    &quot;--build-dir&quot;, options.buildDir,
+                    (libpath.extname(file) === &#x27;.js&#x27; ? &#x27;--yui-module&#x27; : &#x27;--config&#x27;), file
+                ].concat(options.args || []);
+
+                child = spawn(process.argv[0], args, {
+                    cwd: libpath.dirname(file),
+                    stdio: &#x27;inherit&#x27;
+                });
+                child.on(&#x27;exit&#x27;, function (code) {
+                    if (code) {
+                        if (options.cache) {
+                            // invalidating the cache entry
+                            self._clearCached(file, options.buildDir);
+                        }
+                        callback(new Error(file + &quot;: shifter compiler error: &quot; + code + &#x27;\n&#x27; +
+                            &#x27; while executing: \n&#x27; + args.join(&#x27; &#x27;)));
+                        return;
+                    }
+                    next(); // next item in queue to be processed
+                });
+
+            } else {
+                if (callback) { callback(null); }
+            }
+
+        }
+
+        next(); // kick off the queue process
+
+    },
+
+    /**
+    Analyze a build.json file to extract all the important metadata associted with it.
+
+    @method _checkBuildFile
+    @protected
+    @param {string} file The filesystem path for the build.json file to be analyzed
+    @return {object} The parsed and augmented content of the build.json file
+    **/
+    _checkBuildFile: function (file) {
+        var mod,
+            entry,
+            metas = libpath.join(libpath.dirname(file), &#x27;meta&#x27;),
+            files,
+            i,
+            j,
+            f;
+
+        try {
+            mod = JSON.parse(libfs.readFileSync(file, &#x27;utf8&#x27;));
+        } catch (e1) {
+            console.error(&#x27;Failed to parse build file: &#x27; + file);
+            console.error(e1);
+            return;
+        }
+
+        if (!mod.builds) {
+            console.error(&#x27;Invalid meta file: &#x27; + file);
+            return;
+        }
+
+        mod.buildfile = file;
+
+        if (existsSync(metas)) {
+            files = libfs.readdirSync(metas);
+            for (i = 0; i &lt; files.length; i += 1) {
+                f = files[i];
+                if (libpath.extname(f) === &#x27;.json&#x27;) {
+                    try {
+                        entry = JSON.parse(libfs.readFileSync(libpath.join(metas, f), &#x27;utf8&#x27;));
+                    } catch (e2) {
+                        console.error(&#x27;Failed to parse meta file: &#x27; + f);
+                        console.error(e2);
+                        return;
+                    }
+                    for (j in entry) {
+                        if (entry.hasOwnProperty(j)) {
+                            mod.builds[j] = mod.builds[j] || {};
+                            mod.builds[j].config = entry[j];
+                            // setting the proper filename for test if needed
+                            if (entry[j] &amp;&amp; entry[j].condition &amp;&amp; entry[j].condition.test &amp;&amp;
+                                    libpath.extname(entry[j].condition.test) === &#x27;.js&#x27;) {
+                                entry[j].condition.test = libpath.join(metas, entry[j].condition.test);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return mod;
+    },
+
+    /**
+    Analyze a javascript file, if it is a yui module, it extracts all the important metadata
+    associted with it.
+
+    @method _checkYUIModule
+    @protected
+    @param {string} file The filesystem path for the yui module to be analyzed
+    @return {object} The parsed and augmented metadata from the yui module
+    **/
+    _checkYUIModule: function (file) {
+        var mod;
+
+        contextForRunInContext.YUI = {
+            add: function (name, fn, version, config) {
+                if (!mod) {
+                    mod = {
+                        name: name,
+                        buildfile: file,
+                        builds: {}
+                    };
+                }
+                mod.builds[name] = {
+                    name: name,
+                    config: config || {}
+                };
+                // detecting affinity from the filename
+                if (file.indexOf(&#x27;.server.js&#x27;) === file.length - 10) {
+                    mod.builds[name].config.affinity = &#x27;server&#x27;;
+                }
+                if (file.indexOf(&#x27;.client.js&#x27;) === file.length - 10) {
+                    mod.builds[name].config.affinity = &#x27;client&#x27;;
+                }
+            }
+        };
+        try {
+            vm.runInContext(libfs.readFileSync(file, &#x27;utf8&#x27;), contextForRunInContext, file);
+        } catch (e) {
+            return;
+        }
+        return mod;
+    },
+
+    /**
+    Verifies if a source file was already processed by analyzing its content against an
+    internal cache mechanism. JSON files (*.json) are an exception, and they will not be
+    cached since they might includes other files that might change and affects the result
+    of the build so we can&#x27;t rely on the source file alone. If the file is not in cache,
+    it will be included automatically.
+
+    Why? This method is just an artifact to avoid spawning a process to execute shifter, which
+    is very expensive. It is also the main artifact to avoid shifting files when in production,
+    if the build process includes the build folder, specially because manhattan does not
+    support spawn. Finally, it is just a noop artifact to avoid calling shifter, it does not
+    need to cache the response of the shifter process, just opt out for the next call to shift
+    the same file with the same content.
+
+    @method _isCached
+    @protected
+    @param {string} file The filesystem path for the file to be cached
+    @param {string} buildDir The filesystem path for the build folder
+    @return {boolean} &#x60;true&#x60; if the file and its content matches the internal cache, otherwise &#x60;false&#x60;.
+    **/
+    _isCached: function (file, buildDir) {
+        var fileHash,
+            data;
+        if (libpath.extname(file) !== &#x27;.json&#x27;) {
+            fileHash = libpath.join(buildDir, &#x27;.cache&#x27;, md5(file));
+            data = libfs.readFileSync(file, &#x27;utf8&#x27;);
+            if (existsSync(fileHash) &amp;&amp; (libfs.readFileSync(fileHash, &#x27;utf8&#x27;) === data)) {
+                return true;
+            }
+            libmkdirp.sync(libpath.join(buildDir, &#x27;.cache&#x27;));
+            libfs.writeFileSync(fileHash, data, &#x27;utf8&#x27;);
+        }
+        return false;
+    },
+
+    /**
+    Removes the cache entry for a particular file.
+
+    Why? This method is just an artifact to invalidate the cache entry created by
+    &#x60;_isCached&#x60; when a shifter error is detected because the cache entry is premature
+    created before spawing to shifter.
+
+    @method _clearCached
+    @protected
+    @param {string} file The filesystem path for the file to be cached
+    @param {string} buildDir The filesystem path for the build folder
+    **/
+    _clearCached: function (file, buildDir) {
+        var fileHash;
+        fileHash = libpath.join(buildDir, &#x27;.cache&#x27;, md5(file));
+        if (existsSync(fileHash)) {
+            libfs.unlinkSync(fileHash, &#x27;utf8&#x27;);
+        }
+    },
+
+    // exposing the builder class for better testing and customization
+    // TODO: api doc
+    BuilderClass: Builder
+
+};
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

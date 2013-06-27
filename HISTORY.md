@@ -1,6 +1,52 @@
 Express YUI Change History
 ==========================
 
+0.5.1 (2013-06-21)
+------------------
+
+* removing prefix `templates/` when calling for `res.render()`, this is not needed anymore.
+* adding support for partials, which are language specific.
+* better error reporting when loader fails to load a template without bundle
+* using `outlet` instead of `body` to inject the result of the view into the selected layout.
+
+0.5.1 (2013-06-20)
+------------------
+
+* all groups registered are now provisioned on the server side
+* yui is now locked down to 3.10.x
+* adding better error reporting when loader fails to load a module on the server side
+
+0.5.0 (2013-06-19)
+------------------
+
+* refactor to integrate with `express-state`.
+* using `app.yui.*` api on server and client.
+* bootstrap to load `seed` files in paralell and non-blocking.
+* integration with the new `locator`
+* many bugfixes and reorganization of the code
+
+0.4.4 (2013-06-19)
+------------------
+
+* adding a hook for locator plugins to force attaching a yui module thru `evt.bundle.useServerModules` array. this is useful for compiled templates and other basic yui modules.
+
+0.4.3 (2013-06-17)
+------------------
+
+* adding custom options for `app.yui.plugin()` to control the `lint`, `coverage`, `silence` and `quiet` arguments used by shifter. by default, the plugin will print out shifter output
+when `process.env.NODE_ENV` is `development`.
+
+0.4.2 (2013-06-13)
+------------------
+
+* avoid executing arbitrary scripts while trying to detect yui modules in all files by using a custom context that does not have `require` or `module`. this enforces the use of `YUI.add()` to wrap everything into the function that defines the module.
+
+0.4.1 (2013-06-13)
+------------------
+
+* exposing `yui.augment(app)` as a static method to augment an existing express app instance
+* exposing `yui.extend(express)` as a static method to extend express module.
+
 0.4.0 (2013-06-07)
 ------------------
 

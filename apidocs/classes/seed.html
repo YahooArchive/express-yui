@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>seed - express-yui API documentation</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../assets/css/logo.png" title="express-yui API documentation"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 0.2.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/cdn.html">cdn</a></li>
+            
+                <li><a href="../classes/groups.html">groups</a></li>
+            
+                <li><a href="../classes/loader.html">loader</a></li>
+            
+                <li><a href="../classes/middleware.html">middleware</a></li>
+            
+                <li><a href="../classes/origin.html">origin</a></li>
+            
+                <li><a href="../classes/seed.html">seed</a></li>
+            
+                <li><a href="../classes/server.html">server</a></li>
+            
+                <li><a href="../classes/shifter.html">shifter</a></li>
+            
+                <li><a href="../classes/View.html">View</a></li>
+            
+                <li><a href="../classes/view.html">view</a></li>
+            
+                <li><a href="../classes/yui.html">yui</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="../modules/cdn.html">cdn</a></li>
+            
+                <li><a href="../modules/client.html">client</a></li>
+            
+                <li><a href="../modules/express-yui.html">express-yui</a></li>
+            
+                <li><a href="../modules/groups.html">groups</a></li>
+            
+                <li><a href="../modules/loader.html">loader</a></li>
+            
+                <li><a href="../modules/middleware.html">middleware</a></li>
+            
+                <li><a href="../modules/origin.html">origin</a></li>
+            
+                <li><a href="../modules/seed.html">seed</a></li>
+            
+                <li><a href="../modules/server.html">server</a></li>
+            
+                <li><a href="../modules/shifter.html">shifter</a></li>
+            
+                <li><a href="../modules/utils.html">utils</a></li>
+            
+                <li><a href="../modules/view.html">view</a></li>
+            
+                <li><a href="../modules/yui.html">yui</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1>seed Class</h1>
+<div class="box meta">
+    
+        <div class="uses">
+            Uses
+            <ul class="inline commas">
+                
+                    <li><a href="utils.html">utils</a></li>
+                
+            </ul>
+        </div>
+    
+
+    
+
+    
+        <div class="foundat">
+            Defined in: <a href="../files/lib_seed.js.html#l24"><code>lib&#x2F;seed.js:24</code></a>
+        </div>
+    
+
+    
+        
+            Module: <a href="../modules/seed.html">seed</a><br>
+            Parent Module: <a href="../modules/yui.html">yui</a>
+        
+    
+
+    
+</div>
+
+
+
+<div class="box intro">
+    <p>The <code>express-yui.seed</code> middleware extension that provides a set of features
+to configure and construct the yui seed object which
+contains the urls to be used to fetch the initial pieces
+of the yui library, plus any app specific modules
+before calling <code>YUI().use()</code> in the client runtime.</p>
+
+<p>When the <code>"seed"</code> sub-module is used by <code>yui</code> middleware, it
+will automatically mix itself into <code>app.yui.expose()</code>, and it
+exposes an array of object with the information to build
+the script tag or tags that forms the seed:</p>
+
+<p>The following is an example of how these features can be used:</p>
+
+<pre class="code prettyprint"><code>// Creates a new express app.
+var app = express();
+// adjust the seed modules
+app.yui.seed(['yui-base', 'loader']);
+
+// Call expose middleware when a route match.
+app.get('/index.html', app.yui.expose(), anotherRoute);
+</code></pre>
+
+<p>In the example above, the array of objects with the seed information
+will be exposed thru <code>res.locals.yui_seed</code>, which means you
+can use it in your templates by doing something like this if
+using handlebars templates:</p>
+
+<pre class="code prettyprint"><code>{{#yui_seed}}
+&lt;script src="{{{src}}}"&gt;&lt;/script&gt;
+{{/yui_seed}}
+</code></pre>
+</div>
+
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+        
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+        
+        
+        
+        
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+            
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                        
+                            <li class="index-item method public">
+                                <a href="#method_addModuleToSeed">addModuleToSeed</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getDefaultSeed">getDefaultSeed</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method public">
+                                <a href="#method_seed">seed</a>
+
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+
+            
+
+            
+        </div>
+
+        
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+                
+                    <div id="method_addModuleToSeed" class="method item public">
+    <h3 class="name"><code>addModuleToSeed</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>moduleName</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>groupName</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/lib_seed.js.html#l74"><code>lib&#x2F;seed.js:74</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Adds a yui module name into the <code>core</code> YUI configuration
+which is used by loader to identify the pieces that are
+already part of the seed and should be attached to Y
+automatically.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">moduleName</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>the yui module name</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">groupName</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>the group name for the module</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_getDefaultSeed" class="method item">
+    <h3 class="name"><code>getDefaultSeed</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Array</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/lib_seed.js.html#l62"><code>lib&#x2F;seed.js:62</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Gets the default list of module names that should
+be part of the seed files.</p>
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Array</span>:
+                    
+                    list of modules in seed
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_seed" class="method item public">
+    <h3 class="name"><code>seed</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>modules</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Function</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/lib_seed.js.html#l104"><code>lib&#x2F;seed.js:104</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Specify a list of modules to use as seed. This
+method extends the yui static configuration,
+specifically setting the <code>app.yui.config().seed</code> value.</p>
+
+<pre class="code prettyprint"><code>app.yui.seed(["yui-base", "loader"]);
+</code></pre>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">modules</code>
+                        <span class="type">Array</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>list of modules to use</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Function</span>:
+                    
+                    express middleware
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+
+        
+
+        
+    </div>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>
