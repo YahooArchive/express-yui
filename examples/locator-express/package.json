@@ -1,12 +1,15 @@
 {
-    "name": "locator-express",
+    "name": "demo",
     "description": "Express YUI - Locator Integration Example.",
     "version": "0.0.1",
     "private": true,
     "main": "app.js",
     "devDependencies": {
-        "locator-micro": "git+ssh://git@git.corp.yahoo.com:modown/locator-micro.git",
-        "locator-handlebars": "git+ssh://git@git.corp.yahoo.com:modown/locator-handlebars.git",
-        "locator": "~0.3.0"
+        "express": "*",
+        "express-yui": "*",
+        "locator": "~0.3.0",
+        "locator-handlebars": "*",
+        "locator-micro": "*",
+        "yui": "~3.10.1"
     }
 }

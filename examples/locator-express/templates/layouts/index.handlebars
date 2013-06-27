@@ -12,20 +12,22 @@
 
     <p>Tagline: {{tagline}}<p>
 
-    {{{outlet}}}
+    <div id="child">{{{outlet}}}</div>
 
     <div id="content">
         Loading...
     </div>
 
-    <h3>Support for partials:</h3>
-    <p>Partials will work, but they are template language specific, just like helpers, which means each compiler will have to take care of the details. Here is an example of a handlebars partial:</p>
-    <ul>{{>baz}}</ul>
-
     <script>{{{state}}}</script>
     <script>
-    app.yui.use('alerts-model', 'node', function (Y) {
-        Y.Model && Y.Model.Alerts && Y.one('#content').setContent('<p>Ready!</p>');
+    app.yui.use('alerts-model', 'binder-index', function (Y) {
+        // creating a model based on `alerts-model` module
+        var model = new Y.Model.Alerts({
+            tagline: 'testing some data thru alerts-model',
+            tellme: 'NY is nice too, during summer!'
+        });
+        // using a binder to render a template and with the data from model
+        Y.Binders.index.update(Y.one('#content'), model.toJSON());
     });
     </script>
 </body>
