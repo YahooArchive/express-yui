@@ -1,7 +1,12 @@
 Express YUI Change History
 ==========================
 
-0.5.1 (2013-06-21)
+0.5.3 (2013-06-27)
+------------------
+
+* default setting for core modules to point to CDN.
+
+0.5.2 (2013-06-21)
 ------------------
 
 * removing prefix `templates/` when calling for `res.render()`, this is not needed anymore.
