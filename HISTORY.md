@@ -1,6 +1,11 @@
 Express YUI Change History
 ==========================
 
+0.5.4 (2013-07-08)
+------------------
+
+* `defaultBundle` is not longer required, and it will be computed automatically based on the locator information about the bundles. You can still define it if needed, specially when the top level package is not the one providing templates.
+
 0.5.3 (2013-06-27)
 ------------------
 

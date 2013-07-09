@@ -10,7 +10,6 @@ var express = require('express'),
     app = express();
 
 app.set('view', app.yui.view({
-    defaultBundle: 'demo',
     defaultLayout: 'index'
 }));
 
