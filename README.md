@@ -190,24 +190,40 @@ _note: remember that `req.app` holds a reference to the `app` object for conveni
 For that, you just need to hook `app.yui.view()` into express, by doing this:
 
 ```
+app.set('view', app.yui.view());
+```
+
+With the code above, there is not need to define anything else in express in terms of engine, or path to views, or anything else, all that is irrelevant since `express-yui` will completely take over the `express`'s template resolution process, and will drive it thru `Y.Template`, which means you can call `res.render('foo')` in your middleware, and `express-yui` will resolve `foo` template. `express-yui` will try to find `foo` template within the `Y.Template` internal cache, and call for render if the exists.
+
+#### Layout
+
+You can also define a default layout:
+
+```
 app.set('view', app.yui.view({
-    defaultBundle: 'demo-app', // usually the name in package.json for the app
+    defaultLayout: 'bar'
 }));
 ```
 
-With the code above, there is not need to define anything else in express in terms of engine, or path to views, or anything else, all that is irrelevant since `express-yui` will completely take over the `express`'s template resolution process, and will drive it thru `Y.Template`, which means you can call `res.render('foo')` in your middleware, and `express-yui` will resolve `foo` on the default `bundle`. `express-yui` will try to find `foo` template within the `Y.Template` internal cache, and call for render if the exists.
-
-You can also specify custom values for `bundle` and `layout` options thru `res.render()`, here is how:
+If you use `defaultLayout` as above, or just by providing the `layout` value when calling `res.render('foo', { layout: 'bar' })`, `express-yui` will resolve the `view`, render it, and the result of that operation will be passed into the layout render thru a context variable called `outlet`, this is similar to `emberjs`. In a handlebars template, you will define the `outlet` like this:
 
 ```
-res.render('bar', {
-    title: 'by happy!',
-    bundle: 'dependency-library-name',
-    layout: 'narrow-layout'
-});
+<div>{{{outlet}}}</div>
 ```
 
-If you use layout as above, or just by providing a default layout value thru `defaultLayout` when calling `app.yui.view()`, `express-yui` will resolve the `view`, render it, and the result of that operation will be passed into the layout render thru a context variable called `outlet`, this is similar to `emberjs`.
+#### Bundle (optional)
+
+If your templates are part of a NPM dependency, you have to tell `express-yui` and the `view` how to resolve those templates from a different package, for that, you can define `defaultBundle`:
+
+```
+app.set('view', app.yui.view({
+    defaultBundle: 'name-of-package-with-templates'
+}));
+```
+
+If you use `defaultBundle` as above, or just by providing the `bundle` value when calling `res.render('foo', { bundle: 'name-of-package-with-templates' })`, `express-yui` will lookup for the template under the specified bundle. Internally, all templates will be prefixed with the package name of their corresponding NPM package, and the `bundle` will be used to specify what prefix to use.
+
+### Using [Locator] plugins
 
 If you use `locator` component plus other plugins like `locator-handlebars` to precompile templates into YUI Modules, then when calling `res.render('foo')`, `express-yui` can resolve `foo` automatically based on the compiled version. Check this example to see `app.yui.view()` in action:
 
