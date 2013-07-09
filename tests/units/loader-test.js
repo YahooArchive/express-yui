@@ -151,6 +151,13 @@ suite.add(new YUITest.TestCase({
             };
 
         YUITest.Mock.expect(api, {
+            method: 'getRootBundleName',
+            args: [],
+            run: function () {
+                return true;
+            }
+        });
+        YUITest.Mock.expect(api, {
             method: 'writeFileInBundle',
             args: ['foo', 'loader-foo.js', YUITest.Mock.Value.String],
             run: function (bundleName, destination_path, contents) {
