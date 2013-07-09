@@ -256,7 +256,7 @@ module.exports = {
         utils.extend(View.prototype, {
             // augmenting the lookup mechanism to use the Y registered at the server side
             lookup: function (templateName, options) {
-                var bundleName = (options &amp;&amp; options.bundle) || config.defaultBundle,
+                var bundleName = (options &amp;&amp; options.bundle) || config.defaultBundle || self._defaultBundle,
                     Y = self.use(),
                     template;
 

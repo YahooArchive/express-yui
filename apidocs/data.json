@@ -897,7 +897,7 @@
         },
         {
             "file": "lib/loader.js",
-            "line": 307,
+            "line": 314,
             "description": "Analyze modified files and build.json files to infer the list of files that\nshould be shifted.",
             "itemtype": "method",
             "name": "_buildsInBundle",

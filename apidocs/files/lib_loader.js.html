@@ -290,6 +290,7 @@ module.exports = {
                     builds,
                     files = [];
 
+                // producing the yui build directory for the bundle
                 if (!bundle.yuiBuildDirectory) {
                     // augmenting bundle obj with more metadata about yui
                     bundle.yuiBuildDirectory = options.buildDir || path.resolve(bundle.buildDirectory);
@@ -312,6 +313,12 @@ module.exports = {
                 if (!meta || builds.length === 0) {
                     // this bundle does not have any yui module registered
                     return;
+                }
+
+                // storing name of the default bundle if the current
+                // bundle has files and is the root bundle from locator
+                if (api.getRootBundleName() === bundleName) {
+                    yui._defaultBundle = bundleName;
                 }
 
                 return api.promise(function (fulfilled, rejected) {
