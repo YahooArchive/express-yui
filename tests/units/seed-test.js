@@ -132,6 +132,61 @@ suite.add(new YUITest.TestCase({
         A.areEqual('/static/yui/yui-min.js',
                     urls[0],
                     'urls[0] does not match');
+    },
+
+    "test builJSUrls()": function () {
+        var yui_config;
+
+        yui_config = {
+            base: '/app/',
+            groups: {
+                app: {
+                    base: '/app-base/'
+                }
+            }
+        };
+        seed.config = function () {
+            return yui_config;
+        };
+
+        var urls = seed.buildJSUrls('dom', 'foo@app');
+
+        // console.log(urls);
+        A.areEqual(2, urls.length, '2 js expected');
+        A.areEqual('/app/dom/dom-min.js',
+                    urls[0],
+                    'urls[0] does not match');
+        A.areEqual('/app-base/foo/foo-min.js',
+                    urls[1],
+                    'urls[1] does not match');
+    },
+
+
+    "test builCSSUrls()": function () {
+        var yui_config;
+
+        yui_config = {
+            base: '/app/',
+            groups: {
+                app: {
+                    base: '/app-base/'
+                }
+            }
+        };
+        seed.config = function () {
+            return yui_config;
+        };
+
+        var urls = seed.buildCSSUrls('cssbase', 'cssfoo@app');
+
+        // console.log(urls);
+        A.areEqual(2, urls.length, '2 css expected');
+        A.areEqual('/app/cssbase/cssbase-min.css',
+                    urls[0],
+                    'urls[0] does not match');
+        A.areEqual('/app-base/cssfoo/cssfoo-min.css',
+                    urls[1],
+                    'urls[1] does not match');
     }
 
 }));
