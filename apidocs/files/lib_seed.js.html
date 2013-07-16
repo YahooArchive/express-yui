@@ -152,8 +152,7 @@ calling &#x60;YUI().use()&#x60; in the client runtime.
 
 &#x27;use strict&#x27;;
 
-var debug = require(&#x27;debug&#x27;)(&#x27;express:yui:seed&#x27;),
-    utils = require(&#x27;./utils&#x27;);
+var debug = require(&#x27;debug&#x27;)(&#x27;express:yui:seed&#x27;);
 
 /**
 The &#x60;express-yui.seed&#x60; middleware extension that provides a set of features
@@ -188,10 +187,42 @@ using handlebars templates:
 
 @class seed
 @static
-@uses utils
+@uses debug*
 @extensionfor yui
 */
 module.exports = {
+
+    /**
+    The default mapping for suffix based on the config &#x60;filter&#x60; value for js modules.
+
+    @property JS_FILTERS_MAP
+    @type {Object}
+    **/
+    JS_FILTERS_MAP: {
+        raw: &#x27;&#x27;,
+        min: &#x27;-min&#x27;,
+        debug: &#x27;-debug&#x27;
+    },
+
+    /**
+    The default mapping for suffix based on the config &#x60;filter&#x60; value for css modules.
+
+    @property CSS_FILTERS_MAP
+    @type {Object}
+    **/
+    CSS_FILTERS_MAP: {
+        raw: &#x27;&#x27;,
+        min: &#x27;-min&#x27;,
+        debug: &#x27;&#x27;
+    },
+
+    /**
+    The default filter suffix for yui modules urls.
+
+    @property DEFAULT_FILTER
+    @type {String}
+    **/
+    DEFAULT_FILTER: &#x27;-min&#x27;,
 
     /**
     Gets the default list of module names that should
@@ -263,10 +294,71 @@ module.exports = {
 
     },
 
+    /**
+    Build the list of urls to load the seed files for the app.
+
+        var scripts = app.yui.getSeedUrls();
+
+    As a result, &#x60;scripts&#x60; will be an array with one or more urls that
+    you can use in your templates to provision YUI. Keep in mind that if
+    use &#x60;expressYUI.expose()&#x60; middleware, you don&#x27;t need to provision the
+    seed, it will be provisioned automatically as part of the &#x60;state&#x60; object.
+
+    @method getSeedUrls
+    @public
+    @return {Array} the &#x60;src&#x60; url for each script tag that forms the seed
+    **/
     getSeedUrls: function () {
+        var config = this.config(),
+            modules = config.seed || this.getDefaultSeed();
+        return this._buildUrls(modules, &#x27;js&#x27;, this.JS_FILTERS_MAP);
+    },
+
+    /**
+    Build a list of urls to load a list of modules.
+
+        var scripts = app.yui.buildJSUrls(&#x27;node&#x27;, &#x27;photos@hermes&#x27;);
+
+    As a result, &#x60;scripts&#x60; will be an array with one or more urls that
+    you can use in your templates to insert script tags.
+
+    Modules as &#x60;photos@hermes&#x60; denotate a module from a particular group,
+    as in &#x60;&lt;module-name&gt;@&lt;group-name&gt;&#x60;. Modules without the group denotation
+    will be assumed as core modules from yui.
+
+    @method buildJSUrls
+    @public
+    @param {string} modules* One or more module name (and optional @&lt;group-name&gt;)
+    @return {Array} the &#x60;src&#x60; url for each script tag that forms the seed
+    **/
+    buildJSUrls: function () {
+        return this._buildUrls(arguments, &#x27;js&#x27;, this.JS_FILTERS_MAP);
+    },
+
+    /**
+    Build a list of urls to load a list of css modules.
+
+        var links = app.yui.buildCSSUrls(&#x27;cssbase&#x27;, &#x27;cssflickr@hermes&#x27;);
+
+    As a result, &#x60;links&#x60; will be an array with the urls that
+    you can use in your templates to provision styles.
+
+    Modules as &#x60;cssflickr@hermes&#x60; denotate a module from a particular group,
+    as in &#x60;&lt;module-name&gt;@&lt;group-name&gt;&#x60;. Modules without the group denotation
+    will be assumed as core modules from yui.
+
+    @method buildCSSUrls
+    @public
+    @param {string} modules* One or more module name (and optional @&lt;group-name&gt;)
+    @return {Array} the &#x60;href&#x60; url for each link tag to be inserted in the header of the page
+    **/
+    buildCSSUrls: function () {
+        return this._buildUrls(arguments, &#x27;css&#x27;, this.CSS_FILTERS_MAP);
+    },
+
+    _buildUrls: function (modules, ext, filterMap) {
         // getting static config
         var config = this.config(),
-            modules = config.seed || this.getDefaultSeed(),
             urls = [],
             groups = config.groups || {},
             prevGroup,
@@ -292,8 +384,7 @@ module.exports = {
                 newGroup.comboSep === prevGroup.comboSep;
         }
 
-        // producing an array of objects with the src
-        // for each file in the seed.
+        // producing an array of objects with the urls for the module.
         for (i = 0; i &lt; modules.length; i += 1) {
             // a module in the list might have a suffix with the group name denotated as @&lt;groupname&gt;
             m = modules[i].split(&#x27;@&#x27;);
@@ -309,11 +400,11 @@ module.exports = {
             // computing the default filter for yui core modules
             // default is always -min
             filter = groupConfig.filter || config.filter; // inheriting from yui config
-            filter = filter &amp;&amp; utils.FILTERS_MAP.hasOwnProperty(filter) ?
-                    utils.FILTERS_MAP[filter] : utils.DEFAULT_FILTER;
+            filter = filter &amp;&amp; filterMap &amp;&amp; filterMap.hasOwnProperty(filter) ?
+                    filterMap[filter] : this.DEFAULT_FILTER;
 
             // just build the url as loader will do at the client side.
-            path = moduleName + &#x27;/&#x27; + moduleName + filter + &#x27;.js&#x27;;
+            path = moduleName + &#x27;/&#x27; + moduleName + filter + &#x27;.&#x27; + ext;
 
             if (groupConfig) {
 
@@ -329,8 +420,8 @@ module.exports = {
 
             } else {
 
-                debug(&#x27;Skipping module [&#x27; + moduleName + &#x27;] form &#x27; +
-                    &#x27;seed due to invalid group resolution.&#x27;);
+                debug(&#x27;Skipping module [%s] &#x27; +
+                    &#x27;due to invalid group resolution.&#x27;, modules[i]);
 
             }
 

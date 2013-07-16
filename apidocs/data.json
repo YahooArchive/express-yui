@@ -283,7 +283,7 @@
             "module": "yui",
             "namespace": "",
             "file": "lib/seed.js",
-            "line": 24,
+            "line": 23,
             "description": "The `express-yui.seed` extension that provides a set of features\nto construct the yui seed structure which contains the url\nto fetch the initial piece of the library before\ncalling `YUI().use()` in the client runtime."
         },
         "server": {
@@ -482,11 +482,11 @@
             "submodule": "seed",
             "namespace": "",
             "file": "lib/seed.js",
-            "line": 24,
+            "line": 23,
             "description": "The `express-yui.seed` middleware extension that provides a set of features\nto configure and construct the yui seed object which\ncontains the urls to be used to fetch the initial pieces\nof the yui library, plus any app specific modules\nbefore calling `YUI().use()` in the client runtime.\n\nWhen the `\"seed\"` sub-module is used by `yui` middleware, it\nwill automatically mix itself into `app.yui.expose()`, and it\nexposes an array of object with the information to build\nthe script tag or tags that forms the seed:\n\nThe following is an example of how these features can be used:\n\n    // Creates a new express app.\n    var app = express();\n    // adjust the seed modules\n    app.yui.seed(['yui-base', 'loader']);\n\n    // Call expose middleware when a route match.\n    app.get('/index.html', app.yui.expose(), anotherRoute);\n\nIn the example above, the array of objects with the seed information\nwill be exposed thru `res.locals.yui_seed`, which means you\ncan use it in your templates by doing something like this if\nusing handlebars templates:\n\n    {{#yui_seed}}\n    <script src=\"{{{src}}}\"></script>\n    {{/yui_seed}}",
             "static": 1,
             "uses": [
-                "utils"
+                "debug*"
             ]
         },
         "server": {
@@ -1076,7 +1076,40 @@
         },
         {
             "file": "lib/seed.js",
-            "line": 62,
+            "line": 61,
+            "description": "The default mapping for suffix based on the config `filter` value for js modules.",
+            "itemtype": "property",
+            "name": "JS_FILTERS_MAP",
+            "type": "{Object}",
+            "class": "seed",
+            "module": "yui",
+            "submodule": "seed"
+        },
+        {
+            "file": "lib/seed.js",
+            "line": 73,
+            "description": "The default mapping for suffix based on the config `filter` value for css modules.",
+            "itemtype": "property",
+            "name": "CSS_FILTERS_MAP",
+            "type": "{Object}",
+            "class": "seed",
+            "module": "yui",
+            "submodule": "seed"
+        },
+        {
+            "file": "lib/seed.js",
+            "line": 85,
+            "description": "The default filter suffix for yui modules urls.",
+            "itemtype": "property",
+            "name": "DEFAULT_FILTER",
+            "type": "{String}",
+            "class": "seed",
+            "module": "yui",
+            "submodule": "seed"
+        },
+        {
+            "file": "lib/seed.js",
+            "line": 93,
             "description": "Gets the default list of module names that should\nbe part of the seed files.",
             "itemtype": "method",
             "name": "getDefaultSeed",
@@ -1091,7 +1124,7 @@
         },
         {
             "file": "lib/seed.js",
-            "line": 74,
+            "line": 105,
             "description": "Adds a yui module name into the `core` YUI configuration\nwhich is used by loader to identify the pieces that are\nalready part of the seed and should be attached to Y\nautomatically.",
             "itemtype": "method",
             "name": "addModuleToSeed",
@@ -1116,7 +1149,7 @@
         },
         {
             "file": "lib/seed.js",
-            "line": 104,
+            "line": 135,
             "description": "Specify a list of modules to use as seed. This\nmethod extends the yui static configuration,\nspecifically setting the `app.yui.config().seed` value.\n\n    app.yui.seed([\"yui-base\", \"loader\"]);",
             "itemtype": "method",
             "name": "seed",
@@ -1134,6 +1167,70 @@
                 "type": "Function"
             },
             "chainable": 1,
+            "class": "seed",
+            "module": "yui",
+            "submodule": "seed"
+        },
+        {
+            "file": "lib/seed.js",
+            "line": 163,
+            "description": "Build the list of urls to load the seed files for the app.\n\n    var scripts = app.yui.getSeedUrls();\n\nAs a result, `scripts` will be an array with one or more urls that\nyou can use in your templates to provision YUI. Keep in mind that if\nuse `expressYUI.expose()` middleware, you don't need to provision the\nseed, it will be provisioned automatically as part of the `state` object.",
+            "itemtype": "method",
+            "name": "getSeedUrls",
+            "access": "public",
+            "tagname": "",
+            "return": {
+                "description": "the `src` url for each script tag that forms the seed",
+                "type": "Array"
+            },
+            "class": "seed",
+            "module": "yui",
+            "submodule": "seed"
+        },
+        {
+            "file": "lib/seed.js",
+            "line": 183,
+            "description": "Build a list of urls to load a list of modules.\n\n    var scripts = app.yui.buildJSUrls('node', 'photos@hermes');\n\nAs a result, `scripts` will be an array with one or more urls that\nyou can use in your templates to insert script tags.\n\nModules as `photos@hermes` denotate a module from a particular group,\nas in `<module-name>@<group-name>`. Modules without the group denotation\nwill be assumed as core modules from yui.",
+            "itemtype": "method",
+            "name": "buildJSUrls",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "modules",
+                    "description": "One or more module name (and optional @<group-name>)",
+                    "type": "String",
+                    "multiple": true
+                }
+            ],
+            "return": {
+                "description": "the `src` url for each script tag that forms the seed",
+                "type": "Array"
+            },
+            "class": "seed",
+            "module": "yui",
+            "submodule": "seed"
+        },
+        {
+            "file": "lib/seed.js",
+            "line": 204,
+            "description": "Build a list of urls to load a list of css modules.\n\n    var links = app.yui.buildCSSUrls('cssbase', 'cssflickr@hermes');\n\nAs a result, `links` will be an array with the urls that\nyou can use in your templates to provision styles.\n\nModules as `cssflickr@hermes` denotate a module from a particular group,\nas in `<module-name>@<group-name>`. Modules without the group denotation\nwill be assumed as core modules from yui.",
+            "itemtype": "method",
+            "name": "buildCSSUrls",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "modules",
+                    "description": "One or more module name (and optional @<group-name>)",
+                    "type": "String",
+                    "multiple": true
+                }
+            ],
+            "return": {
+                "description": "the `href` url for each link tag to be inserted in the header of the page",
+                "type": "Array"
+            },
             "class": "seed",
             "module": "yui",
             "submodule": "seed"
@@ -1472,28 +1569,6 @@
         {
             "file": "lib/utils.js",
             "line": 144,
-            "description": "The default mapping for suffix based on the config `filter` value.",
-            "itemtype": "property",
-            "name": "FILTERS_MAP",
-            "type": "{Object}",
-            "class": "View",
-            "module": "express-yui",
-            "submodule": "utils"
-        },
-        {
-            "file": "lib/utils.js",
-            "line": 156,
-            "description": "The default filter suffix for yui modules urls.",
-            "itemtype": "property",
-            "name": "DEFAULT_FILTER",
-            "type": "{String}",
-            "class": "View",
-            "module": "express-yui",
-            "submodule": "utils"
-        },
-        {
-            "file": "lib/utils.js",
-            "line": 164,
             "description": "Whether the app is running in debug mode or not. True if nodejs is running\nin development mode.",
             "itemtype": "property",
             "name": "debugMode",
@@ -1734,7 +1809,7 @@
     "warnings": [
         {
             "message": "unknown tag: pretected",
-            "line": " lib/seed.js:62"
+            "line": " lib/seed.js:93"
         },
         {
             "message": "unknown tag: api",
