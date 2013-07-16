@@ -1,6 +1,12 @@
 Express YUI Change History
 ==========================
 
+@next (@date)
+------------------
+
+* adding support for `app.yui.buildJSUrls('dom', 'photos@hermes')` to produce urls to load modules.
+* adding support for `app.yui.buildCSSUrls('cssbase', 'flickr@hermes')` to produce urls to load css modules.
+
 0.5.4 (2013-07-08)
 ------------------
 
