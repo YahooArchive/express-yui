@@ -315,7 +315,7 @@ You can get `express-yui` to compile yui css modules as well, for that, you need
 Aside from that, there are a couple of things you need to keep in mind about yui css modules:
 
 * `cssfiles` from the example above are relative to a `css` folder that is located at the same level than `build.json`.
-* YUI css modules can contain assets (usually located under the `assets` folder at the same level), but if you use a combo, then the path for those assets will not resolve correctly. More info about this problem (here)[https://github.com/davglass/cssproc#css-relative-url-processor]. To solve this you can enable `cssproc` configuration when you plug the plugin:
+* YUI css modules can contain assets (usually located under the `assets` folder at the same level), but if you use a combo, then the path for those assets will not resolve correctly. More info about this problem [here](https://github.com/davglass/cssproc#css-relative-url-processor). To solve this you can enable `cssproc` configuration when you plug the plugin:
 
 ```
 locatorObj.plug(app.yui.plugin({
