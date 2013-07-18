@@ -1,6 +1,11 @@
 Express YUI Change History
 ==========================
 
+@next (@date)
+------------------
+
+* adding support for `cssproc` option thru `app.yui.plugin({ cssproc: true})`.
+
 0.5.5 (2013-07-15)
 ------------------
 
