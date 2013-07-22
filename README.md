@@ -258,10 +258,10 @@ app.yui.setCoreFromAppOrigin();
 app.use(yui.static());
 ```
 
-With this configuration, a group called `foo` with version `1.2.3`, and `yui` version `3.10.2`, it will produce urls like these:
+With this configuration, a group called `foo` with version `1.2.3`, and `yui` version `3.11.0`, it will produce urls like these:
 
-  * /combo~/yui-3.10.2/yui-base/yui-base-min.js~/foo-1.2.3/bar/bar-min.js~/foo-1.2.3/baz/baz-min.js
-  * /yui-3.10.2/yui-base/yui-base-min.js
+  * /combo~/yui-3.11.0/yui-base/yui-base-min.js~/foo-1.2.3/bar/bar-min.js~/foo-1.2.3/baz/baz-min.js
+  * /yui-3.11.0/yui-base/yui-base-min.js
   * /foo-1.2.3/bar/bar-min.js
 
 Any of those urls will be valid because `express-yui` static middleware will serve them and
