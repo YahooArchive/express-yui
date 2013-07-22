@@ -1,7 +1,7 @@
 Express YUI Change History
 ==========================
 
-@next (@date)
+0.5.6 (2013-07-22)
 ------------------
 
 * yui is now locked down to 3.11.x
