@@ -33,6 +33,7 @@ suite.add(new YUITest.TestCase({
         delete loader._checkYUIModule;
         delete loader._checkBuildFile;
         delete loader.BuilderClass;
+        delete loader.config;
         loader._buildsInBundle = _buildsInBundle;
     },
 
@@ -116,8 +117,8 @@ suite.add(new YUITest.TestCase({
         });
         YUITest.Mock.expect(loader, {
             method: '_buildsInBundle',
-            args: ['foo', YUITest.Mock.Value.Any, YUITest.Mock.Value.Any],
-            run: function (bundleName, modifiedFiles) {
+            args: [YUITest.Mock.Value.Object, YUITest.Mock.Value.Any, YUITest.Mock.Value.Any],
+            run: function (bundle, modifiedFiles) {
                 A.areSame(1, modifiedFiles.length, 'only bar.js shuould pass the filter');
                 A.areSame(__dirname + '/bar.js', modifiedFiles[0], 'fullpath for bar.js should be produced');
                 return [];
@@ -165,7 +166,11 @@ suite.add(new YUITest.TestCase({
                 return {
                     // mocking promise
                     then: function (fn) {
-                        return fn(__filename);
+                        return {
+                            then: function() {
+                                fn(__filename);
+                            }
+                        };
                     }
                 };
             }
@@ -251,6 +256,69 @@ suite.add(new YUITest.TestCase({
         }, api);
         YUITest.Mock.verify(api);
         YUITest.Mock.verify(loader);
+    },
+    "test _cssprocInBundle": function () {
+        var bundle = {
+                name: 'foo',
+                buildDirectory: '/path/to/foo-a.b.c'
+            },
+            args;
+
+        loader.config = function () {
+            return {
+                groups: {
+                    foo: {
+                        base: 'base-for-foo'
+                    }
+                }
+            };
+        };
+
+        args = loader._cssprocInBundle(bundle);
+        A.areEqual(0, args.length, 'undefined cssproc should not add any arg');
+        args = loader._cssprocInBundle(bundle, false);
+        A.areEqual(0, args.length, 'false cssproc should not add any arg');
+        args = loader._cssprocInBundle(bundle, true);
+        A.areEqual(2, args.length, 'true cssproc should add two args');
+        A.areEqual('--cssproc', args[0]);
+        A.areEqual('base-for-foo', args[1]);
+    },
+    'test _filterFilesInBundle': function () {
+        var bundle = {
+                name: 'foo',
+                buildDirectory: '/path/to/foo-a.b.c'
+            },
+            files,
+            list = {
+                'foo': {
+                    relativePath: 'path/to/foo',
+                    fullPath: '/fullpath/to/foo'
+                },
+                'bar': {
+                    relativePath: 'path/to/bar',
+                    fullPath: '/fullpath/to/bar'
+                }
+            };
+
+        function filter(b, relativePath) {
+            A.areEqual(bundle, b, 'the original bundle should be passed into filter');
+            return relativePath === 'path/to/foo';
+        }
+
+        files = loader._filterFilesInBundle(bundle);
+        A.areEqual(0, files.length, 'no list and filter should return empty list');
+
+        files = loader._filterFilesInBundle(bundle, list);
+        A.areEqual(2, files.length, 'no filter should return all items');
+        A.areEqual('/fullpath/to/foo', files[0]);
+        A.areEqual('/fullpath/to/bar', files[1]);
+
+        files = loader._filterFilesInBundle(bundle, null, filter);
+        A.areEqual(0, files.length, 'no list should return empty list');
+
+        files = loader._filterFilesInBundle(bundle, list, filter);
+        A.areEqual(1, files.length, 'filter should only processed foo');
+        A.areEqual('/fullpath/to/foo', files[0]);
     }
 }));
 

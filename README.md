@@ -274,7 +274,6 @@ sure you set the proper configuration for all groups so loader can know about th
 Here is the example:
 
 ```
-app.yui.setCoreFromCDN(); // this is the default config btw
 app.set('yui combo config', {
     comboBase: 'http://mycdn.com/path/to/combo?',
     comboSep: '&',
@@ -292,6 +291,37 @@ With this configuration, a group called `foo` with version `1.2.3` will produce 
   * http://mycdn.com/path/to/combo?static/foo-1.2.3/bar/bar-min.js&static/foo-1.2.3/baz/baz-min.js
   * http://mycdn.com/path/to/static/foo-1.2.3/bar/bar-min.js
 
+
+### CSS modules and assets
+
+You can get `express-yui` to compile yui css modules as well, for that, you need to use a json file that describe how to locate and build the css modules. This is the same technique we use in `yui` to build css modules. Here is an example of such as file (build.json):
+
+```
+{
+    "name": "styles",
+    "builds": {
+        "cssdemo": {
+            "cssfiles": [
+                "demo.css"
+            ],
+            "config": {
+                "type": "css"
+            }
+        }
+    }
+}
+```
+
+Aside from that, there are a couple of things you need to keep in mind about yui css modules:
+
+* `cssfiles` from the example above are relative to a `css` folder that is located at the same level than `build.json`.
+* YUI css modules can contain assets (usually located under the `assets` folder at the same level), but if you use a combo, then the path for those assets will not resolve correctly. More info about this problem [here](https://github.com/davglass/cssproc#css-relative-url-processor). To solve this you can enable `cssproc` configuration when you plug the plugin:
+
+```
+locatorObj.plug(app.yui.plugin({
+    cssproc: true
+}));
+```
 
 API Docs
 --------

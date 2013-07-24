@@ -6,33 +6,26 @@ var express = require('express'),
     YUI = require('express-yui'),
     Locator = require('locator'),
     LocatorHandlebars = require('locator-handlebars'),
-    LocatorMicro = require('locator-micro'),
     app = express();
 
-app.set('view', app.yui.view({
-    defaultLayout: 'index'
-}));
+app.set('view', app.yui.view());
 
 app.yui.debugMode();
-app.yui.setCoreFromAppOrigin();
 
 // serving static yui modules
 app.use(YUI['static']());
 
 // creating a page with YUI embeded
-app.get('/bar', YUI.expose(), function (req, res, next) {
-    res.render('bar', {
-        tagline: 'testing with some data for template bar',
-        tellme: 'but miami is awesome!'
-    });
-});
-
-// creating a page with YUI embeded
-app.get('/foo', YUI.expose(), function (req, res, next) {
-    res.render('foo', {
-        tagline: 'testing some data for template foo',
-        tellme: 'san francisco is nice!'
-    });
+app.get('/', YUI.expose(), function (req, res, next) {
+    // here is an example of how to compute custom urls for a set of css modules
+    // that should be included in the `head` instead of using them thru `Y.use()`
+    // Note: `@demo` is optional to specify the group, which comes from `package.json>name`
+    var links = req.app.yui.buildCSSUrls('cssbar@demo');
+    // passing the first url (there is a single module anyways) so we can
+    // use it in the templates
+    res.locals['computed-cssbar-url'] = links[0];
+    // rendering `templates/page.handlebars`
+    res.render('page');
 });
 
 // locator initialiation
@@ -40,11 +33,10 @@ new Locator({
     buildDirectory: 'build'
 })
     .plug(LocatorHandlebars.yui())
-    .plug(LocatorMicro.yui())
     .plug(app.yui.plugin({
         registerGroup: true,
         registerServerModules: true,
-        useServerModules: true
+        cssproc: true
     }))
     .parseBundle(__dirname, {}).then(function (have) {
 

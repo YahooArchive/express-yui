@@ -1,0 +1,14 @@
+{
+    "name": "demo",
+    "description": "How to build CSS Modules using express-yui.",
+    "version": "0.0.1",
+    "private": true,
+    "main": "app.js",
+    "devDependencies": {
+        "express": "*",
+        "express-yui": "*",
+        "locator": "~0.3.0",
+        "locator-handlebars": "*",
+        "yui": "~3.10.1"
+    }
+}
