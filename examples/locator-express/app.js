@@ -53,6 +53,7 @@ new Locator({
             console.log("Server listening on port 3000");
         });
 
-    }, function () {
-        console.log('error: ', arguments);
+    }, function (e) {
+        console.log(e);
+        console.log(e.stack);
     });
