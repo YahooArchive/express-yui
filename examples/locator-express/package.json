@@ -10,6 +10,6 @@
         "locator": "~0.3.0",
         "locator-handlebars": "*",
         "locator-micro": "*",
-        "yui": "~3.10.1"
+        "yui": "~3.11.0"
     }
 }

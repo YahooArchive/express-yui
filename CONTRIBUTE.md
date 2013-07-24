@@ -33,3 +33,29 @@ To generate the API docs under `apidocs/index.html`:
 To lint the app lib folder:
 
     npm run lint
+    
+Release checklist
+-----------------
+
+* verify that [HISTORY.md] is updated
+* verify that [README.md] is updated
+* bump the version in [package.json]
+* commit to master
+* push to npm using `npm publish`
+* create a [new release] entry including the tag for the new version
+
+If is also important to verify that whatever we pushed to npm is working as expected, to do that, do this:
+
+```
+cd examples/locator-express
+rm -rf build node_modules
+npm install
+node app.js
+```
+
+then navigate to [http://localhost:3000/foo](http://localhost:3000/foo) to do some sanity checks on the release.
+
+[HISTORY.md]: https://github.com/yahoo/express-yui/blob/master/HISTORY.md
+[README.md]: https://github.com/yahoo/express-yui/blob/master/README.md
+[package.json]: https://github.com/yahoo/express-yui/blob/master/package.json
+[new release]: https://github.com/yahoo/express-yui/releases/new
