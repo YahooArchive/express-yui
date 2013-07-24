@@ -861,30 +861,33 @@
                             "name": "quiet",
                             "description": "Optional run shifter in quiet mode.",
                             "type": "Object"
+                        },
+                        {
+                            "name": "cssproc",
+                            "description": "Optional flag to preprocess css to readjust urls for assets\n        to resolve with `base` for the corresponding group to make them work with combo.",
+                            "type": "Boolean"
+                        },
+                        {
+                            "name": "filter",
+                            "description": "optional regex or function to execute\n        for each `evt.files`. If no `filter` is supplied, all modified files will be\n        shifted. If the regex is provided, it will be tested against every\n        `evn.files`, testing the relative path to determine if the file should be\n        shifted or not. In a function if provided, the function will be called for\n        every `evt.files` with the following arguments:",
+                            "type": "RegExp|Function"
                         }
                     ]
                 },
                 {
-                    "name": "filter",
-                    "description": "optional regular express or function to execute\n        for each `evt.files`. If no `filter` is supplied, all modified files will be\n        shifted. If the regular express is provided, it will be tested against every\n        `evn.files`, testing the relative path to determine if the file should be\n        shifted or not. In a function if provided, the function will be called for\n        every `evt.files` with the following arguments:",
-                    "type": "RegExp|Function",
-                    "props": [
-                        {
-                            "name": "bundle",
-                            "description": "the current bundle to where the file belongs to",
-                            "type": "Object"
-                        },
-                        {
-                            "name": "relativePath",
-                            "description": "the relative path to the file from the bundle",
-                            "type": "Object"
-                        },
-                        {
-                            "name": "return",
-                            "description": "Return true to indicate that the\n        file should be shifted. Otherise the file will be skipped.",
-                            "type": "Boolean"
-                        }
-                    ]
+                    "name": "filter.bundle",
+                    "description": "the current bundle to where the file belongs to",
+                    "type": "Object"
+                },
+                {
+                    "name": "filter.relativePath",
+                    "description": "the relative path to the file from the bundle",
+                    "type": "Object"
+                },
+                {
+                    "name": "filter.return",
+                    "description": "Return true to indicate that the\n        file should be shifted. Otherise the file will be skipped.",
+                    "type": "Boolean"
                 }
             ],
             "return": {
@@ -897,7 +900,7 @@
         },
         {
             "file": "lib/loader.js",
-            "line": 314,
+            "line": 318,
             "description": "Analyze modified files and build.json files to infer the list of files that\nshould be shifted.",
             "itemtype": "method",
             "name": "_buildsInBundle",
@@ -905,9 +908,9 @@
             "tagname": "",
             "params": [
                 {
-                    "name": "bundleName",
-                    "description": "The bundle name to be registered.",
-                    "type": "String"
+                    "name": "bundle",
+                    "description": "the bundle to be analyzed",
+                    "type": "Object"
                 },
                 {
                     "name": "modifiedFiles",
@@ -922,6 +925,67 @@
             ],
             "return": {
                 "description": "The filesystem path for all files that should be shifted using shifter",
+                "type": "Array"
+            },
+            "class": "loader",
+            "module": "yui",
+            "submodule": "loader"
+        },
+        {
+            "file": "lib/loader.js",
+            "line": 391,
+            "description": "Set the proper shifter configuration for images in the css modules\nto be processed based on the group configuration.",
+            "itemtype": "method",
+            "name": "_cssprocInBundle",
+            "access": "protected",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "bundle",
+                    "description": "the bundle to be analyzed",
+                    "type": "Object"
+                },
+                {
+                    "name": "cssproc",
+                    "description": "Whether or not we should add cssproc to shifter arguments.",
+                    "type": "Boolean"
+                }
+            ],
+            "return": {
+                "description": "the arguments to be added to shifter or empty array",
+                "type": "Array"
+            },
+            "class": "loader",
+            "module": "yui",
+            "submodule": "loader"
+        },
+        {
+            "file": "lib/loader.js",
+            "line": 420,
+            "description": "Get the fullPath of all modified files that should be shifted.",
+            "itemtype": "method",
+            "name": "_filterFilesInBundle",
+            "access": "protected",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "bundle",
+                    "description": "the bundle to be analyzed",
+                    "type": "Object"
+                },
+                {
+                    "name": "the",
+                    "description": "original `evt.files` from locator plugin",
+                    "type": "Object"
+                },
+                {
+                    "name": "filter",
+                    "description": "Custom function to analyze each file",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "the list of files to be shifted or empty array",
                 "type": "Array"
             },
             "class": "loader",

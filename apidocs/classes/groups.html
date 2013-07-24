@@ -170,6 +170,7 @@
 <div class="box intro">
     <p>The <code>yui.groups</code> extension provides a set of utilities
 analyze meta modules and group metada.</p>
+
 </div>
 
 
@@ -314,6 +315,7 @@ analyze meta modules and group metada.</p>
     <div class="description">
         <p>Given a path to a meta YUI module, parse the module name and
 specific group app module configuration.</p>
+
     </div>
 
     
@@ -332,6 +334,7 @@ specific group app module configuration.</p>
 
                     <div class="param-description">
                         <p>absolute path to the meta module</p>
+
                     </div>
 
                     
@@ -349,6 +352,7 @@ specific group app module configuration.</p>
                         <p>a sandbox instance in which to run the YUI
                         module. if not provided, a default one will
                         be used.</p>
+
                     </div>
 
                     
@@ -367,7 +371,8 @@ specific group app module configuration.</p>
                     
                         <span class="type">Object</span>:
                     
-                    configuration with meta details
+                    <p>configuration with meta details</p>
+
                 
             </div>
         </div>
@@ -427,9 +432,7 @@ specific group app module configuration.</p>
 
     <div class="description">
         <p>Creates a new sandbox instance in which to run the YUI module.</p>
-
 <p>Default sandbox supports:</p>
-
 <ul>
   <li>Y.config</li>
   <li>Y.applyConfig</li>
@@ -450,7 +453,8 @@ specific group app module configuration.</p>
                     
                         <span class="type">Object</span>:
                     
-                    the mock to extract the metas from the meta module
+                    <p>the mock to extract the metas from the meta module</p>
+
                 
             </div>
         </div>
@@ -524,12 +528,11 @@ the details about the meta module in the YUI registry plus all the
 info about the groups that are part of the meta module, along with
 all the modules per group. This method is used by <code>origin</code> to
 analyze each group before serving them.</p>
-
 <pre class="code prettyprint"><code>var path,
     config;
-path = __dirname + '/assets/js/metas.js';
-config = app.yui.groups.getGroupConfig(path);
-</code></pre>
+path = __dirname + &#39;/assets/js/metas.js&#39;;
+config = app.yui.groups.getGroupConfig(path);</code></pre>
+
     </div>
 
     
@@ -548,6 +551,7 @@ config = app.yui.groups.getGroupConfig(path);
 
                     <div class="param-description">
                         <p>the filesystem path to the meta module</p>
+
                     </div>
 
                     
@@ -566,7 +570,8 @@ config = app.yui.groups.getGroupConfig(path);
                     
                         <span class="type">Object</span>:
                     
-                    modules the modules meta for the group
+                    <p>modules the modules meta for the group</p>
+
                 
             </div>
         </div>
@@ -635,14 +640,13 @@ config = app.yui.groups.getGroupConfig(path);
     <div class="description">
         <p>Boots the application, rehydrate the app state and calls back to notify the
 <code>ready</code> state of the app.</p>
-
 <pre class="code prettyprint"><code>&lt;script&gt;{{{state}}}&lt;/script&gt;
 &lt;script&gt;
 app.yui.ready(function () {
     // do something!
 });
-&lt;/script&gt;
-</code></pre>
+&lt;/script&gt;</code></pre>
+
     </div>
 
     
@@ -661,6 +665,7 @@ app.yui.ready(function () {
 
                     <div class="param-description">
                         <p>when the app is ready</p>
+
                     </div>
 
                     
@@ -727,17 +732,15 @@ app.yui.ready(function () {
 <code>modules</code> into it. This is equivalent to <code>YUI().use()</code> after getting the seed
 ready. This method is a bootstrap implementation for the library, and the way
 you use this in your templates, is by doing this:</p>
-
 <pre class="code prettyprint"><code>&lt;script&gt;{{{state}}}&lt;/script&gt;
 &lt;script&gt;
-app.yui.use('foo', 'bar', function (Y) {
+app.yui.use(&#39;foo&#39;, &#39;bar&#39;, function (Y) {
     // do something!
 });
-&lt;/script&gt;
-</code></pre>
-
+&lt;/script&gt;</code></pre>
 <p>Where <code>state</code> defines the state of the express app, and <code>app.yui</code> defines
 the helpers that <code>express-yui</code> brings into the client side.</p>
+
     </div>
 
     

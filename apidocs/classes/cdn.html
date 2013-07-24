@@ -165,18 +165,16 @@
     <p>The <code>yui.cdn</code> extension that provides some basic configuration
 that will facilitate the configuration of YUI to be served from
 CDN.</p>
-
-<p>When the <code>"cdn"</code> sub-module is used by <code>yui</code> middleware, it
+<p>When the <code>&quot;cdn&quot;</code> sub-module is used by <code>yui</code> middleware, it
 will allow you to explicitly ask for booting YUI from YUI CDN
 in the client runtime. In the following example you can see how
 to force yui to load from CDN. This is the default behavior, but
 in some cases, when defining a custom base and root for all groups
 you might want to set YUI straight to the original YUI CDN.</p>
-
 <pre class="code prettyprint"><code>// Creates a new express app.
 var app = express();
-app.yui.setCoreFromCDN();
-</code></pre>
+app.yui.setCoreFromCDN();</code></pre>
+
 </div>
 
 
@@ -285,9 +283,8 @@ app.yui.setCoreFromCDN();
     <div class="description">
         <p>Set up a default group in loader that represents the
 core yui modules to be loaded from YUI CDN.</p>
+<pre class="code prettyprint"><code>app.yui.setCoreFromCDN();</code></pre>
 
-<pre class="code prettyprint"><code>app.yui.setCoreFromCDN();
-</code></pre>
     </div>
 
     
@@ -308,6 +305,7 @@ core yui modules to be loaded from YUI CDN.</p>
                         <p>Optional loader configuration
 objects that, if passed, will be mix with the default
 configuration for yui CDN.</p>
+
                     </div>
 
                     

@@ -176,18 +176,13 @@
 <div class="box intro">
     <p>The <code>express-yui.shifter</code> extension exposes a locator plugin to build yui modules
 from *.js or build.json files.</p>
-
 <p>Here is an example:</p>
-
-<pre class="code prettyprint"><code>var plugin = app.yui.locatorShifter({});
-</code></pre>
-
+<pre class="code prettyprint"><code>var plugin = app.yui.locatorShifter({});</code></pre>
 <p>You can also specify a custom yui build directory, by doing:</p>
-
 <pre class="code prettyprint"><code>var plugin = app.yui.locatorShifter({
-    yuiBuildDirectory: '/path/to/folder'
-});
-</code></pre>
+    yuiBuildDirectory: &#39;/path/to/folder&#39;
+});</code></pre>
+
 </div>
 
 
@@ -237,6 +232,20 @@ from *.js or build.json files.</p>
                         
                             <li class="index-item method protected inherited">
                                 <a href="#method__clearCached">_clearCached</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected inherited">
+                                <a href="#method__cssprocInBundle">_cssprocInBundle</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected inherited">
+                                <a href="#method__filterFilesInBundle">_filterFilesInBundle</a>
 
                                 
                                 
@@ -295,7 +304,7 @@ from *.js or build.json files.</p>
             
                 <li class="arg">
                     
-                        <code>bundleName</code>
+                        <code>bundle</code>
                     
                 </li>
             
@@ -343,7 +352,7 @@ from *.js or build.json files.</p>
             
         
         
-        <a href="../files/lib_loader.js.html#l314"><code>lib&#x2F;loader.js:314</code></a>
+        <a href="../files/lib_loader.js.html#l318"><code>lib&#x2F;loader.js:318</code></a>
         
         </p>
 
@@ -356,6 +365,7 @@ from *.js or build.json files.</p>
     <div class="description">
         <p>Analyze modified files and build.json files to infer the list of files that
 should be shifted.</p>
+
     </div>
 
     
@@ -366,14 +376,15 @@ should be shifted.</p>
             
                 <li class="param">
                     
-                        <code class="param-name">bundleName</code>
-                        <span class="type">String</span>
+                        <code class="param-name">bundle</code>
+                        <span class="type">Object</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>The bundle name to be registered.</p>
+                        <p>the bundle to be analyzed</p>
+
                     </div>
 
                     
@@ -389,6 +400,7 @@ should be shifted.</p>
 
                     <div class="param-description">
                         <p>The filesystem path for all modified files in bundle.</p>
+
                     </div>
 
                     
@@ -404,6 +416,7 @@ should be shifted.</p>
 
                     <div class="param-description">
                         <p>The filesystem path for all json files in bundle.</p>
+
                     </div>
 
                     
@@ -422,7 +435,8 @@ should be shifted.</p>
                     
                         <span class="type">Array</span>:
                     
-                    The filesystem path for all files that should be shifted using shifter
+                    <p>The filesystem path for all files that should be shifted using shifter</p>
+
                 
             </div>
         </div>
@@ -492,6 +506,7 @@ should be shifted.</p>
 
     <div class="description">
         <p>Analyze a build.json file to extract all the important metadata associted with it.</p>
+
     </div>
 
     
@@ -510,6 +525,7 @@ should be shifted.</p>
 
                     <div class="param-description">
                         <p>The filesystem path for the build.json file to be analyzed</p>
+
                     </div>
 
                     
@@ -528,7 +544,8 @@ should be shifted.</p>
                     
                         <span class="type">Object</span>:
                     
-                    The parsed and augmented content of the build.json file
+                    <p>The parsed and augmented content of the build.json file</p>
+
                 
             </div>
         </div>
@@ -599,6 +616,7 @@ should be shifted.</p>
     <div class="description">
         <p>Analyze a javascript file, if it is a yui module, it extracts all the important metadata
 associted with it.</p>
+
     </div>
 
     
@@ -617,6 +635,7 @@ associted with it.</p>
 
                     <div class="param-description">
                         <p>The filesystem path for the yui module to be analyzed</p>
+
                     </div>
 
                     
@@ -635,7 +654,8 @@ associted with it.</p>
                     
                         <span class="type">Object</span>:
                     
-                    The parsed and augmented metadata from the yui module
+                    <p>The parsed and augmented metadata from the yui module</p>
+
                 
             </div>
         </div>
@@ -707,10 +727,10 @@ associted with it.</p>
 
     <div class="description">
         <p>Removes the cache entry for a particular file.</p>
-
 <p>Why? This method is just an artifact to invalidate the cache entry created by
 <code>_isCached</code> when a shifter error is detected because the cache entry is premature
 created before spawing to shifter.</p>
+
     </div>
 
     
@@ -729,6 +749,7 @@ created before spawing to shifter.</p>
 
                     <div class="param-description">
                         <p>The filesystem path for the file to be cached</p>
+
                     </div>
 
                     
@@ -744,6 +765,7 @@ created before spawing to shifter.</p>
 
                     <div class="param-description">
                         <p>The filesystem path for the build folder</p>
+
                     </div>
 
                     
@@ -753,6 +775,285 @@ created before spawing to shifter.</p>
         </div>
     
 
+    
+
+    
+</div>
+
+                
+                    <div id="method__cssprocInBundle" class="method item protected inherited">
+    <h3 class="name"><code>_cssprocInBundle</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>bundle</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>cssproc</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Array</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="../classes/Loader.html#method__cssprocInBundle">loader</a>:
+            
+        
+        
+        <a href="../files/lib_loader.js.html#l391"><code>lib&#x2F;loader.js:391</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Set the proper shifter configuration for images in the css modules
+to be processed based on the group configuration.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">bundle</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>the bundle to be analyzed</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">cssproc</code>
+                        <span class="type">Boolean</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Whether or not we should add cssproc to shifter arguments.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Array</span>:
+                    
+                    <p>the arguments to be added to shifter or empty array</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method__filterFilesInBundle" class="method item protected inherited">
+    <h3 class="name"><code>_filterFilesInBundle</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>bundle</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>the</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>filter</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Array</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="../classes/Loader.html#method__filterFilesInBundle">loader</a>:
+            
+        
+        
+        <a href="../files/lib_loader.js.html#l420"><code>lib&#x2F;loader.js:420</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Get the fullPath of all modified files that should be shifted.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">bundle</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>the bundle to be analyzed</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">the</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>original <code>evt.files</code> from locator plugin</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">filter</code>
+                        <span class="type">Function</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Custom function to analyze each file</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Array</span>:
+                    
+                    <p>the list of files to be shifted or empty array</p>
+
+                
+            </div>
+        </div>
     
 
     
@@ -827,15 +1128,15 @@ created before spawing to shifter.</p>
         <p>Verifies if a source file was already processed by analyzing its content against an
 internal cache mechanism. JSON files (*.json) are an exception, and they will not be
 cached since they might includes other files that might change and affects the result
-of the build so we can't rely on the source file alone. If the file is not in cache,
+of the build so we can&#39;t rely on the source file alone. If the file is not in cache,
 it will be included automatically.</p>
-
 <p>Why? This method is just an artifact to avoid spawning a process to execute shifter, which
 is very expensive. It is also the main artifact to avoid shifting files when in production,
 if the build process includes the build folder, specially because manhattan does not
 support spawn. Finally, it is just a noop artifact to avoid calling shifter, it does not
 need to cache the response of the shifter process, just opt out for the next call to shift
 the same file with the same content.</p>
+
     </div>
 
     
@@ -854,6 +1155,7 @@ the same file with the same content.</p>
 
                     <div class="param-description">
                         <p>The filesystem path for the file to be cached</p>
+
                     </div>
 
                     
@@ -869,6 +1171,7 @@ the same file with the same content.</p>
 
                     <div class="param-description">
                         <p>The filesystem path for the build folder</p>
+
                     </div>
 
                     
@@ -887,7 +1190,8 @@ the same file with the same content.</p>
                     
                         <span class="type">Boolean</span>:
                     
-                    <code>true</code> if the file and its content matches the internal cache, otherwise <code>false</code>.
+                    <p><code>true</code> if the file and its content matches the internal cache, otherwise <code>false</code>.</p>
+
                 
             </div>
         </div>
@@ -912,7 +1216,19 @@ the same file with the same content.</p>
             
                 <li class="arg">
                     
-                        <code>filter</code>
+                        <code>filter.bundle</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>filter.relativePath</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>filter.return</code>
                     
                 </li>
             
@@ -961,6 +1277,7 @@ the same file with the same content.</p>
     <div class="description">
         <p>Creates a locator plugin that can analyze locator bundles, build modules
 and build loader metadata for all yui modules within the bundle.</p>
+
     </div>
 
     
@@ -981,6 +1298,7 @@ and build loader metadata for all yui modules within the bundle.</p>
                         <p>Optional plugin configuration
 objects that, if passed, will be mix with the default
 configuration of the plugin.</p>
+
                     </div>
 
                     
@@ -996,6 +1314,7 @@ configuration of the plugin.</p>
                                     <p>Whether or not the bundle should be 
         registered as a loader group to be used from the client and server.
         Default to false.</p>
+
                                 </div>
 
                                 
@@ -1011,6 +1330,7 @@ configuration of the plugin.</p>
                                     <p>Whether or not server
         modules should be provisioned to be loaded thru <code>app.yui.use()</code> on the
         server side. Default to false.</p>
+
                                 </div>
 
                                 
@@ -1025,6 +1345,7 @@ configuration of the plugin.</p>
                                 <div class="param-description">
                                     <p>Whether or not server modules
         should be automatically used thru <code>Y.use()</code> whenever <code>app.yui.use()</code> is called.</p>
+
                                 </div>
 
                                 
@@ -1039,6 +1360,7 @@ configuration of the plugin.</p>
                                 <div class="param-description">
                                     <p>Whether or not the shifting process should be cached
         to speed up the build process. By default, it is true.</p>
+
                                 </div>
 
                                 
@@ -1053,6 +1375,7 @@ configuration of the plugin.</p>
                                 <div class="param-description">
                                     <p>Optional custom filesystem path for the output
         folder of the shifter. Default to an internal computation based on <code>locator.buildDir</code>.</p>
+
                                 </div>
 
                                 
@@ -1067,6 +1390,7 @@ configuration of the plugin.</p>
                                 <div class="param-description">
                                     <p>Optional custom shifter cli arguments. This will overrule
         custom <code>options</code> that are translated into shifter arguments.</p>
+
                                 </div>
 
                                 
@@ -1080,6 +1404,7 @@ configuration of the plugin.</p>
 
                                 <div class="param-description">
                                     <p>Optional enable linting in shifter.</p>
+
                                 </div>
 
                                 
@@ -1093,6 +1418,7 @@ configuration of the plugin.</p>
 
                                 <div class="param-description">
                                     <p>Optional generate <code>-coverage.js</code> version of modules in shifter.</p>
+
                                 </div>
 
                                 
@@ -1106,6 +1432,7 @@ configuration of the plugin.</p>
 
                                 <div class="param-description">
                                     <p>Optional run shifter in silent mode.</p>
+
                                 </div>
 
                                 
@@ -1119,6 +1446,41 @@ configuration of the plugin.</p>
 
                                 <div class="param-description">
                                     <p>Optional run shifter in quiet mode.</p>
+
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">cssproc</code>
+                                    <span class="type">Boolean</span>
+                                
+
+                                <div class="param-description">
+                                    <p>Optional flag to preprocess css to readjust urls for assets
+        to resolve with <code>base</code> for the corresponding group to make them work with combo.</p>
+
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">filter</code>
+                                    <span class="type">RegExp | Function</span>
+                                
+
+                                <div class="param-description">
+                                    <p>optional regex or function to execute
+        for each <code>evt.files</code>. If no <code>filter</code> is supplied, all modified files will be
+        shifted. If the regex is provided, it will be tested against every
+        <code>evn.files</code>, testing the relative path to determine if the file should be
+        shifted or not. In a function if provided, the function will be called for
+        every <code>evt.files</code> with the following arguments:</p>
+
                                 </div>
 
                                 
@@ -1130,65 +1492,50 @@ configuration of the plugin.</p>
             
                 <li class="param">
                     
-                        <code class="param-name">filter</code>
-                        <span class="type">RegExp | Function</span>
+                        <code class="param-name">filter.bundle</code>
+                        <span class="type">Object</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>optional regular express or function to execute
-        for each <code>evt.files</code>. If no <code>filter</code> is supplied, all modified files will be
-        shifted. If the regular express is provided, it will be tested against every
-        <code>evn.files</code>, testing the relative path to determine if the file should be
-        shifted or not. In a function if provided, the function will be called for
-        every <code>evt.files</code> with the following arguments:</p>
+                        <p>the current bundle to where the file belongs to</p>
+
                     </div>
 
                     
-                        <ul class="params-list">
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">bundle</code>
-                                    <span class="type">Object</span>
-                                
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">filter.relativePath</code>
+                        <span class="type">Object</span>
+                    
 
-                                <div class="param-description">
-                                    <p>the current bundle to where the file belongs to</p>
-                                </div>
+                    
 
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">relativePath</code>
-                                    <span class="type">Object</span>
-                                
+                    <div class="param-description">
+                        <p>the relative path to the file from the bundle</p>
 
-                                <div class="param-description">
-                                    <p>the relative path to the file from the bundle</p>
-                                </div>
+                    </div>
 
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">return</code>
-                                    <span class="type">Boolean</span>
-                                
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">filter.return</code>
+                        <span class="type">Boolean</span>
+                    
 
-                                <div class="param-description">
-                                    <p>Return true to indicate that the
+                    
+
+                    <div class="param-description">
+                        <p>Return true to indicate that the
         file should be shifted. Otherise the file will be skipped.</p>
-                                </div>
 
-                                
-                            </li>
-                            
-                        </ul>
+                    </div>
+
                     
                 </li>
             
@@ -1205,7 +1552,8 @@ configuration of the plugin.</p>
                     
                         <span class="type">Object</span>:
                     
-                    locator plugin
+                    <p>locator plugin</p>
+
                 
             </div>
         </div>
@@ -1281,6 +1629,7 @@ configuration of the plugin.</p>
     <div class="description">
         <p>Registers information about modules that will be used
 to generate the bundle meta.</p>
+
     </div>
 
     
@@ -1299,6 +1648,7 @@ to generate the bundle meta.</p>
 
                     <div class="param-description">
                         <p>The bundle name to be registered.</p>
+
                     </div>
 
                     
@@ -1314,6 +1664,7 @@ to generate the bundle meta.</p>
 
                     <div class="param-description">
                         <p>The cache key for the file that generates mod.</p>
+
                     </div>
 
                     
@@ -1329,6 +1680,7 @@ to generate the bundle meta.</p>
 
                     <div class="param-description">
                         <p>The module information generated by the shifter module.</p>
+
                     </div>
 
                     
@@ -1412,6 +1764,7 @@ to generate the bundle meta.</p>
 
     <div class="description">
         <p>Shift yui modules using shifter cli.</p>
+
     </div>
 
     
@@ -1430,6 +1783,7 @@ to generate the bundle meta.</p>
 
                     <div class="param-description">
                         <p>filesystem paths for all files to be shifted</p>
+
                     </div>
 
                     
@@ -1445,6 +1799,7 @@ to generate the bundle meta.</p>
 
                     <div class="param-description">
                         <p>configuration</p>
+
                     </div>
 
                     
@@ -1458,6 +1813,7 @@ to generate the bundle meta.</p>
 
                                 <div class="param-description">
                                     <p>custom path for the output of the shifter</p>
+
                                 </div>
 
                                 
@@ -1474,6 +1830,7 @@ to generate the bundle meta.</p>
         the shifting process. If true, it will create the folder <code>.cache</code> and generate
         some hash to prevent shifting the same *.js files if there is not change in
         the source.</p>
+
                                 </div>
 
                                 
@@ -1487,6 +1844,7 @@ to generate the bundle meta.</p>
 
                                 <div class="param-description">
                                     <p>shifter cli build arguments, it defaults to <code>[]</code></p>
+
                                 </div>
 
                                 
@@ -1506,6 +1864,7 @@ to generate the bundle meta.</p>
 
                     <div class="param-description">
                         <p>the callback method to signal the end of the operation</p>
+
                     </div>
 
                     

@@ -167,32 +167,26 @@ to configure and construct the yui seed object which
 contains the urls to be used to fetch the initial pieces
 of the yui library, plus any app specific modules
 before calling <code>YUI().use()</code> in the client runtime.</p>
-
-<p>When the <code>"seed"</code> sub-module is used by <code>yui</code> middleware, it
+<p>When the <code>&quot;seed&quot;</code> sub-module is used by <code>yui</code> middleware, it
 will automatically mix itself into <code>app.yui.expose()</code>, and it
 exposes an array of object with the information to build
 the script tag or tags that forms the seed:</p>
-
 <p>The following is an example of how these features can be used:</p>
-
 <pre class="code prettyprint"><code>// Creates a new express app.
 var app = express();
 // adjust the seed modules
-app.yui.seed(['yui-base', 'loader']);
+app.yui.seed([&#39;yui-base&#39;, &#39;loader&#39;]);
 
 // Call expose middleware when a route match.
-app.get('/index.html', app.yui.expose(), anotherRoute);
-</code></pre>
-
+app.get(&#39;/index.html&#39;, app.yui.expose(), anotherRoute);</code></pre>
 <p>In the example above, the array of objects with the seed information
 will be exposed thru <code>res.locals.yui_seed</code>, which means you
 can use it in your templates by doing something like this if
 using handlebars templates:</p>
-
 <pre class="code prettyprint"><code>{{#yui_seed}}
-&lt;script src="{{{src}}}"&gt;&lt;/script&gt;
-{{/yui_seed}}
-</code></pre>
+&lt;script src=&quot;{{{src}}}&quot;&gt;&lt;/script&gt;
+{{/yui_seed}}</code></pre>
+
 </div>
 
 
@@ -375,6 +369,7 @@ using handlebars templates:</p>
 which is used by loader to identify the pieces that are
 already part of the seed and should be attached to Y
 automatically.</p>
+
     </div>
 
     
@@ -393,6 +388,7 @@ automatically.</p>
 
                     <div class="param-description">
                         <p>the yui module name</p>
+
                     </div>
 
                     
@@ -408,6 +404,7 @@ automatically.</p>
 
                     <div class="param-description">
                         <p>the group name for the module</p>
+
                     </div>
 
                     
@@ -483,16 +480,13 @@ automatically.</p>
 
     <div class="description">
         <p>Build a list of urls to load a list of css modules.</p>
-
-<pre class="code prettyprint"><code>var links = app.yui.buildCSSUrls('cssbase', 'cssflickr@hermes');
-</code></pre>
-
+<pre class="code prettyprint"><code>var links = app.yui.buildCSSUrls(&#39;cssbase&#39;, &#39;cssflickr@hermes&#39;);</code></pre>
 <p>As a result, <code>links</code> will be an array with the urls that
 you can use in your templates to provision styles.</p>
-
 <p>Modules as <code>cssflickr@hermes</code> denotate a module from a particular group,
 as in <code>&lt;module-name&gt;@&lt;group-name&gt;</code>. Modules without the group denotation
 will be assumed as core modules from yui.</p>
+
     </div>
 
     
@@ -513,6 +507,7 @@ will be assumed as core modules from yui.</p>
 
                     <div class="param-description">
                         <p>One or more module name (and optional @<group-name>)</p>
+
                     </div>
 
                     
@@ -531,7 +526,8 @@ will be assumed as core modules from yui.</p>
                     
                         <span class="type">Array</span>:
                     
-                    the <code>href</code> url for each link tag to be inserted in the header of the page
+                    <p>the <code>href</code> url for each link tag to be inserted in the header of the page</p>
+
                 
             </div>
         </div>
@@ -601,16 +597,13 @@ will be assumed as core modules from yui.</p>
 
     <div class="description">
         <p>Build a list of urls to load a list of modules.</p>
-
-<pre class="code prettyprint"><code>var scripts = app.yui.buildJSUrls('node', 'photos@hermes');
-</code></pre>
-
+<pre class="code prettyprint"><code>var scripts = app.yui.buildJSUrls(&#39;node&#39;, &#39;photos@hermes&#39;);</code></pre>
 <p>As a result, <code>scripts</code> will be an array with one or more urls that
 you can use in your templates to insert script tags.</p>
-
 <p>Modules as <code>photos@hermes</code> denotate a module from a particular group,
 as in <code>&lt;module-name&gt;@&lt;group-name&gt;</code>. Modules without the group denotation
 will be assumed as core modules from yui.</p>
+
     </div>
 
     
@@ -631,6 +624,7 @@ will be assumed as core modules from yui.</p>
 
                     <div class="param-description">
                         <p>One or more module name (and optional @<group-name>)</p>
+
                     </div>
 
                     
@@ -649,7 +643,8 @@ will be assumed as core modules from yui.</p>
                     
                         <span class="type">Array</span>:
                     
-                    the <code>src</code> url for each script tag that forms the seed
+                    <p>the <code>src</code> url for each script tag that forms the seed</p>
+
                 
             </div>
         </div>
@@ -708,6 +703,7 @@ will be assumed as core modules from yui.</p>
     <div class="description">
         <p>Gets the default list of module names that should
 be part of the seed files.</p>
+
     </div>
 
     
@@ -721,7 +717,8 @@ be part of the seed files.</p>
                     
                         <span class="type">Array</span>:
                     
-                    list of modules in seed
+                    <p>list of modules in seed</p>
+
                 
             </div>
         </div>
@@ -781,14 +778,12 @@ be part of the seed files.</p>
 
     <div class="description">
         <p>Build the list of urls to load the seed files for the app.</p>
-
-<pre class="code prettyprint"><code>var scripts = app.yui.getSeedUrls();
-</code></pre>
-
+<pre class="code prettyprint"><code>var scripts = app.yui.getSeedUrls();</code></pre>
 <p>As a result, <code>scripts</code> will be an array with one or more urls that
 you can use in your templates to provision YUI. Keep in mind that if
-use <code>expressYUI.expose()</code> middleware, you don't need to provision the
+use <code>expressYUI.expose()</code> middleware, you don&#39;t need to provision the
 seed, it will be provisioned automatically as part of the <code>state</code> object.</p>
+
     </div>
 
     
@@ -802,7 +797,8 @@ seed, it will be provisioned automatically as part of the <code>state</code> obj
                     
                         <span class="type">Array</span>:
                     
-                    the <code>src</code> url for each script tag that forms the seed
+                    <p>the <code>src</code> url for each script tag that forms the seed</p>
+
                 
             </div>
         </div>
@@ -876,9 +872,8 @@ seed, it will be provisioned automatically as part of the <code>state</code> obj
         <p>Specify a list of modules to use as seed. This
 method extends the yui static configuration,
 specifically setting the <code>app.yui.config().seed</code> value.</p>
+<pre class="code prettyprint"><code>app.yui.seed([&quot;yui-base&quot;, &quot;loader&quot;]);</code></pre>
 
-<pre class="code prettyprint"><code>app.yui.seed(["yui-base", "loader"]);
-</code></pre>
     </div>
 
     
@@ -897,6 +892,7 @@ specifically setting the <code>app.yui.config().seed</code> value.</p>
 
                     <div class="param-description">
                         <p>list of modules to use</p>
+
                     </div>
 
                     
@@ -915,7 +911,8 @@ specifically setting the <code>app.yui.config().seed</code> value.</p>
                     
                         <span class="type">Function</span>:
                     
-                    express middleware
+                    <p>express middleware</p>
+
                 
             </div>
         </div>
@@ -967,6 +964,7 @@ specifically setting the <code>app.yui.config().seed</code> value.</p>
 
     <div class="description">
         <p>The default mapping for suffix based on the config <code>filter</code> value for css modules.</p>
+
     </div>
 
     
@@ -1011,6 +1009,7 @@ specifically setting the <code>app.yui.config().seed</code> value.</p>
 
     <div class="description">
         <p>The default filter suffix for yui modules urls.</p>
+
     </div>
 
     
@@ -1055,6 +1054,7 @@ specifically setting the <code>app.yui.config().seed</code> value.</p>
 
     <div class="description">
         <p>The default mapping for suffix based on the config <code>filter</code> value for js modules.</p>
+
     </div>
 
     

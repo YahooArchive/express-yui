@@ -171,11 +171,10 @@
     <p>The <code>express-yui</code> exports few middleware that provide some basic
 features to attach information into the <code>res.locals</code> object
 that could be used to boot <code>YUI</code> in the client runtime.</p>
-
 <pre class="code prettyprint"><code>var app = express();
 app.yui.applyConfig({ fetchCSS: false });
-app.use(yui.expose());
-</code></pre>
+app.use(yui.expose());</code></pre>
+
 </div>
 
 
@@ -299,6 +298,7 @@ app.use(yui.expose());
 all of them will be prefixed with <code>yui_</code> to avoid collitions.
 E.g: <code>res.locals.yui_seed</code> and <code>res.locals.yui_config</code>.
 Each of these structures could be string, array or object.</p>
+
     </div>
 
     
@@ -312,7 +312,8 @@ Each of these structures could be string, array or object.</p>
                     
                         <span class="type">Function</span>:
                     
-                    express middleware collection
+                    <p>express middleware collection</p>
+
                 
             </div>
         </div>
@@ -375,6 +376,7 @@ Each of these structures could be string, array or object.</p>
 configuration computed based on all the calls to <code>app.yui.*</code>
 methods. This middleware will be invoked by <code>express-yui.expose</code> middleware
 automatically, which means you should not call it directly.</p>
+
     </div>
 
     
@@ -388,7 +390,8 @@ automatically, which means you should not call it directly.</p>
                     
                         <span class="type">Function</span>:
                     
-                    express middleware
+                    <p>express middleware</p>
+
                 
             </div>
         </div>
@@ -450,24 +453,18 @@ automatically, which means you should not call it directly.</p>
         <p>Expose the seed information to the client.
 Usually, <code>yui.expose()</code> will take care of calling
 <code>yui.exposeSeed()</code>, although you can do it directly.</p>
-
 <p>This method will expose an array through
 <code>res.locals.yui_seed</code> with the following format:</p>
-
 <pre class="code prettyprint"><code>[
-    {src: "path/to/yui.js"},
-    {src: "path/to/another.js"}
-]
-</code></pre>
-
+    {src: &quot;path/to/yui.js&quot;},
+    {src: &quot;path/to/another.js&quot;}
+]</code></pre>
 <p>In your template (assuming using handlebars):</p>
-
 <pre class="code prettyprint"><code>{{#yui_seed}}
-&amp;lt;script src="{{{src}}}"&amp;gt;&amp;lt;/script&amp;gt;
-{{/yui_seed}}
-</code></pre>
-
+&amp;lt;script src=&quot;{{{src}}}&quot;&amp;gt;&amp;lt;/script&amp;gt;
+{{/yui_seed}}</code></pre>
 <p>Adjust the format if using a different template engine.</p>
+
     </div>
 
     
@@ -481,7 +478,8 @@ Usually, <code>yui.expose()</code> will take care of calling
                     
                         <span class="type">Function</span>:
                     
-                    express middleware
+                    <p>express middleware</p>
+
                 
             </div>
         </div>
@@ -552,9 +550,8 @@ Usually, <code>yui.expose()</code> will take care of calling
     <div class="description">
         <p>Serves YUI Modules as static assets. All registered groups and core will be
 served from app origin.</p>
+<pre class="code prettyprint"><code>app.use(yui.static());</code></pre>
 
-<pre class="code prettyprint"><code>app.use(yui.static());
-</code></pre>
     </div>
 
     
@@ -573,6 +570,7 @@ served from app origin.</p>
 
                     <div class="param-description">
                         <p>express static handler options</p>
+
                     </div>
 
                     
@@ -591,7 +589,8 @@ served from app origin.</p>
                     
                         <span class="type">Function</span>:
                     
-                    express middleware
+                    <p>express middleware</p>
+
                 
             </div>
         </div>
