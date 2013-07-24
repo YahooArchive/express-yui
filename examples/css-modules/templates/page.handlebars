@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+
+    <title>How to build CSS Modules using `express-yui`</title>
+    <link type="text/css" rel="stylesheet" href="{{computed-cssbar-url}}">
+
+</head>
+<body>
+
+    <h1>How to build CSS Modules using `express-yui`</h1>
+
+    <div id="content">
+        Loading...
+    </div>
+
+    <script>{{{state}}}</script>
+    <script>
+    app.yui.use('cssfoo', 'node', function (Y) {
+        Y.one('#content').setContent('CSS Module `cssfoo` was loaded');
+    });
+    </script>
+</body>
+</html>
