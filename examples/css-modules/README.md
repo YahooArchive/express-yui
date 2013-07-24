@@ -3,7 +3,7 @@ What is this example?
 
 This examples demonstrate how to use `express-yui` with `locator` in an express application to manage css in a form of yui css modules.
 
-It also show how to use assets in those css files that will be compiled and will be available thru a combo url, in which case the path to the assets has to be absolute.
+It also shows how to use assets in those css files that will be compiled and will be available thru a combo url, in which case the path to the assets has to be absolute.
 
 All this is possible because `express-yui` uses `shifter`, which uses `cssproc` to pre-process those css modules to correct any url for any asset within the css rules.
 
