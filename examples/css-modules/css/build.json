@@ -1,0 +1,21 @@
+{
+    "name": "styles",
+    "builds": {
+        "cssfoo": {
+            "cssfiles": [
+                "foo.css"
+            ],
+            "config": {
+                "type": "css"
+            }
+        },
+        "cssbar": {
+            "cssfiles": [
+                "bar.css"
+            ],
+            "config": {
+                "type": "css"
+            }
+        }
+    }
+}
