@@ -13,7 +13,7 @@
     },
     "dependencies": {
         "express-combo": "0.1.x",
-        "express-state": "0.0.x",
+        "express-state": "~0.0.4",
         "mkdirp": "*",
         "shifter": "*",
         "win-spawn": "*",
