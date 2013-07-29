@@ -14,6 +14,7 @@ var YUITest = require('yuitest'),
     mockery = require('mockery'),
     mockYUI,
     mockExpress,
+    mockExpressState,
     suite,
     ExpressYUI,
     configFn;
@@ -31,6 +32,9 @@ mockExpress = {
         defaultConfiguration: function () {}
     }
 };
+mockExpressState = {
+    augment: function () {}
+};
 
 suite = new YUITest.TestSuite("yui-test suite");
 
@@ -41,6 +45,7 @@ suite.add(new YUITest.TestCase({
         mockery.registerMock('yui', mockYUI);
         mockery.registerMock('yui/debug', mockYUI);
         mockery.registerMock('express', mockExpress);
+        mockery.registerMock('express-state', mockExpressState);
         mockery.enable({
             warnOnReplace: false,
             warnOnUnregistered: false
@@ -52,6 +57,7 @@ suite.add(new YUITest.TestCase({
         mockery.deregisterMock('yui');
         mockery.deregisterMock('yui/debug');
         mockery.deregisterMock('express');
+        mockery.deregisterMock('express-state');
         mockery.disable();
     },
 
@@ -116,6 +122,36 @@ suite.add(new YUITest.TestCase({
         A.areSame(obj, obj.applyConfig({foo: 'bar'}), 'applyConfig should be chainable');
 
         A.areEqual('bar', obj.config().foo, 'applyConfig should set config.foo');
+    },
+
+    "test extend": function () {
+        var exp, result;
+        // empty app
+        exp = { application: {} };
+        result = ExpressYUI.extend(exp);
+        A.isFunction(exp.application.defaultConfiguration, 'express app was not extended correctly');
+        A.areSame(result, exp, 'extend shoud return the express function');
+
+        // already augmented app
+        exp = { application: { defaultConfiguration: 1 } };
+        result = ExpressYUI.extend(exp);
+        A.isFunction(exp.application.defaultConfiguration, 'original express.application.defaultConfiguration should be replaced with the new method');
+        A.areSame(result, exp, 'extend shoud return the express function');
+    },
+
+    "test augment": function () {
+        var app, result;
+        // empty app
+        app = {};
+        result = ExpressYUI.augment(app);
+        A.isObject(app.yui, 'express app was not augmented correctly');
+        A.areSame(result, app, 'extend shoud return the express function');
+
+        // already augmented app
+        app = { yui: 1 };
+        result = ExpressYUI.augment(app);
+        A.areSame(1, app.yui, 'original app.yui should be honored');
+        A.areSame(result, app, 'extend shoud return the express function');
     }
 
 }));
