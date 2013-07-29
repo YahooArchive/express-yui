@@ -13,9 +13,6 @@ app.set('view', app.yui.view({
     defaultLayout: 'index'
 }));
 
-app.yui.debugMode();
-app.yui.setCoreFromAppOrigin();
-
 // serving static yui modules
 app.use(YUI['static']());
 

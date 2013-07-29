@@ -9,9 +9,9 @@ var express = require('express'),
 
 app.configure('development', function () {
 
-    // when using `app.yui.debugMode()` you will get debug,
-    // filter and logLevel set accordingly
-    app.yui.debugMode();
+    // when using `yui.debug()` middleware you will get debug,
+    // filter and logLevel set accordingly or customized
+    app.use(yui.debug({ filter: 'raw' }));
 
     // to get YUI Core modules from the app origin.
     app.yui.setCoreFromAppOrigin({

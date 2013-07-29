@@ -8,10 +8,10 @@ var express = require('express'),
     app     = express();
 
 app.configure('development', function () {
-    // when using `app.yui.debugMode()` you will get debug,
+    // when using `yui.debug()` middleware you will get debug,
     // filter and logLevel set accordingly at the app level.
     // In this case, `raw` version instead of `debug`.
-    app.yui.debugMode({ filter: 'raw' });
+    app.use(yui.debug({ filter: 'raw' }));
 });
 
 app.yui.setCoreFromAppOrigin();
