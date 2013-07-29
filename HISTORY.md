@@ -1,6 +1,11 @@
 Express YUI Change History
 ==========================
 
+0.5.9 (2013-07-29)
+------------------
+
+* using `express-state` to augment the express app.
+
 0.5.8 (2013-07-29)
 ------------------
 
