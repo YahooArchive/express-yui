@@ -221,20 +221,106 @@ suite.add(new YUITest.TestCase({
     "test expose": function () {
         var fn1,
             fn2,
-            mid;
+            mid,
+            counter = 0;
 
         fn1 = middleware.exposeConfig;
         fn2 = middleware.exposeSeed;
-        middleware.exposeConfig = function () { return 'A'; };
-        middleware.exposeSeed  = function () { return 'B'; };
+        middleware.exposeConfig = middleware.exposeSeed  = function() {
+            return function (req, res, next) {
+                counter++;
+                next();
+            };
+        };
 
         mid = middleware.expose();
 
-        A.areEqual('A', mid[0], 'exposeConfig was not included in expose');
-        A.areEqual('B', mid[1], 'exposeSeed was not included in expose');
+        A.isFunction(mid, 'expose middleware is missing');
+
+        mid({}, {}, function () { counter++; });
+        A.areEqual(3, counter, 'exposeSeed and exposeConfig should be invoked as part of expose');
 
         middleware.exposeConfig = fn1;
         middleware.exposeSeed = fn2;
+    },
+
+    "test debug": function () {
+        var mid,
+            req = { app: { yui: {} } },
+            res = {},
+            output = {};
+
+        YUITest.Mock.expect(res, {
+            method: 'expose',
+            args: [YUITest.Mock.Value.Any, YUITest.Mock.Value.String],
+            callCount: 3,
+            run: function (data, ns) {
+                output[ns] = data;
+            }
+        });
+        YUITest.Mock.expect(req.app.yui, {
+            method: 'getSeedUrls',
+            args: [YUITest.Mock.Value.Object],
+            run: function (config) {
+                output.config = config;
+                return 'final-seed';
+            }
+        });
+
+        mid = middleware.debug();
+
+        A.isFunction(mid, 'debug middleware is missing');
+
+        mid(req, res, function () { output.ok = 1; });
+
+        A.areEqual(1, output.ok, 'debug middleware should never stop the flow');
+        A.areEqual('debug', output.config.filter, 'default filter');
+        A.areEqual(false, output.config.combine, 'default combine');
+        A.areEqual('debug', output['window.YUI_config.filter'], 'exposed filter');
+        A.areEqual(false, output['window.YUI_config.combine'], 'exposed combine');
+        A.areEqual('final-seed', output['window.YUI_config.seed'], 'seed shoudl be recomputed');
+
+        YUITest.Mock.verify(res.expose);
+        YUITest.Mock.verify(req.app.yui);
+    },
+
+    "test debug with params": function () {
+        var mid,
+            req = { app: { yui: {} } },
+            res = {},
+            output = {};
+
+        YUITest.Mock.expect(res, {
+            method: 'expose',
+            args: [YUITest.Mock.Value.Any, YUITest.Mock.Value.String],
+            callCount: 3,
+            run: function (data, ns) {
+                output[ns] = data;
+            }
+        });
+        YUITest.Mock.expect(req.app.yui, {
+            method: 'getSeedUrls',
+            args: [YUITest.Mock.Value.Object],
+            run: function (config) {
+                output.config = config;
+                return 'final-seed';
+            }
+        });
+
+        mid = middleware.debug({
+            filter: 'raw',
+            combine: true
+        });
+
+        mid(req, res, function () { output.ok = 1; });
+
+        A.areEqual('raw', output.config.filter, 'custom filter');
+        A.areEqual(true, output.config.combine, 'custom combine');
+        A.areEqual('raw', output['window.YUI_config.filter'], 'custom filter');
+        A.areEqual(true, output['window.YUI_config.combine'], 'custom combine');
+
+        YUITest.Mock.verify(res.expose);
+        YUITest.Mock.verify(req.app.yui);
     }
 
 }));

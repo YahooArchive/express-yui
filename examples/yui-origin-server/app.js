@@ -8,9 +8,10 @@ var express = require('express'),
     app     = express();
 
 app.configure('development', function () {
-    // when using `app.yui.debugMode()` you will get debug,
-    // filter and logLevel set accordingly
-    app.yui.debugMode();
+    // when using `yui.debug()` middleware you will get debug,
+    // filter and logLevel set accordingly at the app level.
+    // In this case, `raw` version instead of `debug`.
+    app.use(yui.debug({ filter: 'raw' }));
 });
 
 app.yui.setCoreFromAppOrigin();
@@ -24,8 +25,20 @@ app.use(yui['static']({
     maxAge: 100
 }));
 
+// exposing yui into the client side for all requests
+app.use(yui.expose());
+
+// using debug when a querystring `?debug=1` is passed
+app.use(function(req, res, next) {
+    if (req.query.debug) {
+        yui.debug()(req, res, next);
+    } else {
+        next();
+    }
+});
+
 // creating a page with YUI embeded
-app.get('/', yui.expose(), function (req, res, next) {
+app.get('/', function (req, res, next) {
     res.render('page');
 });
 

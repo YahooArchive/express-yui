@@ -33,14 +33,6 @@ app.yui.applyConfig({
     }
 });
 
-app.configure('development', function () {
-
-    // when using `app.yui.debugMode()` you will get debug,
-    // filter and logLevel set accordingly
-    app.yui.debugMode();
-
-});
-
 // getting YUI Core modules from CDN.
 app.yui.setCoreFromCDN();
 

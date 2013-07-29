@@ -117,7 +117,7 @@ suite.add(new YUITest.TestCase({
 
         yui_config = {
             // no seed, force getDefaultSeed to be called
-            filter: '-debug',
+            filter: 'debug',
             base: '/static/'
         };
 
@@ -127,9 +127,36 @@ suite.add(new YUITest.TestCase({
 
         var urls = seed.getSeedUrls();
 
-        // [ '/static/yui/yui-min.js' ]
+        // [ '/static/yui/yui-debug.js' ]
         A.areEqual(1, urls.length, 'only 1 seed expected');
-        A.areEqual('/static/yui/yui-min.js',
+        A.areEqual('/static/yui/yui-debug.js',
+                    urls[0],
+                    'urls[0] does not match');
+    },
+
+    "test getSeedUrls({ filter: 'min', combine: false })": function () {
+        var yui_config;
+
+        yui_config = {
+            // no seed, force getDefaultSeed to be called
+            filter: 'min',
+            base: '/static/',
+            combine: true
+        };
+
+        seed.config = function () {
+            return yui_config;
+        };
+
+        // forcing `raw` version of modules, and no-combine
+        var urls = seed.getSeedUrls({
+            filter: 'raw',
+            combine: false
+        });
+
+        // [ '/static/yui/yui.js' ]
+        A.areEqual(1, urls.length, 'only 1 seed expected');
+        A.areEqual('/static/yui/yui.js',
                     urls[0],
                     'urls[0] does not match');
     },
