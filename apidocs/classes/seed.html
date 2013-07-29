@@ -215,6 +215,13 @@ using handlebars templates:</p>
 
                     <ul class="index-list methods">
                         
+                            <li class="index-item method protected">
+                                <a href="#method__buildUrls">_buildUrls</a>
+
+                                
+                                
+                            </li>
+                        
                             <li class="index-item method public">
                                 <a href="#method_addModuleToSeed">addModuleToSeed</a>
 
@@ -300,6 +307,218 @@ using handlebars templates:</p>
         
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
+
+                
+                    <div id="method__buildUrls" class="method item protected">
+    <h3 class="name"><code>_buildUrls</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>modules</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>ext</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>filterMap</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>customConfig</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Array</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/lib_seed.js.html#l231"><code>lib&#x2F;seed.js:231</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Build a list of urls for a list of modules. Modules are described as <code>&lt;module-name&gt;@&lt;group-name&gt;</code>.
+Modules without the group denotation will be assumed as core modules from yui. <code>ext</code> denotates
+the type of the modules since this routine is able to produce css or js modules alike.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">modules</code>
+                        <span class="type">Array</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>the array of modules to generate the urls.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">ext</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>the modules extension, <code>js</code> or <code>css</code>.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">filterMap</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>hash table to translate filter values into suffix for modules.
+                          e.g.: <code>min</code> -&gt; <code>-min</code></p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">customConfig</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>optional configuration to overrule filter and combine per request when
+                building the urls</p>
+
+                    </div>
+
+                    
+                        <ul class="params-list">
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">filter</code>
+                                    <span class="type">String</span>
+                                
+
+                                <div class="param-description">
+                                    <p>optional filter to overrule any filter</p>
+
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">combine</code>
+                                    <span class="type">Boolean</span>
+                                
+
+                                <div class="param-description">
+                                    <p>optional flag to overrule combine,
+                     when set to <code>false</code>, it will avoid creating combo urls.</p>
+
+                                </div>
+
+                                
+                            </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Array</span>:
+                    
+                    <p>the <code>href</code> url for each link tag to be inserted in the header of the page</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
 
                 
                     <div id="method_addModuleToSeed" class="method item public">
@@ -468,7 +687,7 @@ automatically.</p>
             
         
         
-        <a href="../files/lib_seed.js.html#l204"><code>lib&#x2F;seed.js:204</code></a>
+        <a href="../files/lib_seed.js.html#l210"><code>lib&#x2F;seed.js:210</code></a>
         
         </p>
 
@@ -585,7 +804,7 @@ will be assumed as core modules from yui.</p>
             
         
         
-        <a href="../files/lib_seed.js.html#l183"><code>lib&#x2F;seed.js:183</code></a>
+        <a href="../files/lib_seed.js.html#l189"><code>lib&#x2F;seed.js:189</code></a>
         
         </p>
 
@@ -732,7 +951,17 @@ be part of the seed files.</p>
     <h3 class="name"><code>getSeedUrls</code></h3>
 
     
-        <span class="paren">()</span>
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>customConfig</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
     
 
     
@@ -786,6 +1015,65 @@ seed, it will be provisioned automatically as part of the <code>state</code> obj
 
     </div>
 
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">customConfig</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>optional configuration to overrule filter and combine per request when
+                building the urls. This is useful if you have a custom middleware to turn debug mode
+                on, and combine off by passing some special parameter.</p>
+
+                    </div>
+
+                    
+                        <ul class="params-list">
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">filter</code>
+                                    <span class="type">String</span>
+                                
+
+                                <div class="param-description">
+                                    <p>optional filter to overrule any filter</p>
+
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">combine</code>
+                                    <span class="type">Boolean</span>
+                                
+
+                                <div class="param-description">
+                                    <p>optional flag to overrule combine,
+                     when set to <code>false</code>, it will avoid creating combo urls.</p>
+
+                                </div>
+
+                                
+                            </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+            </ul>
+        </div>
     
 
     

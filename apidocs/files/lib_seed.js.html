@@ -306,12 +306,18 @@ module.exports = {
 
     @method getSeedUrls
     @public
+    @param {object} customConfig optional configuration to overrule filter and combine per request when
+                    building the urls. This is useful if you have a custom middleware to turn debug mode
+                    on, and combine off by passing some special parameter.
+        @param {string} customConfig.filter optional filter to overrule any filter
+        @param {boolean} customConfig.combine optional flag to overrule combine,
+                         when set to &#x60;false&#x60;, it will avoid creating combo urls.
     @return {Array} the &#x60;src&#x60; url for each script tag that forms the seed
     **/
-    getSeedUrls: function () {
+    getSeedUrls: function (customConfig) {
         var config = this.config(),
             modules = config.seed || this.getDefaultSeed();
-        return this._buildUrls(modules, &#x27;js&#x27;, this.JS_FILTERS_MAP);
+        return this._buildUrls(modules, &#x27;js&#x27;, this.JS_FILTERS_MAP, customConfig);
     },
 
     /**
@@ -356,7 +362,25 @@ module.exports = {
         return this._buildUrls(arguments, &#x27;css&#x27;, this.CSS_FILTERS_MAP);
     },
 
-    _buildUrls: function (modules, ext, filterMap) {
+    /**
+    Build a list of urls for a list of modules. Modules are described as &#x60;&lt;module-name&gt;@&lt;group-name&gt;&#x60;.
+    Modules without the group denotation will be assumed as core modules from yui. &#x60;ext&#x60; denotates
+    the type of the modules since this routine is able to produce css or js modules alike.
+
+    @method _buildUrls
+    @protected
+    @param {array} modules the array of modules to generate the urls.
+    @param {string} ext the modules extension, &#x60;js&#x60; or &#x60;css&#x60;.
+    @param {object} filterMap hash table to translate filter values into suffix for modules.
+                              e.g.: &#x60;min&#x60; -&gt; &#x60;-min&#x60;
+    @param {object} customConfig optional configuration to overrule filter and combine per request when
+                    building the urls
+        @param {string} customConfig.filter optional filter to overrule any filter
+        @param {boolean} customConfig.combine optional flag to overrule combine,
+                         when set to &#x60;false&#x60;, it will avoid creating combo urls.
+    @return {Array} the &#x60;href&#x60; url for each link tag to be inserted in the header of the page
+    **/
+    _buildUrls: function (modules, ext, filterMap, customConfig) {
         // getting static config
         var config = this.config(),
             urls = [],
@@ -384,6 +408,8 @@ module.exports = {
                 newGroup.comboSep === prevGroup.comboSep;
         }
 
+        customConfig = customConfig || {};
+
         // producing an array of objects with the urls for the module.
         for (i = 0; i &lt; modules.length; i += 1) {
             // a module in the list might have a suffix with the group name denotated as @&lt;groupname&gt;
@@ -399,7 +425,7 @@ module.exports = {
 
             // computing the default filter for yui core modules
             // default is always -min
-            filter = groupConfig.filter || config.filter; // inheriting from yui config
+            filter = customConfig.filter || groupConfig.filter || config.filter; // inheriting from yui config
             filter = filter &amp;&amp; filterMap &amp;&amp; filterMap.hasOwnProperty(filter) ?
                     filterMap[filter] : this.DEFAULT_FILTER;
 
@@ -408,10 +434,10 @@ module.exports = {
 
             if (groupConfig) {
 
-                if (!isSimilarGroup(groupConfig)) {
+                if (customConfig.combine === false || !isSimilarGroup(groupConfig)) {
                     flush(groupConfig);
                 }
-                if (groupConfig.combine) {
+                if (customConfig.combine !== false &amp;&amp; groupConfig.combine) {
                     stack.push(groupConfig.root + path);
                 } else {
                     urls.push(groupConfig.base + path);

@@ -255,18 +255,91 @@ module.exports = {
     },
 
     /**
-    Exposes different data structures thru &#x60;res.locals.*&#x60;,
-    all of them will be prefixed with &#x60;yui_&#x60; to avoid collitions.
-    E.g: &#x60;res.locals.yui_seed&#x60; and &#x60;res.locals.yui_config&#x60;.
-    Each of these structures could be string, array or object.
+    Exposes YUI into the client side.
+
+        // using it for a mounted middleware
+        app.use(yui.expose());
+
+        // or using it as a route middleware
+        app.get(&#x27;/foo&#x27;, yui.expose());
 
     @method expose
     @public
-    @return {function[]} express middleware collection
+    @return {function[]} express middleware
     **/
     expose: function () {
 
-        return [this.exposeConfig(), this.exposeSeed()];
+        var handlers = [this.exposeConfig(), this.exposeSeed()];
+
+        return function (req, res, next) {
+
+            function run(index) {
+                if (index &lt; handlers.length) {
+                    handlers[index](req, res, function (err) {
+                        if (err) {
+                            return next(err);
+                        }
+                        index += 1;
+                        run(index);
+                    });
+                } else {
+                    next();
+                }
+            }
+
+            run(0);
+
+        };
+
+    },
+
+    /**
+    Forces a request to use yui in debug mode with combine disabled.
+
+        // exposing yui into the client side thru &#x60;state&#x60; object
+        app.use(yui.expose());
+        // using yui in debug mode when node runs in debug mode with custom filter
+        if (app.get(&#x27;env&#x27;) === &#x27;development&#x27;) {
+            app.use(yui.debug({filter: &#x27;raw&#x27;}));
+        }
+
+    Note: the &#x60;debug()&#x60; middleware only works if it is called
+    after the regular &#x60;expose()&#x60; middleware was called, otherwise
+    it will not be able to overrule the default yui config for the app.
+
+    More details about the yui debug mode settings
+    [in the YUI API Docs](http://yuilibrary.com/yui/docs/api/classes/config.html).
+
+    @method debug
+    @public
+    @param {Object} config optional debug settings
+        @param {boolean} config.combine default to &#x60;false&#x60;
+        @param {string} config.logLevel default to &#x60;&quot;debug&quot;&#x60;
+        @param {string} config.filter default to &#x60;&quot;debug&quot;&#x60;
+        @param {boolean} config.useBrowserConsole optional debug settings
+    @return {function} express middleware
+    **/
+    debug: function (config) {
+
+        config = config || {};
+
+        var filter = config.filter || &#x27;debug&#x27;,
+            combine = config.combine || false,
+            logLevel = config.logLevel || &#x27;debug&#x27;,
+            useBrowserConsole = config.hasOwnProperty(&#x27;useBrowserConsole&#x27;) ? config.useBrowserConsole : true;
+
+        return function debug(req, res, next) {
+            res.expose(filter, &#x27;window.YUI_config.filter&#x27;);
+            res.expose(combine || false, &#x27;window.YUI_config.combine&#x27;);
+            res.expose(true, &#x27;window.YUI_config.debug&#x27;);
+            res.expose(logLevel, &#x27;window.YUI_config.logLevel&#x27;);
+            res.expose(useBrowserConsole, &#x27;window.YUI_config.useBrowserConsole&#x27;);
+            res.expose(req.app.yui.getSeedUrls({
+                 filter: filter,
+                 combine: combine
+            }), &#x27;window.YUI_config.seed&#x27;);
+            next();
+        };
 
     },
 

@@ -189,9 +189,6 @@ The following is an example of how these features can be used:
         fetchCSS: false
     });
 
-    // Use helpers to do advanced configurations
-    app.yui.debugMode());
-
     // Call expose middleware when a route match.
     app.get(&#x27;/index.html&#x27;, YUI.expose(), anotherRoute);
 
@@ -251,13 +248,13 @@ ExpressYUIExtension.prototype = {
     /**
     Turns on debug mode for YUI Loader by setting
     &#x60;debug=true&#x60;, &#x60;logLevel=&quot;debug&quot;&#x60;, &#x60;combine=false&#x60; and &#x60;filter=&quot;debug&quot;&#x60;
-    into the static configuration. More available settings
-    [in the YUI API Docs](http://yuilibrary.com/yui/docs/api/classes/config.html).
+    into the static configuration.
 
         app.yui.debugMode();
 
     @method debugMode
     @public
+    @deprecated in favor of &#x60;expressYUI.debug()&#x60;
     @param {Object} config optional object to overrule
     specific settings when in debug mode.
 
@@ -269,6 +266,9 @@ ExpressYUIExtension.prototype = {
     @chainable
     **/
     debugMode: function (config) {
+
+        console.warn(&#x27;&#x60;app.yui.debugMode()&#x60; is now deprecated, &#x27; +
+                &#x27; use &#x60;expressYUI.debug()&#x60; middleware instead.&#x27;);
 
         // storing static config
         this.config({

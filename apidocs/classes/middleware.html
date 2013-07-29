@@ -202,6 +202,13 @@ app.use(yui.expose());</code></pre>
                     <ul class="index-list methods">
                         
                             <li class="index-item method public">
+                                <a href="#method_debug">debug</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method public">
                                 <a href="#method_expose">expose</a>
 
                                 
@@ -243,6 +250,186 @@ app.use(yui.expose());</code></pre>
         
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
+
+                
+                    <div id="method_debug" class="method item public">
+    <h3 class="name"><code>debug</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>config</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Function</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/lib_middleware.js.html#l162"><code>lib&#x2F;middleware.js:162</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Forces a request to use yui in debug mode with combine disabled.</p>
+<pre class="code prettyprint"><code>// exposing yui into the client side thru <code>state</code> object
+app.use(yui.expose());
+// using yui in debug mode when node runs in debug mode with custom filter
+if (app.get(&#39;env&#39;) === &#39;development&#39;) {
+    app.use(yui.debug({filter: &#39;raw&#39;}));
+}</code></pre>
+<p>Note: the <code>debug()</code> middleware only works if it is called
+after the regular <code>expose()</code> middleware was called, otherwise
+it will not be able to overrule the default yui config for the app.</p>
+<p>More details about the yui debug mode settings
+<a href="http://yuilibrary.com/yui/docs/api/classes/config.html">in the YUI API Docs</a>.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">config</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>optional debug settings</p>
+
+                    </div>
+
+                    
+                        <ul class="params-list">
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">combine</code>
+                                    <span class="type">Boolean</span>
+                                
+
+                                <div class="param-description">
+                                    <p>default to <code>false</code></p>
+
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">logLevel</code>
+                                    <span class="type">String</span>
+                                
+
+                                <div class="param-description">
+                                    <p>default to <code>&quot;debug&quot;</code></p>
+
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">filter</code>
+                                    <span class="type">String</span>
+                                
+
+                                <div class="param-description">
+                                    <p>default to <code>&quot;debug&quot;</code></p>
+
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">useBrowserConsole</code>
+                                    <span class="type">Boolean</span>
+                                
+
+                                <div class="param-description">
+                                    <p>optional debug settings</p>
+
+                                </div>
+
+                                
+                            </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Function</span>:
+                    
+                    <p>express middleware</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
 
                 
                     <div id="method_expose" class="method item public">
@@ -294,10 +481,12 @@ app.use(yui.expose());</code></pre>
     </div>
 
     <div class="description">
-        <p>Exposes different data structures thru <code>res.locals.*</code>,
-all of them will be prefixed with <code>yui_</code> to avoid collitions.
-E.g: <code>res.locals.yui_seed</code> and <code>res.locals.yui_config</code>.
-Each of these structures could be string, array or object.</p>
+        <p>Exposes YUI into the client side.</p>
+<pre class="code prettyprint"><code>// using it for a mounted middleware
+app.use(yui.expose());
+
+// or using it as a route middleware
+app.get(&#39;/foo&#39;, yui.expose());</code></pre>
 
     </div>
 
@@ -312,7 +501,7 @@ Each of these structures could be string, array or object.</p>
                     
                         <span class="type">Function</span>:
                     
-                    <p>express middleware collection</p>
+                    <p>express middleware</p>
 
                 
             </div>
@@ -537,7 +726,7 @@ Usually, <code>yui.expose()</code> will take care of calling
             
         
         
-        <a href="../files/lib_middleware.js.html#l139"><code>lib&#x2F;middleware.js:139</code></a>
+        <a href="../files/lib_middleware.js.html#l212"><code>lib&#x2F;middleware.js:212</code></a>
         
         </p>
 
