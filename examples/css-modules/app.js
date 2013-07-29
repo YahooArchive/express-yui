@@ -10,8 +10,6 @@ var express = require('express'),
 
 app.set('view', app.yui.view());
 
-app.yui.debugMode();
-
 // serving static yui modules
 app.use(YUI['static']());
 

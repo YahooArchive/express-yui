@@ -14,10 +14,6 @@ app.yui.seed(['yui', 'json-stringify']);
 
 app.configure('development', function () {
 
-    // when using `app.yui.debugMode()` you will get debug,
-    // filter and logLevel set accordingly
-    app.yui.debugMode();
-
     // In development, we can get YUI from app origin
     // to facilitate development.
     app.yui.setCoreFromAppOrigin();

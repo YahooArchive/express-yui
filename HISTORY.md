@@ -1,6 +1,12 @@
 Express YUI Change History
 ==========================
 
+0.5.8 (2013-07-29)
+------------------
+
+* adding `debug` middleware to control it per request
+* making `expose` middleware connect/express compatible.
+
 0.5.7 (2013-07-24)
 ------------------
 

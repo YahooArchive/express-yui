@@ -12,11 +12,10 @@ var express = require('express'),
 // to speed up the booting process
 app.yui.seed(['yui-base', 'loader']);
 
-app.configure('development', function () {
-    // when using `app.yui.debugMode()` you will get debug,
-    // filter and logLevel set accordingly
-    app.yui.debugMode();
-});
+if (app.get('env') === 'development') {
+    // getting yui in debug mode
+    app.use(yui.debug());
+}
 
 // normally, production is the default configuration,
 // but here is an example of forcing to use CDN
