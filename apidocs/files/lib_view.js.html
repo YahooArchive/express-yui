@@ -267,7 +267,7 @@ module.exports = {
                 }
 
                 try {
-                    template = Y.Template._cache[bundleName + &#x27;/&#x27; + templateName];
+                    template = Y.Template.get(bundleName + &#x27;/&#x27; + templateName);
                 } catch (e) {
                     throw new Error(&#x27;Error trying to access template &#x60;&#x27; + templateName + &#x27;&#x60;&#x27; +
                         &#x27; from bundle &#x60;&#x27; + bundleName + &#x27;&#x60;; make sure the template was compiled correctly.&#x27;);
