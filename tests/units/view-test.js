@@ -52,6 +52,10 @@ suite.add(new YUITest.TestCase({
                         'bundleName/foo': function (ctx, callback) {
                             return 'output';
                         }
+                    },
+
+                    get: function (templateName) {
+                        return this._registry[templateName];
                     }
                 }
             };
@@ -78,6 +82,10 @@ suite.add(new YUITest.TestCase({
                         'bundleName/bar': function (ctx, callback) {
                             return ctx.outlet + '+layout';
                         }
+                    },
+
+                    get: function (templateName) {
+                        return this._registry[templateName];
                     }
                 }
             };
