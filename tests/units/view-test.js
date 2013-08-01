@@ -48,7 +48,7 @@ suite.add(new YUITest.TestCase({
         view.use = function () {
             return {
                 Template: {
-                    _cache: {
+                    _registry: {
                         'bundleName/foo': function (ctx, callback) {
                             return 'output';
                         }
@@ -71,7 +71,7 @@ suite.add(new YUITest.TestCase({
         view.use = function () {
             return {
                 Template: {
-                    _cache: {
+                    _registry: {
                         'bundleName/foo': function (ctx, callback) {
                             return 'output';
                         },
