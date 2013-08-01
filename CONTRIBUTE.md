@@ -42,7 +42,7 @@ Release checklist
 * bump the version in [package.json]
 * commit to master
 * push to npm using `npm publish`
-* create a [new release] entry including the tag for the new version
+* create a [new release] entry including the tag for the new version, being sure to document any deprecations
 
 If is also important to verify that whatever we pushed to npm is working as expected, to do that, do this:
 
