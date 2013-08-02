@@ -3,7 +3,7 @@
 'use strict';
 
 var express = require('express'),
-    expyui = require('express-yui'),
+    expyui  = require('../../'), // express-yui
     Locator = require('locator'),
     LocatorHandlebars = require('locator-handlebars'),
     LocatorMicro = require('locator-micro'),
