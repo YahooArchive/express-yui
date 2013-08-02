@@ -4,14 +4,16 @@
 
 var express = require('express'),
     exphbs  = require('express3-handlebars'),
-    yui     = require('../../'), // express-yui
+    expyui  = require('../../'), // express-yui
     app     = express();
+
+expyui.extend(app);
 
 app.configure('development', function () {
 
-    // when using `yui.debug()` middleware you will get debug,
+    // when using `expyui.debug()` middleware you will get debug,
     // filter and logLevel set accordingly or customized
-    app.use(yui.debug({ filter: 'raw' }));
+    app.use(expyui.debug({ filter: 'raw' }));
 
     // to get YUI Core modules from the app origin.
     app.yui.setCoreFromAppOrigin({
@@ -45,12 +47,12 @@ app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
 // serving static yui modules
-app.use(yui['static']({
+app.use(expyui['static']({
     maxAge: 100
 }));
 
 // creating a page with YUI embeded
-app.get('/', yui.expose(), function (req, res, next) {
+app.get('/', expyui.expose(), function (req, res, next) {
     res.render('page');
 });
 

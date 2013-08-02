@@ -1,6 +1,12 @@
 Express YUI Change History
 ==========================
 
+@NEXT
+-----
+
+* `expyui.extend(app)` is required to be able to extend an express application with `express-yui`.
+* `expyui.augment(app)` is now deprecated in favor of `expyui.extend(app)`.
+
 0.5.9 (2013-07-29)
 ------------------
 
