@@ -1,6 +1,11 @@
 Express YUI Change History
 ==========================
 
+NEXT
+----
+
+* removing `options.useServerModules` for `app.yui.plugin()`. locator plugin will not longer accept `useServerModules`, you either call `app.yui.attachModules("foo", "bar")` explicitely, or add an array to `bundle.useServerModules` with the list of modules to be attached, e.g.: pre-compiled templates, and that could happen in any plugin.
+
 0.5.9 (2013-07-29)
 ------------------
 
