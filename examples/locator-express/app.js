@@ -40,8 +40,7 @@ new Locator({
     .plug(LocatorMicro.yui())
     .plug(app.yui.plugin({
         registerGroup: true,
-        registerServerModules: true,
-        useServerModules: true
+        registerServerModules: true
     }))
     .parseBundle(__dirname, {}).then(function (have) {
 

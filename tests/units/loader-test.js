@@ -142,13 +142,13 @@ suite.add(new YUITest.TestCase({
     "test plugin flow with register and attach": function () {
         var plugin = loader.plugin({
                 registerGroup: true,
-                registerServerModules: true,
-                useServerModules: true
+                registerServerModules: true
             }),
             api = YUITest.Mock(),
             bundle = {
                 name: 'foo',
-                buildDirectory: '/path/to/foo-a.b.c'
+                buildDirectory: '/path/to/foo-a.b.c',
+                useServerModules: ['mod1']
             };
 
         YUITest.Mock.expect(api, {
@@ -222,8 +222,8 @@ suite.add(new YUITest.TestCase({
         });
         YUITest.Mock.expect(loader, {
             method: 'attachModules',
-            args: ['foo', YUITest.Mock.Value.Any],
-            run: function (name, modules) {
+            args: [YUITest.Mock.Value.Any],
+            run: function (modules) {
                 A.areEqual(1, modules.length, 'mod1 was not attached');
                 A.areEqual('mod1', modules[0], 'mod1 was not attached');
             }
