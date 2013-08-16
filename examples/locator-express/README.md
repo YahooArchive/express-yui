@@ -15,10 +15,9 @@ When the page gets rendered on the client side, the `app` can use yui to load mo
 How to test this app?
 ---------------------
 
-First, install the demo dependencies, then run the express application:
+Make sure you install the `express-yui` component first by doing `npm  i` on the root folder of this repository, then run the express application:
 
 ```
-npm install
 node app.js
 ```
 

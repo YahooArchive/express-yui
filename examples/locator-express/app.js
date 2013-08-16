@@ -3,21 +3,23 @@
 'use strict';
 
 var express = require('express'),
-    YUI = require('express-yui'),
+    expyui  = require('../../'), // express-yui
     Locator = require('locator'),
     LocatorHandlebars = require('locator-handlebars'),
     LocatorMicro = require('locator-micro'),
     app = express();
+
+expyui.extend(app);
 
 app.set('view', app.yui.view({
     defaultLayout: 'index'
 }));
 
 // serving static yui modules
-app.use(YUI['static']());
+app.use(expyui['static']());
 
 // creating a page with YUI embeded
-app.get('/bar', YUI.expose(), function (req, res, next) {
+app.get('/bar', expyui.expose(), function (req, res, next) {
     res.render('bar', {
         tagline: 'testing with some data for template bar',
         tellme: 'but miami is awesome!'
@@ -25,7 +27,7 @@ app.get('/bar', YUI.expose(), function (req, res, next) {
 });
 
 // creating a page with YUI embeded
-app.get('/foo', YUI.expose(), function (req, res, next) {
+app.get('/foo', expyui.expose(), function (req, res, next) {
     res.render('foo', {
         tagline: 'testing some data for template foo',
         tellme: 'san francisco is nice!'
