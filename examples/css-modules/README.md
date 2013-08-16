@@ -17,10 +17,9 @@ It uses a json file `css/build.json` to describe how to build yui css modules ba
 How to test this app?
 ---------------------
 
-First, install the demo dependencies, then run the express application:
+Make sure you install the `express-yui` component first by doing `npm  i` on the root folder of this repository, then run the express application:
 
 ```
-npm install
 node app.js
 ```
 

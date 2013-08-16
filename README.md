@@ -62,33 +62,20 @@ with a new member called `yui`. At the same time, `express-yui` provides a set o
 static methods that you can call directly off the `express-yui` module, those
 methods are utility methods and express middleware.
 
-Aside from that, `express-yui` will try to extend the `express` peer dependency to
-augment the app instance automatically everytime you call `express()` to create a
-brand new instance. This is useful, and in most cases, it is just enough. Here is an example:
+Here is an example of how to extend an `express` app with `express-yui`:
 
 ```
 var express = require('express'),
-    yui = require('express-yui'),
+    expyui = require('express-yui'),
     app = express();
 
+// calling a static method to extend the `express` app instance
+expyui.extend(app);
+// using the new `yui` member off the app instance
 app.yui.applyConfig({ fetchCSS: false });
 ```
 
-As you can see in the example above, the `yui` member is available off the app instance.
-But this is not always the case, sometimes you have a 3rd party module that is requiring
-`express`, and even creating the app under the hood, in which case you can just augment
-an existing express app instance by using the static utility `augment`, this is how:
-
-```
-var yui = require('express-yui'),
-    express = require('express'),
-    app = express();
-
-// calling a yui static method to augment the `express` app instance
-yui.augment(app);
-
-app.yui.applyConfig({ fetchCSS: false });
-```
+As you can see in the example above, the `yui` member is available off the app instance after extending the `express` app.
 
 
 ### Exposing app state into client
@@ -98,16 +85,17 @@ on the configuration defined thru the express app instance, you can call the `ex
 middleware for any particular route:
 
 ```
-var yui = require('express-yui'),
+var expyui = require('express-yui'),
     express = require('express'),
     app = express();
 
-app.get('/foo', yui.expose(), function (req, res, next) {
+expyui.extend(app);
+app.get('/foo', expyui.expose(), function (req, res, next) {
     res.render('foo');
 });
 ```
 
-By doing `yui.expose()`, `express-yui` will provision a property call `state` that
+By doing `expyui.expose()`, `express-yui` will provision a property call `state` that
 can be use in your templates as a `javascript` blob that sets up the page to run
 YUI with some very specific settings coming from the server. If you use `handlebars`
 you will do this:
@@ -131,13 +119,15 @@ using it in conjunction with [locator][] component.
 
 ```
 var express = require('express'),
-    yui = require('express-yui'),
+    expyui = require('express-yui'),
     app = express();
 
-// serving static yui modules built by locator
-app.use(yui.static());
+expyui.extend(app);
 
-app.get('/foo', yui.expose(), function (req, res, next) {
+// serving static yui modules built by locator
+app.use(expyui.static());
+
+app.get('/foo', expyui.expose(), function (req, res, next) {
     res.render('foo');
 });
 
@@ -168,7 +158,7 @@ Using modules on the server is exactly the same that using them on the client th
 weather forecast and passing the result into the template:
 
 ```
-app.get('/forecast', yui.expose(), function (req, res, next) {
+app.get('/forecast', expyui.expose(), function (req, res, next) {
     req.app.yui.use('yql', function (Y) {
         Y.YQL('select * from weather.forecast where location=90210', function(r) {
             // r contains the result of the YQL Query
@@ -255,7 +245,7 @@ express app is perfectly capable to do so, and even serve as origin server for y
 
 ```
 app.yui.setCoreFromAppOrigin();
-app.use(yui.static());
+app.use(expyui.static());
 ```
 
 With this configuration, a group called `foo` with version `1.2.3`, and `yui` version `3.11.0`, it will produce urls like these:
@@ -283,7 +273,7 @@ app.set('yui default base', 'http://mycdn.com/path/to/static/{{groupDir}}/');
 app.set('yui default root', 'static/{{groupDir}}/');
 ```
 
-In this case you don't need to use `yui.static` middleware since you are not
+In this case you don't need to use `expyui.static` middleware since you are not
 serving local files, unless the app should work as origin server.
 
 With this configuration, a group called `foo` with version `1.2.3` will produce urls like these:

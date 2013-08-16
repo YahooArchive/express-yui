@@ -5,8 +5,10 @@
 
 var express = require('express'),
     exphbs  = require('express3-handlebars'),
-    yui     = require('../../'), // express-yui
+    expyui  = require('../../'), // express-yui
     app     = express();
+
+expyui.extend(app);
 
 // you can set custom configurations for YUI by
 // calling app.yui.applyConfig(), this will automatically
@@ -41,12 +43,12 @@ app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
 // serving static yui modules
-app.use(yui['static']({
+app.use(expyui['static']({
     maxAge: 100
 }));
 
 // creating a page with YUI embeded
-app.get('/', yui.expose(), function (req, res, next) {
+app.get('/', expyui.expose(), function (req, res, next) {
     res.render('page');
 });
 

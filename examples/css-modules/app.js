@@ -3,18 +3,20 @@
 'use strict';
 
 var express = require('express'),
-    YUI = require('express-yui'),
+    expyui  = require('../../'), // express-yui
     Locator = require('locator'),
     LocatorHandlebars = require('locator-handlebars'),
     app = express();
 
+expyui.extend(app);
+
 app.set('view', app.yui.view());
 
 // serving static yui modules
-app.use(YUI['static']());
+app.use(expyui['static']());
 
 // creating a page with YUI embeded
-app.get('/', YUI.expose(), function (req, res, next) {
+app.get('/', expyui.expose(), function (req, res, next) {
     // here is an example of how to compute custom urls for a set of css modules
     // that should be included in the `head` instead of using them thru `Y.use()`
     // Note: `@demo` is optional to specify the group, which comes from `package.json>name`

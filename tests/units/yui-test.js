@@ -33,7 +33,9 @@ mockExpress = {
     }
 };
 mockExpressState = {
-    augment: function () {}
+    extend: function (app) {
+        return app;
+    }
 };
 
 suite = new YUITest.TestSuite("yui-test suite");
@@ -125,33 +127,17 @@ suite.add(new YUITest.TestCase({
     },
 
     "test extend": function () {
-        var exp, result;
-        // empty app
-        exp = { application: {} };
-        result = ExpressYUI.extend(exp);
-        A.isFunction(exp.application.defaultConfiguration, 'express app was not extended correctly');
-        A.areSame(result, exp, 'extend shoud return the express function');
+        var app = {},
+            result;
+        result = ExpressYUI.extend(app);
+        A.isObject(app.yui, 'express app was not extended correctly');
+        A.areSame(result, app, 'extend shoud return the express app');
 
         // already augmented app
-        exp = { application: { defaultConfiguration: 1 } };
-        result = ExpressYUI.extend(exp);
-        A.isFunction(exp.application.defaultConfiguration, 'original express.application.defaultConfiguration should be replaced with the new method');
-        A.areSame(result, exp, 'extend shoud return the express function');
-    },
-
-    "test augment": function () {
-        var app, result;
-        // empty app
-        app = {};
-        result = ExpressYUI.augment(app);
-        A.isObject(app.yui, 'express app was not augmented correctly');
-        A.areSame(result, app, 'extend shoud return the express function');
-
-        // already augmented app
-        app = { yui: 1 };
-        result = ExpressYUI.augment(app);
-        A.areSame(1, app.yui, 'original app.yui should be honored');
-        A.areSame(result, app, 'extend shoud return the express function');
+        app.yui = 1;
+        result = ExpressYUI.extend(app);
+        A.areSame(1, app.yui, 'already extended app should not be extended again');
+        A.areSame(result, app, 'extend shoud return the express app');
     }
 
 }));
