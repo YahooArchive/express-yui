@@ -155,19 +155,21 @@ and alternative CDN as well.
 var utils = require(&#x27;./utils&#x27;);
 
 /**
-The &#x60;yui.cdn&#x60; extension that provides some basic configuration
-that will facilitate the configuration of YUI to be served from
+The &#x60;yui.cdn&#x60; extension provides some basic configuration
+that facilitates the configuration of YUI to be served from
 CDN.
 
-When the &#x60;&quot;cdn&quot;&#x60; sub-module is used by &#x60;yui&#x60; middleware, it
-will allow you to explicitly ask for booting YUI from YUI CDN
-in the client runtime. In the following example you can see how
-to force yui to load from CDN. This is the default behavior, but
-in some cases, when defining a custom base and root for all groups
-you might want to set YUI straight to the original YUI CDN.
+Explicitly defines to boot YUI from YUI CDN in the client runtime.
+This is the default behavior, but in some cases, when defining a
+custom base and root for all groups you might want to set YUI
+straight to the original YUI CDN. In the following example you can
+see how to force yui to load from CDN. 
 
-    // Creates a new express app.
-    var app = express();
+    var express = require(&#x27;express&#x27;),
+        expyui = require(&#x27;express-yui&#x27;),
+        app = express();
+
+    expyui.extend(app);
     app.yui.setCoreFromCDN();
 
 @class cdn

@@ -156,17 +156,17 @@ var utils = require(&#x27;./utils&#x27;),
     combo = require(&#x27;express-combo&#x27;),
     client = require(&#x27;./client&#x27;);
 
-// by requesting &#x60;express-state&#x60; we guarantee that res.expose() is available
-require(&#x27;express-state&#x27;);
-
 /**
 The &#x60;express-yui&#x60; exports few middleware that provide some basic
 features to attach information into the &#x60;res.locals&#x60; object
 that could be used to boot &#x60;YUI&#x60; in the client runtime.
 
-    var app = express();
-    app.yui.applyConfig({ fetchCSS: false });
-    app.use(yui.expose());
+    var express = require(&#x27;express&#x27;),
+        expyui = require(&#x27;express-yui&#x27;),
+        app = express();
+
+    expyui.extend(app);
+    app.use(expyui.expose());
 
 @class middleware
 @static
@@ -176,10 +176,13 @@ that could be used to boot &#x60;YUI&#x60; in the client runtime.
 module.exports = {
 
     /**
-    Exposes &#x60;res.locals.yui_config&#x60; string with the serialized
-    configuration computed based on all the calls to &#x60;app.yui.*&#x60;
-    methods. This middleware will be invoked by &#x60;express-yui.expose&#x60; middleware
-    automatically, which means you should not call it directly.
+    Exposes the yui configuration into &#x60;res.locals.state&#x60;. It also
+    exposes the &#x60;express-yui&#x60; wrapper for YUI on the client so you can
+    access &#x60;app.yui.*&#x60; on the client side just like you do on the server
+    side. The client wrapper includes &#x60;app.yui.ready()&#x60; and &#x60;app.yui.use()&#x60;
+    with the corresponding bootstraping code to inject YUI into the page.
+    This middleware will be invoked by &#x60;expyui.expose()&#x60; middleware
+    automatically, which means you do not need to call it directly.
 
     @method exposeConfig
     @protected
@@ -210,25 +213,12 @@ module.exports = {
     },
 
     /**
-    Expose the seed information to the client.
-    Usually, &#x60;yui.expose()&#x60; will take care of calling
-    &#x60;yui.exposeSeed()&#x60;, although you can do it directly.
-
-    This method will expose an array through
-    &#x60;res.locals.yui_seed&#x60; with the following format:
-
-        [
-            {src: &quot;path/to/yui.js&quot;},
-            {src: &quot;path/to/another.js&quot;}
-        ]
-
-    In your template (assuming using handlebars):
-
-        {{#yui_seed}}
-        &amp;lt;script src=&quot;{{{src}}}&quot;&amp;gt;&amp;lt;/script&amp;gt;
-        {{/yui_seed}}
-
-    Adjust the format if using a different template engine.
+    Expose the seed information into &#x60;res.locals.state&#x60;. This seed is
+    an array of urls based on the call to &#x60;app.yui.seed()&#x60;, which is
+    going to be used by the client bootstrap code to inject YUI into
+    the page.
+    This middleware will be invoked by &#x60;expyui.expose()&#x60; middleware
+    automatically, which means you do not need to call it directly.
 
     @method exposeSeed
     @protected
@@ -255,17 +245,18 @@ module.exports = {
     },
 
     /**
-    Exposes YUI into the client side.
+    Exposes YUI into the client side. This middleware bundles
+    &#x60;expyui.exposeConfig()&#x60; and &#x60;expyui.exposeSeed()&#x60; middleware.
 
         // using it for a mounted middleware
-        app.use(yui.expose());
+        app.use(expyui.expose());
 
         // or using it as a route middleware
-        app.get(&#x27;/foo&#x27;, yui.expose());
+        app.get(&#x27;/foo&#x27;, expyui.expose());
 
     @method expose
     @public
-    @return {function[]} express middleware
+    @return {function} express middleware
     **/
     expose: function () {
 
@@ -297,14 +288,14 @@ module.exports = {
     Forces a request to use yui in debug mode with combine disabled.
 
         // exposing yui into the client side thru &#x60;state&#x60; object
-        app.use(yui.expose());
+        app.use(expyui.expose());
         // using yui in debug mode when node runs in debug mode with custom filter
         if (app.get(&#x27;env&#x27;) === &#x27;development&#x27;) {
-            app.use(yui.debug({filter: &#x27;raw&#x27;}));
+            app.use(expyui.debug({filter: &#x27;raw&#x27;}));
         }
 
-    Note: the &#x60;debug()&#x60; middleware only works if it is called
-    after the regular &#x60;expose()&#x60; middleware was called, otherwise
+    Note: the &#x60;expyui.debug()&#x60; middleware only works if it is called
+    after the regular &#x60;expyui.expose()&#x60; middleware was called, otherwise
     it will not be able to overrule the default yui config for the app.
 
     More details about the yui debug mode settings
@@ -347,7 +338,7 @@ module.exports = {
     Serves YUI Modules as static assets. All registered groups and core will be
     served from app origin.
 
-        app.use(yui.static());
+        app.use(expyui.static());
 
     @method static
     @public

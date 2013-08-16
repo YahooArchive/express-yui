@@ -172,13 +172,15 @@ will automatically mix itself into <code>app.yui.expose()</code>, and it
 exposes an array of object with the information to build
 the script tag or tags that forms the seed:</p>
 <p>The following is an example of how these features can be used:</p>
-<pre class="code prettyprint"><code>// Creates a new express app.
-var app = express();
+<pre class="code prettyprint"><code>var express = require(&#39;express&#39;),
+    expyui = require(&#39;express-yui&#39;),
+    app = express();
+
+expyui.extend(app);
 // adjust the seed modules
 app.yui.seed([&#39;yui-base&#39;, &#39;loader&#39;]);
-
 // Call expose middleware when a route match.
-app.get(&#39;/index.html&#39;, app.yui.expose(), anotherRoute);</code></pre>
+app.get(&#39;/index.html&#39;, expyui.expose(), anotherRoute);</code></pre>
 <p>In the example above, the array of objects with the seed information
 will be exposed thru <code>res.locals.yui_seed</code>, which means you
 can use it in your templates by doing something like this if
@@ -375,7 +377,7 @@ using handlebars templates:</p>
             
         
         
-        <a href="../files/lib_seed.js.html#l231"><code>lib&#x2F;seed.js:231</code></a>
+        <a href="../files/lib_seed.js.html#l233"><code>lib&#x2F;seed.js:233</code></a>
         
         </p>
 
@@ -573,7 +575,7 @@ the type of the modules since this routine is able to produce css or js modules 
             
         
         
-        <a href="../files/lib_seed.js.html#l105"><code>lib&#x2F;seed.js:105</code></a>
+        <a href="../files/lib_seed.js.html#l107"><code>lib&#x2F;seed.js:107</code></a>
         
         </p>
 
@@ -687,7 +689,7 @@ automatically.</p>
             
         
         
-        <a href="../files/lib_seed.js.html#l210"><code>lib&#x2F;seed.js:210</code></a>
+        <a href="../files/lib_seed.js.html#l212"><code>lib&#x2F;seed.js:212</code></a>
         
         </p>
 
@@ -804,7 +806,7 @@ will be assumed as core modules from yui.</p>
             
         
         
-        <a href="../files/lib_seed.js.html#l189"><code>lib&#x2F;seed.js:189</code></a>
+        <a href="../files/lib_seed.js.html#l191"><code>lib&#x2F;seed.js:191</code></a>
         
         </p>
 
@@ -909,7 +911,7 @@ will be assumed as core modules from yui.</p>
             
         
         
-        <a href="../files/lib_seed.js.html#l93"><code>lib&#x2F;seed.js:93</code></a>
+        <a href="../files/lib_seed.js.html#l95"><code>lib&#x2F;seed.js:95</code></a>
         
         </p>
 
@@ -995,7 +997,7 @@ be part of the seed files.</p>
             
         
         
-        <a href="../files/lib_seed.js.html#l163"><code>lib&#x2F;seed.js:163</code></a>
+        <a href="../files/lib_seed.js.html#l165"><code>lib&#x2F;seed.js:165</code></a>
         
         </p>
 
@@ -1146,7 +1148,7 @@ seed, it will be provisioned automatically as part of the <code>state</code> obj
             
         
         
-        <a href="../files/lib_seed.js.html#l135"><code>lib&#x2F;seed.js:135</code></a>
+        <a href="../files/lib_seed.js.html#l137"><code>lib&#x2F;seed.js:137</code></a>
         
         </p>
 
@@ -1241,7 +1243,7 @@ specifically setting the <code>app.yui.config().seed</code> value.</p>
             
         
         
-        <a href="../files/lib_seed.js.html#l73"><code>lib&#x2F;seed.js:73</code></a>
+        <a href="../files/lib_seed.js.html#l75"><code>lib&#x2F;seed.js:75</code></a>
         
         </p>
 
@@ -1286,7 +1288,7 @@ specifically setting the <code>app.yui.config().seed</code> value.</p>
             
         
         
-        <a href="../files/lib_seed.js.html#l85"><code>lib&#x2F;seed.js:85</code></a>
+        <a href="../files/lib_seed.js.html#l87"><code>lib&#x2F;seed.js:87</code></a>
         
         </p>
 
@@ -1331,7 +1333,7 @@ specifically setting the <code>app.yui.config().seed</code> value.</p>
             
         
         
-        <a href="../files/lib_seed.js.html#l61"><code>lib&#x2F;seed.js:61</code></a>
+        <a href="../files/lib_seed.js.html#l63"><code>lib&#x2F;seed.js:63</code></a>
         
         </p>
 

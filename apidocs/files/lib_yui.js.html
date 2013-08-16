@@ -150,7 +150,7 @@ that could be used to boot &#x60;YUI&#x60; in the client runtime.
 
 &#x27;use strict&#x27;;
 
-var express = require(&#x27;express&#x27;),
+var expstate = require(&#x27;express-state&#x27;),
     middleware = require(&#x27;./middleware&#x27;),
 
     // sub-modules
@@ -179,18 +179,17 @@ build the script tag or tags that forms the seed:
 
 The following is an example of how these features can be used:
 
-    // Creates a new express app.
     var express = require(&#x27;express&#x27;),
-        YUI = require(&#x27;express-yui&#x27;),
+        expyui = require(&#x27;express-yui&#x27;),
         app = express();
 
+    expyui.extend(app);
     // Set some basic configs
     app.yui.applyConfig({
         fetchCSS: false
     });
-
     // Call expose middleware when a route match.
-    app.get(&#x27;/index.html&#x27;, YUI.expose(), anotherRoute);
+    app.get(&#x27;/index.html&#x27;, expyui.expose(), anotherRoute);
 
 In the example above, the &#x60;state&#x60; of the app will be serialized
 per request, and can be used in the template to set up the client
@@ -339,61 +338,47 @@ utils.extend(ExpressYUIExtension.prototype, cdn, seed, origin, groups, shifter, 
 module.exports = utils.extend(ExpressYUIExtension, middleware, {
 
     /**
-    Augment an express application instance with &#x60;express-yui&#x60; functionalities.
-    By default, &#x60;express-yui&#x60; will augment the &#x60;express&#x60;&#x27;s app prototype to include
-    the &#x60;yui&#x60; member, but if you want to augment an existing &#x60;app&#x60; instance, you can
-    use this method.
+    Deprecated method to augment an express application instance with &#x60;express-yui&#x60; functionalities.
 
     @method augment
+    @deprecated
     @static
     @public
-    @param {Object} app express app instance to be augmented with the &#x60;yui&#x60; member.
+    @param {Object} app express app instance to be extended with the &#x60;yui&#x60; member.
     @return {object} express app instance
     **/
     augment: function (app) {
 
-        if (!app.yui) {
-            app.yui = new ExpressYUIExtension(app);
-        } else {
-            debug(&#x27;skipping the creation of &#x60;app.yui&#x60; because it was already defined.&#x27;);
-        }
+        console.warn(&#x27;&#x60;expyui.augment(app)&#x60; is now deprecated, &#x27; +
+                &#x27; use &#x60;expyui.extend(app)&#x60; instead.&#x27;);
 
-        return app;
-
+        return this.extend(app);
     },
 
     /**
-    Extends the express module prototype with &#x60;express-yui&#x60; functionalities.
-    By default, &#x60;express-yui&#x60; will extend the &#x60;express&#x60;&#x27;s app prototype to include
-    the &#x60;yui&#x60; member, but if you want to extend a custom express reference, you can
-    use this method.
+    Extends an express application instance with &#x60;express-yui&#x60; functionalities.
 
     @method extend
     @static
     @public
-    @param {function} express the express module to be extended.
-    @return {function} express module
+    @param {Object} app express app instance to be extended with the &#x60;yui&#x60; member.
+    @return {object} express app instance
     **/
-    extend: function (express) {
+    extend: function (app) {
 
-        var appProto = express.application,
-            defaultConfiguration = appProto.defaultConfiguration;
+        if (app[&#x27;@yui&#x27;]) { return app; }
 
-        // replacing the original &#x60;defaultConfiguration&#x60; method with the wrapper to include
-        // the creating of app.yui as part of the init in express
-        appProto.defaultConfiguration = function () {
-            defaultConfiguration.apply(this, arguments);
-            module.exports.augment(this);
-        };
+        // Brand.
+        Object.defineProperty(app, &#x27;@yui&#x27;, {value: true});
+        // expose requirements.
+        expstate.extend(app);
+        // adding the &#x60;yui&#x60; member.
+        app.yui = new ExpressYUIExtension(app);
 
-        return express;
-
+        return app;
     }
 
 });
-
-// augmenting the default express dependency
-module.exports.extend(express);
 
     </pre>
 </div>

@@ -168,13 +168,15 @@ the script tag or tags that forms the seed:
 
 The following is an example of how these features can be used:
 
-    // Creates a new express app.
-    var app = express();
+    var express = require(&#x27;express&#x27;),
+        expyui = require(&#x27;express-yui&#x27;),
+        app = express();
+
+    expyui.extend(app);
     // adjust the seed modules
     app.yui.seed([&#x27;yui-base&#x27;, &#x27;loader&#x27;]);
-
     // Call expose middleware when a route match.
-    app.get(&#x27;/index.html&#x27;, app.yui.expose(), anotherRoute);
+    app.get(&#x27;/index.html&#x27;, expyui.expose(), anotherRoute);
 
 In the example above, the array of objects with the seed information
 will be exposed thru &#x60;res.locals.yui_seed&#x60;, which means you

@@ -151,7 +151,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/lib_middleware.js.html#l28"><code>lib&#x2F;middleware.js:28</code></a>
+            Defined in: <a href="../files/lib_middleware.js.html#l25"><code>lib&#x2F;middleware.js:25</code></a>
         </div>
     
 
@@ -171,9 +171,12 @@
     <p>The <code>express-yui</code> exports few middleware that provide some basic
 features to attach information into the <code>res.locals</code> object
 that could be used to boot <code>YUI</code> in the client runtime.</p>
-<pre class="code prettyprint"><code>var app = express();
-app.yui.applyConfig({ fetchCSS: false });
-app.use(yui.expose());</code></pre>
+<pre class="code prettyprint"><code>var express = require(&#39;express&#39;),
+    expyui = require(&#39;express-yui&#39;),
+    app = express();
+
+expyui.extend(app);
+app.use(expyui.expose());</code></pre>
 
 </div>
 
@@ -300,7 +303,7 @@ app.use(yui.expose());</code></pre>
             
         
         
-        <a href="../files/lib_middleware.js.html#l162"><code>lib&#x2F;middleware.js:162</code></a>
+        <a href="../files/lib_middleware.js.html#l153"><code>lib&#x2F;middleware.js:153</code></a>
         
         </p>
 
@@ -313,13 +316,13 @@ app.use(yui.expose());</code></pre>
     <div class="description">
         <p>Forces a request to use yui in debug mode with combine disabled.</p>
 <pre class="code prettyprint"><code>// exposing yui into the client side thru <code>state</code> object
-app.use(yui.expose());
+app.use(expyui.expose());
 // using yui in debug mode when node runs in debug mode with custom filter
 if (app.get(&#39;env&#39;) === &#39;development&#39;) {
-    app.use(yui.debug({filter: &#39;raw&#39;}));
+    app.use(expyui.debug({filter: &#39;raw&#39;}));
 }</code></pre>
-<p>Note: the <code>debug()</code> middleware only works if it is called
-after the regular <code>expose()</code> middleware was called, otherwise
+<p>Note: the <code>expyui.debug()</code> middleware only works if it is called
+after the regular <code>expyui.expose()</code> middleware was called, otherwise
 it will not be able to overrule the default yui config for the app.</p>
 <p>More details about the yui debug mode settings
 <a href="http://yuilibrary.com/yui/docs/api/classes/config.html">in the YUI API Docs</a>.</p>
@@ -470,7 +473,7 @@ it will not be able to overrule the default yui config for the app.</p>
             
         
         
-        <a href="../files/lib_middleware.js.html#l123"><code>lib&#x2F;middleware.js:123</code></a>
+        <a href="../files/lib_middleware.js.html#l113"><code>lib&#x2F;middleware.js:113</code></a>
         
         </p>
 
@@ -481,12 +484,13 @@ it will not be able to overrule the default yui config for the app.</p>
     </div>
 
     <div class="description">
-        <p>Exposes YUI into the client side.</p>
+        <p>Exposes YUI into the client side. This middleware bundles
+<code>expyui.exposeConfig()</code> and <code>expyui.exposeSeed()</code> middleware.</p>
 <pre class="code prettyprint"><code>// using it for a mounted middleware
-app.use(yui.expose());
+app.use(expyui.expose());
 
 // or using it as a route middleware
-app.get(&#39;/foo&#39;, yui.expose());</code></pre>
+app.get(&#39;/foo&#39;, expyui.expose());</code></pre>
 
     </div>
 
@@ -561,10 +565,13 @@ app.get(&#39;/foo&#39;, yui.expose());</code></pre>
     </div>
 
     <div class="description">
-        <p>Exposes <code>res.locals.yui_config</code> string with the serialized
-configuration computed based on all the calls to <code>app.yui.*</code>
-methods. This middleware will be invoked by <code>express-yui.expose</code> middleware
-automatically, which means you should not call it directly.</p>
+        <p>Exposes the yui configuration into <code>res.locals.state</code>. It also
+exposes the <code>express-yui</code> wrapper for YUI on the client so you can
+access <code>app.yui.*</code> on the client side just like you do on the server
+side. The client wrapper includes <code>app.yui.ready()</code> and <code>app.yui.use()</code>
+with the corresponding bootstraping code to inject YUI into the page.
+This middleware will be invoked by <code>expyui.expose()</code> middleware
+automatically, which means you do not need to call it directly.</p>
 
     </div>
 
@@ -628,7 +635,7 @@ automatically, which means you should not call it directly.</p>
             
         
         
-        <a href="../files/lib_middleware.js.html#l78"><code>lib&#x2F;middleware.js:78</code></a>
+        <a href="../files/lib_middleware.js.html#l81"><code>lib&#x2F;middleware.js:81</code></a>
         
         </p>
 
@@ -639,20 +646,12 @@ automatically, which means you should not call it directly.</p>
     </div>
 
     <div class="description">
-        <p>Expose the seed information to the client.
-Usually, <code>yui.expose()</code> will take care of calling
-<code>yui.exposeSeed()</code>, although you can do it directly.</p>
-<p>This method will expose an array through
-<code>res.locals.yui_seed</code> with the following format:</p>
-<pre class="code prettyprint"><code>[
-    {src: &quot;path/to/yui.js&quot;},
-    {src: &quot;path/to/another.js&quot;}
-]</code></pre>
-<p>In your template (assuming using handlebars):</p>
-<pre class="code prettyprint"><code>{{#yui_seed}}
-&amp;lt;script src=&quot;{{{src}}}&quot;&amp;gt;&amp;lt;/script&amp;gt;
-{{/yui_seed}}</code></pre>
-<p>Adjust the format if using a different template engine.</p>
+        <p>Expose the seed information into <code>res.locals.state</code>. This seed is
+an array of urls based on the call to <code>app.yui.seed()</code>, which is
+going to be used by the client bootstrap code to inject YUI into
+the page.
+This middleware will be invoked by <code>expyui.expose()</code> middleware
+automatically, which means you do not need to call it directly.</p>
 
     </div>
 
@@ -726,7 +725,7 @@ Usually, <code>yui.expose()</code> will take care of calling
             
         
         
-        <a href="../files/lib_middleware.js.html#l212"><code>lib&#x2F;middleware.js:212</code></a>
+        <a href="../files/lib_middleware.js.html#l203"><code>lib&#x2F;middleware.js:203</code></a>
         
         </p>
 
@@ -739,7 +738,7 @@ Usually, <code>yui.expose()</code> will take care of calling
     <div class="description">
         <p>Serves YUI Modules as static assets. All registered groups and core will be
 served from app origin.</p>
-<pre class="code prettyprint"><code>app.use(yui.static());</code></pre>
+<pre class="code prettyprint"><code>app.use(expyui.static());</code></pre>
 
     </div>
 

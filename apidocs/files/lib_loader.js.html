@@ -169,7 +169,6 @@ as well as a bunch of custom settings. Here is another example:
     var plugin = app.yui.plugin({
         registerGroup: true,
         registerServerModules: true,
-        useServerModules: true,
         lint: true,
         coverage: true,
         silence: false
@@ -214,8 +213,6 @@ module.exports = {
         @param {Boolean|Function} options.registerServerModules Whether or not server
             modules should be provisioned to be loaded thru &#x60;app.yui.use()&#x60; on the
             server side. Default to false.
-        @param {Boolean|Function} options.useServerModules Whether or not server modules
-            should be automatically used thru &#x60;Y.use()&#x60; whenever &#x60;app.yui.use()&#x60; is called.
         @param {Boolean} options.cache Whether or not the shifting process should be cached
             to speed up the build process. By default, it is true.
         @param {string} options.buildDir Optional custom filesystem path for the output
@@ -400,19 +397,11 @@ module.exports = {
                                         options.registerServerModules(bundleName, server.data.json) :
                                         server.data.json));
 
-                                // automatically attaching modules into a server instance if needed
-                                if (options.useServerModules) {
-                                    yui.attachModules(bundleName, (utils.isFunction(options.useServerModules) ?
-                                            options.useServerModules(bundleName, Object.keys(server.data.json)) :
-                                            Object.keys(server.data.json)));
-                                }
-
-                                // if not all modules should be attached automatically, then try to
-                                // automatically attach any module added to &#x60;bundle.useServerModules&#x60; by
-                                // any plugin. this is very useful for plugins that compile templates
-                                // and those templates should be attached automatically
-                                if (!options.useServerModules &amp;&amp; bundle.useServerModules) {
-                                    yui.attachModules(bundleName, bundle.useServerModules);
+                                // attach any module added to &#x60;bundle.useServerModules&#x60; by
+                                // any plugin. this is very useful for plugins that compile templates,
+                                // where those templates should be attached automatically
+                                if (bundle.useServerModules) {
+                                    yui.attachModules(bundle.useServerModules);
                                 }
 
                             }
