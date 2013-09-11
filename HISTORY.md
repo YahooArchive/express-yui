@@ -1,7 +1,7 @@
 Express YUI Change History
 ==========================
 
-@NEXT@
+0.6.1 (2013-09-11)
 ------------------
 
 * bugfix to support a `build.json` file at the top level in a bundle.
