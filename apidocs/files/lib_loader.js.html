@@ -452,12 +452,11 @@ module.exports = {
     _buildsInBundle: function (bundle, modifiedFiles, jsonFiles) {
         var bundleName = bundle.name,
             file,
-            skip,
             dir,
             mod,
             i,
             m,
-            builds = [];
+            builds = {};
 
         // validating and ordering the list of files to make sure they are processed
         // in the same order every time to generate the metas. If the order is not
@@ -475,7 +474,7 @@ module.exports = {
                 mod = this._checkYUIModule(file);
                 if (mod) {
                     this.register(bundleName, file, mod);
-                    builds.push(file);
+                    builds[file] = true;
                 }
             }
         }
@@ -485,30 +484,29 @@ module.exports = {
             if (path.basename(jsonFiles[i]) === &#x27;build.json&#x27;) {
                 mod = this._checkBuildFile(jsonFiles[i]);
                 if (mod) {
-                    skip = true;
                     dir = path.dirname(jsonFiles[i]);
                     for (m = 0; m &lt; modifiedFiles.length; m += 1) {
                         file = modifiedFiles[m];
                         // if build.json itself was modified, we should not skip
                         if (file === jsonFiles[i]) {
-                            skip = false;
+                            builds[jsonFiles[i]] = true;
                         }
-                        // if there is a modified .js file in the range, we should not skip
-                        if (path.extname(file) === &#x27;.js&#x27; &amp;&amp; file.indexOf(dir) === 0) {
-                            skip = false;
+                        // if there is a modified .js file in the range,
+                        // and it is not under build directory,
+                        // we should shift it, just in case
+                        // note: this is not ideal, but we don&#x27;t know how to analyze a build.json to really
+                        //       know when to build it or not, so we need to build it everytime
+                        if (path.extname(file) === &#x27;.js&#x27; &amp;&amp;
+                                file.indexOf(dir) === 0 &amp;&amp;
+                                file.indexOf(bundle.buildDirectory) === -1) {
+                            builds[jsonFiles[i]] = true;
                         }
                     }
                     this.register(bundleName, jsonFiles[i], mod);
-                    // build only if at least one file from modified is under the dirname of build.json, or
-                    // build.json was modified
-                    if (!skip) {
-                        builds.push(jsonFiles[i]);
-                    }
                 }
             }
         }
-
-        return builds;
+        return Object.keys(builds).sort();
     },
 
     /**

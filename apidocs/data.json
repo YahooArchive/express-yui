@@ -928,7 +928,7 @@
         },
         {
             "file": "lib/loader.js",
-            "line": 380,
+            "line": 378,
             "description": "Set the proper shifter configuration for images in the css modules\nto be processed based on the group configuration.",
             "itemtype": "method",
             "name": "_cssprocInBundle",
@@ -956,7 +956,7 @@
         },
         {
             "file": "lib/loader.js",
-            "line": 409,
+            "line": 407,
             "description": "Get the fullPath of all modified files that should be shifted.",
             "itemtype": "method",
             "name": "_filterFilesInBundle",
