@@ -319,6 +319,123 @@ suite.add(new YUITest.TestCase({
         files = loader._filterFilesInBundle(bundle, list, filter);
         A.areEqual(1, files.length, 'filter should only processed foo');
         A.areEqual('/fullpath/to/foo', files[0]);
+    },
+    'test _buildsInBundle for yui modules': function () {
+        var bundle = {
+                name: 'foo',
+                buildDirectory: '/path/build'
+            },
+            files, modifiedFiles, jsonFiles;
+
+        YUITest.Mock.expect(loader, {
+            method: '_checkYUIModule',
+            callCount: 5,
+            args: [YUITest.Mock.Value.String],
+            run: function () {
+                return '_checkYUIModule result';
+            }
+        });
+
+        modifiedFiles = [];
+        jsonFiles = [];
+        files = loader._buildsInBundle(bundle, modifiedFiles, jsonFiles);
+        A.areEqual(0, files.length, 'no need to build any file in bundle');
+
+        modifiedFiles = ['/path/src/foo/bar/baz.js'];
+        jsonFiles = [];
+        files = loader._buildsInBundle(bundle, modifiedFiles, jsonFiles);
+        A.areEqual(1, files.length, 'baz.js in source');
+
+        modifiedFiles = ['/path/build/foo/bar/baz.js'];
+        jsonFiles = [];
+        files = loader._buildsInBundle(bundle, modifiedFiles, jsonFiles);
+        A.areEqual(1, files.length, 'build.json in build');
+
+        modifiedFiles = ['/path/foo.js'];
+        jsonFiles = [];
+        files = loader._buildsInBundle(bundle, modifiedFiles, jsonFiles);
+        A.areEqual(1, files.length, 'foo.js at the top level with possible yui module within build');
+
+        modifiedFiles = ['/path/foo.js', '/path/foo.js'];
+        jsonFiles = [];
+        files = loader._buildsInBundle(bundle, modifiedFiles, jsonFiles);
+        A.areEqual(1, files.length, 'dedupe on foo.js at the top level with possible yui module within build');
+
+        YUITest.Mock.verify(loader);
+    },
+    'test _buildsInBundle for non yui modules': function () {
+        var bundle = {
+                name: 'foo',
+                buildDirectory: '/path/build'
+            },
+            files, modifiedFiles, jsonFiles;
+
+        YUITest.Mock.expect(loader, {
+            method: '_checkYUIModule',
+            callCount: 1,
+            args: [YUITest.Mock.Value.String],
+            run: function () {
+                return null;
+            }
+        });
+
+        modifiedFiles = ['/path/src/foo/bar/baz.js'];
+        jsonFiles = [];
+        files = loader._buildsInBundle(bundle, modifiedFiles, jsonFiles);
+        A.areEqual(0, files.length, 'baz.js which is not a js file');
+
+        YUITest.Mock.verify(loader);
+    },
+    'test _buildsInBundle for build.json': function () {
+        var bundle = {
+                name: 'foo',
+                buildDirectory: '/path/build'
+            },
+            files, modifiedFiles, jsonFiles;
+
+        YUITest.Mock.expect(loader, {
+            method: '_checkYUIModule',
+            callCount: 3,
+            args: [YUITest.Mock.Value.String],
+            run: function () {
+                return null;
+            }
+        });
+        YUITest.Mock.expect(loader, {
+            method: '_checkBuildFile',
+            callCount: 4,
+            args: [YUITest.Mock.Value.String],
+            run: function () {
+                return '_checkBuildFile result';
+            }
+        });
+
+        modifiedFiles = [];
+        jsonFiles = [];
+        files = loader._buildsInBundle(bundle, modifiedFiles, jsonFiles);
+        A.areEqual(0, files.length, 'no need to build any file in bundle');
+
+        modifiedFiles = ['/path/src/build.json'];
+        jsonFiles = ['/path/src/build.json'];
+        files = loader._buildsInBundle(bundle, modifiedFiles, jsonFiles);
+        A.areEqual(1, files.length, 'simple build.json');
+
+        modifiedFiles = ['/path/src/foo/bar/baz.js'];
+        jsonFiles = ['/path/src/build.json'];
+        files = loader._buildsInBundle(bundle, modifiedFiles, jsonFiles);
+        A.areEqual(1, files.length, 'build.json with a possible yui module in range');
+
+        modifiedFiles = ['/path/build/foo/bar/baz.js'];
+        jsonFiles = ['/path/src/build.json'];
+        files = loader._buildsInBundle(bundle, modifiedFiles, jsonFiles);
+        A.areEqual(0, files.length, 'build.json with a possible yui module off range');
+
+        modifiedFiles = ['/path/build/foo.js'];
+        jsonFiles = ['/path/build.json'];
+        files = loader._buildsInBundle(bundle, modifiedFiles, jsonFiles);
+        A.areEqual(0, files.length, 'build.json at the top level with possible yui module within build');
+
+        YUITest.Mock.verify(loader);
     }
 }));
 
