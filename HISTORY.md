@@ -1,6 +1,10 @@
 Express YUI Change History
 ==========================
 
+0.6.2 (2013-09-16)
+
+* relaxing the yui dependency to support 3.x.
+
 0.6.1 (2013-09-11)
 ------------------
 
