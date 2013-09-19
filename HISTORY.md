@@ -6,6 +6,9 @@ Express YUI Change History
 
 * moving `lib/view.js` into a separate component called `express-view`.
 * moving `lib/shifter.js` into a separated component called `locator-yui`.
+* moving `lib/loader.js` into its own component called `locator-yui`.
+* removing already deprecated method `app.yui.debugMode()`, use `.debug()` middleware instead.
+* removing already deprecated method require('express-yui').augment(), use `.extend()` instead.
 
 0.6.2 (2013-09-16)
 ------------------
