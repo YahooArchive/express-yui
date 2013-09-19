@@ -5,6 +5,7 @@ Express YUI Change History
 ------------------
 
 * moving `lib/view.js` into a separate component called `express-view`.
+* moving `lib/shifter.js` into a separated component called `locator-yui`.
 
 0.6.2 (2013-09-16)
 ------------------
