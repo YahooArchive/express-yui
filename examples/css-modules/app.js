@@ -3,14 +3,15 @@
 'use strict';
 
 var express = require('express'),
-    expyui  = require('../../'), // express-yui
+    expyui = require('../../'), // express-yui
+    expview = require('express-view'),
     Locator = require('locator'),
     LocatorHandlebars = require('locator-handlebars'),
+    LocatorYUI = require('locator-yui'),
     app = express();
 
 expyui.extend(app);
-
-app.set('view', app.yui.view());
+expview.extend(app);
 
 // serving static yui modules
 app.use(expyui['static']());
@@ -32,11 +33,9 @@ app.get('/', expyui.expose(), function (req, res, next) {
 new Locator({
     buildDirectory: 'build'
 })
-    .plug(LocatorHandlebars.yui())
-    .plug(app.yui.plugin({
-        registerGroup: true,
-        registerServerModules: true,
-        cssproc: true
+    .plug(new LocatorHandlebars({ format: 'yui' }))
+    .plug(new LocatorYUI({
+        cssproc: '/build'
     }))
     .parseBundle(__dirname, {}).then(function (have) {
 

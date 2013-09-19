@@ -1,7 +1,13 @@
 Express YUI Change History
 ==========================
 
+@NEXT@
+------------------
+
+* moving `lib/view.js` into a separate component called `express-view`.
+
 0.6.2 (2013-09-16)
+------------------
 
 * relaxing the yui dependency to support 3.x.
 

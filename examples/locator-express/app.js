@@ -3,17 +3,22 @@
 'use strict';
 
 var express = require('express'),
-    expyui  = require('../../'), // express-yui
+    expyui = require('../../'), // express-yui
+    expview = require('express-view'),
     Locator = require('locator'),
     LocatorHandlebars = require('locator-handlebars'),
     LocatorMicro = require('locator-micro'),
-    app = express();
+    LocatorYUI = require('locator-yui'),
+    app = express(),
+    loca = new Locator({
+        buildDirectory: 'build'
+    });
 
+app.set('locator', loca);
+app.set('layout', 'index');
+
+expview.extend(app);
 expyui.extend(app);
-
-app.set('view', app.yui.view({
-    defaultLayout: 'index'
-}));
 
 // serving static yui modules
 app.use(expyui['static']());
@@ -34,16 +39,9 @@ app.get('/foo', expyui.expose(), function (req, res, next) {
     });
 });
 
-// locator initialiation
-new Locator({
-    buildDirectory: 'build'
-})
-    .plug(LocatorHandlebars.yui())
-    .plug(LocatorMicro.yui())
-    .plug(app.yui.plugin({
-        registerGroup: true,
-        registerServerModules: true
-    }))
+loca.plug(new LocatorHandlebars({ format: 'yui' }))
+    .plug(new LocatorMicro({ format: 'yui' }))
+    .plug(new LocatorYUI({}))
     .parseBundle(__dirname, {}).then(function (have) {
 
         // listening for traffic only after locator finishes the walking process

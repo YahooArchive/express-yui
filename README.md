@@ -45,7 +45,6 @@ combo capabilities built-in.
 ### Other features
 
  * built-in integration with [locator][] component to analyze and build applications and dependencies using [shifter][].
- * provide basic express view engine to rely on views registered at the server side thru the `app.yui.use()` as compiled templates.
 
 [locator]: https://github.com/yahoo/locator
 [shifter]: https://github.com/yui/shifter
@@ -172,57 +171,11 @@ app.get('/forecast', expyui.expose(), function (req, res, next) {
 
 _note: remember that `req.app` holds a reference to the `app` object for convenience._
 
-
-### Using Y.Template on the server side
-
-`express-yui` ships with a custom `express` view class implementation which allows to control `res.render()` calls. Normally, `express` along with some specific view engine can do the work of compiling and rendering templates on the server side, but `express-yui` is striking for bringing parity between server and client, and for that, it supports the use of compiled-to-javascript templates that can be used on the server and client alike.
-
-For that, you just need to hook `app.yui.view()` into express, by doing this:
-
-```
-app.set('view', app.yui.view());
-```
-
-With the code above, there is not need to define anything else in express in terms of engine, or path to views, or anything else, all that is irrelevant since `express-yui` will completely take over the `express`'s template resolution process, and will drive it thru `Y.Template`, which means you can call `res.render('foo')` in your middleware, and `express-yui` will resolve `foo` template. `express-yui` will try to find `foo` template within the `Y.Template` internal cache, and call for render if the exists.
-
-#### Layout
-
-You can also define a default layout:
-
-```
-app.set('view', app.yui.view({
-    defaultLayout: 'bar'
-}));
-```
-
-If you use `defaultLayout` as above, or just by providing the `layout` value when calling `res.render('foo', { layout: 'bar' })`, `express-yui` will resolve the `view`, render it, and the result of that operation will be passed into the layout render thru a context variable called `outlet`, this is similar to `emberjs`. In a handlebars template, you will define the `outlet` like this:
-
-```
-<div>{{{outlet}}}</div>
-```
-
-#### Bundle (optional)
-
-If your templates are part of a NPM dependency, you have to tell `express-yui` and the `view` how to resolve those templates from a different package, for that, you can define `defaultBundle`:
-
-```
-app.set('view', app.yui.view({
-    defaultBundle: 'name-of-package-with-templates'
-}));
-```
-
-If you use `defaultBundle` as above, or just by providing the `bundle` value when calling `res.render('foo', { bundle: 'name-of-package-with-templates' })`, `express-yui` will lookup for the template under the specified bundle. Internally, all templates will be prefixed with the package name of their corresponding NPM package, and the `bundle` will be used to specify what prefix to use.
-
 ### Using [Locator] plugins
 
-If you use `locator` component plus other plugins like `locator-handlebars` to precompile templates into YUI Modules, then when calling `res.render('foo')`, `express-yui` can resolve `foo` automatically based on the compiled version. Check this example to see `app.yui.view()` in action:
+If you use `locator` component plus other plugins like `locator-handlebars` to precompile templates, then when calling `res.render('foo')`, you can rely on `express-view` to resolve `foo` automatically based on the precompiled version. Check this example to see this in action:
 
  * https://github.com/yahoo/express-yui/tree/master/examples/locator-express
-
-More information about this new feature in express here:
-
- * http://caridy.name/blog/2013/05/bending-express-to-support-synthetic-views/
-
 
 ### Registering yui groups manually
 
