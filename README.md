@@ -42,14 +42,6 @@ combo capabilities built-in.
  view engine to be used in the templates to boot YUI and the app in the client side.
 
 
-### Other features
-
- * built-in integration with [locator][] component to analyze and build applications and dependencies using [shifter][].
-
-[locator]: https://github.com/yahoo/locator
-[shifter]: https://github.com/yui/shifter
-
-
 Usage
 -----
 
@@ -176,20 +168,6 @@ _note: remember that `req.app` holds a reference to the `app` object for conveni
 If you use `locator` component plus other plugins like `locator-handlebars` to precompile templates, then when calling `res.render('foo')`, you can rely on `express-view` to resolve `foo` automatically based on the precompiled version. Check this example to see this in action:
 
  * https://github.com/yahoo/express-yui/tree/master/examples/locator-express
-
-### Registering yui groups manually
-
-
-If you are not using [locator][] component for whatever reason, you will be responsible
-for building yui modules, grouping them into yui groups and registering them thru
-`app.yui.registerGroup` method. Here is how you register a folder that has the build
-result with all yui modules compiled thru [shifter][]:
-
-```
-app.yui.registerGroup('foo', 'path/to/foo-1.2.3');
-```
-
-Again, this is absolutely not needed if you use [locator][].
 
 ### Serving static assets from app origin
 
