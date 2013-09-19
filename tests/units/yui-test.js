@@ -101,23 +101,6 @@ suite.add(new YUITest.TestCase({
         A.areEqual('$', out.comboSep, 'wrong comboSep, should not be overruled');
     },
 
-    "test debugMode": function () {
-        var obj = new ExpressYUI({}),
-            out;
-
-        A.areSame(obj, obj.debugMode(), 'debugMode should be chainable');
-        out = obj.config();
-        A.isTrue(out.debug);
-        A.areEqual('debug', out.filter);
-        A.areEqual('debug', out.logLevel);
-        A.isTrue(out.useBrowserConsole);
-
-        obj.debugMode({debug: false, filter: 'raw'});
-        out = obj.config();
-        A.isFalse(out.debug, 'debug should be overrulled');
-        A.areEqual('raw', out.filter, 'filter should be overrulled');
-    },
-
     "test applyConfig": function () {
         var obj = new ExpressYUI({});
 
