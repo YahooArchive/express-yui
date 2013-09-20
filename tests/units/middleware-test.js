@@ -61,7 +61,7 @@ suite.add(new YUITest.TestCase({
                         version: 'a.b.c',
                         config: function () { return config; }
                     },
-                    set: function () {}
+                    get: function () {}
                 }
             },
             res = {},
