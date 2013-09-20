@@ -121,6 +121,38 @@ suite.add(new YUITest.TestCase({
         result = ExpressYUI.extend(app);
         A.areSame(1, app.yui, 'already extended app should not be extended again');
         A.areSame(result, app, 'extend shoud return the express app');
+    },
+
+    "test setCoreFromCDN": function () {
+        var mid,
+            obj = new ExpressYUI({}),
+            c = {
+                baz: 1
+            };
+
+        A.isFunction(obj.setCoreFromCDN);
+
+        obj.version = '3.9'; // from yui()
+        obj.config = function () {
+            return c;
+        };
+
+        mid = obj.setCoreFromCDN({
+            foo: 'bar'
+        });
+
+        OA.areEqual({
+            "baz": 1,
+            "base": "http://yui.yahooapis.com/3.9/",
+            "comboBase": "http://yui.yahooapis.com/combo?",
+            "comboSep": "&",
+            "root": "3.9/",
+            "filter": "debug",
+            "combine": false,
+            "foo": "bar"
+        }, c, 'wrong loader config');
+
+        A.areEqual(obj, mid, 'cdn.setCoreFromCDN() should be chainable');
     }
 
 }));
