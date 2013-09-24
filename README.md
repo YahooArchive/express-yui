@@ -40,7 +40,7 @@ Features
 combo capabilities built-in.
  * provide middleware to `expose` the app state and the yui config into the
  view engine to be used in the templates to boot YUI and the app in the client side.
-
+ * removing `app.yui.attachModules()`, stick to `app.yui.use()`.
 
 Usage
 -----

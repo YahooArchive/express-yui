@@ -9,6 +9,8 @@ Express YUI Change History
 * moving `lib/loader.js` into its own component called `locator-yui`.
 * removing already deprecated method `app.yui.debugMode()`, use `.debug()` middleware instead.
 * removing already deprecated method require('express-yui').augment(), use `.extend()` instead.
+* removing support for built-in combo handler.
+* using `bundleObj.yui` as the source of truth for yui meta data.
 
 0.6.2 (2013-09-16)
 ------------------
