@@ -12,7 +12,6 @@
         "npm" : ">=1.2.10"
     },
     "dependencies": {
-        "express-combo": "0.1.x",
         "express-state": "~1.0.0",
         "debug": "*"
     },
