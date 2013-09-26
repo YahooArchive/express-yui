@@ -34,7 +34,7 @@
         "yuitest": "0.7.x",
         "yuidocjs": "0.3.x"
     },
-    "main": "./lib/yui",
+    "main": "./lib/",
     "keywords": [
         "framework",
         "yui",
