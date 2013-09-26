@@ -11,7 +11,7 @@ var express = require('express'),
     LocatorYUI = require('locator-yui'),
     app = express(),
     loca = new Locator({
-        buildDirectory: 'build'
+        buildDirectory: __dirname + '/build'
     });
 
 app.set('locator', loca);
@@ -21,7 +21,9 @@ expview.extend(app);
 expyui.extend(app);
 
 // serving static yui modules
-app.use(expyui['static']());
+app.use(expyui['static'](__dirname + '/build'));
+
+app.yui.setCoreFromAppOrigin();
 
 // creating a page with YUI embeded
 app.get('/bar', expyui.expose(), function (req, res, next) {
@@ -42,14 +44,16 @@ app.get('/foo', expyui.expose(), function (req, res, next) {
 loca.plug(new LocatorHandlebars({ format: 'yui' }))
     .plug(new LocatorMicro({ format: 'yui' }))
     .plug(new LocatorYUI({}))
-    .parseBundle(__dirname, {}).then(function (have) {
+    .parseBundle(__dirname);
 
-        // listening for traffic only after locator finishes the walking process
-        app.listen(3000, function () {
-            console.log("Server listening on port 3000");
-        });
-
-    }, function (e) {
-        console.log(e);
-        console.log(e.stack);
+app.yui.ready(function (err) {
+    if (err) {
+        console.log(err);
+        console.log(err.stack);
+        return;
+    }
+    // listening for traffic only after locator finishes the walking process
+    app.listen(3000, function () {
+        console.log("Server listening on port 3000");
     });
+});

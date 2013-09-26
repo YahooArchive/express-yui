@@ -5,11 +5,11 @@
     "private": true,
     "main": "app.js",
     "dependencies": {
-        "express": "*",
+        "express": "3.x",
         "express-yui": "*",
         "locator": "~0.3.0",
         "locator-handlebars": "*",
         "locator-micro": "*",
-        "yui": "~3.11.0"
+        "yui": "3.x"
     }
 }
