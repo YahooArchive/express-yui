@@ -47,90 +47,17 @@ suite.add(new YUITest.TestCase({
 
     "test static": function () {
 
-        var mid,
-            options,
-            config,
-            combineCalled,
-            req = {
-                app: {
-                    yui: {
-                        _groupFolderMap: {
-                            'testgroup': 'path/to/testgroup-1.2.3'
-                        },
-                        path: 'path/to/yui',
-                        version: 'a.b.c',
-                        config: function () { return config; }
-                    },
-                    set: function () {}
-                }
-            },
-            res = {},
-            folders,
-            counter = 0;
+        var app,
+            options;
 
         options = {
             foo: 1
         };
-        config = {
-            root: "http://foo.yahoo.com",
-            comboBase: "/samba~",
-            comboSep: "$",
-            local: true,
-            combine: true,
-            groups: {
-                "testgroup": {
-                    root: "http://foo.yahoo.com",
-                    comboBase: "/samba~",
-                    comboSep: "$",
-                    local: true
-                }
-            }
-        };
 
-        expressCombo.combine = function (o) {
-            combineCalled = true;
-            A.areEqual(1, o.foo, 'options should be propagated');
-            return function (req, res, next) {
-                counter += 1;
-                next();
-            };
-        };
-
-        folders = [function (name, path, o) {
-            // console.log(o);
-            A.areEqual('yui-a.b.c', name, 'yui group should be added to static.folder()');
-            A.areEqual('path/to/yui', path, 'yui path should be collected from app.yui.version');
-            A.areEqual(1, o.foo, 'options should be propagated');
-
-            return function (req, res, next) {
-                counter += 1;
-                next();
-            };
-        }, function (name, path, o) {
-            // console.log(o);
-            A.areEqual('testgroup-1.2.3', name, 'testgroup group should be added to static.folder()');
-            A.areEqual('path/to/testgroup-1.2.3', path, 'testgroup path should be collected from _groupFolderMap basename value');
-            A.areEqual(1, o.foo, 'options should be propagated');
-
-            return function (req, res, next) {
-                counter += 1;
-                next();
-            };
-        }];
-
-        expressCombo.folder = function () {
-            return folders.shift().apply(this, arguments);
-        };
-
-        mid = middleware['static'](options);
-
-        mid(req, res, function (err, data) {
-            counter += 1;
-        });
-
-        A.areEqual(true, combineCalled, 'static.combine() was not called');
-        A.isFunction(mid, 'static() should return a middleware');
-        A.areEqual(4, counter, 'not all middleware were called');
+        app = middleware['static']('/path/to/build', options);
+console.log(app);
+        A.isObject(app, 'static() should return an express app to be mounted');
+        A.isFunction(app.use, 'static() should return an express app with `use()` method');
     },
 
     "test exposeSeed": function () {

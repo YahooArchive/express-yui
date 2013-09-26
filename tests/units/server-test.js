@@ -36,23 +36,6 @@ suite.add(new YUITest.TestCase({
         A.isNotNull(server, "server require failed");
     },
 
-    "test attachModules": function () {
-        // attaching for the first time
-        server.attachModules('foo', ['baz', 'bar']);
-        // flagging Env
-        server._Y = YUITest.Mock();
-        YUITest.Mock.expect(server._Y, {
-            method: 'use',
-            args: [YUITest.Mock.Value.Any],
-            callCount: 1,
-            run: function (modules) {
-                A.areEqual(4, modules.length, 'provision of 2 modules failed');
-            }
-        });
-        // attaching again
-        A.areSame(server, server.attachModules('foo', ['baz', 'bar']), 'server.attachModules should be chainable');
-    },
-
     "test registerModules": function () {
         // attaching for the first time
         server.registerModules('foo', {
