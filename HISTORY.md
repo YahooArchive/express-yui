@@ -4,13 +4,37 @@ Express YUI Change History
 @NEXT@
 ------------------
 
-* moving `lib/view.js` into a separate component called `express-view`.
-* moving `lib/shifter.js` into a separated component called `locator-yui`.
-* moving `lib/loader.js` into its own component called `locator-yui`.
-* removing already deprecated method `app.yui.debugMode()`, use `.debug()` middleware instead.
-* removing already deprecated method require('express-yui').augment(), use `.extend()` instead.
-* removing support for built-in combo handler.
+## Important (non-backward compatible) changes:
+
+* __[!]__ moving `lib/view.js` into a separate component called `express-view`, which means that `app.yui.view()` is not longer available.
+* __[!]__ moving `lib/shifter.js` into a separated component called `locator-yui`.
+* __[!]__ moving `lib/loader.js` into its own component called `locator-yui`, which means that `app.yui.plugin()` is not longer available.
+* __[!]__ removing already deprecated method `app.yui.debugMode()`, use `.debug()` middleware instead.
+* __[!]__ removing already deprecated method require('express-yui').augment(), use `.extend()` instead.
+* __[!]__ removing support for built-in combo handler.
+* __[!]__ non-backward compatible change on `app.set('yui default base', 'http://path/to/cdn/');`, it should point to the build folder in CDN without the need to pass `{{groupDir}}`
+* __[!]__ non-backward compatible change on `app.set('yui default root', 'something/')'`, it should hold the path from combo to the build folder without the need to pass `{{groupDir}}`
+* __[!]__ `express-yui` does NOT longer add support for combo out of the box (we plan to provide support for that in `express-combo`)
+* __[!]__ `expyui.static` is now equivalent to `express.static` in format and behavior. It returns an express application instance that can be mounted like `app.use(expyui.static(__dirname + '/build'))` or under a particular path `app.use('/static', expyui.static(__dirname + '/build'));`. This `static` middleware will also expose the folder that you provide (usually the locator build directory) and it will also expose YUI build folder thru NPM dependency. The actual behavior of serving files is pretty much the same as before.
+* __[!]__ `locator.watch()` is not longer supported in `express-yui`.
+
+## Other changes:
+
 * using `bundleObj.yui` as the source of truth for yui meta data.
+* `app.yui._clientModules` and `app.yui._serverModules` are exposed as protected properties in case you need to mess around with the loader on server and client.
+* `app.yui.addModuleToSeed()` does not require a second argument specifying the group of the module to be added to seed, this is now resolved thru `app.yui._clientModules` registry.
+* `app['@yui']` stores a reference to the extension function to align with the express extension pattern.
+* feature pairity between server and client. You can, and should, use `app.yui.ready()` on the server as well to wait for YUI to be ready before serving traffic. This method has the same signature than the client version and on the server it is bound to the locator object to fulfill its internal `ready` promise.
+* `app.yui.registerGroup()` signature changed. The optional 3rd argument is not longer a filesystem path to the meta module, but just the meta module name produced by `locator-yui`.
+* `app.yui.registerModules()` was removed. Modules will be registered automatically thru `locator-yui` or you can do it manually thru the protected registries `app.yui._clientModules` and `app.yui._serverModules`, or you can explore `app.yui.registerBundle()` method.
+
+## Patching yui loader to support:
+
+* `templates: ['foo', 'bar']`, which is equivalent to say `requires: ['<bundleName>-template-foo', '<bundleName>-template-bar']`. This brings templates as first class citizen for loader, and avoid the necessity to know how the compiled yui module for the template was named since the only name that matters is the filename of the template.
+* `langBundles: ['bar', 'baz']`, which is equivalent to say `requires: ['<bundleName>-lang-bar', '<bundleName>-lang-baz']`. This declouple the lang bundles from the name of the module, and allow us to specify what bundle should be attached independently of the module name of the requirer. This also brings lang bundles as first class citizen for loader, and avoid the necessity to know how the compiled yui module for the lang bundle was named since the only name that matters is the filename of the lang bundle. The locale/lang will be filled in by loader on the client side based on `Y.config.lang`, and on the server side it will use the language defined based on the request.
+* `optionalRequires: ['xyz', 'qwe-server']`, which helps to require a yui module that might or might not be available in the current runtime, which means that you can require a server only module as optional in a client module without triggering an error. The difference between this and the loader original `optional` feature is that `optional` will only attach the module if some other module is requiring it, or it is was specified manually in the same `use` statement, guaranteeing the order in which those modules were attached, but `optionalRequires` will look into the guts of loader to see if the module is really available in the runtime before trying to use is as a regular requirement.
+
+_more info about loader here:_ http://yuilibrary.com/yui/docs/api/classes/Loader.html#method_addModule
 
 0.6.2 (2013-09-16)
 ------------------
