@@ -55,7 +55,7 @@ suite.add(new YUITest.TestCase({
         };
 
         app = middleware['static']('/path/to/build', options);
-console.log(app);
+
         A.isObject(app, 'static() should return an express app to be mounted');
         A.isFunction(app.use, 'static() should return an express app with `use()` method');
     },

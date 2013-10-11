@@ -12,75 +12,98 @@ var YUITest = require('yuitest'),
     A = YUITest.Assert,
     OA = YUITest.ObjectAssert,
     suite,
-    server = require('../../lib/server.js'),
-    original = server.getYInstance;
+    server = require('../../lib/server.js');
 
 suite = new YUITest.TestSuite("expres-yui server suite");
 
 suite.add(new YUITest.TestCase({
     name: "server-test",
 
+    _should: {
+        error: {
+            "test ready without locator": true
+        }
+    },
+
     setUp: function () {
-        server.getYInstance = original;
+        server._clientModules = {};
+        server._serverModules = {};
+        server.YUI = {};
+        server._app = {
+            _mockAttrs: {},
+            // express app
+            set: function (name, value) {
+                this._mockAttrs[name] = value;
+            },
+            get: function (name) {
+                return this._mockAttrs[name];
+            }
+        };
     },
 
     tearDown: function () {
         // unregister mocks
         delete server.config;
-        delete server.YUI;
-        delete server._Y;
-        delete server.version;
+        delete server.registerGroup;
+        delete server._app;
     },
 
     "test constructor": function () {
         A.isNotNull(server, "server require failed");
     },
 
-    "test registerModules": function () {
+    "test empty registerBundle": function () {
+        var bundle = { name: 'foo' };
         // attaching for the first time
-        server.registerModules('foo', {
-            'baz': {},
-            'bar': {}
-        });
-        // flagging Env
-        server._Y = {
-            Env: {
-                _attached: {
-                    baz: true
+        var result = server.registerBundle(bundle);
+        A.areEqual(server, result, 'registerBundle should be chainable');
+    },
+
+    "test registerBundle with client stuff": function () {
+        var bundle = {
+            name: 'bar',
+            buildDirectory: __dirname,
+            yui: {
+                client: {
+                    foo: 1
                 },
-                _used: {},
-                _loader: {
-                    loaded: {},
-                    inserted: {},
-                    required: {}
+                metaModuleName: 'loader-foo'
+            }
+        };
+        YUITest.Mock.expect(server, {
+            method: 'registerGroup',
+            args: ['bar', __dirname, 'loader-foo']
+        });
+        server.registerBundle(bundle);
+        A.areSame(1, server._clientModules.foo, 'internal registry with _clientModules was not successfully updated');
+    },
+
+    "test registerBundle with server stuff": function () {
+        var bundle = {
+            name: 'bar',
+            buildDirectory: __dirname,
+            yui: {
+                server: {
+                    bar: 2
                 }
             }
         };
-        server.YUI = {
-            Env: {
-                _loaded: {
-                    '1': {
-                        baz: true
-                    }
-                },
-                mods: {}
-            }
-        };
-        server.version = '1';
-        // attaching again
-        server.registerModules('foo', {
-            'baz': {},
-            'bar': {}
+        YUITest.Mock.expect(server.YUI, {
+            method: 'applyConfig',
+            args: [YUITest.Mock.Value.Object]
         });
-        A.isUndefined(server._Y.Env._attached.baz, 'Y.Env was not correctly cleaned up');
-        A.isUndefined(server.YUI.Env._loaded['1'].baz, 'YUI.Env was not correctly cleaned up');
+        server.registerBundle(bundle);
+        A.areSame(2, server._serverModules.bar, 'internal registry with _serverModules was not successfully updated');
     },
 
     "test use": function () {
-        var clonerTest = {},
-            Y = YUITest.Mock(),
-            result;
+        var Y = YUITest.Mock(),
+            result,
+            attachedModules = {};
 
+        server._app.set('locator', {
+            getRootBundle: function () {}
+        });
         YUITest.Mock.expect(server, {
             method: 'config',
             args: [],
@@ -91,30 +114,19 @@ suite.add(new YUITest.TestCase({
                         'foo': {
                             more: 1
                         }
-                    },
-                    ref: clonerTest
+                    }
                 };
             }
         });
-        YUITest.Mock.expect(Y, {
-            method: 'applyConfig',
-            args: [YUITest.Mock.Value.Object],
-            callCount: 1,
-            run: function (groupConfig) {
-                A.areSame(1, groupConfig.groups.foo.more, 'group config from original should be mix with groupConfig');
-            }
-        });
-        YUITest.Mock.expect(Y, {
-            method: 'use',
-            args: [YUITest.Mock.Value.Any],
-            callCount: 2,
-            run: function (modules) {
-                A.isArray(modules);
-                A.areSame('baz', modules[0]);
-                A.areSame('bar', modules[1]);
-            }
-        });
-        Y.Env = {};
+        Y.use = function () {
+            Array.prototype.slice(arguments).forEach(function (name) {
+                attachedModules[name] = true;
+            });
+            return Y;
+        };
+        Y.Env = { _loader: { getRequires: function () {} } };
+        Y.Template = { get: function () {} };
+        Y.Intl = { get: function () {} };
         YUITest.Mock.expect(server, {
             method: 'YUI',
             callCount: 1,
@@ -127,107 +139,62 @@ suite.add(new YUITest.TestCase({
         server.YUI.applyConfig = function () {};
 
         // first pass
-        // setting up groups
-        server.registerModules('foo', {
-            'baz': {},
-            'bar': {}
-        });
-        server.attachModules('foo', ['baz', 'bar']);
-        // other mocks
-        server._groupFolderMap = {
-            'foo': __dirname
-        };
         result = server.use();
+        A.areSame(Y, result);
+
+        // second pass
+        result = server.use('foo', 'baz', 'bar');
+        A.areSame(Y, result);
+
+        // third pass
+        result = server.use('foo', 'baz', 'bar');
         A.areSame(Y, result);
         A.areSame(Y, server._Y, 'private _Y used by other internal methods was not exposed');
-
-        // second pass: without any change in groups
-        result = server.use();
-        A.areSame(Y, result);
-
-        // third pass: with change in groups
-        // more groups
-        server.registerModules('foo', {
-            'baz': {},
-            'bar': {}
-        });
-        server.attachModules('foo', ['baz', 'bar']);
-
-        result = server.use();
-        A.areSame(Y, result);
 
         YUITest.Mock.verify(server);
         YUITest.Mock.verify(Y);
     },
 
-    "test use multi-groups": function () {
-        var Y = YUITest.Mock(),
-            result,
-            groupFoo,
-            groupBar;
+    "test ready without locator": function () {
+        server.ready(function () {});
+        // this test is meant to throw because server._app.get('locator') is not set.
+    },
 
-        YUITest.Mock.expect(server, {
-            method: 'config',
-            args: [],
-            run: function () {
+    "test ready fulfilled": function () {
+        server._app.set('locator', {
+            getBundle: function (name) {
                 return {
-                    groups: {
-                        'foo': {},
-                        'bar': {}
-                    }
-                };
+                    foo: {},
+                    bar: {}
+                }[name];
+            },
+            listBundleNames: function () {
+                return ['foo', 'bar'];
+            },
+            ready: {
+                then: function (fulfilled, rejected) {
+                    fulfilled();
+                }
             }
         });
-        YUITest.Mock.expect(Y, {
-            method: 'use',
-            args: [YUITest.Mock.Value.Any],
-            run: function (modules) {
-                A.isArray(modules);
-                A.areSame('baz', modules[0]);
-                A.areSame('xyz', modules[1]);
-            }
+        server.ready(function (err) {
+            A.isUndefined(err, 'the ready promise should be fulfilled');
         });
-        YUITest.Mock.expect(server, {
-            method: 'YUI',
-            callCount: 1,
-            args: [YUITest.Mock.Value.Object],
-            run: function (c) {
-                A.isTrue(c.useSync, 'useSync is required when running on the server');
-                return Y;
-            }
-        });
-        YUITest.Mock.expect(server.YUI, {
-            method: 'applyConfig',
-            args: [YUITest.Mock.Value.Object],
-            run: function (c) {
-                console.log(c);
-                groupFoo = (c.groups && c.groups.foo) || groupFoo;
-                groupBar = (c.groups && c.groups.bar) || groupBar;
-                return Y;
-            }
-        });
+    },
 
-        // setting up groups
-        server.registerModules('foo', {
-            'baz': {}
+    "test ready rejected": function () {
+        var rejection = new Error('this should be propagated');
+        server._app.set('locator', {
+            ready: {
+                then: function (fulfilled, rejected) {
+                    rejected(rejection);
+                }
+            }
         });
-        server.registerModules('bar', {
-            'xyz': {}
+        server.ready(function (err) {
+            A.isObject(err, 'the ready promise should be rejected');
+            A.areSame(rejection, err, 'the promise rejection error should be propagated');
         });
-        server.attachModules('foo', ['baz']);
-        server.attachModules('bar', ['zyx']);
-        // other mocks
-        server._groupFolderMap = {
-            'foo': __dirname,
-            'bar': __dirname
-        };
-        result = server.use();
-
-        A.isObject(groupFoo, 'foo group is not defined');
-        A.isObject(groupBar, 'bar group is not defined');
-
-        YUITest.Mock.verify(server);
-        YUITest.Mock.verify(Y);
     }
 
 }));
