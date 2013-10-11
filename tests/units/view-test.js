@@ -48,10 +48,14 @@ suite.add(new YUITest.TestCase({
         view.use = function () {
             return {
                 Template: {
-                    _cache: {
+                    _registry: {
                         'bundleName/foo': function (ctx, callback) {
                             return 'output';
                         }
+                    },
+
+                    get: function (templateName) {
+                        return this._registry[templateName];
                     }
                 }
             };
@@ -71,13 +75,17 @@ suite.add(new YUITest.TestCase({
         view.use = function () {
             return {
                 Template: {
-                    _cache: {
+                    _registry: {
                         'bundleName/foo': function (ctx, callback) {
                             return 'output';
                         },
                         'bundleName/bar': function (ctx, callback) {
                             return ctx.outlet + '+layout';
                         }
+                    },
+
+                    get: function (templateName) {
+                        return this._registry[templateName];
                     }
                 }
             };

@@ -7,7 +7,7 @@ YUI.add('binder-index', function (Y) {
     Y.Binders = {
         index: {
             update: function (node, data) {
-                var fooContent = Y.Template._cache['demo/foo'](data);
+                var fooContent = Y.Template.render('demo/foo', data);
                 node.setContent(fooContent);
             }
         }
