@@ -41,11 +41,9 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="../classes/cdn.html">cdn</a></li>
+                <li><a href="../classes/client.html">client</a></li>
             
-                <li><a href="../classes/groups.html">groups</a></li>
-            
-                <li><a href="../classes/loader.html">loader</a></li>
+                <li><a href="../classes/ExpressYUI.html">ExpressYUI</a></li>
             
                 <li><a href="../classes/middleware.html">middleware</a></li>
             
@@ -55,11 +53,7 @@
             
                 <li><a href="../classes/server.html">server</a></li>
             
-                <li><a href="../classes/shifter.html">shifter</a></li>
-            
-                <li><a href="../classes/View.html">View</a></li>
-            
-                <li><a href="../classes/view.html">view</a></li>
+                <li><a href="../classes/utils.html">utils</a></li>
             
                 <li><a href="../classes/yui.html">yui</a></li>
             
@@ -67,31 +61,21 @@
 
             <ul id="api-modules" class="apis modules">
             
-                <li><a href="../modules/cdn.html">cdn</a></li>
-            
-                <li><a href="../modules/client.html">client</a></li>
-            
                 <li><a href="../modules/express-yui.html">express-yui</a></li>
             
-                <li><a href="../modules/groups.html">groups</a></li>
+                <li><a href="../modules/express-yui_lib_client.html">express-yui/lib/client</a></li>
             
-                <li><a href="../modules/loader.html">loader</a></li>
+                <li><a href="../modules/express-yui_lib_middleware.html">express-yui/lib/middleware</a></li>
             
-                <li><a href="../modules/middleware.html">middleware</a></li>
+                <li><a href="../modules/express-yui_lib_origin.html">express-yui/lib/origin</a></li>
             
-                <li><a href="../modules/origin.html">origin</a></li>
+                <li><a href="../modules/express-yui_lib_seed.html">express-yui/lib/seed</a></li>
             
-                <li><a href="../modules/seed.html">seed</a></li>
+                <li><a href="../modules/express-yui_lib_server.html">express-yui/lib/server</a></li>
             
-                <li><a href="../modules/server.html">server</a></li>
+                <li><a href="../modules/express-yui_lib_utils.html">express-yui/lib/utils</a></li>
             
-                <li><a href="../modules/shifter.html">shifter</a></li>
-            
-                <li><a href="../modules/utils.html">utils</a></li>
-            
-                <li><a href="../modules/view.html">view</a></li>
-            
-                <li><a href="../modules/yui.html">yui</a></li>
+                <li><a href="../modules/express-yui_lib_yui.html">express-yui/lib/yui</a></li>
             
             </ul>
         </div>
@@ -135,27 +119,13 @@
             Uses
             <ul class="inline commas">
                 
-                    <li><a href="*express.html">*express</a></li>
-                
-                    <li><a href="*express-expose.html">*express-expose</a></li>
-                
                     <li><a href="utils.html">utils</a></li>
-                
-                    <li><a href="cdn.html">cdn</a></li>
                 
                     <li><a href="seed.html">seed</a></li>
                 
                     <li><a href="origin.html">origin</a></li>
                 
-                    <li><a href="groups.html">groups</a></li>
-                
-                    <li><a href="shifter.html">shifter</a></li>
-                
-                    <li><a href="loader.html">loader</a></li>
-                
                     <li><a href="server.html">server</a></li>
-                
-                    <li><a href="view.html">view</a></li>
                 
             </ul>
         </div>
@@ -165,13 +135,13 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/lib_yui.js.html#l36"><code>lib&#x2F;yui.js:36</code></a>
+            Defined in: <a href="../files/lib_yui.js.html#l26"><code>lib&#x2F;yui.js:26</code></a>
         </div>
     
 
     
         
-            Module: <a href="../modules/express-yui.html">express-yui</a>
+            Module: <a href="../modules/express-yui_lib_yui.html">express-yui/lib/yui</a>
         
     
 
@@ -181,26 +151,28 @@
 
 
 <div class="box intro">
-    <p>The <code>express-yui</code> extension provides the foundation and some basic
-features to attach information into the <code>res.locals</code> object
-that could be used to boot <code>YUI</code> in the client runtime.</p>
-<p>When the <code>&quot;seed&quot;</code> sub-module is used, it will automatically
-mix itself into <code>app.yui.expose()</code>, and it exposes a local variable
-in a form of an array of object with the information to
-build the script tag or tags that forms the seed:</p>
+    <p>The <code>express-yui/lib/yui</code> exports the class used to create the <code>app.yui</code>
+member that will be attached to the express app instance. This member
+provides a set of functionalities to control the YUI version to be used
+on the client as well as on the server.</p>
 <p>The following is an example of how these features can be used:</p>
 <pre class="code prettyprint"><code>var express = require(&#39;express&#39;),
     expyui = require(&#39;express-yui&#39;),
     app = express();
 
 expyui.extend(app);
+
 // Set some basic configs
 app.yui.applyConfig({
     fetchCSS: false
 });
+
 // Call expose middleware when a route match.
 app.get(&#39;/index.html&#39;, expyui.expose(), anotherRoute);</code></pre>
-<p>In the example above, the <code>state</code> of the app will be serialized
+<p>In the example above, you can see that right after extending the
+<code>app</code> with <code>expyui.extend()</code> a new member is available under <code>app.yui</code>,
+and it enable us to configure YUI in any way we want.
+Also, the <code>state</code> of the app will be serialized
 per request, and can be used in the template to set up the client
 side to run YUI with the same configuration used on the server side.
 Here is an example of a handlebars template:</p>
@@ -252,7 +224,7 @@ appropiated settings generated by <code>expose</code> middleware.</p>
             
         
         
-        <a href="../files/lib_yui.js.html#l36"><code>lib&#x2F;yui.js:36</code></a>
+        <a href="../files/lib_yui.js.html#l26"><code>lib&#x2F;yui.js:26</code></a>
         
         </p>
 
@@ -301,70 +273,28 @@ appropiated settings generated by <code>expose</code> middleware.</p>
                     <ul class="index-list methods">
                         
                             <li class="index-item method protected inherited">
-                                <a href="#method__buildsInBundle">_buildsInBundle</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method protected inherited">
                                 <a href="#method__buildUrls">_buildUrls</a>
 
                                 
                                 
                             </li>
                         
-                            <li class="index-item method private inherited">
-                                <a href="#method__captureYUIModuleDetails">_captureYUIModuleDetails</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method protected inherited inherited">
-                                <a href="#method__checkBuildFile">_checkBuildFile</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method protected inherited inherited">
-                                <a href="#method__checkYUIModule">_checkYUIModule</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method protected inherited inherited">
-                                <a href="#method__clearCached">_clearCached</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method private inherited">
-                                <a href="#method__createSandbox">_createSandbox</a>
+                            <li class="index-item method protected inherited">
+                                <a href="#method__patchIntl">_patchIntl</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item method protected inherited">
-                                <a href="#method__cssprocInBundle">_cssprocInBundle</a>
+                                <a href="#method__patchLoader">_patchLoader</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item method protected inherited">
-                                <a href="#method__filterFilesInBundle">_filterFilesInBundle</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method protected inherited inherited">
-                                <a href="#method__isCached">_isCached</a>
+                                <a href="#method__patchTemplate">_patchTemplate</a>
 
                                 
                                 
@@ -392,24 +322,6 @@ appropiated settings generated by <code>expose</code> middleware.</p>
                             </li>
                         
                             <li class="index-item method public inherited">
-                                <a href="#method_attachModules">attachModules</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method public deprecated">
-                                <a href="#method_augment">augment</a>
-
-                                
-                                    <span class="flag static">static</span>
-                                
-                                
-                                    <span class="flag deprecated">deprecated</span>
-                                
-                            </li>
-                        
-                            <li class="index-item method public inherited">
                                 <a href="#method_buildCSSUrls">buildCSSUrls</a>
 
                                 
@@ -430,33 +342,8 @@ appropiated settings generated by <code>expose</code> middleware.</p>
                                 
                             </li>
                         
-                            <li class="index-item method public deprecated">
-                                <a href="#method_debugMode">debugMode</a>
-
-                                
-                                
-                                    <span class="flag deprecated">deprecated</span>
-                                
-                            </li>
-                        
-                            <li class="index-item method public">
-                                <a href="#method_extend">extend</a>
-
-                                
-                                    <span class="flag static">static</span>
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method inherited">
-                                <a href="#method_getDefaultSeed">getDefaultSeed</a>
-
-                                
-                                
-                            </li>
-                        
                             <li class="index-item method protected inherited">
-                                <a href="#method_getGroupConfig">getGroupConfig</a>
+                                <a href="#method_getDefaultSeed">getDefaultSeed</a>
 
                                 
                                 
@@ -470,21 +357,14 @@ appropiated settings generated by <code>expose</code> middleware.</p>
                             </li>
                         
                             <li class="index-item method public inherited">
-                                <a href="#method_plugin">plugin</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method public inherited">
                                 <a href="#method_ready">ready</a>
 
                                 
                                 
                             </li>
                         
-                            <li class="index-item method protected inherited">
-                                <a href="#method_register">register</a>
+                            <li class="index-item method public inherited">
+                                <a href="#method_registerBundle">registerBundle</a>
 
                                 
                                 
@@ -492,13 +372,6 @@ appropiated settings generated by <code>expose</code> middleware.</p>
                         
                             <li class="index-item method public inherited">
                                 <a href="#method_registerGroup">registerGroup</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method public inherited">
-                                <a href="#method_registerModules">registerModules</a>
 
                                 
                                 
@@ -518,29 +391,15 @@ appropiated settings generated by <code>expose</code> middleware.</p>
                                 
                             </li>
                         
-                            <li class="index-item method public inherited">
+                            <li class="index-item method public">
                                 <a href="#method_setCoreFromCDN">setCoreFromCDN</a>
 
                                 
                                 
                             </li>
                         
-                            <li class="index-item method public inherited inherited">
-                                <a href="#method_shiftFiles">shiftFiles</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method public inherited inherited">
-                                <a href="#method_use">use</a>
-
-                                
-                                
-                            </li>
-                        
                             <li class="index-item method public inherited">
-                                <a href="#method_view">view</a>
+                                <a href="#method_use">use</a>
 
                                 
                                 
@@ -589,157 +448,6 @@ appropiated settings generated by <code>expose</code> middleware.</p>
         
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
-
-                
-                    <div id="method__buildsInBundle" class="method item protected inherited">
-    <h3 class="name"><code>_buildsInBundle</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>bundle</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>modifiedFiles</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>jsonFiles</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">Array</span>
-        </span>
-    
-
-    
-
-    
-        <span class="flag protected">protected</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="../classes/Loader.html#method__buildsInBundle">loader</a>:
-            
-        
-        
-        <a href="../files/lib_loader.js.html#l307"><code>lib&#x2F;loader.js:307</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Analyze modified files and build.json files to infer the list of files that
-should be shifted.</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">bundle</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>the bundle to be analyzed</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">modifiedFiles</code>
-                        <span class="type">Array</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>The filesystem path for all modified files in bundle.</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">jsonFiles</code>
-                        <span class="type">Array</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>The filesystem path for all json files in bundle.</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Array</span>:
-                    
-                    <p>The filesystem path for all files that should be shifted using shifter</p>
-
-                
-            </div>
-        </div>
-    
-
-    
-</div>
 
                 
                     <div id="method__buildUrls" class="method item protected inherited">
@@ -805,7 +513,7 @@ should be shifted.</p>
             
         
         
-        <a href="../files/lib_seed.js.html#l233"><code>lib&#x2F;seed.js:233</code></a>
+        <a href="../files/lib_seed.js.html#l230"><code>lib&#x2F;seed.js:230</code></a>
         
         </p>
 
@@ -951,489 +659,19 @@ the type of the modules since this routine is able to produce css or js modules 
 </div>
 
                 
-                    <div id="method__captureYUIModuleDetails" class="method item private inherited">
-    <h3 class="name"><code>_captureYUIModuleDetails</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>path</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>sandbox</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">Object</span>
-        </span>
-    
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="../classes/Groups.html#method__captureYUIModuleDetails">groups</a>:
-            
-        
-        
-        <a href="../files/lib_groups.js.html#l144"><code>lib&#x2F;groups.js:144</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Given a path to a meta YUI module, parse the module name and
-specific group app module configuration.</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">path</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>absolute path to the meta module</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">sandbox</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>a sandbox instance in which to run the YUI
-                        module. if not provided, a default one will
-                        be used.</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Object</span>:
-                    
-                    <p>configuration with meta details</p>
-
-                
-            </div>
-        </div>
-    
-
-    
-</div>
-
-                
-                    <div id="method__checkBuildFile" class="method item protected inherited">
-    <h3 class="name"><code>_checkBuildFile</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>file</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">Object</span>
-        </span>
-    
-
-    
-
-    
-        <span class="flag protected">protected</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            <p>Inherited from
-            <a href="../classes/Shifter.html#method__checkBuildFile">
-                shifter
-            </a>
-            
-            but overwritten in
-            
-        
-        
-        <a href="../files/lib_shifter.js.html#l283"><code>lib&#x2F;shifter.js:283</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Analyze a build.json file to extract all the important metadata associted with it.</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">file</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>The filesystem path for the build.json file to be analyzed</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Object</span>:
-                    
-                    <p>The parsed and augmented content of the build.json file</p>
-
-                
-            </div>
-        </div>
-    
-
-    
-</div>
-
-                
-                    <div id="method__checkYUIModule" class="method item protected inherited">
-    <h3 class="name"><code>_checkYUIModule</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>file</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">Object</span>
-        </span>
-    
-
-    
-
-    
-        <span class="flag protected">protected</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            <p>Inherited from
-            <a href="../classes/Shifter.html#method__checkYUIModule">
-                shifter
-            </a>
-            
-            but overwritten in
-            
-        
-        
-        <a href="../files/lib_shifter.js.html#l344"><code>lib&#x2F;shifter.js:344</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Analyze a javascript file, if it is a yui module, it extracts all the important metadata
-associted with it.</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">file</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>The filesystem path for the yui module to be analyzed</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Object</span>:
-                    
-                    <p>The parsed and augmented metadata from the yui module</p>
-
-                
-            </div>
-        </div>
-    
-
-    
-</div>
-
-                
-                    <div id="method__clearCached" class="method item protected inherited">
-    <h3 class="name"><code>_clearCached</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>file</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>buildDir</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-        <span class="flag protected">protected</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            <p>Inherited from
-            <a href="../classes/Shifter.html#method__clearCached">
-                shifter
-            </a>
-            
-            but overwritten in
-            
-        
-        
-        <a href="../files/lib_shifter.js.html#l421"><code>lib&#x2F;shifter.js:421</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Removes the cache entry for a particular file.</p>
-<p>Why? This method is just an artifact to invalidate the cache entry created by
-<code>_isCached</code> when a shifter error is detected because the cache entry is premature
-created before spawing to shifter.</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">file</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>The filesystem path for the file to be cached</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">buildDir</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>The filesystem path for the build folder</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method__createSandbox" class="method item private inherited">
-    <h3 class="name"><code>_createSandbox</code></h3>
+                    <div id="method__patchIntl" class="method item protected inherited">
+    <h3 class="name"><code>_patchIntl</code></h3>
 
     
         <span class="paren">()</span>
     
 
     
-        <span class="returns-inline">
-            <span class="type">Object</span>
-        </span>
-    
 
     
 
     
-        <span class="flag private">private</span>
+        <span class="flag protected">protected</span>
     
 
     
@@ -1448,11 +686,11 @@ created before spawing to shifter.</p>
         
             
                 <p>Inherited from
-                <a href="../classes/Groups.html#method__createSandbox">groups</a>:
+                <a href="../classes/Server.html#method__patchIntl">server</a>:
             
         
         
-        <a href="../files/lib_groups.js.html#l108"><code>lib&#x2F;groups.js:108</code></a>
+        <a href="../files/lib_server.js.html#l153"><code>lib&#x2F;server.js:153</code></a>
         
         </p>
 
@@ -1463,66 +701,27 @@ created before spawing to shifter.</p>
     </div>
 
     <div class="description">
-        <p><p>Creates a new sandbox instance in which to run the YUI module.</p></p>
-<p><p>Default sandbox supports:</p></p>
-<ul>
-  <li>Y.config</li>
-  <li>Y.applyConfig</li>
-  <li>Y.mix</li>
-  <li>Y.merge</li>
-  <li>Y.version</li>
-</ul>
+        <p>Patches <code>Y.Intl.get</code> to use the language bundles produced by
+<code>locator-lang</code> plugin, and will be available thru locator&#39;s bundle
+objects.</p>
+
     </div>
 
     
 
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Object</span>:
-                    
-                    <p>the mock to extract the metas from the meta module</p>
-
-                
-            </div>
-        </div>
     
 
     
 </div>
 
                 
-                    <div id="method__cssprocInBundle" class="method item protected inherited">
-    <h3 class="name"><code>_cssprocInBundle</code></h3>
+                    <div id="method__patchLoader" class="method item protected inherited">
+    <h3 class="name"><code>_patchLoader</code></h3>
 
     
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>bundle</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>cssproc</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
+        <span class="paren">()</span>
     
 
-    
-        <span class="returns-inline">
-            <span class="type">Array</span>
-        </span>
     
 
     
@@ -1543,11 +742,11 @@ created before spawing to shifter.</p>
         
             
                 <p>Inherited from
-                <a href="../classes/Loader.html#method__cssprocInBundle">loader</a>:
+                <a href="../classes/Server.html#method__patchLoader">server</a>:
             
         
         
-        <a href="../files/lib_loader.js.html#l378"><code>lib&#x2F;loader.js:378</code></a>
+        <a href="../files/lib_server.js.html#l82"><code>lib&#x2F;server.js:82</code></a>
         
         </p>
 
@@ -1558,106 +757,27 @@ created before spawing to shifter.</p>
     </div>
 
     <div class="description">
-        <p>Set the proper shifter configuration for images in the css modules
-to be processed based on the group configuration.</p>
+        <p>Patches <code>Y.Loader</code> to support <code>optionalRequires</code>, which enables you
+to require modules that might not be available in a runtime, and avoid
+to throw when that happens.</p>
 
     </div>
 
     
-        <div class="params">
-            <h4>Parameters:</h4>
 
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">bundle</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>the bundle to be analyzed</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">cssproc</code>
-                        <span class="type">Boolean</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Whether or not we should add cssproc to shifter arguments.</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Array</span>:
-                    
-                    <p>the arguments to be added to shifter or empty array</p>
-
-                
-            </div>
-        </div>
     
 
     
 </div>
 
                 
-                    <div id="method__filterFilesInBundle" class="method item protected inherited">
-    <h3 class="name"><code>_filterFilesInBundle</code></h3>
+                    <div id="method__patchTemplate" class="method item protected inherited">
+    <h3 class="name"><code>_patchTemplate</code></h3>
 
     
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>bundle</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>the</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>filter</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
+        <span class="paren">()</span>
     
 
-    
-        <span class="returns-inline">
-            <span class="type">Array</span>
-        </span>
     
 
     
@@ -1678,158 +798,11 @@ to be processed based on the group configuration.</p>
         
             
                 <p>Inherited from
-                <a href="../classes/Loader.html#method__filterFilesInBundle">loader</a>:
+                <a href="../classes/Server.html#method__patchTemplate">server</a>:
             
         
         
-        <a href="../files/lib_loader.js.html#l407"><code>lib&#x2F;loader.js:407</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Get the fullPath of all modified files that should be shifted.</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">bundle</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>the bundle to be analyzed</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">the</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>original <code>evt.files</code> from locator plugin</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">filter</code>
-                        <span class="type">Function</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Custom function to analyze each file</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Array</span>:
-                    
-                    <p>the list of files to be shifted or empty array</p>
-
-                
-            </div>
-        </div>
-    
-
-    
-</div>
-
-                
-                    <div id="method__isCached" class="method item protected inherited">
-    <h3 class="name"><code>_isCached</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>file</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>buildDir</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">Boolean</span>
-        </span>
-    
-
-    
-
-    
-        <span class="flag protected">protected</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            <p>Inherited from
-            <a href="../classes/Shifter.html#method__isCached">
-                shifter
-            </a>
-            
-            but overwritten in
-            
-        
-        
-        <a href="../files/lib_shifter.js.html#l386"><code>lib&#x2F;shifter.js:386</code></a>
+        <a href="../files/lib_server.js.html#l115"><code>lib&#x2F;server.js:115</code></a>
         
         </p>
 
@@ -1840,76 +813,14 @@ to be processed based on the group configuration.</p>
     </div>
 
     <div class="description">
-        <p>Verifies if a source file was already processed by analyzing its content against an
-internal cache mechanism. JSON files (*.json) are an exception, and they will not be
-cached since they might includes other files that might change and affects the result
-of the build so we can&#39;t rely on the source file alone. If the file is not in cache,
-it will be included automatically.</p>
-<p>Why? This method is just an artifact to avoid spawning a process to execute shifter, which
-is very expensive. It is also the main artifact to avoid shifting files when in production,
-if the build process includes the build folder, specially because manhattan does not
-support spawn. Finally, it is just a noop artifact to avoid calling shifter, it does not
-need to cache the response of the shifter process, just opt out for the next call to shift
-the same file with the same content.</p>
+        <p>Patches <code>Y.Template.get</code> to use the templates produced by
+<code>locator-handlebars</code> or any other similar plugin, and will be available thru locator&#39;s bundle
+objects.</p>
 
     </div>
 
     
-        <div class="params">
-            <h4>Parameters:</h4>
 
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">file</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>The filesystem path for the file to be cached</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">buildDir</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>The filesystem path for the build folder</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Boolean</span>:
-                    
-                    <p><code>true</code> if the file and its content matches the internal cache, otherwise <code>false</code>.</p>
-
-                
-            </div>
-        </div>
     
 
     
@@ -1926,12 +837,6 @@ the same file with the same content.</p>
                 <li class="arg">
                     
                         <code>moduleName</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>groupName</code>
                     
                 </li>
             
@@ -1965,7 +870,7 @@ the same file with the same content.</p>
             
         
         
-        <a href="../files/lib_seed.js.html#l107"><code>lib&#x2F;seed.js:107</code></a>
+        <a href="../files/lib_seed.js.html#l105"><code>lib&#x2F;seed.js:105</code></a>
         
         </p>
 
@@ -1999,22 +904,6 @@ automatically.</p>
 
                     <div class="param-description">
                         <p>the yui module name</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">groupName</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>the group name for the module</p>
 
                     </div>
 
@@ -2077,7 +966,7 @@ automatically.</p>
             
         
         
-        <a href="../files/lib_yui.js.html#l150"><code>lib&#x2F;yui.js:150</code></a>
+        <a href="../files/lib_yui.js.html#l106"><code>lib&#x2F;yui.js:106</code></a>
         
         </p>
 
@@ -2181,7 +1070,7 @@ can be used here.</p>
             
         
         
-        <a href="../files/lib_origin.js.html#l87"><code>lib&#x2F;origin.js:87</code></a>
+        <a href="../files/lib_origin.js.html#l84"><code>lib&#x2F;origin.js:84</code></a>
         
         </p>
 
@@ -2251,211 +1140,6 @@ for the group.</p>
 </div>
 
                 
-                    <div id="method_attachModules" class="method item public inherited">
-    <h3 class="name"><code>attachModules</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>mods</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-        <span class="flag public">public</span>
-    
-
-    
-
-    
-
-    
-        <span class="flag chainable">chainable</span>
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="../classes/Server.html#method_attachModules">server</a>:
-            
-        
-        
-        <a href="../files/lib_server.js.html#l79"><code>lib&#x2F;server.js:79</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Attach modules into the Y instance on the server. This is equivalent to call
-<code>req.app.yui.use(moduleName)</code> for every module in <code>mods</code>, but it
-does queue them until the first <code>Y</code> gets ready to be used.</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">mods</code>
-                        <span class="type">Array</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>The list of modules to be attached.</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method_augment" class="method item public deprecated">
-    <h3 class="name"><code>augment</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>app</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">Object</span>
-        </span>
-    
-
-    
-        <span class="flag deprecated">deprecated</span>
-    
-
-    
-        <span class="flag public">public</span>
-    
-
-    
-
-    
-        <span class="flag static">static</span>
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/lib_yui.js.html#l206"><code>lib&#x2F;yui.js:206</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Deprecated method to augment an express application instance with <code>express-yui</code> functionalities.</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">app</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>express app instance to be extended with the <code>yui</code> member.</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Object</span>:
-                    
-                    <p>express app instance</p>
-
-                
-            </div>
-        </div>
-    
-
-    
-</div>
-
-                
                     <div id="method_buildCSSUrls" class="method item public inherited">
     <h3 class="name"><code>buildCSSUrls</code></h3>
 
@@ -2501,7 +1185,7 @@ does queue them until the first <code>Y</code> gets ready to be used.</p>
             
         
         
-        <a href="../files/lib_seed.js.html#l212"><code>lib&#x2F;seed.js:212</code></a>
+        <a href="../files/lib_seed.js.html#l209"><code>lib&#x2F;seed.js:209</code></a>
         
         </p>
 
@@ -2615,7 +1299,7 @@ will be assumed as core modules from yui.</p>
             
         
         
-        <a href="../files/lib_seed.js.html#l191"><code>lib&#x2F;seed.js:191</code></a>
+        <a href="../files/lib_seed.js.html#l188"><code>lib&#x2F;seed.js:188</code></a>
         
         </p>
 
@@ -2732,7 +1416,7 @@ will be assumed as core modules from yui.</p>
             
         
         
-        <a href="../files/lib_yui.js.html#l172"><code>lib&#x2F;yui.js:172</code></a>
+        <a href="../files/lib_yui.js.html#l128"><code>lib&#x2F;yui.js:128</code></a>
         
         </p>
 
@@ -2798,279 +1482,7 @@ that, if passed, will be mix with the static configuration.</p>
 </div>
 
                 
-                    <div id="method_debugMode" class="method item public deprecated">
-    <h3 class="name"><code>debugMode</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>config</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-        <span class="flag deprecated" title="in favor of &#x60;expressYUI.debug()&#x60;">deprecated</span>
-    
-
-    
-        <span class="flag public">public</span>
-    
-
-    
-
-    
-
-    
-        <span class="flag chainable">chainable</span>
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/lib_yui.js.html#l113"><code>lib&#x2F;yui.js:113</code></a>
-        
-        </p>
-
-
-        
-            <p>Deprecated: in favor of &#x60;expressYUI.debug()&#x60;</p>
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Turns on debug mode for YUI Loader by setting
-<code>debug=true</code>, <code>logLevel=&quot;debug&quot;</code>, <code>combine=false</code> and <code>filter=&quot;debug&quot;</code>
-into the static configuration.</p>
-<pre class="code prettyprint"><code>app.yui.debugMode();</code></pre>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">config</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>optional object to overrule
-specific settings when in debug mode.</p>
-
-                    </div>
-
-                    
-                        <ul class="params-list">
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">combine</code>
-                                    <span class="type">Boolean</span>
-                                
-
-                                <div class="param-description">
-                                    <p>default to <code>false</code></p>
-
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">debug</code>
-                                    <span class="type">Boolean</span>
-                                
-
-                                <div class="param-description">
-                                    <p>default to <code>true</code></p>
-
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">logLevel</code>
-                                    <span class="type">String</span>
-                                
-
-                                <div class="param-description">
-                                    <p>default to <code>&quot;debug&quot;</code></p>
-
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">filter</code>
-                                    <span class="type">String</span>
-                                
-
-                                <div class="param-description">
-                                    <p>default to <code>&quot;debug&quot;</code></p>
-
-                                </div>
-
-                                
-                            </li>
-                            
-                        </ul>
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method_extend" class="method item public">
-    <h3 class="name"><code>extend</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>app</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">Object</span>
-        </span>
-    
-
-    
-
-    
-        <span class="flag public">public</span>
-    
-
-    
-
-    
-        <span class="flag static">static</span>
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/lib_yui.js.html#l224"><code>lib&#x2F;yui.js:224</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Extends an express application instance with <code>express-yui</code> functionalities.</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">app</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>express app instance to be extended with the <code>yui</code> member.</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Object</span>:
-                    
-                    <p>express app instance</p>
-
-                
-            </div>
-        </div>
-    
-
-    
-</div>
-
-                
-                    <div id="method_getDefaultSeed" class="method item inherited">
+                    <div id="method_getDefaultSeed" class="method item protected inherited">
     <h3 class="name"><code>getDefaultSeed</code></h3>
 
     
@@ -3085,6 +1497,8 @@ specific settings when in debug mode.</p>
 
     
 
+    
+        <span class="flag protected">protected</span>
     
 
     
@@ -3103,7 +1517,7 @@ specific settings when in debug mode.</p>
             
         
         
-        <a href="../files/lib_seed.js.html#l95"><code>lib&#x2F;seed.js:95</code></a>
+        <a href="../files/lib_seed.js.html#l93"><code>lib&#x2F;seed.js:93</code></a>
         
         </p>
 
@@ -3131,120 +1545,6 @@ be part of the seed files.</p>
                         <span class="type">Array</span>:
                     
                     <p>list of modules in seed</p>
-
-                
-            </div>
-        </div>
-    
-
-    
-</div>
-
-                
-                    <div id="method_getGroupConfig" class="method item protected inherited">
-    <h3 class="name"><code>getGroupConfig</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>path</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">Object</span>
-        </span>
-    
-
-    
-
-    
-        <span class="flag protected">protected</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="../classes/Groups.html#method_getGroupConfig">groups</a>:
-            
-        
-        
-        <a href="../files/lib_groups.js.html#l46"><code>lib&#x2F;groups.js:46</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p><p>Extracts information from a meta module. This information includes
-the details about the meta module in the YUI registry plus all the
-info about the groups that are part of the meta module, along with
-all the modules per group. This method is used by <code>origin</code> to
-analyze each group before serving them.</p></p>
-<pre class="code prettyprint"><code>var path,
-    config;
-path = __dirname + &#39;/assets/js/metas.js&#39;;
-config = app.yui.groups.getGroupConfig(path);</code></pre>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">path</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>the filesystem path to the meta module</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Object</span>:
-                    
-                    <p>modules the modules meta for the group</p>
 
                 
             </div>
@@ -3300,7 +1600,7 @@ config = app.yui.groups.getGroupConfig(path);</code></pre>
             
         
         
-        <a href="../files/lib_seed.js.html#l165"><code>lib&#x2F;seed.js:165</code></a>
+        <a href="../files/lib_seed.js.html#l162"><code>lib&#x2F;seed.js:162</code></a>
         
         </p>
 
@@ -3401,353 +1701,6 @@ seed, it will be provisioned automatically as part of the <code>state</code> obj
 </div>
 
                 
-                    <div id="method_plugin" class="method item public inherited">
-    <h3 class="name"><code>plugin</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>options</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>filter.bundle</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>filter.relativePath</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>filter.return</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">Object</span>
-        </span>
-    
-
-    
-
-    
-        <span class="flag public">public</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="../classes/Loader.html#method_plugin">loader</a>:
-            
-        
-        
-        <a href="../files/lib_loader.js.html#l66"><code>lib&#x2F;loader.js:66</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Creates a locator plugin that can analyze locator bundles, build modules
-and build loader metadata for all yui modules within the bundle.</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">options</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Optional plugin configuration
-objects that, if passed, will be mix with the default
-configuration of the plugin.</p>
-
-                    </div>
-
-                    
-                        <ul class="params-list">
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">registerGroup</code>
-                                    <span class="type">Boolean</span>
-                                
-
-                                <div class="param-description">
-                                    <p>Whether or not the bundle should be 
-        registered as a loader group to be used from the client and server.
-        Default to false.</p>
-
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">registerServerModules</code>
-                                    <span class="type">Boolean | Function</span>
-                                
-
-                                <div class="param-description">
-                                    <p>Whether or not server
-        modules should be provisioned to be loaded thru <code>app.yui.use()</code> on the
-        server side. Default to false.</p>
-
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">cache</code>
-                                    <span class="type">Boolean</span>
-                                
-
-                                <div class="param-description">
-                                    <p>Whether or not the shifting process should be cached
-        to speed up the build process. By default, it is true.</p>
-
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">buildDir</code>
-                                    <span class="type">String</span>
-                                
-
-                                <div class="param-description">
-                                    <p>Optional custom filesystem path for the output
-        folder of the shifter. Default to an internal computation based on <code>locator.buildDir</code>.</p>
-
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">args</code>
-                                    <span class="type">Object</span>
-                                
-
-                                <div class="param-description">
-                                    <p>Optional custom shifter cli arguments. This will overrule
-        custom <code>options</code> that are translated into shifter arguments.</p>
-
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">lint</code>
-                                    <span class="type">Object</span>
-                                
-
-                                <div class="param-description">
-                                    <p>Optional enable linting in shifter.</p>
-
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">coverage</code>
-                                    <span class="type">Object</span>
-                                
-
-                                <div class="param-description">
-                                    <p>Optional generate <code>-coverage.js</code> version of modules in shifter.</p>
-
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">silent</code>
-                                    <span class="type">Object</span>
-                                
-
-                                <div class="param-description">
-                                    <p>Optional run shifter in silent mode.</p>
-
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">quiet</code>
-                                    <span class="type">Object</span>
-                                
-
-                                <div class="param-description">
-                                    <p>Optional run shifter in quiet mode.</p>
-
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">cssproc</code>
-                                    <span class="type">Boolean</span>
-                                
-
-                                <div class="param-description">
-                                    <p>Optional flag to preprocess css to readjust urls for assets
-        to resolve with <code>base</code> for the corresponding group to make them work with combo.</p>
-
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">filter</code>
-                                    <span class="type">RegExp | Function</span>
-                                
-
-                                <div class="param-description">
-                                    <p>optional regex or function to execute
-        for each <code>evt.files</code>. If no <code>filter</code> is supplied, all modified files will be
-        shifted. If the regex is provided, it will be tested against every
-        <code>evn.files</code>, testing the relative path to determine if the file should be
-        shifted or not. In a function if provided, the function will be called for
-        every <code>evt.files</code> with the following arguments:</p>
-
-                                </div>
-
-                                
-                            </li>
-                            
-                        </ul>
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">filter.bundle</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>the current bundle to where the file belongs to</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">filter.relativePath</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>the relative path to the file from the bundle</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">filter.return</code>
-                        <span class="type">Boolean</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Return true to indicate that the
-        file should be shifted. Otherise the file will be skipped.</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Object</span>:
-                    
-                    <p>locator plugin</p>
-
-                
-            </div>
-        </div>
-    
-
-    
-</div>
-
-                
                     <div id="method_ready" class="method item public inherited">
     <h3 class="name"><code>ready</code></h3>
 
@@ -3785,11 +1738,11 @@ configuration of the plugin.</p>
         
             
                 <p>Inherited from
-                <a href="../classes/Groups.html#method_ready">groups</a>:
+                <a href="../classes/Server.html#method_ready">server</a>:
             
         
         
-        <a href="../files/lib_client.js.html#l159"><code>lib&#x2F;client.js:159</code></a>
+        <a href="../files/lib_server.js.html#l197"><code>lib&#x2F;server.js:197</code></a>
         
         </p>
 
@@ -3800,14 +1753,17 @@ configuration of the plugin.</p>
     </div>
 
     <div class="description">
-        <p><p>Boots the application, rehydrate the app state and calls back to notify the
-<code>ready</code> state of the app.</p></p>
-<pre class="code prettyprint"><code>&lt;script&gt;{{{state}}}&lt;/script&gt;
-&lt;script&gt;
-app.yui.ready(function () {
+        <p><p>Waits for the app to be ready, including the YUI instance to notify back that the
+<code>ready</code> state of the app was reached by calling the <code>callback</code>. The ready state is
+bound to the locator instance mounted into the express app thru <code>app.set(&#39;locator&#39;, locator);</code>
+and depending on <code>app.get(&#39;locator&#39;).ready.then()</code> promise result, the ready state
+will be reached or not.</p></p>
+<pre class="code prettyprint"><code>app.yui.ready(function (err) {
+    if (err) {
+        throw err;
+    }
     // do something!
-});
-&lt;/script&gt;</code></pre>
+});</code></pre>
 
     </div>
 
@@ -3826,7 +1782,8 @@ app.yui.ready(function () {
                     
 
                     <div class="param-description">
-                        <p>when the app is ready</p>
+                        <p>when the app is ready. If an error occurr, the error object
+                    will be passed as the first argument of the callback function.</p>
 
                     </div>
 
@@ -3843,8 +1800,8 @@ app.yui.ready(function () {
 </div>
 
                 
-                    <div id="method_register" class="method item protected inherited">
-    <h3 class="name"><code>register</code></h3>
+                    <div id="method_registerBundle" class="method item public inherited">
+    <h3 class="name"><code>registerBundle</code></h3>
 
     
         <div class="args">
@@ -3852,19 +1809,7 @@ app.yui.ready(function () {
             
                 <li class="arg">
                     
-                        <code>bundleName</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>cacheKey</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>mod</code>
+                        <code>bundle</code>
                     
                 </li>
             
@@ -3877,13 +1822,15 @@ app.yui.ready(function () {
     
 
     
-        <span class="flag protected">protected</span>
+        <span class="flag public">public</span>
     
 
     
 
     
 
+    
+        <span class="flag chainable">chainable</span>
     
 
     
@@ -3892,11 +1839,11 @@ app.yui.ready(function () {
         
             
                 <p>Inherited from
-                <a href="../classes/Loader.html#method_register">loader</a>:
+                <a href="../classes/Server.html#method_registerBundle">server</a>:
             
         
         
-        <a href="../files/lib_loader.js.html#l50"><code>lib&#x2F;loader.js:50</code></a>
+        <a href="../files/lib_server.js.html#l32"><code>lib&#x2F;server.js:32</code></a>
         
         </p>
 
@@ -3907,8 +1854,8 @@ app.yui.ready(function () {
     </div>
 
     <div class="description">
-        <p>Registers information about modules that will be used
-to generate the bundle meta.</p>
+        <p>Create a synthetic group off the bundle renference to register its modules
+into the server and/or client Y instance so they can be used thru <code>app.yui.use()</code>.</p>
 
     </div>
 
@@ -3920,46 +1867,14 @@ to generate the bundle meta.</p>
             
                 <li class="param">
                     
-                        <code class="param-name">bundleName</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>The bundle name to be registered.</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">cacheKey</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>The cache key for the file that generates mod.</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">mod</code>
+                        <code class="param-name">bundle</code>
                         <span class="type">Object</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>The module information generated by the shifter module.</p>
+                        <p>A locator bundle reference.</p>
 
                     </div>
 
@@ -3997,7 +1912,7 @@ to generate the bundle meta.</p>
             
                 <li class="arg">
                     
-                        <code>metaFile</code>
+                        <code>metaModuleName</code>
                     
                 </li>
             
@@ -4031,7 +1946,7 @@ to generate the bundle meta.</p>
             
         
         
-        <a href="../files/lib_origin.js.html#l120"><code>lib&#x2F;origin.js:120</code></a>
+        <a href="../files/lib_origin.js.html#l117"><code>lib&#x2F;origin.js:117</code></a>
         
         </p>
 
@@ -4042,13 +1957,13 @@ to generate the bundle meta.</p>
     </div>
 
     <div class="description">
-        <p><p>Register a group and its modules by analyzing the meta file and defining the
-group configuration for the loader. Groups can be served from origin app or
-from CDN by calling <code>applyGroupConfig</code> or by setting <code>yui default base</code>,
-<code>yui default root</code> and <code>yui combo config</code> thru <code>app.set()</code>.</p></p>
+        <p><p>Register a group by defining the group configuration for the loader.
+Groups can be served from origin app or from CDN by calling <code>applyGroupConfig</code>
+or by setting <code>yui default base</code>, <code>yui default root</code> and <code>yui combo config</code> thru
+<code>app.set()</code>.</p></p>
 <p><p>Here is an example on how to use it, assuming that the YUI metadata are
 located in the <code>build</code> directory under the app root.</p></p>
-<pre class="code prettyprint"><code>app.yui.registerGroup(&#39;app&#39;, __dirname + &#39;/build&#39;);</code></pre>
+<pre class="code prettyprint"><code>app.yui.registerGroup(&#39;app&#39;, __dirname + &#39;/build&#39;, &#39;loader-app&#39;);</code></pre>
 
     </div>
 
@@ -4093,128 +2008,15 @@ analyze all modules in the group.</p>
             
                 <li class="param">
                     
-                        <code class="param-name">metaFile</code>
+                        <code class="param-name">metaModuleName</code>
                         <span class="type">String</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>optional filesystem path for the yui module that holds
-the metas for the group. Default value: <code>&lt;groupRoot&gt;/&lt;groupName&gt;/&lt;groupName&gt;.js</code></p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method_registerModules" class="method item public inherited">
-    <h3 class="name"><code>registerModules</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>groupName</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>groupModules</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-        <span class="flag public">public</span>
-    
-
-    
-
-    
-
-    
-        <span class="flag chainable">chainable</span>
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="../classes/Server.html#method_registerModules">server</a>:
-            
-        
-        
-        <a href="../files/lib_server.js.html#l36"><code>lib&#x2F;server.js:36</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Add a group and its modules into the server Y instance or
-updates the current Y instance by re-adding them.</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">groupName</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>The bundle/group name to be attached.</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">groupModules</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>The modules meta for the group.</p>
+                        <p>optional module name to denotate the yui module that holds
+the metas for the group. Default value: <code>loader-&lt;groupName&gt;</code></p>
 
                     </div>
 
@@ -4278,7 +2080,7 @@ updates the current Y instance by re-adding them.</p>
             
         
         
-        <a href="../files/lib_seed.js.html#l137"><code>lib&#x2F;seed.js:137</code></a>
+        <a href="../files/lib_seed.js.html#l134"><code>lib&#x2F;seed.js:134</code></a>
         
         </p>
 
@@ -4398,8 +2200,10 @@ specifically setting the <code>app.yui.config().seed</code> value.</p></p>
     <div class="description">
         <p><p>Set YUI Core Modules from the same origin as to where the application
 is hosted.</p></p>
-<p><p>Here is an example on how to use it:</p></p>
-<pre class="code prettyprint"><code>app.yui.setCoreFromAppOrigin({});</code></pre>
+<p><p>This is not recommended for production and instead you should use a
+<code>cdn</code> to server the build folder, but it is a very useful feature for
+development. Here is an example on how to use it:</p></p>
+<pre class="code prettyprint"><code>app.yui.setCoreFromAppOrigin();</code></pre>
 
     </div>
 
@@ -4435,7 +2239,7 @@ is hosted.</p></p>
 </div>
 
                 
-                    <div id="method_setCoreFromCDN" class="method item public inherited">
+                    <div id="method_setCoreFromCDN" class="method item public">
     <h3 class="name"><code>setCoreFromCDN</code></h3>
 
     
@@ -4473,12 +2277,15 @@ is hosted.</p></p>
     <div class="meta">
         
             
-                <p>Inherited from
-                <a href="../classes/Cdn.html#method_setCoreFromCDN">cdn</a>:
+                
+                <p>
+                
+                Defined in
+                
             
         
         
-        <a href="../files/lib_cdn.js.html#l48"><code>lib&#x2F;cdn.js:48</code></a>
+        <a href="../files/lib_yui.js.html#l154"><code>lib&#x2F;yui.js:154</code></a>
         
         </p>
 
@@ -4489,8 +2296,8 @@ is hosted.</p></p>
     </div>
 
     <div class="description">
-        <p><p>Set up a default group in loader that represents the
-core yui modules to be loaded from YUI CDN.</p></p>
+        <p>Set up a default group in loader that represents the
+core yui modules to be loaded from YUI CDN.</p>
 <pre class="code prettyprint"><code>app.yui.setCoreFromCDN();</code></pre>
 
     </div>
@@ -4529,190 +2336,6 @@ configuration for yui CDN.</p>
 </div>
 
                 
-                    <div id="method_shiftFiles" class="method item public inherited">
-    <h3 class="name"><code>shiftFiles</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>files</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>options</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>callback</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-        <span class="flag public">public</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            <p>Inherited from
-            <a href="../classes/Shifter.html#method_shiftFiles">
-                shifter
-            </a>
-            
-            but overwritten in
-            
-        
-        
-        <a href="../files/lib_shifter.js.html#l205"><code>lib&#x2F;shifter.js:205</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Shift yui modules using shifter cli.</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">files</code>
-                        <span class="type">Array</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>filesystem paths for all files to be shifted</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">options</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>configuration</p>
-
-                    </div>
-
-                    
-                        <ul class="params-list">
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">buildDir</code>
-                                    <span class="type">String</span>
-                                
-
-                                <div class="param-description">
-                                    <p>custom path for the output of the shifter</p>
-
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">cache</code>
-                                    <span class="type">Boolean</span>
-                                
-
-                                <div class="param-description">
-                                    <p>whether or not we should apply cache to speed up
-        the shifting process. If true, it will create the folder <code>.cache</code> and generate
-        some hash to prevent shifting the same *.js files if there is not change in
-        the source.</p>
-
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">args</code>
-                                    <span class="type">Array</span>
-                                
-
-                                <div class="param-description">
-                                    <p>shifter cli build arguments, it defaults to <code>[]</code></p>
-
-                                </div>
-
-                                
-                            </li>
-                            
-                        </ul>
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">callback</code>
-                        <span class="type">Function</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>the callback method to signal the end of the operation</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-</div>
-
-                
                     <div id="method_use" class="method item public inherited">
     <h3 class="name"><code>use</code></h3>
 
@@ -4721,92 +2344,8 @@ configuration for yui CDN.</p>
     
 
     
-
-    
-
-    
-        <span class="flag public">public</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            <p>Inherited from
-            <a href="../classes/Server.html#method_use">
-                server
-            </a>
-            
-            but overwritten in
-            
-        
-        
-        <a href="../files/lib_client.js.html#l138"><code>lib&#x2F;client.js:138</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Attaches the seed into the head, then creates a YUI Instance and attaches
-<code>modules</code> into it. This is equivalent to <code>YUI().use()</code> after getting the seed
-ready. This method is a bootstrap implementation for the library, and the way
-you use this in your templates, is by doing this:</p>
-<pre class="code prettyprint"><code>&lt;script&gt;{{{state}}}&lt;/script&gt;
-&lt;script&gt;
-app.yui.use(&#39;foo&#39;, &#39;bar&#39;, function (Y) {
-    // do something!
-});
-&lt;/script&gt;</code></pre>
-<p>Where <code>state</code> defines the state of the express app, and <code>app.yui</code> defines
-the helpers that <code>express-yui</code> brings into the client side.</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method_view" class="method item public inherited">
-    <h3 class="name"><code>view</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>config</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>defaultBundle</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
         <span class="returns-inline">
-            <span class="type">Function</span>
+            <span class="type">Object</span>
         </span>
     
 
@@ -4828,11 +2367,11 @@ the helpers that <code>express-yui</code> brings into the client side.</p>
         
             
                 <p>Inherited from
-                <a href="../classes/View.html#method_view">view</a>:
+                <a href="../classes/Server.html#method_use">server</a>:
             
         
         
-        <a href="../files/lib_view.js.html#l103"><code>lib&#x2F;view.js:103</code></a>
+        <a href="../files/lib_server.js.html#l244"><code>lib&#x2F;server.js:244</code></a>
         
         </p>
 
@@ -4843,51 +2382,20 @@ the helpers that <code>express-yui</code> brings into the client side.</p>
     </div>
 
     <div class="description">
-        <p><p>Expose a View class for express.</p></p>
-<pre class="code prettyprint"><code>app.set(&#39;view&#39;, app.yui.view({ defaultBundle: &#39;app-name&#39; });</code></pre>
+        <p><p>Creates a YUI Instance, and wraps the call to <code>Y.use()</code> to work appropiatly on
+the server side. The <code>use</code> method can be called once the <code>ready</code> state is achieved
+thru <code>app.yui.ready()</code>.</p></p>
+<pre class="code prettyprint"><code>app.yui.ready(function (err) {
+    if (err) {
+        throw err;
+    }
+    app.yui.use(&#39;json-stringify&#39;, function (Y) {
+        Y.JSON.stringify({ entry: &#39;value&#39; });
+    });
+});</code></pre>
 
     </div>
 
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">config</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>The default configuration of the view engine.</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">defaultBundle</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>The default group or bundle to lookup the template name.</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
     
 
     
@@ -4897,9 +2405,9 @@ the helpers that <code>express-yui</code> brings into the client side.</p>
             <div class="returns-description">
                 
                     
-                        <span class="type">Function</span>:
+                        <span class="type">Object</span>:
                     
-                    <p>the express view class</p>
+                    <p>Y instance</p>
 
                 
             </div>
@@ -4938,7 +2446,7 @@ the helpers that <code>express-yui</code> brings into the client side.</p>
             
         
         
-        <a href="../files/lib_seed.js.html#l75"><code>lib&#x2F;seed.js:75</code></a>
+        <a href="../files/lib_seed.js.html#l73"><code>lib&#x2F;seed.js:73</code></a>
         
         </p>
 
@@ -4980,7 +2488,7 @@ the helpers that <code>express-yui</code> brings into the client side.</p>
             
         
         
-        <a href="../files/lib_seed.js.html#l87"><code>lib&#x2F;seed.js:87</code></a>
+        <a href="../files/lib_seed.js.html#l85"><code>lib&#x2F;seed.js:85</code></a>
         
         </p>
 
@@ -5022,7 +2530,7 @@ the helpers that <code>express-yui</code> brings into the client side.</p>
             
         
         
-        <a href="../files/lib_seed.js.html#l63"><code>lib&#x2F;seed.js:63</code></a>
+        <a href="../files/lib_seed.js.html#l61"><code>lib&#x2F;seed.js:61</code></a>
         
         </p>
 

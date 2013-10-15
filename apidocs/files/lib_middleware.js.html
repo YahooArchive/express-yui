@@ -41,11 +41,9 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="../classes/cdn.html">cdn</a></li>
+                <li><a href="../classes/client.html">client</a></li>
             
-                <li><a href="../classes/groups.html">groups</a></li>
-            
-                <li><a href="../classes/loader.html">loader</a></li>
+                <li><a href="../classes/ExpressYUI.html">ExpressYUI</a></li>
             
                 <li><a href="../classes/middleware.html">middleware</a></li>
             
@@ -55,11 +53,7 @@
             
                 <li><a href="../classes/server.html">server</a></li>
             
-                <li><a href="../classes/shifter.html">shifter</a></li>
-            
-                <li><a href="../classes/View.html">View</a></li>
-            
-                <li><a href="../classes/view.html">view</a></li>
+                <li><a href="../classes/utils.html">utils</a></li>
             
                 <li><a href="../classes/yui.html">yui</a></li>
             
@@ -67,31 +61,21 @@
 
             <ul id="api-modules" class="apis modules">
             
-                <li><a href="../modules/cdn.html">cdn</a></li>
-            
-                <li><a href="../modules/client.html">client</a></li>
-            
                 <li><a href="../modules/express-yui.html">express-yui</a></li>
             
-                <li><a href="../modules/groups.html">groups</a></li>
+                <li><a href="../modules/express-yui_lib_client.html">express-yui/lib/client</a></li>
             
-                <li><a href="../modules/loader.html">loader</a></li>
+                <li><a href="../modules/express-yui_lib_middleware.html">express-yui/lib/middleware</a></li>
             
-                <li><a href="../modules/middleware.html">middleware</a></li>
+                <li><a href="../modules/express-yui_lib_origin.html">express-yui/lib/origin</a></li>
             
-                <li><a href="../modules/origin.html">origin</a></li>
+                <li><a href="../modules/express-yui_lib_seed.html">express-yui/lib/seed</a></li>
             
-                <li><a href="../modules/seed.html">seed</a></li>
+                <li><a href="../modules/express-yui_lib_server.html">express-yui/lib/server</a></li>
             
-                <li><a href="../modules/server.html">server</a></li>
+                <li><a href="../modules/express-yui_lib_utils.html">express-yui/lib/utils</a></li>
             
-                <li><a href="../modules/shifter.html">shifter</a></li>
-            
-                <li><a href="../modules/utils.html">utils</a></li>
-            
-                <li><a href="../modules/view.html">view</a></li>
-            
-                <li><a href="../modules/yui.html">yui</a></li>
+                <li><a href="../modules/express-yui_lib_yui.html">express-yui/lib/yui</a></li>
             
             </ul>
         </div>
@@ -141,37 +125,25 @@
 /*jslint node:true, nomen: true */
 
 /**
-The &#x60;express-yui&#x60; exports few middleware that provide some basic
-features to attach information into the &#x60;res.locals&#x60; object
-that could be used to boot &#x60;YUI&#x60; in the client runtime.
+Provides some basic features to expose yui configurations information thru &#x60;res.expose()&#x60;
+that could be used to boot &#x60;YUI&#x60; in the client runtime. It also provide some sugar to
+expose static assests that are YUI related.
 
-@module express-yui
-@submodule middleware
+@module express-yui/lib/middleware
 **/
 
 &#x27;use strict&#x27;;
 
-var utils = require(&#x27;./utils&#x27;),
-    libpath = require(&#x27;path&#x27;),
-    combo = require(&#x27;express-combo&#x27;),
-    client = require(&#x27;./client&#x27;);
+var client = require(&#x27;./client&#x27;),
+    utils = require(&#x27;./utils&#x27;);
 
 /**
-The &#x60;express-yui&#x60; exports few middleware that provide some basic
-features to attach information into the &#x60;res.locals&#x60; object
-that could be used to boot &#x60;YUI&#x60; in the client runtime.
-
-    var express = require(&#x27;express&#x27;),
-        expyui = require(&#x27;express-yui&#x27;),
-        app = express();
-
-    expyui.extend(app);
-    app.use(expyui.expose());
+Exports few middleware.
 
 @class middleware
 @static
-@uses utils, *path, *debug, *express-combo
-@extensionfor yui
+@uses client, utils, *debug, *express, *yui
+@extensionfor express-yui
 */
 module.exports = {
 
@@ -248,11 +220,26 @@ module.exports = {
     Exposes YUI into the client side. This middleware bundles
     &#x60;expyui.exposeConfig()&#x60; and &#x60;expyui.exposeSeed()&#x60; middleware.
 
-        // using it for a mounted middleware
+        var express = require(&#x27;express&#x27;),
+            expyui = require(&#x27;express-yui&#x27;),
+            app = express();
+    
+        expyui.extend(app);
+
+        // using it for a mounted middleware for all requests
         app.use(expyui.expose());
 
-        // or using it as a route middleware
-        app.get(&#x27;/foo&#x27;, expyui.expose());
+    In the example above, the &#x60;state&#x60; of the app will be serialized
+    per request, and can be used in the template to set up the client
+    side to run YUI with the same configuration used on the server side.
+    Here is an example of a handlebars template:
+
+        &lt;script&gt;
+        {{{state}}}
+        app.yui.use(&#x27;node&#x27;, function (Y) {
+            Y.one(&#x27;#content&#x27;).setContent(&#x27;&lt;p&gt;Ready!&lt;/p&gt;&#x27;);
+        });
+        &lt;/script&gt;
 
     @method expose
     @public
@@ -326,8 +313,8 @@ module.exports = {
             res.expose(logLevel, &#x27;window.YUI_config.logLevel&#x27;);
             res.expose(useBrowserConsole, &#x27;window.YUI_config.useBrowserConsole&#x27;);
             res.expose(req.app.yui.getSeedUrls({
-                 filter: filter,
-                 combine: combine
+                filter: filter,
+                combine: combine
             }), &#x27;window.YUI_config.seed&#x27;);
             next();
         };
@@ -338,16 +325,26 @@ module.exports = {
     Serves YUI Modules as static assets. All registered groups and core will be
     served from app origin.
 
-        app.use(expyui.static());
+        app.use(expyui.static(__dirname + &#x27;/build&#x27;));
+
+    The example above behaves very similar to &#x60;express.static()&#x60; middleware, but
+    it adds some sugar to also server YUI core modules as synthetic files, so you
+    can combine yui core modules with app specific modules for better performance.
+    If also adds some extra headers to avoid caching static files in a browser
+    when nodejs is running in debug mode to facilitate development.
 
     @method static
     @public
+    @param {string} buildDirectory fullpath to locator build directory
     @param {Object} options express static handler options
-    @return {Function} express middleware
+    @return {Object} express app that can be mounted into another express app.
     **/
-    &#x27;static&#x27;: function (options) {
-
-        var staticCache;
+    &#x27;static&#x27;: function (buildDirectory, options) {
+        var express = require(&#x27;express&#x27;),
+            YUI = require(&#x27;yui&#x27;),
+            version = YUI.YUI.version,
+            path = YUI.path(),
+            app;
 
         options = options || {};
 
@@ -356,53 +353,15 @@ module.exports = {
             options.maxAge = 0;
         }
 
-        function composeStaticHandlers(yui, comboConfig) {
-            var config = yui.config(),
-                groups = config.groups || {},
-                group,
-                handlers = [];
+        // creating an internal express app for static assets and
+        app = express();
+        // registering yui as the first entry mounted under the yui version
+        app.use(&#x27;/yui-&#x27; + version, express[&#x27;static&#x27;](path, options));
+        // now registering the build directory from locator
+        app.use(express[&#x27;static&#x27;](buildDirectory, options));
 
-            // first, yui core
-            handlers.push(combo.folder(&#x27;yui-&#x27; + yui.version, yui.path, options));
-
-            // second, each group might be marked as local, and should be included
-            for (group in groups) {
-                if (groups.hasOwnProperty(group) &amp;&amp; yui._groupFolderMap &amp;&amp; yui._groupFolderMap[group]) {
-                    handlers.push(combo.folder(libpath.basename(yui._groupFolderMap[group]), yui._groupFolderMap[group], utils.extend({}, options)));
-                }
-            }
-
-            // enabling combo handler using the custom setting when posible.
-            handlers.push(combo.combine(utils.extend({}, options, comboConfig || utils.DEFAULT_COMBO_CONFIG)));
-
-            return handlers;
-        }
-
-        return function (req, res, next) {
-
-            var handlers = staticCache;
-
-            function run(index) {
-                if (handlers &amp;&amp; index &lt; handlers.length) {
-                    handlers[index](req, res, function (err) {
-                        if (err) {
-                            return next(err);
-                        }
-                        index += 1;
-                        run(index);
-                    });
-                } else {
-                    next();
-                }
-            }
-
-            if (!handlers &amp;&amp; req.app &amp;&amp; req.app.yui) {
-                handlers = staticCache = composeStaticHandlers(req.app.yui, req.app.set(&#x27;yui combo config&#x27;));
-            }
-
-            run(0);
-        };
-
+        // returning the app that can be mounted as an express middleware
+        return app;
     }
 
 };

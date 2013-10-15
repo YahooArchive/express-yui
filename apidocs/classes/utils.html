@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>groups - express-yui API documentation</title>
+    <title>utils - express-yui API documentation</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -41,11 +41,9 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="../classes/cdn.html">cdn</a></li>
+                <li><a href="../classes/client.html">client</a></li>
             
-                <li><a href="../classes/groups.html">groups</a></li>
-            
-                <li><a href="../classes/loader.html">loader</a></li>
+                <li><a href="../classes/ExpressYUI.html">ExpressYUI</a></li>
             
                 <li><a href="../classes/middleware.html">middleware</a></li>
             
@@ -55,11 +53,7 @@
             
                 <li><a href="../classes/server.html">server</a></li>
             
-                <li><a href="../classes/shifter.html">shifter</a></li>
-            
-                <li><a href="../classes/View.html">View</a></li>
-            
-                <li><a href="../classes/view.html">view</a></li>
+                <li><a href="../classes/utils.html">utils</a></li>
             
                 <li><a href="../classes/yui.html">yui</a></li>
             
@@ -67,31 +61,21 @@
 
             <ul id="api-modules" class="apis modules">
             
-                <li><a href="../modules/cdn.html">cdn</a></li>
-            
-                <li><a href="../modules/client.html">client</a></li>
-            
                 <li><a href="../modules/express-yui.html">express-yui</a></li>
             
-                <li><a href="../modules/groups.html">groups</a></li>
+                <li><a href="../modules/express-yui_lib_client.html">express-yui/lib/client</a></li>
             
-                <li><a href="../modules/loader.html">loader</a></li>
+                <li><a href="../modules/express-yui_lib_middleware.html">express-yui/lib/middleware</a></li>
             
-                <li><a href="../modules/middleware.html">middleware</a></li>
+                <li><a href="../modules/express-yui_lib_origin.html">express-yui/lib/origin</a></li>
             
-                <li><a href="../modules/origin.html">origin</a></li>
+                <li><a href="../modules/express-yui_lib_seed.html">express-yui/lib/seed</a></li>
             
-                <li><a href="../modules/seed.html">seed</a></li>
+                <li><a href="../modules/express-yui_lib_server.html">express-yui/lib/server</a></li>
             
-                <li><a href="../modules/server.html">server</a></li>
+                <li><a href="../modules/express-yui_lib_utils.html">express-yui/lib/utils</a></li>
             
-                <li><a href="../modules/shifter.html">shifter</a></li>
-            
-                <li><a href="../modules/utils.html">utils</a></li>
-            
-                <li><a href="../modules/view.html">view</a></li>
-            
-                <li><a href="../modules/yui.html">yui</a></li>
+                <li><a href="../modules/express-yui_lib_yui.html">express-yui/lib/yui</a></li>
             
             </ul>
         </div>
@@ -128,37 +112,21 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>groups Class</h1>
+                        <h1>utils Class</h1>
 <div class="box meta">
-    
-        <div class="uses">
-            Uses
-            <ul class="inline commas">
-                
-                    <li><a href="utils.html">utils</a></li>
-                
-                    <li><a href="*fs.html">*fs</a></li>
-                
-                    <li><a href="*path.html">*path</a></li>
-                
-                    <li><a href="*vm.html">*vm</a></li>
-                
-            </ul>
-        </div>
     
 
     
 
     
         <div class="foundat">
-            Defined in: <a href="../files/lib_groups.js.html#l34"><code>lib&#x2F;groups.js:34</code></a>
+            Defined in: <a href="../files/lib_utils.js.html#l20"><code>lib&#x2F;utils.js:20</code></a>
         </div>
     
 
     
         
-            Module: <a href="../modules/groups.html">groups</a><br>
-            Parent Module: <a href="../modules/yui.html">yui</a>
+            Module: <a href="../modules/express-yui_lib_utils.html">express-yui/lib/utils</a>
         
     
 
@@ -168,8 +136,7 @@
 
 
 <div class="box intro">
-    <p>The <code>yui.groups</code> extension provides a set of utilities
-analyze meta modules and group metada.</p>
+    <p>Exports few utility methods and constants for <code>express-yui</code> components.</p>
 
 </div>
 
@@ -182,6 +149,8 @@ analyze meta modules and group metada.</p>
         
             <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
         
+        
+            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
         
         
         
@@ -197,37 +166,38 @@ analyze meta modules and group metada.</p>
 
                     <ul class="index-list methods">
                         
-                            <li class="index-item method private">
-                                <a href="#method__captureYUIModuleDetails">_captureYUIModuleDetails</a>
+                            <li class="index-item method">
+                                <a href="#method_clone">clone</a>
 
+                                
+                                    <span class="flag static">static</span>
                                 
                                 
                             </li>
                         
-                            <li class="index-item method private">
-                                <a href="#method__createSandbox">_createSandbox</a>
+                            <li class="index-item method">
+                                <a href="#method_extend">extend</a>
 
+                                
+                                    <span class="flag static">static</span>
                                 
                                 
                             </li>
                         
-                            <li class="index-item method protected">
-                                <a href="#method_getGroupConfig">getGroupConfig</a>
+                            <li class="index-item method">
+                                <a href="#method_joinURLFolder">joinURLFolder</a>
 
+                                
+                                    <span class="flag static">static</span>
                                 
                                 
                             </li>
                         
-                            <li class="index-item method public">
-                                <a href="#method_ready">ready</a>
+                            <li class="index-item method">
+                                <a href="#method_minifyFunction">minifyFunction</a>
 
                                 
-                                
-                            </li>
-                        
-                            <li class="index-item method public">
-                                <a href="#method_use">use</a>
-
+                                    <span class="flag static">static</span>
                                 
                                 
                             </li>
@@ -236,6 +206,32 @@ analyze meta modules and group metada.</p>
                 </div>
             
 
+            
+                <div class="index-section properties">
+                    <h3>Properties</h3>
+
+                    <ul class="index-list properties">
+                        
+                            <li class="index-item property">
+                                <a href="#property_debugMode">debugMode</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_DEFAULT_COMBO_CONFIG">DEFAULT_COMBO_CONFIG</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
             
 
             
@@ -248,8 +244,8 @@ analyze meta modules and group metada.</p>
                 <h2 class="off-left">Methods</h2>
 
                 
-                    <div id="method__captureYUIModuleDetails" class="method item private">
-    <h3 class="name"><code>_captureYUIModuleDetails</code></h3>
+                    <div id="method_clone" class="method item">
+    <h3 class="name"><code>clone</code></h3>
 
     
         <div class="args">
@@ -257,13 +253,7 @@ analyze meta modules and group metada.</p>
             
                 <li class="arg">
                     
-                        <code>path</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>sandbox</code>
+                        <code>oldObj</code>
                     
                 </li>
             
@@ -280,11 +270,11 @@ analyze meta modules and group metada.</p>
     
 
     
-        <span class="flag private">private</span>
-    
 
     
 
+    
+        <span class="flag static">static</span>
     
 
     
@@ -302,7 +292,7 @@ analyze meta modules and group metada.</p>
             
         
         
-        <a href="../files/lib_groups.js.html#l144"><code>lib&#x2F;groups.js:144</code></a>
+        <a href="../files/lib_utils.js.html#l59"><code>lib&#x2F;utils.js:59</code></a>
         
         </p>
 
@@ -313,8 +303,7 @@ analyze meta modules and group metada.</p>
     </div>
 
     <div class="description">
-        <p>Given a path to a meta YUI module, parse the module name and
-specific group app module configuration.</p>
+        <p>Deep clone of an object.</p>
 
     </div>
 
@@ -326,32 +315,14 @@ specific group app module configuration.</p>
             
                 <li class="param">
                     
-                        <code class="param-name">path</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>absolute path to the meta module</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">sandbox</code>
+                        <code class="param-name">oldObj</code>
                         <span class="type">Object</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>a sandbox instance in which to run the YUI
-                        module. if not provided, a default one will
-                        be used.</p>
+                        <p>the origal object to be cloned</p>
 
                     </div>
 
@@ -371,7 +342,7 @@ specific group app module configuration.</p>
                     
                         <span class="type">Object</span>:
                     
-                    <p>configuration with meta details</p>
+                    <p>The cloned object</p>
 
                 
             </div>
@@ -382,90 +353,8 @@ specific group app module configuration.</p>
 </div>
 
                 
-                    <div id="method__createSandbox" class="method item private">
-    <h3 class="name"><code>_createSandbox</code></h3>
-
-    
-        <span class="paren">()</span>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">Object</span>
-        </span>
-    
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/lib_groups.js.html#l108"><code>lib&#x2F;groups.js:108</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Creates a new sandbox instance in which to run the YUI module.</p>
-<p>Default sandbox supports:</p>
-<ul>
-  <li>Y.config</li>
-  <li>Y.applyConfig</li>
-  <li>Y.mix</li>
-  <li>Y.merge</li>
-  <li>Y.version</li>
-</ul>
-    </div>
-
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Object</span>:
-                    
-                    <p>the mock to extract the metas from the meta module</p>
-
-                
-            </div>
-        </div>
-    
-
-    
-</div>
-
-                
-                    <div id="method_getGroupConfig" class="method item protected">
-    <h3 class="name"><code>getGroupConfig</code></h3>
+                    <div id="method_extend" class="method item">
+    <h3 class="name"><code>extend</code></h3>
 
     
         <div class="args">
@@ -473,7 +362,13 @@ specific group app module configuration.</p>
             
                 <li class="arg">
                     
-                        <code>path</code>
+                        <code>obj</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>supplier</code>
                     
                 </li>
             
@@ -490,11 +385,11 @@ specific group app module configuration.</p>
     
 
     
-        <span class="flag protected">protected</span>
-    
 
     
 
+    
+        <span class="flag static">static</span>
     
 
     
@@ -512,7 +407,7 @@ specific group app module configuration.</p>
             
         
         
-        <a href="../files/lib_groups.js.html#l46"><code>lib&#x2F;groups.js:46</code></a>
+        <a href="../files/lib_utils.js.html#l27"><code>lib&#x2F;utils.js:27</code></a>
         
         </p>
 
@@ -523,15 +418,13 @@ specific group app module configuration.</p>
     </div>
 
     <div class="description">
-        <p>Extracts information from a meta module. This information includes
-the details about the meta module in the YUI registry plus all the
-info about the groups that are part of the meta module, along with
-all the modules per group. This method is used by <code>origin</code> to
-analyze each group before serving them.</p>
-<pre class="code prettyprint"><code>var path,
-    config;
-path = __dirname + &#39;/assets/js/metas.js&#39;;
-config = app.yui.groups.getGroupConfig(path);</code></pre>
+        <p>Extends object with properties from other objects.</p>
+<pre class="code prettyprint"><code>var a = { foo: &#39;bar&#39; }
+  , b = { bar: &#39;baz&#39; }
+  , c = { baz: &#39;xyz&#39; };
+
+utils.extends(a, b, c);
+// a =&gt; { foo: &#39;bar&#39;, bar: &#39;baz&#39;, baz: &#39;xyz&#39; }</code></pre>
 
     </div>
 
@@ -543,14 +436,144 @@ config = app.yui.groups.getGroupConfig(path);</code></pre>
             
                 <li class="param">
                     
-                        <code class="param-name">path</code>
+                        <code class="param-name">obj</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>the receiver object to be extended</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">supplier</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>objects</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Object</span>:
+                    
+                    <p>The extended object</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_joinURLFolder" class="method item">
+    <h3 class="name"><code>joinURLFolder</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>url</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">String</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/lib_utils.js.html#l120"><code>lib&#x2F;utils.js:120</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Utility method to use the loader base and add the folder name that represents
+a group to complete the new base and root value for each custom group.</p>
+<pre class="code prettyprint"><code>utils.joinURLFolder(&#39;http://foo.com/bar&#39;, &#39;baz&#39;);  // =&gt; http://foo.com/bar/baz/
+utils.joinURLFolder(&#39;https://foo.com/bar&#39;, &#39;baz&#39;); // =&gt; https://foo.com/bar/baz/
+utils.joinURLFolder(&#39;//foo.com/bar/&#39;, &#39;baz&#39;);      // =&gt; //foo.com/bar/baz/
+utils.joinURLFolder(&#39;/bar&#39;, &#39;baz&#39;);                // =&gt; /bar/baz/</code></pre>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">url</code>
                         <span class="type">String</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>the filesystem path to the meta module</p>
+                        <p>the url that should get the new segment added at the end</p>
 
                     </div>
 
@@ -568,9 +591,9 @@ config = app.yui.groups.getGroupConfig(path);</code></pre>
             <div class="returns-description">
                 
                     
-                        <span class="type">Object</span>:
+                        <span class="type">String</span>:
                     
-                    <p>modules the modules meta for the group</p>
+                    <p>the new url</p>
 
                 
             </div>
@@ -581,8 +604,8 @@ config = app.yui.groups.getGroupConfig(path);</code></pre>
 </div>
 
                 
-                    <div id="method_ready" class="method item public">
-    <h3 class="name"><code>ready</code></h3>
+                    <div id="method_minifyFunction" class="method item">
+    <h3 class="name"><code>minifyFunction</code></h3>
 
     
         <div class="args">
@@ -590,7 +613,7 @@ config = app.yui.groups.getGroupConfig(path);</code></pre>
             
                 <li class="arg">
                     
-                        <code>callback</code>
+                        <code>fn</code>
                     
                 </li>
             
@@ -599,15 +622,19 @@ config = app.yui.groups.getGroupConfig(path);</code></pre>
     
 
     
+        <span class="returns-inline">
+            <span class="type">Function</span>
+        </span>
+    
+
+    
 
     
 
     
-        <span class="flag public">public</span>
-    
 
     
-
+        <span class="flag static">static</span>
     
 
     
@@ -618,8 +645,6 @@ config = app.yui.groups.getGroupConfig(path);</code></pre>
         
             
                 
-                    <p>Provided by the <a href="../modules/client.html">client</a> module.</p>
-                
                 <p>
                 
                 Defined in
@@ -627,7 +652,7 @@ config = app.yui.groups.getGroupConfig(path);</code></pre>
             
         
         
-        <a href="../files/lib_client.js.html#l159"><code>lib&#x2F;client.js:159</code></a>
+        <a href="../files/lib_utils.js.html#l94"><code>lib&#x2F;utils.js:94</code></a>
         
         </p>
 
@@ -638,14 +663,9 @@ config = app.yui.groups.getGroupConfig(path);</code></pre>
     </div>
 
     <div class="description">
-        <p>Boots the application, rehydrate the app state and calls back to notify the
-<code>ready</code> state of the app.</p>
-<pre class="code prettyprint"><code>&lt;script&gt;{{{state}}}&lt;/script&gt;
-&lt;script&gt;
-app.yui.ready(function () {
-    // do something!
-});
-&lt;/script&gt;</code></pre>
+        <p>Minify the body of a function by removing spaces, tabs, comments, breaklines, etc.
+This is specially useful to optimize the function before serializing it to send
+it to the client side as a js blob.</p>
 
     </div>
 
@@ -657,14 +677,14 @@ app.yui.ready(function () {
             
                 <li class="param">
                     
-                        <code class="param-name">callback</code>
+                        <code class="param-name">fn</code>
                         <span class="type">Function</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>when the app is ready</p>
+                        <p>the function to minify</p>
 
                     </div>
 
@@ -676,25 +696,36 @@ app.yui.ready(function () {
     
 
     
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Function</span>:
+                    
+                    <p>the minified function</p>
+
+                
+            </div>
+        </div>
+    
 
     
 </div>
 
                 
-                    <div id="method_use" class="method item public">
-    <h3 class="name"><code>use</code></h3>
+            </div>
+        
 
-    
-        <span class="paren">()</span>
-    
+        
+            <div id="properties" class="api-class-tabpanel">
+                <h2 class="off-left">Properties</h2>
 
-    
-
-    
-
-    
-        <span class="flag public">public</span>
-    
+                
+                    <div id="property_debugMode" class="property item">
+    <h3 class="name"><code>debugMode</code></h3>
+    <span class="type">Boolean</span>
 
     
 
@@ -702,13 +733,13 @@ app.yui.ready(function () {
 
     
 
+    
+        <span class="flag static">static</span>
     
 
     <div class="meta">
         
             
-                
-                    <p>Provided by the <a href="../modules/client.html">client</a> module.</p>
                 
                 <p>
                 
@@ -717,10 +748,9 @@ app.yui.ready(function () {
             
         
         
-        <a href="../files/lib_client.js.html#l138"><code>lib&#x2F;client.js:138</code></a>
+        <a href="../files/lib_utils.js.html#l152"><code>lib&#x2F;utils.js:152</code></a>
         
         </p>
-
 
         
 
@@ -728,18 +758,55 @@ app.yui.ready(function () {
     </div>
 
     <div class="description">
-        <p>Attaches the seed into the head, then creates a YUI Instance and attaches
-<code>modules</code> into it. This is equivalent to <code>YUI().use()</code> after getting the seed
-ready. This method is a bootstrap implementation for the library, and the way
-you use this in your templates, is by doing this:</p>
-<pre class="code prettyprint"><code>&lt;script&gt;{{{state}}}&lt;/script&gt;
-&lt;script&gt;
-app.yui.use(&#39;foo&#39;, &#39;bar&#39;, function (Y) {
-    // do something!
-});
-&lt;/script&gt;</code></pre>
-<p>Where <code>state</code> defines the state of the express app, and <code>app.yui</code> defines
-the helpers that <code>express-yui</code> brings into the client side.</p>
+        <p>Whether the app is running in debug mode or not. True if nodejs is running
+in development mode.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_DEFAULT_COMBO_CONFIG" class="property item">
+    <h3 class="name"><code>DEFAULT_COMBO_CONFIG</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/lib_utils.js.html#l139"><code>lib&#x2F;utils.js:139</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The default combo handler configuration for app origin.</p>
 
     </div>
 
@@ -752,8 +819,6 @@ the helpers that <code>express-yui</code> brings into the client side.</p>
 
                 
             </div>
-        
-
         
 
         

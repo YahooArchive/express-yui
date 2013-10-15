@@ -41,11 +41,9 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="../classes/cdn.html">cdn</a></li>
+                <li><a href="../classes/client.html">client</a></li>
             
-                <li><a href="../classes/groups.html">groups</a></li>
-            
-                <li><a href="../classes/loader.html">loader</a></li>
+                <li><a href="../classes/ExpressYUI.html">ExpressYUI</a></li>
             
                 <li><a href="../classes/middleware.html">middleware</a></li>
             
@@ -55,11 +53,7 @@
             
                 <li><a href="../classes/server.html">server</a></li>
             
-                <li><a href="../classes/shifter.html">shifter</a></li>
-            
-                <li><a href="../classes/View.html">View</a></li>
-            
-                <li><a href="../classes/view.html">view</a></li>
+                <li><a href="../classes/utils.html">utils</a></li>
             
                 <li><a href="../classes/yui.html">yui</a></li>
             
@@ -67,31 +61,21 @@
 
             <ul id="api-modules" class="apis modules">
             
-                <li><a href="../modules/cdn.html">cdn</a></li>
-            
-                <li><a href="../modules/client.html">client</a></li>
-            
                 <li><a href="../modules/express-yui.html">express-yui</a></li>
             
-                <li><a href="../modules/groups.html">groups</a></li>
+                <li><a href="../modules/express-yui_lib_client.html">express-yui/lib/client</a></li>
             
-                <li><a href="../modules/loader.html">loader</a></li>
+                <li><a href="../modules/express-yui_lib_middleware.html">express-yui/lib/middleware</a></li>
             
-                <li><a href="../modules/middleware.html">middleware</a></li>
+                <li><a href="../modules/express-yui_lib_origin.html">express-yui/lib/origin</a></li>
             
-                <li><a href="../modules/origin.html">origin</a></li>
+                <li><a href="../modules/express-yui_lib_seed.html">express-yui/lib/seed</a></li>
             
-                <li><a href="../modules/seed.html">seed</a></li>
+                <li><a href="../modules/express-yui_lib_server.html">express-yui/lib/server</a></li>
             
-                <li><a href="../modules/server.html">server</a></li>
+                <li><a href="../modules/express-yui_lib_utils.html">express-yui/lib/utils</a></li>
             
-                <li><a href="../modules/shifter.html">shifter</a></li>
-            
-                <li><a href="../modules/utils.html">utils</a></li>
-            
-                <li><a href="../modules/view.html">view</a></li>
-            
-                <li><a href="../modules/yui.html">yui</a></li>
+                <li><a href="../modules/express-yui_lib_yui.html">express-yui/lib/yui</a></li>
             
             </ul>
         </div>
@@ -147,14 +131,13 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/lib_server.js.html#l25"><code>lib&#x2F;server.js:25</code></a>
+            Defined in: <a href="../files/lib_server.js.html#l22"><code>lib&#x2F;server.js:22</code></a>
         </div>
     
 
     
         
-            Module: <a href="../modules/server.html">server</a><br>
-            Parent Module: <a href="../modules/yui.html">yui</a>
+            Module: <a href="../modules/express-yui_lib_server.html">express-yui/lib/server</a>
         
     
 
@@ -164,8 +147,7 @@
 
 
 <div class="box intro">
-    <p>The <code>express-yui.server</code> extension that provides a set of features
-to control a YUI instance on the server side.</p>
+    <p>Provides a set of features to control a YUI instance on the server side.</p>
 
 </div>
 
@@ -193,15 +175,36 @@ to control a YUI instance on the server side.</p>
 
                     <ul class="index-list methods">
                         
-                            <li class="index-item method public">
-                                <a href="#method_attachModules">attachModules</a>
+                            <li class="index-item method protected">
+                                <a href="#method__patchIntl">_patchIntl</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected">
+                                <a href="#method__patchLoader">_patchLoader</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected">
+                                <a href="#method__patchTemplate">_patchTemplate</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item method public">
-                                <a href="#method_registerModules">registerModules</a>
+                                <a href="#method_ready">ready</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method public">
+                                <a href="#method_registerBundle">registerBundle</a>
 
                                 
                                 
@@ -230,8 +233,185 @@ to control a YUI instance on the server side.</p>
                 <h2 class="off-left">Methods</h2>
 
                 
-                    <div id="method_attachModules" class="method item public">
-    <h3 class="name"><code>attachModules</code></h3>
+                    <div id="method__patchIntl" class="method item protected">
+    <h3 class="name"><code>_patchIntl</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/lib_server.js.html#l153"><code>lib&#x2F;server.js:153</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Patches <code>Y.Intl.get</code> to use the language bundles produced by
+<code>locator-lang</code> plugin, and will be available thru locator&#39;s bundle
+objects.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__patchLoader" class="method item protected">
+    <h3 class="name"><code>_patchLoader</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/lib_server.js.html#l82"><code>lib&#x2F;server.js:82</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Patches <code>Y.Loader</code> to support <code>optionalRequires</code>, which enables you
+to require modules that might not be available in a runtime, and avoid
+to throw when that happens.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__patchTemplate" class="method item protected">
+    <h3 class="name"><code>_patchTemplate</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/lib_server.js.html#l115"><code>lib&#x2F;server.js:115</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Patches <code>Y.Template.get</code> to use the templates produced by
+<code>locator-handlebars</code> or any other similar plugin, and will be available thru locator&#39;s bundle
+objects.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_ready" class="method item public">
+    <h3 class="name"><code>ready</code></h3>
 
     
         <div class="args">
@@ -239,7 +419,7 @@ to control a YUI instance on the server side.</p>
             
                 <li class="arg">
                     
-                        <code>mods</code>
+                        <code>callback</code>
                     
                 </li>
             
@@ -260,8 +440,6 @@ to control a YUI instance on the server side.</p>
     
 
     
-        <span class="flag chainable">chainable</span>
-    
 
     
 
@@ -276,7 +454,7 @@ to control a YUI instance on the server side.</p>
             
         
         
-        <a href="../files/lib_server.js.html#l79"><code>lib&#x2F;server.js:79</code></a>
+        <a href="../files/lib_server.js.html#l197"><code>lib&#x2F;server.js:197</code></a>
         
         </p>
 
@@ -287,9 +465,17 @@ to control a YUI instance on the server side.</p>
     </div>
 
     <div class="description">
-        <p>Attach modules into the Y instance on the server. This is equivalent to call
-<code>req.app.yui.use(moduleName)</code> for every module in <code>mods</code>, but it
-does queue them until the first <code>Y</code> gets ready to be used.</p>
+        <p>Waits for the app to be ready, including the YUI instance to notify back that the
+<code>ready</code> state of the app was reached by calling the <code>callback</code>. The ready state is
+bound to the locator instance mounted into the express app thru <code>app.set(&#39;locator&#39;, locator);</code>
+and depending on <code>app.get(&#39;locator&#39;).ready.then()</code> promise result, the ready state
+will be reached or not.</p>
+<pre class="code prettyprint"><code>app.yui.ready(function (err) {
+    if (err) {
+        throw err;
+    }
+    // do something!
+});</code></pre>
 
     </div>
 
@@ -301,14 +487,15 @@ does queue them until the first <code>Y</code> gets ready to be used.</p>
             
                 <li class="param">
                     
-                        <code class="param-name">mods</code>
-                        <span class="type">Array</span>
+                        <code class="param-name">callback</code>
+                        <span class="type">Function</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>The list of modules to be attached.</p>
+                        <p>when the app is ready. If an error occurr, the error object
+                    will be passed as the first argument of the callback function.</p>
 
                     </div>
 
@@ -325,8 +512,8 @@ does queue them until the first <code>Y</code> gets ready to be used.</p>
 </div>
 
                 
-                    <div id="method_registerModules" class="method item public">
-    <h3 class="name"><code>registerModules</code></h3>
+                    <div id="method_registerBundle" class="method item public">
+    <h3 class="name"><code>registerBundle</code></h3>
 
     
         <div class="args">
@@ -334,13 +521,7 @@ does queue them until the first <code>Y</code> gets ready to be used.</p>
             
                 <li class="arg">
                     
-                        <code>groupName</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>groupModules</code>
+                        <code>bundle</code>
                     
                 </li>
             
@@ -377,7 +558,7 @@ does queue them until the first <code>Y</code> gets ready to be used.</p>
             
         
         
-        <a href="../files/lib_server.js.html#l36"><code>lib&#x2F;server.js:36</code></a>
+        <a href="../files/lib_server.js.html#l32"><code>lib&#x2F;server.js:32</code></a>
         
         </p>
 
@@ -388,8 +569,8 @@ does queue them until the first <code>Y</code> gets ready to be used.</p>
     </div>
 
     <div class="description">
-        <p>Add a group and its modules into the server Y instance or
-updates the current Y instance by re-adding them.</p>
+        <p>Create a synthetic group off the bundle renference to register its modules
+into the server and/or client Y instance so they can be used thru <code>app.yui.use()</code>.</p>
 
     </div>
 
@@ -401,30 +582,14 @@ updates the current Y instance by re-adding them.</p>
             
                 <li class="param">
                     
-                        <code class="param-name">groupName</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>The bundle/group name to be attached.</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">groupModules</code>
+                        <code class="param-name">bundle</code>
                         <span class="type">Object</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>The modules meta for the group.</p>
+                        <p>A locator bundle reference.</p>
 
                     </div>
 
@@ -479,7 +644,7 @@ updates the current Y instance by re-adding them.</p>
             
         
         
-        <a href="../files/lib_server.js.html#l109"><code>lib&#x2F;server.js:109</code></a>
+        <a href="../files/lib_server.js.html#l244"><code>lib&#x2F;server.js:244</code></a>
         
         </p>
 
@@ -490,9 +655,17 @@ updates the current Y instance by re-adding them.</p>
     </div>
 
     <div class="description">
-        <p>Creates a YUI Instance and attaches all registered modules for all registered
-groups into it, and optional attaches some more modules my mimicing the original
-YUI.use method.</p>
+        <p>Creates a YUI Instance, and wraps the call to <code>Y.use()</code> to work appropiatly on
+the server side. The <code>use</code> method can be called once the <code>ready</code> state is achieved
+thru <code>app.yui.ready()</code>.</p>
+<pre class="code prettyprint"><code>app.yui.ready(function (err) {
+    if (err) {
+        throw err;
+    }
+    app.yui.use(&#39;json-stringify&#39;, function (Y) {
+        Y.JSON.stringify({ entry: &#39;value&#39; });
+    });
+});</code></pre>
 
     </div>
 

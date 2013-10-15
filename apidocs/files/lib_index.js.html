@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>lib/cdn.js - express-yui API documentation</title>
+    <title>lib/index.js - express-yui API documentation</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -41,11 +41,9 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="../classes/cdn.html">cdn</a></li>
+                <li><a href="../classes/client.html">client</a></li>
             
-                <li><a href="../classes/groups.html">groups</a></li>
-            
-                <li><a href="../classes/loader.html">loader</a></li>
+                <li><a href="../classes/ExpressYUI.html">ExpressYUI</a></li>
             
                 <li><a href="../classes/middleware.html">middleware</a></li>
             
@@ -55,11 +53,7 @@
             
                 <li><a href="../classes/server.html">server</a></li>
             
-                <li><a href="../classes/shifter.html">shifter</a></li>
-            
-                <li><a href="../classes/View.html">View</a></li>
-            
-                <li><a href="../classes/view.html">view</a></li>
+                <li><a href="../classes/utils.html">utils</a></li>
             
                 <li><a href="../classes/yui.html">yui</a></li>
             
@@ -67,31 +61,21 @@
 
             <ul id="api-modules" class="apis modules">
             
-                <li><a href="../modules/cdn.html">cdn</a></li>
-            
-                <li><a href="../modules/client.html">client</a></li>
-            
                 <li><a href="../modules/express-yui.html">express-yui</a></li>
             
-                <li><a href="../modules/groups.html">groups</a></li>
+                <li><a href="../modules/express-yui_lib_client.html">express-yui/lib/client</a></li>
             
-                <li><a href="../modules/loader.html">loader</a></li>
+                <li><a href="../modules/express-yui_lib_middleware.html">express-yui/lib/middleware</a></li>
             
-                <li><a href="../modules/middleware.html">middleware</a></li>
+                <li><a href="../modules/express-yui_lib_origin.html">express-yui/lib/origin</a></li>
             
-                <li><a href="../modules/origin.html">origin</a></li>
+                <li><a href="../modules/express-yui_lib_seed.html">express-yui/lib/seed</a></li>
             
-                <li><a href="../modules/seed.html">seed</a></li>
+                <li><a href="../modules/express-yui_lib_server.html">express-yui/lib/server</a></li>
             
-                <li><a href="../modules/server.html">server</a></li>
+                <li><a href="../modules/express-yui_lib_utils.html">express-yui/lib/utils</a></li>
             
-                <li><a href="../modules/shifter.html">shifter</a></li>
-            
-                <li><a href="../modules/utils.html">utils</a></li>
-            
-                <li><a href="../modules/view.html">view</a></li>
-            
-                <li><a href="../modules/yui.html">yui</a></li>
+                <li><a href="../modules/express-yui_lib_yui.html">express-yui/lib/yui</a></li>
             
             </ul>
         </div>
@@ -128,7 +112,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: lib/cdn.js</h1>
+                        <h1 class="file-heading">File: lib/index.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
@@ -141,74 +125,84 @@
 /*jslint node:true, nomen: true */
 
 /**
-The &#x60;yui.cdn&#x60; extension that provides some basic configuration
-that will facilitate the configuration of YUI to be served from
-CDN as well as custom groups to be configured to be served from
-and alternative CDN as well.
+The &#x60;express-yui&#x60; module implements an express extension to provide
+yui capabilities to express applications.
 
-@module yui
-@submodule cdn
+@module express-yui
 **/
 
 &#x27;use strict&#x27;;
 
-var utils = require(&#x27;./utils&#x27;);
+var expstate = require(&#x27;express-state&#x27;),
+    YUIClass = require(&#x27;./yui&#x27;),
+    middleware = require(&#x27;./middleware&#x27;),
+    utils = require(&#x27;./utils&#x27;);
+
+function ExpressYUI(app) {
+    if (app[&#x27;@yui&#x27;]) { return app; }
+
+    // Brand.
+    Object.defineProperty(app, &#x27;@yui&#x27;, { value: ExpressYUI });
+    // extend express with some other requirements.
+    expstate.extend(app);
+    // adding the &#x60;yui&#x60; member.
+    app.yui = new YUIClass(app);
+    return app;
+}
 
 /**
-The &#x60;yui.cdn&#x60; extension provides some basic configuration
-that facilitates the configuration of YUI to be served from
-CDN.
+The &#x60;express-yui&#x60; extension provides the foundation and some basic
+features to boot &#x60;YUI&#x60; in the client and server runtimes.
 
-Explicitly defines to boot YUI from YUI CDN in the client runtime.
-This is the default behavior, but in some cases, when defining a
-custom base and root for all groups you might want to set YUI
-straight to the original YUI CDN. In the following example you can
-see how to force yui to load from CDN. 
+The following is an example of how to extend an express application:
 
     var express = require(&#x27;express&#x27;),
         expyui = require(&#x27;express-yui&#x27;),
         app = express();
 
     expyui.extend(app);
-    app.yui.setCoreFromCDN();
 
-@class cdn
+    // setting some basic configurations for YUI
+    app.yui.applyConfig({
+        fetchCSS: false
+    });
+
+    // calling expose middleware when a route match.
+    app.get(&#x27;/index.html&#x27;, expyui.expose(), anotherRoute);
+
+In the example above, the &#x60;state&#x60; of the app will be serialized
+per request, and can be used in the template to set up the client
+side to run YUI with the same configuration used on the server side.
+Here is an example of a handlebars template:
+
+    &lt;script&gt;
+    {{{state}}}
+    app.yui.use(&#x27;node&#x27;, function (Y) {
+        Y.one(&#x27;#content&#x27;).setContent(&#x27;&lt;p&gt;Ready!&lt;/p&gt;&#x27;);
+    });
+    &lt;/script&gt;
+
+In this particular case, &#x60;state&#x60; will hold all the
+appropiated settings generated by &#x60;expose&#x60; middleware.
+
+@class ExpressYUI
 @static
-@uses utils
-@extensionfor yui
+@uses middleware
 */
-module.exports = {
+module.exports = utils.extend({
 
     /**
-    Set up a default group in loader that represents the
-    core yui modules to be loaded from YUI CDN.
-
-        app.yui.setCoreFromCDN();
-
-    @method setCoreFromCDN
+    Extends an express application instance with &#x60;express-yui&#x60; functionalities.
+    
+    @method extend
+    @static
     @public
-    @param {Object} loaderConfig Optional loader configuration
-    objects that, if passed, will be mix with the default
-    configuration for yui CDN.
-    @chainable
+    @param {Object} app express app instance to be extended with the &#x60;yui&#x60; member.
+    @return {object} express app instance
     **/
-    setCoreFromCDN: function (loaderConfig) {
+    extend: ExpressYUI
 
-        var config = this.config(),
-            version = this.version;
-
-        utils.extend(config, {
-            base: &quot;http://yui.yahooapis.com/&quot; + version + &quot;/&quot;,
-            comboBase: &quot;http://yui.yahooapis.com/combo?&quot;,
-            comboSep: &quot;&amp;&quot;,
-            root: version + &quot;/&quot;
-        }, loaderConfig);
-
-        return this;
-
-    }
-
-};
+}, middleware);
 
     </pre>
 </div>

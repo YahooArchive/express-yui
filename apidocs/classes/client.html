@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>cdn - express-yui API documentation</title>
+    <title>client - express-yui API documentation</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -41,11 +41,9 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="../classes/cdn.html">cdn</a></li>
+                <li><a href="../classes/client.html">client</a></li>
             
-                <li><a href="../classes/groups.html">groups</a></li>
-            
-                <li><a href="../classes/loader.html">loader</a></li>
+                <li><a href="../classes/ExpressYUI.html">ExpressYUI</a></li>
             
                 <li><a href="../classes/middleware.html">middleware</a></li>
             
@@ -55,11 +53,7 @@
             
                 <li><a href="../classes/server.html">server</a></li>
             
-                <li><a href="../classes/shifter.html">shifter</a></li>
-            
-                <li><a href="../classes/View.html">View</a></li>
-            
-                <li><a href="../classes/view.html">view</a></li>
+                <li><a href="../classes/utils.html">utils</a></li>
             
                 <li><a href="../classes/yui.html">yui</a></li>
             
@@ -67,31 +61,21 @@
 
             <ul id="api-modules" class="apis modules">
             
-                <li><a href="../modules/cdn.html">cdn</a></li>
-            
-                <li><a href="../modules/client.html">client</a></li>
-            
                 <li><a href="../modules/express-yui.html">express-yui</a></li>
             
-                <li><a href="../modules/groups.html">groups</a></li>
+                <li><a href="../modules/express-yui_lib_client.html">express-yui/lib/client</a></li>
             
-                <li><a href="../modules/loader.html">loader</a></li>
+                <li><a href="../modules/express-yui_lib_middleware.html">express-yui/lib/middleware</a></li>
             
-                <li><a href="../modules/middleware.html">middleware</a></li>
+                <li><a href="../modules/express-yui_lib_origin.html">express-yui/lib/origin</a></li>
             
-                <li><a href="../modules/origin.html">origin</a></li>
+                <li><a href="../modules/express-yui_lib_seed.html">express-yui/lib/seed</a></li>
             
-                <li><a href="../modules/seed.html">seed</a></li>
+                <li><a href="../modules/express-yui_lib_server.html">express-yui/lib/server</a></li>
             
-                <li><a href="../modules/server.html">server</a></li>
+                <li><a href="../modules/express-yui_lib_utils.html">express-yui/lib/utils</a></li>
             
-                <li><a href="../modules/shifter.html">shifter</a></li>
-            
-                <li><a href="../modules/utils.html">utils</a></li>
-            
-                <li><a href="../modules/view.html">view</a></li>
-            
-                <li><a href="../modules/yui.html">yui</a></li>
+                <li><a href="../modules/express-yui_lib_yui.html">express-yui/lib/yui</a></li>
             
             </ul>
         </div>
@@ -128,7 +112,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>cdn Class</h1>
+                        <h1>client Class</h1>
 <div class="box meta">
     
         <div class="uses">
@@ -145,14 +129,13 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/lib_cdn.js.html#l23"><code>lib&#x2F;cdn.js:23</code></a>
+            Defined in: <a href="../files/lib_client.js.html#l20"><code>lib&#x2F;client.js:20</code></a>
         </div>
     
 
     
         
-            Module: <a href="../modules/cdn.html">cdn</a><br>
-            Parent Module: <a href="../modules/yui.html">yui</a>
+            Module: <a href="../modules/express-yui_lib_client.html">express-yui/lib/client</a>
         
     
 
@@ -162,20 +145,8 @@
 
 
 <div class="box intro">
-    <p>The <code>yui.cdn</code> extension provides some basic configuration
-that facilitates the configuration of YUI to be served from
-CDN.</p>
-<p>Explicitly defines to boot YUI from YUI CDN in the client runtime.
-This is the default behavior, but in some cases, when defining a
-custom base and root for all groups you might want to set YUI
-straight to the original YUI CDN. In the following example you can
-see how to force yui to load from CDN. </p>
-<pre class="code prettyprint"><code>var express = require(&#39;express&#39;),
-    expyui = require(&#39;express-yui&#39;),
-    app = express();
-
-expyui.extend(app);
-app.yui.setCoreFromCDN();</code></pre>
+    <p>Provides a set of methods to be serialized and sent to the client side to boot
+the application in the browser.</p>
 
 </div>
 
@@ -204,7 +175,14 @@ app.yui.setCoreFromCDN();</code></pre>
                     <ul class="index-list methods">
                         
                             <li class="index-item method public">
-                                <a href="#method_setCoreFromCDN">setCoreFromCDN</a>
+                                <a href="#method_ready">ready</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method public">
+                                <a href="#method_use">use</a>
 
                                 
                                 
@@ -226,8 +204,8 @@ app.yui.setCoreFromCDN();</code></pre>
                 <h2 class="off-left">Methods</h2>
 
                 
-                    <div id="method_setCoreFromCDN" class="method item public">
-    <h3 class="name"><code>setCoreFromCDN</code></h3>
+                    <div id="method_ready" class="method item public">
+    <h3 class="name"><code>ready</code></h3>
 
     
         <div class="args">
@@ -235,7 +213,7 @@ app.yui.setCoreFromCDN();</code></pre>
             
                 <li class="arg">
                     
-                        <code>loaderConfig</code>
+                        <code>callback</code>
                     
                 </li>
             
@@ -256,7 +234,99 @@ app.yui.setCoreFromCDN();</code></pre>
     
 
     
-        <span class="flag chainable">chainable</span>
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/lib_client.js.html#l213"><code>lib&#x2F;client.js:213</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Boots the application, rehydrate the app state and calls back to notify the
+<code>ready</code> state of the app.</p>
+<pre class="code prettyprint"><code>&lt;script&gt;{{{state}}}&lt;/script&gt;
+&lt;script&gt;
+app.yui.ready(function (err) {
+    if (err) {
+        throw err;
+    }
+    app.yui.use(&#39;foo&#39;, &#39;bar&#39;, function (Y) {
+        // do something!
+    });
+});
+&lt;/script&gt;</code></pre>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">callback</code>
+                        <span class="type">Function</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>when the app is ready. If an error occurr, the error object
+                    will be passed as the first argument of the callback function.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_use" class="method item public">
+    <h3 class="name"><code>use</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
     
 
     
@@ -272,7 +342,7 @@ app.yui.setCoreFromCDN();</code></pre>
             
         
         
-        <a href="../files/lib_cdn.js.html#l48"><code>lib&#x2F;cdn.js:48</code></a>
+        <a href="../files/lib_client.js.html#l192"><code>lib&#x2F;client.js:192</code></a>
         
         </p>
 
@@ -283,38 +353,21 @@ app.yui.setCoreFromCDN();</code></pre>
     </div>
 
     <div class="description">
-        <p>Set up a default group in loader that represents the
-core yui modules to be loaded from YUI CDN.</p>
-<pre class="code prettyprint"><code>app.yui.setCoreFromCDN();</code></pre>
+        <p>Attaches the seed into the head, then creates a YUI Instance and attaches
+<code>modules</code> into it. This is equivalent to <code>YUI().use()</code> after getting the seed
+ready. This method is a bootstrap implementation for the library, and the way
+you use this in your templates, is by doing this:</p>
+<pre class="code prettyprint"><code>&lt;script&gt;{{{state}}}&lt;/script&gt;
+&lt;script&gt;
+app.yui.use(&#39;foo&#39;, &#39;bar&#39;, function (Y) {
+    // do something!
+});
+&lt;/script&gt;</code></pre>
+<p>Where <code>state</code> defines the state of the express app, and <code>app.yui</code> defines
+the helpers that <code>express-yui</code> brings into the client side.</p>
 
     </div>
 
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">loaderConfig</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Optional loader configuration
-objects that, if passed, will be mix with the default
-configuration for yui CDN.</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
     
 
     

@@ -1,97 +1,65 @@
 YUI.add("yuidoc-meta", function(Y) {
    Y.YUIDoc = { meta: {
     "classes": [
-        "View",
-        "cdn",
-        "groups",
-        "loader",
+        "ExpressYUI",
+        "client",
         "middleware",
         "origin",
         "seed",
         "server",
-        "shifter",
-        "view",
+        "utils",
         "yui"
     ],
     "modules": [
-        "cdn",
-        "client",
         "express-yui",
-        "groups",
-        "loader",
-        "middleware",
-        "origin",
-        "seed",
-        "server",
-        "shifter",
-        "utils",
-        "view",
-        "yui"
+        "express-yui_lib_client",
+        "express-yui_lib_middleware",
+        "express-yui_lib_origin",
+        "express-yui_lib_seed",
+        "express-yui_lib_server",
+        "express-yui_lib_utils",
+        "express-yui_lib_yui"
     ],
     "allModules": [
         {
-            "displayName": "cdn",
-            "name": "cdn",
-            "description": "The `yui.cdn` extension that provides some basic configuration\nthat will facilitate the configuration of YUI to be served from\nCDN as well as custom groups to be configured to be served from\nand alternative CDN as well."
-        },
-        {
-            "displayName": "client",
-            "name": "client",
-            "description": "The `express-yui.client` extension that provides a set of features\nto control a YUI instance on the client side. This module will be\nserialized and sent to the client side thru `res.expose()` and available\nin the client side thru `window.app.yui`."
-        },
-        {
             "displayName": "express-yui",
             "name": "express-yui",
-            "description": "The `express-yui` middleware provides the foundation and some basic\nfeatures to attach information into the `res.locals` object\nthat could be used to boot `YUI` in the client runtime."
+            "description": "The `express-yui` module implements an express extension to provide\nyui capabilities to express applications."
         },
         {
-            "displayName": "groups",
-            "name": "groups",
-            "description": "The `yui.groups` extension provides a set of utilities\nanalyze meta modules and group metada."
+            "displayName": "express-yui/lib/client",
+            "name": "express-yui_lib_client",
+            "description": "Provides a set of features\nto control a YUI instance on the client side. This module will be\nserialized and sent to the client side thru `res.expose()` and available\nin the client side thru `window.app.yui`."
         },
         {
-            "displayName": "loader",
-            "name": "loader",
-            "description": "The `yui.loader` extension exposes a locator plugin to build and register yui meta modules\nfrom shifter module metadata."
+            "displayName": "express-yui/lib/middleware",
+            "name": "express-yui_lib_middleware",
+            "description": "Provides some basic features to expose yui configurations information thru `res.expose()`\nthat could be used to boot `YUI` in the client runtime. It also provide some sugar to\nexpose static assests that are YUI related."
         },
         {
-            "displayName": "middleware",
-            "name": "middleware",
-            "description": "The `express-yui` exports few middleware that provide some basic\nfeatures to attach information into the `res.locals` object\nthat could be used to boot `YUI` in the client runtime."
+            "displayName": "express-yui/lib/origin",
+            "name": "express-yui_lib_origin",
+            "description": "Provides a set of features to mutate the express app into an origin server for yui\nmodules and static assets."
         },
         {
-            "displayName": "origin",
-            "name": "origin",
-            "description": "The `express-yui.origin` extension that provides a set of features\nto mutate the express app into an origin server for yui\nmodules and static assets."
+            "displayName": "express-yui/lib/seed",
+            "name": "express-yui_lib_seed",
+            "description": "Provides a set of features to construct the yui seed structure which contains the url\nto fetch the initial piece of the library from the client runtime."
         },
         {
-            "displayName": "seed",
-            "name": "seed",
-            "description": "The `express-yui.seed` extension that provides a set of features\nto construct the yui seed structure which contains the url\nto fetch the initial piece of the library before\ncalling `YUI().use()` in the client runtime."
+            "displayName": "express-yui/lib/server",
+            "name": "express-yui_lib_server",
+            "description": "The `express-yui/lib/server` provides a set of features\nto control a YUI instance on the server side."
         },
         {
-            "displayName": "server",
-            "name": "server",
-            "description": "The `express-yui.server` extension that provides a set of features\nto control a YUI instance on the server side."
-        },
-        {
-            "displayName": "shifter",
-            "name": "shifter",
-            "description": "The `express-yui.shifter` extension exposes a set of utilities to build yui modules\nfrom *.js or build.json files."
-        },
-        {
-            "displayName": "utils",
-            "name": "utils",
+            "displayName": "express-yui/lib/utils",
+            "name": "express-yui_lib_utils",
             "description": "Utility functions used across `express-yui` components."
         },
         {
-            "displayName": "view",
-            "name": "view",
-            "description": "The `express-yui.view` extension exposes an express view class that relies on all templates\nexposed by all modules that are registered on the server side thru Loader, those\ntemplates should be using Y.Template."
-        },
-        {
-            "displayName": "yui",
-            "name": "yui"
+            "displayName": "express-yui/lib/yui",
+            "name": "express-yui_lib_yui",
+            "description": "Provides the class foundation of the `app.yui` object."
         }
     ]
 } };

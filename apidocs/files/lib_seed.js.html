@@ -41,11 +41,9 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="../classes/cdn.html">cdn</a></li>
+                <li><a href="../classes/client.html">client</a></li>
             
-                <li><a href="../classes/groups.html">groups</a></li>
-            
-                <li><a href="../classes/loader.html">loader</a></li>
+                <li><a href="../classes/ExpressYUI.html">ExpressYUI</a></li>
             
                 <li><a href="../classes/middleware.html">middleware</a></li>
             
@@ -55,11 +53,7 @@
             
                 <li><a href="../classes/server.html">server</a></li>
             
-                <li><a href="../classes/shifter.html">shifter</a></li>
-            
-                <li><a href="../classes/View.html">View</a></li>
-            
-                <li><a href="../classes/view.html">view</a></li>
+                <li><a href="../classes/utils.html">utils</a></li>
             
                 <li><a href="../classes/yui.html">yui</a></li>
             
@@ -67,31 +61,21 @@
 
             <ul id="api-modules" class="apis modules">
             
-                <li><a href="../modules/cdn.html">cdn</a></li>
-            
-                <li><a href="../modules/client.html">client</a></li>
-            
                 <li><a href="../modules/express-yui.html">express-yui</a></li>
             
-                <li><a href="../modules/groups.html">groups</a></li>
+                <li><a href="../modules/express-yui_lib_client.html">express-yui/lib/client</a></li>
             
-                <li><a href="../modules/loader.html">loader</a></li>
+                <li><a href="../modules/express-yui_lib_middleware.html">express-yui/lib/middleware</a></li>
             
-                <li><a href="../modules/middleware.html">middleware</a></li>
+                <li><a href="../modules/express-yui_lib_origin.html">express-yui/lib/origin</a></li>
             
-                <li><a href="../modules/origin.html">origin</a></li>
+                <li><a href="../modules/express-yui_lib_seed.html">express-yui/lib/seed</a></li>
             
-                <li><a href="../modules/seed.html">seed</a></li>
+                <li><a href="../modules/express-yui_lib_server.html">express-yui/lib/server</a></li>
             
-                <li><a href="../modules/server.html">server</a></li>
+                <li><a href="../modules/express-yui_lib_utils.html">express-yui/lib/utils</a></li>
             
-                <li><a href="../modules/shifter.html">shifter</a></li>
-            
-                <li><a href="../modules/utils.html">utils</a></li>
-            
-                <li><a href="../modules/view.html">view</a></li>
-            
-                <li><a href="../modules/yui.html">yui</a></li>
+                <li><a href="../modules/express-yui_lib_yui.html">express-yui/lib/yui</a></li>
             
             </ul>
         </div>
@@ -141,13 +125,10 @@
 /*jslint node:true, nomen: true */
 
 /**
-The &#x60;express-yui.seed&#x60; extension that provides a set of features
-to construct the yui seed structure which contains the url
-to fetch the initial piece of the library before
-calling &#x60;YUI().use()&#x60; in the client runtime.
+Provides a set of features to construct the yui seed structure which contains the url
+to fetch the initial piece of the library from the client runtime.
 
-@module yui
-@submodule seed
+@module express-yui/lib/seed
 **/
 
 &#x27;use strict&#x27;;
@@ -155,14 +136,7 @@ calling &#x60;YUI().use()&#x60; in the client runtime.
 var debug = require(&#x27;debug&#x27;)(&#x27;express:yui:seed&#x27;);
 
 /**
-The &#x60;express-yui.seed&#x60; middleware extension that provides a set of features
-to configure and construct the yui seed object which
-contains the urls to be used to fetch the initial pieces
-of the yui library, plus any app specific modules
-before calling &#x60;YUI().use()&#x60; in the client runtime.
-
-When the &#x60;&quot;seed&quot;&#x60; sub-module is used by &#x60;yui&#x60; middleware, it
-will automatically mix itself into &#x60;app.yui.expose()&#x60;, and it
+Provision the seed information into &#x60;app.yui.expose()&#x60;, and it
 exposes an array of object with the information to build
 the script tag or tags that forms the seed:
 
@@ -174,23 +148,31 @@ The following is an example of how these features can be used:
 
     expyui.extend(app);
     // adjust the seed modules
-    app.yui.seed([&#x27;yui-base&#x27;, &#x27;loader&#x27;]);
+    app.yui.seed([&#x27;yui-base&#x27;, &#x27;loader&#x27;, &#x27;foo&#x27;, &#x27;bar&#x27;]);
     // Call expose middleware when a route match.
     app.get(&#x27;/index.html&#x27;, expyui.expose(), anotherRoute);
 
-In the example above, the array of objects with the seed information
-will be exposed thru &#x60;res.locals.yui_seed&#x60;, which means you
-can use it in your templates by doing something like this if
-using handlebars templates:
+In the example above, the array of objects with all seed urls
+will be exposed thru &#x60;window.YUI_config.seed&#x60;, which means you
+can use it in in the client side to prepare the page to host a
+yui instance. Normally, you don&#x27;t have to do this manually, you
+can use &#x60;app.yui.ready()&#x60; or &#x60;app.yui.use()&#x60; methods to do that
+task automatically. Here is an example of what you need in your
+layout template:
 
-    {{#yui_seed}}
-    &lt;script src=&quot;{{{src}}}&quot;&gt;&lt;/script&gt;
-    {{/yui_seed}}
+    &lt;script&gt;
+    {{{state}}}
+    app.yui.ready(function () {
+        // at this point, YUI is ready in the client, plus
+        &#x60;loader&#x60;, &#x60;foo&#x60; and &#x60;bar&#x60; modules injected in the page
+        since they were part or the seed.
+    });
+    &lt;/script&gt;
 
 @class seed
 @static
 @uses debug*
-@extensionfor yui
+@extensionfor express-yui/lib/yui
 */
 module.exports = {
 
@@ -231,7 +213,7 @@ module.exports = {
     be part of the seed files.
 
     @method getDefaultSeed
-    @pretected
+    @protected
     @return {Array} list of modules in seed
     **/
     getDefaultSeed: function () {
@@ -247,17 +229,16 @@ module.exports = {
     @method addModuleToSeed
     @public
     @param {String} moduleName the yui module name
-    @param {String} groupName the group name for the module
     @chainable
     **/
-    addModuleToSeed: function (moduleName, groupName) {
+    addModuleToSeed: function (moduleName) {
 
         var config = this.config();
 
         // add a new entry in the seed for the new meta module
         // so it gets embeded in the page.
         config.seed = config.seed || this.getDefaultSeed();
-        config.seed.push(groupName ? moduleName + &#x27;@&#x27; + groupName : moduleName);
+        config.seed.push(moduleName);
 
         // add a new entry in the extended core for the new meta
         // module to force to attach it when calling &#x60;use()&#x60;
@@ -394,7 +375,6 @@ module.exports = {
             path,
             filter,
             i,
-            m,
             moduleName;
 
         function flush() {
@@ -414,11 +394,9 @@ module.exports = {
 
         // producing an array of objects with the urls for the module.
         for (i = 0; i &lt; modules.length; i += 1) {
-            // a module in the list might have a suffix with the group name denotated as @&lt;groupname&gt;
-            m = modules[i].split(&#x27;@&#x27;);
-            moduleName  = m[0];
-            if (m[1]) {
-                groupName   = m[1];
+            moduleName = modules[i];
+            if (this._clientModules[moduleName]) {
+                groupName   = this._clientModules[moduleName].group;
                 groupConfig = groups[groupName]; // group config
             } else {
                 groupName   = &#x27;yui&#x27;;
