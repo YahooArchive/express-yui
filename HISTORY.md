@@ -1,7 +1,13 @@
 Express YUI Change History
 ==========================
 
+0.6.3 (2013-09-16)
+------------------
+
+* Bump `express-state` dependency to at least v1.0.1, which includes escaping of the javascript blob that holds the state of the app exposed to the client side.
+
 0.6.2 (2013-09-16)
+------------------
 
 * relaxing the yui dependency to support 3.x.
 
