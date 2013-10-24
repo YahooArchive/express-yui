@@ -1,7 +1,7 @@
 {
     "name": "express-yui",
     "description": "Express extension for YUI Applications",
-    "version": "0.6.2",
+    "version": "0.6.3",
     "homepage": "https://github.com/yahoo/express-yui",
     "author": "Caridy Patino <caridy@yahoo-inc.com> (http://github.com/caridy)",
     "contributors": [
@@ -12,7 +12,7 @@
         "npm" : ">=1.2.10"
     },
     "dependencies": {
-        "express-state": "~1.0.0",
+        "express-state": "~1.0.1",
         "debug": "*"
     },
     "peerDependencies": {
