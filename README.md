@@ -1,22 +1,23 @@
 Express YUI
 ===========
 
-[Express][] extension for YUI Applications.
+[Express][] extension for [YUI][] applications.
 
 [![Build Status](https://travis-ci.org/yahoo/express-yui.png?branch=master)][Build Status]
 
 
 [Express]: https://github.com/visionmedia/express
 [Build Status]: https://travis-ci.org/yahoo/express-yui
+[YUI]: http://yuilibrary.com/
 
 
 Goals & Design
 --------------
 
-This compontent extends express by adding a new member `app.yui` to the
-express application. It is responsible for controlling and exposing the yui
-configuration and the app state into the client side as well has controlling
-the yui instance on the server.
+This compontent extends express by adding a new `app.yui` member to the express
+application. It is responsible for controlling and exposing both the yui
+configuration and the application state on the client side as well has
+controlling the yui instance on the server.
 
 
 Installation
@@ -47,8 +48,8 @@ Usage
 `express-yui` is a conventional `express` extension, which means it will extend
 the functionalities provided on `express` by augmenting the express app instance
 with a new member called `yui`. At the same time, `express-yui` provides a set of
-static methods that you can call directly off the `express-yui` module, those
-methods are utility methods and express middleware.
+static methods that you can call directly off the `express-yui` module. These
+methods include utility methods and express middleware.
 
 Here is an example of how to extend an `express` app with `express-yui`:
 
@@ -65,14 +66,15 @@ expyui.extend(app);
 app.yui.applyConfig({ fetchCSS: false });
 ```
 
-As you can see in the example above, the `yui` member is available off the app instance after extending the `express` app.
+As you can see in the example above, the `yui` member is available off the app
+instance after extending the `express` app.
 
 
 ### Exposing app state into client
 
-To expose the state of the app, which includes the yui configuration computed based
-on the configuration defined thru the express app instance, you can call the `expose`
-middleware for any particular route:
+To expose the state of the app (which includes the computed yui configuration
+based on the configuration defined through the express app instance), you can
+call the `expose` middleware for any particular route:
 
 ```
 var express = require('express'),
@@ -86,8 +88,8 @@ app.get('/foo', expyui.expose(), function (req, res, next) {
 });
 ```
 
-By doing `expyui.expose()`, `express-yui` will provision a property call `state` that
-can be use in your templates as a `javascript` blob that sets up the page to run
+By doing `expyui.expose()`, `express-yui` will provision a property called `state` that
+can be used in your templates as a javascript blob that sets up the page to run
 YUI with some very specific settings coming from the server. If you use `handlebars`
 you will do this:
 
@@ -100,13 +102,13 @@ app.yui.ready(function () {
 </script>
 ```
 
-And this is really the only thing you should do in your templates to get YUI ready to roll!
+And this is really the only thing you need to do in your templates to get YUI ready to roll!
 
 
 ### Using the locator plugin to build the app
 
 `express-yui` provides many features, but the real power of this package can be seen when
-using it in conjunction with [locator][] component and [locator-yui][] plugin.
+using it in conjunction with the [locator][] component and the [locator-yui][] plugin.
 
 ```
 var express = require('express'),
@@ -120,6 +122,7 @@ var express = require('express'),
 
 // mounting `locator` instance
 app.set('locator', loc);
+
 // extending app with `express-yui`
 expyui.extend(app);
 
@@ -145,9 +148,9 @@ app.yui.ready(function (err) {
 });
 ```
 
-As a result, any yui module under `__dirname` folder or any npm dependency marked as
-a locator bundle will be built by the `locator-yui` plugin, and automatically
-become available on the client, and potentially on the server as well. This means you
+As a result, any yui module under the `__dirname` folder or any npm dependency marked as
+a locator bundle will be built by the `locator-yui` plugin, and become automatically
+available on the client, and potentially on the server as well. This means you
 no longer need to manually define loader metadata or any kind of yui config to load those
 modules, and `express-yui` will be capable to handle almost everthing for you.
 
@@ -175,7 +178,11 @@ _note: remember that `req.app` holds a reference to the `app` object for conveni
 
 ### Using [Locator] plugins
 
-If you use `locator` and `express-view` components in conjuction with some other [locator][] plugins like `locator-handlebars` and `locator-yui` to precompile templates, and shift yui modules, then when calling `res.render('foo')` and `express-view` will resolve `foo` automatically based on the precompiled version. Check this example to see this in action:
+If you use `locator` and `express-view` components in conjuction with some
+other [locator][] plugins like `locator-handlebars` and `locator-yui` to
+precompile templates, and shift yui modules, then when calling
+`res.render('foo')` and `express-view` will resolve `foo` automatically based
+on the precompiled version. Check this example to see this in action:
 
  * https://github.com/yahoo/express-yui/tree/master/examples/locator-express
 
@@ -189,7 +196,8 @@ app.yui.setCoreFromAppOrigin();
 app.use(expyui.static(__dirname + '/build'));
 ```
 
-With this configuration, a group called `foo` with version `1.2.3`, and `yui` version `3.11.0`, it will produce urls like these:
+With this configuration, a group called `foo` with version `1.2.3`, and `yui`
+version `3.11.0`, it will produce urls like these:
 
   * /yui-3.11.0/yui-base/yui-base-min.js
   * /foo-1.2.3/bar/bar-min.js
@@ -200,8 +208,9 @@ specific modules (modules compiled by [locator][] into the `build` folder).
 
 ### Serving static assets from CDN
 
-If you plan to serve the `build` folder, generated by [locator][], from your CDN, then make
+If you plan to serve the locator-generated `build` folder from your CDN, then make
 sure you set the proper configuration for all groups so loader can know about them.
+
 Here is the example:
 
 ```
