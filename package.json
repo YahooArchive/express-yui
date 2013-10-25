@@ -55,6 +55,7 @@
         "url": "https://github.com/yahoo/express-yui/issues"
     },
     "scripts": {
+        "pretest": "npm run lint",
         "test": "node ./node_modules/ytestrunner/lib/cli.js -c --include tests/units/**/*.js",
         "unit": "node ./node_modules/ytestrunner/lib/cli.js --include tests/units/**/*.js",
         "lint": "node ./node_modules/.bin/jshint --config ./node_modules/yui-lint/jshint.json ./lib/*.js",
