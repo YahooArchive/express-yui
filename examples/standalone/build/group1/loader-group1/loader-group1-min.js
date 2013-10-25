@@ -1,5 +1,5 @@
 /*global YUI*/
-YUI.add('group1', function (Y, NAME) {
+YUI.add('loader-group1', function (Y, NAME) {
     "use strict";
     Y.applyConfig({
         groups: {
@@ -9,7 +9,7 @@ YUI.add('group1', function (Y, NAME) {
                         group: "group1",
                         requires: ["node-base", "json-stringify"]
                     },
-                    "group1": {
+                    "loader-group1": {
                         group: "group1"
                     }
                 }

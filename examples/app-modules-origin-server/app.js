@@ -29,7 +29,7 @@ app.configure('production', function () {
 
     // when running in production to use a custom CDN that
     // uses the app as origin server
-    app.yui.applyGroupConfig('metas', {
+    app.yui.applyGroupConfig('app-modules', {
         // special loader group configuration
         base: 'http://flickrcdn.com/app/',
         comboBase: 'http://flickrcdn.com/combo?',
@@ -39,15 +39,17 @@ app.configure('production', function () {
 
 });
 
-// registering the group information for a group named `metas`
-app.yui.registerGroup('metas', './build');
+// registering the group information for a group named `metas`,
+// corresponding to the `./build` folder and exposing metas
+// thru a yui meta module called `metas`
+app.yui.registerGroup('app-modules', './build/app-modules', 'loader-app-modules');
 
 // template engine
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
 // serving static yui modules
-app.use(expyui['static']({
+app.use(expyui['static'](__dirname + '/build', {
     maxAge: 100
 }));
 

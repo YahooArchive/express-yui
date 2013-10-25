@@ -16,8 +16,8 @@
 
     <script>{{{state}}}</script>
     <script>
-    app.yui.use('foo', 'bar', function (Y) {
-        Y.one('#content').setContent('<p>Ready!</p>');
+    app.yui.use('node', 'foo', 'bar', function (Y) {
+        Y.one('#content').setContent( Y.foo ? '<p>Ready!</p>' : '<p>Failed!</p>' );
     });
     </script>
 </body>

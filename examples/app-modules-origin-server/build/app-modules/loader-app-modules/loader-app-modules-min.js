@@ -1,25 +1,25 @@
 /*global YUI*/
-YUI.add('metas', function (Y, NAME) {
+YUI.add('loader-app-modules', function (Y, NAME) {
     "use strict";
     YUI.Env[Y.version].modules = YUI.Env[Y.version].modules || {};
     Y.mix(YUI.Env[Y.version].modules, {
-        metas: {
-            group: "metas"
+        'loader-app-modules': {
+            group: "app-modules"
         },
         foo: {
-            group: "metas",
+            group: "app-modules",
             requires: ["node"]
         },
         bar: {
-            group: "metas",
+            group: "app-modules",
             requires: ["io-base", "foo"]
         },
         baz: {
-            group: "metas",
+            group: "app-modules",
             type: "css"
         },
         xyz: {
-            group: "metas",
+            group: "app-modules",
             type: "css",
             requires: ["baz"]
         }

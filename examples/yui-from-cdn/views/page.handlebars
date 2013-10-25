@@ -16,7 +16,7 @@
 
     <script>{{{state}}}</script>
     <script>
-    app.yui.use('node', function (Y) {
+    app.yui.use('node-base', 'json-stringify', function (Y) {
         Y.one('#content').setContent('<p>Ready!</p>');
     });
     </script>

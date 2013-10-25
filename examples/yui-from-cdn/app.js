@@ -9,10 +9,10 @@ var express = require('express'),
 
 expyui.extend(app);
 
-// by default, the seed will be just `yui-base`, but we can
+// by default, the seed will be just `yui`, but we can
 // extend the list by adding more modules to the seed list
 // to speed up the booting process
-app.yui.seed(['yui-base', 'loader']);
+app.yui.seed(['yui', 'json-stringify']);
 
 if (app.get('env') === 'development') {
     // getting yui in debug mode
@@ -29,11 +29,6 @@ app.yui.setCoreFromCDN({
 // template engine
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
-
-// serving static yui modules
-app.use(expyui['static']({
-    maxAge: 100
-}));
 
 // creating a page with YUI embeded
 app.get('/', expyui.expose(), function (req, res, next) {

@@ -37,6 +37,7 @@ suite.add(new YUITest.TestCase({
                 return this._mockAttrs[name];
             }
         };
+        origin._clientModules = {};
     },
     tearDown: function () {
         // cleanup
@@ -45,6 +46,7 @@ suite.add(new YUITest.TestCase({
         delete origin.addModuleToSeed;
         delete origin._app;
         delete origin.version;
+        delete origin._clientModules;
     },
 
     "test setCoreFromAppOrigin": function () {
