@@ -42,11 +42,6 @@ app.yui.setCoreFromCDN();
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
-// serving static yui modules
-app.use(expyui['static']({
-    maxAge: 100
-}));
-
 // creating a page with YUI embeded
 app.get('/', expyui.expose(), function (req, res, next) {
     res.render('page');

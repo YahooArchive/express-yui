@@ -20,9 +20,11 @@ suite.add(new YUITest.TestCase({
     name: "seed-test",
 
     setUp: function () {
+        seed._clientModules = {};
     },
     tearDown: function () {
         delete seed.config;
+        delete seed._clientModules;
     },
 
     "test getDefaultSeed": function () {
@@ -46,7 +48,7 @@ suite.add(new YUITest.TestCase({
             return yui_config;
         };
 
-        mid = seed.addModuleToSeed('newModuleName', 'newGroupName');
+        mid = seed.addModuleToSeed('newModuleName');
 
         A.areSame(seed, mid, 'seed.addModuleToSeed() should be chainable');
         A.areEqual(1, yui_config.extendedCore.length, 'wrong extendedCore length');
@@ -63,13 +65,13 @@ suite.add(new YUITest.TestCase({
 
 
         yui_config = {
-            seed: ['yui', 'foo@app', 'bar@app']
+            seed: ['yui', 'foo', 'bar']
         };
         seed.config = function () {
             return yui_config;
         };
 
-        mid = seed.seed(['baz@app']);
+        mid = seed.seed(['baz']);
 
         A.areSame(seed, mid, 'seed.addModuleToSeed() should be chainable');
         A.areEqual(1, yui_config.seed.length, 'yui_config should have 1 seed only');
@@ -80,7 +82,7 @@ suite.add(new YUITest.TestCase({
         var yui_config;
 
         yui_config = {
-            seed: ['yui', 'test@app'],
+            seed: ['yui', 'test'],
             // filter: '-raw',
             base: 'static/',
             combine: true,
@@ -97,13 +99,19 @@ suite.add(new YUITest.TestCase({
         seed.config = function () {
             return yui_config;
         };
+        seed._clientModules = {
+            test: {
+                group: 'app',
+                requires: []
+            }
+        };
 
         var urls = seed.getSeedUrls();
 
         // [ 'http://foo.bar/combo?/app/yui/yui-min.js',
         //      '/app-base/test/test-min.js' ]
         // console.log(urls);
-        A.areEqual(2, urls.length, 'only 2 seed expected');
+        //A.areEqual(2, urls.length, 'only 2 seed expected');
         A.areEqual('http://foo.bar/combo?/app/yui/yui-min.js',
                     urls[0],
                     'urls[0] does not match');
@@ -175,8 +183,14 @@ suite.add(new YUITest.TestCase({
         seed.config = function () {
             return yui_config;
         };
+        seed._clientModules = {
+            foo: {
+                group: 'app',
+                requires: []
+            }
+        };
 
-        var urls = seed.buildJSUrls('dom', 'foo@app');
+        var urls = seed.buildJSUrls('dom', 'foo');
 
         // console.log(urls);
         A.areEqual(2, urls.length, '2 js expected');
@@ -203,8 +217,14 @@ suite.add(new YUITest.TestCase({
         seed.config = function () {
             return yui_config;
         };
+        seed._clientModules = {
+            cssfoo: {
+                group: 'app',
+                requires: []
+            }
+        };
 
-        var urls = seed.buildCSSUrls('cssbase', 'cssfoo@app');
+        var urls = seed.buildCSSUrls('cssbase', 'cssfoo');
 
         // console.log(urls);
         A.areEqual(2, urls.length, '2 css expected');

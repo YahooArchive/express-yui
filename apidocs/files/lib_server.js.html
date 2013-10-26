@@ -41,11 +41,9 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="../classes/cdn.html">cdn</a></li>
+                <li><a href="../classes/client.html">client</a></li>
             
-                <li><a href="../classes/groups.html">groups</a></li>
-            
-                <li><a href="../classes/loader.html">loader</a></li>
+                <li><a href="../classes/ExpressYUI.html">ExpressYUI</a></li>
             
                 <li><a href="../classes/middleware.html">middleware</a></li>
             
@@ -55,11 +53,7 @@
             
                 <li><a href="../classes/server.html">server</a></li>
             
-                <li><a href="../classes/shifter.html">shifter</a></li>
-            
-                <li><a href="../classes/View.html">View</a></li>
-            
-                <li><a href="../classes/view.html">view</a></li>
+                <li><a href="../classes/utils.html">utils</a></li>
             
                 <li><a href="../classes/yui.html">yui</a></li>
             
@@ -67,31 +61,21 @@
 
             <ul id="api-modules" class="apis modules">
             
-                <li><a href="../modules/cdn.html">cdn</a></li>
-            
-                <li><a href="../modules/client.html">client</a></li>
-            
                 <li><a href="../modules/express-yui.html">express-yui</a></li>
             
-                <li><a href="../modules/groups.html">groups</a></li>
+                <li><a href="../modules/express-yui_lib_client.html">express-yui/lib/client</a></li>
             
-                <li><a href="../modules/loader.html">loader</a></li>
+                <li><a href="../modules/express-yui_lib_middleware.html">express-yui/lib/middleware</a></li>
             
-                <li><a href="../modules/middleware.html">middleware</a></li>
+                <li><a href="../modules/express-yui_lib_origin.html">express-yui/lib/origin</a></li>
             
-                <li><a href="../modules/origin.html">origin</a></li>
+                <li><a href="../modules/express-yui_lib_seed.html">express-yui/lib/seed</a></li>
             
-                <li><a href="../modules/seed.html">seed</a></li>
+                <li><a href="../modules/express-yui_lib_server.html">express-yui/lib/server</a></li>
             
-                <li><a href="../modules/server.html">server</a></li>
+                <li><a href="../modules/express-yui_lib_utils.html">express-yui/lib/utils</a></li>
             
-                <li><a href="../modules/shifter.html">shifter</a></li>
-            
-                <li><a href="../modules/utils.html">utils</a></li>
-            
-                <li><a href="../modules/view.html">view</a></li>
-            
-                <li><a href="../modules/yui.html">yui</a></li>
+                <li><a href="../modules/express-yui_lib_yui.html">express-yui/lib/yui</a></li>
             
             </ul>
         </div>
@@ -141,68 +125,71 @@
 /*jslint node:true, nomen: true */
 
 /**
-The &#x60;express-yui.server&#x60; extension that provides a set of features
+The &#x60;express-yui/lib/server&#x60; provides a set of features
 to control a YUI instance on the server side.
 
-@module yui
-@submodule server
+@module express-yui/lib/server
 **/
 
 &#x27;use strict&#x27;;
 
 var libpath = require(&#x27;path&#x27;),
     utils = require(&#x27;./utils&#x27;),
-    debug = require(&#x27;debug&#x27;)(&#x27;express:yui:server&#x27;),
-    groupsQueue = {},
-    modulesQueue = [];
+    debug = require(&#x27;debug&#x27;)(&#x27;express:yui:server&#x27;);
 
 /**
-The &#x60;express-yui.server&#x60; extension that provides a set of features
-to control a YUI instance on the server side.
+Provides a set of features to control a YUI instance on the server side.
 
 @class server
 @static
 @uses *path, utils
-@extensionfor yui
+@extensionfor express-yui/lib/yui
 */
 module.exports = {
 
     /**
-    Add a group and its modules into the server Y instance or
-    updates the current Y instance by re-adding them.
+    Create a synthetic group off the bundle renference to register its modules
+    into the server and/or client Y instance so they can be used thru &#x60;app.yui.use()&#x60;.
 
-    @method registerModules
+    @method registerBundle
     @public
-    @param {string} groupName The bundle/group name to be attached.
-    @param {Object} groupModules The modules meta for the group.
+    @param {Object} bundle A locator bundle reference.
     @chainable
     **/
-    registerModules: function (groupName, groupModules) {
-        var YUIEnv = this.YUI &amp;&amp; this.YUI.Env,
-            version = this.version,
-            YEnv = this._Y &amp;&amp; this._Y.Env,
-            module;
+    registerBundle: function (bundle) {
+        var groups = {},
+            modules;
 
-        groupsQueue[groupName] = {
-            modules: groupModules
-        };
+        if (bundle.yui) {
+            if (bundle.yui.client &amp;&amp; bundle.yui.metaModuleName) {
+                // add the meta module into the core structure
+                // to make sure it gets attached to Y upfront on the client side
+                this.registerGroup(bundle.name, bundle.buildDirectory, bundle.yui.metaModuleName);
+                // storing client modules
+                // - we don&#x27;t own it, locator does it
+                utils.extend(this._clientModules, utils.clone(bundle.yui.client) || {});
+            }
+            if (bundle.yui.server) {
+                debug(&#x27;Registering group &quot;%s&quot; for server side, and using it from &quot;%s&quot;&#x27;,
+                      bundle.name, bundle.buildDirectory);
 
-        if (YEnv &amp;&amp; YUIEnv) {
-            for (module in groupModules) {
-                if (groupModules.hasOwnProperty(module)) {
-                    // if the module was attached already, we should clean up the loader internal hashes
-                    if (YEnv._attached &amp;&amp; YEnv._attached[module]) {
-                        // instance entries
-                        delete YEnv._attached[module];
-                        delete YEnv._used[module];
-                        delete YEnv._loader.loaded[module];
-                        delete YEnv._loader.inserted[module];
-                        delete YEnv._loader.required[module];
-                        // global entries
-                        delete YUIEnv._loaded[version][module];
-                        delete YUIEnv.mods[module];
-                        // TODO: can we optimize this? delete is evil
-                    }
+                // provision modules for server side
+                groups[bundle.name] = {
+                    base: libpath.normalize(bundle.buildDirectory + &#x27;/&#x27;), // TODO: what if two modules have the same name but different affinity?
+                    combine: false
+                };
+                // we don&#x27;t own it, locator does it, and yui will potentially augment it
+                modules = utils.clone(bundle.yui.server);
+                // storing server modules
+                // - we don&#x27;t own it, locator does it
+                utils.extend(this._serverModules, modules || {});
+                // applying the new group config and modules globally and to the current Y instance when possible
+                this.YUI.applyConfig({ groups: groups });
+                this.YUI.applyConfig({ modules: modules });
+
+                if (this._Y) {
+                    this._Y.applyConfig({ groups: groups });
+                    this._Y.applyConfig({ modules: modules });
                 }
             }
         }
@@ -211,39 +198,180 @@ module.exports = {
     },
 
     /**
-    Attach modules into the Y instance on the server. This is equivalent to call
-    &#x60;req.app.yui.use(moduleName)&#x60; for every module in &#x60;mods&#x60;, but it
-    does queue them until the first &#x60;Y&#x60; gets ready to be used.
+    Patches &#x60;Y.Loader&#x60; to support &#x60;optionalRequires&#x60;, which enables you
+    to require modules that might not be available in a runtime, and avoid
+    to throw when that happens.
 
-    @method attachModules
-    @public
-    @param {array} mods The list of modules to be attached.
-    @chainable
+    @method _patchLoader
+    @protected
     **/
-    attachModules: function (mods) {
-        var Y = this._Y;
-
-        modulesQueue = modulesQueue.concat(mods || []);
-
-        if (Y) {
-            try {
-                Y.use(modulesQueue);
-            } catch (e) {
-                console.error(&#x27;error attaching modules: &#x27; + mods);
-                console.error(e);
-                console.error(e.stack);
-            } finally {
-                modulesQueue = [];
+    _patchLoader: function () {
+        var getRequires = this._Y.Env._loader.getRequires;
+        this._Y.Env._loader.getRequires = function (mod) {
+            var i, m;
+            if (!mod) {
+                return [];
             }
-        }
-
-        return this;
+            if (mod._parsed) {
+                return mod.expanded || [];
+            }
+            mod.requires = mod.requires || [];
+            // expanding requirements with optional requires
+            if (mod.optionalRequires) {
+                for (i = 0; i &lt; mod.optionalRequires.length; i += 1) {
+                    m = this.getModule(mod.optionalRequires[i]);
+                    if (m) {
+                        mod.requires.push(m.name);
+                    }
+                }
+            }
+            // mod.templates and mod.langBundles are not used on the server side
+            return getRequires.apply(this, arguments);
+        };
     },
 
     /**
-    Creates a YUI Instance and attaches all registered modules for all registered
-    groups into it, and optional attaches some more modules my mimicing the original
-    YUI.use method.
+    Patches &#x60;Y.Template.get&#x60; to use the templates produced by
+    &#x60;locator-handlebars&#x60; or any other similar plugin, and will be available thru locator&#x27;s bundle
+    objects.
+
+    @method _patchTemplate
+    @protected
+    **/
+    _patchTemplate: function () {
+        // monkey patching Y.Template
+        var locator = this._app.get(&#x27;locator&#x27;),
+            // looking in the root bundle (hermes has only one bundle)
+            // that&#x27;s the most common use-case where the app bundle holds all templates
+            rootBundle = locator.getRootBundle(),
+            originalTemplateGet = this._Y.use(&#x27;template-base&#x27;).Template.get;
+
+        this._Y.Template.get = function (name) {
+            var pos = name.indexOf(&#x27;/&#x27;),
+                bundleName,
+                bundle,
+                template = name;
+            if (pos &gt; 0) {
+                bundleName = name.slice(0, pos);
+                template = name.slice(pos + 1, name.length);
+            }
+            bundle = bundleName ? locator.getBundle(bundleName) : rootBundle;
+            if (bundle.template &amp;&amp; bundle.template[template]) {
+                return bundle.template[template];
+            }
+            // if the template is not in the specified bundle, look for a global/root template
+            if (bundle !== rootBundle &amp;&amp; rootBundle.template &amp;&amp; rootBundle.template[name]) {
+                return rootBundle.template[name];
+            }
+            // falling back to the original implementation
+            return originalTemplateGet.apply(this, arguments);
+        };
+    },
+
+    /**
+    Patches &#x60;Y.Intl.get&#x60; to use the language bundles produced by
+    &#x60;locator-lang&#x60; plugin, and will be available thru locator&#x27;s bundle
+    objects.
+
+    @method _patchIntl
+    @protected
+    **/
+    _patchIntl: function () {
+        // monkey patching Y.Intl
+        var locator = this._app.get(&#x27;locator&#x27;),
+            // looking in the root bundle (hermes has only one bundle)
+            // that&#x27;s the most common use-case where the app bundle holds all lang bundles
+            rootBundle = locator.getRootBundle(),
+            originalInltGet = this._Y.use(&#x27;intl&#x27;).Intl.get;
+        this._Y.Intl.get = function (name, key, lang) {
+            var pos = name.indexOf(&#x27;/&#x27;),
+                bundleName,
+                bundle,
+                langBundle = name;
+
+            function output(entries) {
+                // returning a specific key or all entries (todo: should be make a copy?)
+                return (key ? entries[key] : entries);
+            }
+
+            if (pos &gt; 0) {
+                bundleName = name.slice(0, pos);
+                langBundle = name.slice(pos + 1, name.length);
+            }
+            bundle = bundleName ? locator.getBundle(bundleName) : rootBundle;
+            if (bundle.lang &amp;&amp; bundle.lang[lang] &amp;&amp; bundle.lang[lang][langBundle]) {
+                return output(bundle.lang[lang][langBundle]);
+            }
+            // if the lang bundle is not in the specified bundle, look for a global/root lang bundle
+            if (bundle !== rootBundle &amp;&amp; rootBundle.lang &amp;&amp; rootBundle.lang[lang] &amp;&amp; rootBundle.lang[lang][name]) {
+                return output(rootBundle.lang[lang][name]);
+            }
+
+            // fallbacking back to the original implementation
+            return originalInltGet.apply(this, arguments);
+        };
+    },
+
+    /**
+    Waits for the app to be ready, including the YUI instance to notify back that the
+    &#x60;ready&#x60; state of the app was reached by calling the &#x60;callback&#x60;. The ready state is
+    bound to the locator instance mounted into the express app thru &#x60;app.set(&#x27;locator&#x27;, locator);&#x60;
+    and depending on &#x60;app.get(&#x27;locator&#x27;).ready.then()&#x60; promise result, the ready state
+    will be reached or not.
+
+        app.yui.ready(function (err) {
+            if (err) {
+                throw err;
+            }
+            // do something!
+        });
+
+    @method ready
+    @param {Function} callback when the app is ready. If an error occurr, the error object
+                        will be passed as the first argument of the callback function.
+    @public
+    **/
+    ready: function (callback) {
+        var self = this,
+            app = this._app,
+            locator = app.get(&#x27;locator&#x27;);
+
+        if (!locator) {
+            debug(&#x27;Call &#x60;app.set(&quot;locator&quot;, locatorObj)&#x60; before extending the &#x60;express&#x60; app with &#x60;express-yui&#x60;&#x27;);
+            throw new Error(&#x27;Locator instance should be mounted&#x27;);
+        }
+
+        locator.ready.then(function () {
+            var bundleNames = locator.listBundleNames(),
+                bundle;
+
+            try {
+                bundleNames.forEach(function (bundleName) {
+                    bundle = locator.getBundle(bundleName);
+                    self.registerBundle(bundle);
+                });
+            } catch (e) {
+                callback(e);
+                return;
+            }
+            // we are now ready to receive traffic
+            callback();
+        }, callback);
+    },
+
+    /**
+    Creates a YUI Instance, and wraps the call to &#x60;Y.use()&#x60; to work appropiatly on
+    the server side. The &#x60;use&#x60; method can be called once the &#x60;ready&#x60; state is achieved
+    thru &#x60;app.yui.ready()&#x60;.
+
+        app.yui.ready(function (err) {
+            if (err) {
+                throw err;
+            }
+            app.yui.use(&#x27;json-stringify&#x27;, function (Y) {
+                Y.JSON.stringify({ entry: &#x27;value&#x27; });
+            });
+        });
 
     @method use
     @public
@@ -252,32 +380,20 @@ module.exports = {
     use: function () {
         var config = this.config(),
             Y = this._Y,
-            groupName,
-            obj,
             modules,
             callback;
 
-        for (groupName in groupsQueue) {
-            if (groupsQueue.hasOwnProperty(groupName) &amp;&amp; (config.groups &amp;&amp; config.groups.hasOwnProperty(groupName))) {
-                // we don&#x27;t want obj to be set if we are not sure we have
-                // at least one group config to be applied
-                obj = obj || { groups: {}, useSync: true };
-                obj.groups[groupName] = utils.extend(groupsQueue[groupName], utils.clone(config.groups[groupName]), {
-                    base: libpath.join(this._groupFolderMap[groupName], &#x27;/&#x27;),
-                    combine: false
-                });
-            }
-        }
-
         if (!Y) {
             config = utils.clone(config);
-            config.groups = {}; // disabling the groups that will be added later on
+            // cleaning up the config for to add on the server specific config
+            delete config.modules;
+            delete config.groups;
+
             this.YUI.applyConfig(config);
             this.YUI.applyConfig({
                 base: libpath.normalize(this.path + &#x27;/&#x27;),
                 combine: false
             });
-            this.YUI.applyConfig(obj);
             Y = this._Y = this.YUI({
                 useSync: true,
                 loadErrorFn: function (Y, i, o) {
@@ -291,9 +407,10 @@ module.exports = {
                     }
                 }
             });
-        } else if (obj) {
-            this.YUI.applyConfig(obj);
-            Y.applyConfig(obj);
+            // patching Y
+            this._patchLoader();
+            this._patchTemplate();
+            this._patchIntl();
         }
 
         // attaching modules
@@ -302,20 +419,15 @@ module.exports = {
         if (modules.length &gt; 0 &amp;&amp; (typeof modules[modules.length - 1] === &#x27;function&#x27;)) {
             callback = modules.pop();
         }
-        modulesQueue = modulesQueue.concat(modules);
-        if (modulesQueue.length) {
+        if (modules.length) {
             try {
-                Y.use(modulesQueue);
+                Y.use(modules);
             } catch (e) {
-                console.error(&#x27;error attaching modules: &#x27; + modulesQueue);
+                console.error(&#x27;error attaching modules: &#x27; + modules);
                 console.error(e);
                 console.error(e.stack);
             }
         }
-
-        // reseting the queues
-        modulesQueue = [];
-        groupsQueue = {};
 
         if (callback) {
             callback(Y);

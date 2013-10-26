@@ -41,11 +41,9 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="../classes/cdn.html">cdn</a></li>
+                <li><a href="../classes/client.html">client</a></li>
             
-                <li><a href="../classes/groups.html">groups</a></li>
-            
-                <li><a href="../classes/loader.html">loader</a></li>
+                <li><a href="../classes/ExpressYUI.html">ExpressYUI</a></li>
             
                 <li><a href="../classes/middleware.html">middleware</a></li>
             
@@ -55,11 +53,7 @@
             
                 <li><a href="../classes/server.html">server</a></li>
             
-                <li><a href="../classes/shifter.html">shifter</a></li>
-            
-                <li><a href="../classes/View.html">View</a></li>
-            
-                <li><a href="../classes/view.html">view</a></li>
+                <li><a href="../classes/utils.html">utils</a></li>
             
                 <li><a href="../classes/yui.html">yui</a></li>
             
@@ -67,31 +61,21 @@
 
             <ul id="api-modules" class="apis modules">
             
-                <li><a href="../modules/cdn.html">cdn</a></li>
-            
-                <li><a href="../modules/client.html">client</a></li>
-            
                 <li><a href="../modules/express-yui.html">express-yui</a></li>
             
-                <li><a href="../modules/groups.html">groups</a></li>
+                <li><a href="../modules/express-yui_lib_client.html">express-yui/lib/client</a></li>
             
-                <li><a href="../modules/loader.html">loader</a></li>
+                <li><a href="../modules/express-yui_lib_middleware.html">express-yui/lib/middleware</a></li>
             
-                <li><a href="../modules/middleware.html">middleware</a></li>
+                <li><a href="../modules/express-yui_lib_origin.html">express-yui/lib/origin</a></li>
             
-                <li><a href="../modules/origin.html">origin</a></li>
+                <li><a href="../modules/express-yui_lib_seed.html">express-yui/lib/seed</a></li>
             
-                <li><a href="../modules/seed.html">seed</a></li>
+                <li><a href="../modules/express-yui_lib_server.html">express-yui/lib/server</a></li>
             
-                <li><a href="../modules/server.html">server</a></li>
+                <li><a href="../modules/express-yui_lib_utils.html">express-yui/lib/utils</a></li>
             
-                <li><a href="../modules/shifter.html">shifter</a></li>
-            
-                <li><a href="../modules/utils.html">utils</a></li>
-            
-                <li><a href="../modules/view.html">view</a></li>
-            
-                <li><a href="../modules/yui.html">yui</a></li>
+                <li><a href="../modules/express-yui_lib_yui.html">express-yui/lib/yui</a></li>
             
             </ul>
         </div>
@@ -135,13 +119,15 @@
             Uses
             <ul class="inline commas">
                 
-                    <li><a href="utils.html">utils</a></li>
+                    <li><a href="client.html">client</a></li>
                 
-                    <li><a href="*path.html">*path</a></li>
+                    <li><a href="utils.html">utils</a></li>
                 
                     <li><a href="*debug.html">*debug</a></li>
                 
-                    <li><a href="*express-combo.html">*express-combo</a></li>
+                    <li><a href="*express.html">*express</a></li>
+                
+                    <li><a href="*yui.html">*yui</a></li>
                 
             </ul>
         </div>
@@ -151,14 +137,13 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/lib_middleware.js.html#l25"><code>lib&#x2F;middleware.js:25</code></a>
+            Defined in: <a href="../files/lib_middleware.js.html#l22"><code>lib&#x2F;middleware.js:22</code></a>
         </div>
     
 
     
         
-            Module: <a href="../modules/middleware.html">middleware</a><br>
-            Parent Module: <a href="../modules/express-yui.html">express-yui</a>
+            Module: <a href="../modules/express-yui_lib_middleware.html">express-yui/lib/middleware</a>
         
     
 
@@ -168,15 +153,7 @@
 
 
 <div class="box intro">
-    <p>The <code>express-yui</code> exports few middleware that provide some basic
-features to attach information into the <code>res.locals</code> object
-that could be used to boot <code>YUI</code> in the client runtime.</p>
-<pre class="code prettyprint"><code>var express = require(&#39;express&#39;),
-    expyui = require(&#39;express-yui&#39;),
-    app = express();
-
-expyui.extend(app);
-app.use(expyui.expose());</code></pre>
+    <p>Exports few middleware.</p>
 
 </div>
 
@@ -232,8 +209,22 @@ app.use(expyui.expose());</code></pre>
                                 
                             </li>
                         
+                            <li class="index-item method public inherited">
+                                <a href="#method_ready">ready</a>
+
+                                
+                                
+                            </li>
+                        
                             <li class="index-item method public">
                                 <a href="#method_static">static</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method public inherited">
+                                <a href="#method_use">use</a>
 
                                 
                                 
@@ -303,7 +294,7 @@ app.use(expyui.expose());</code></pre>
             
         
         
-        <a href="../files/lib_middleware.js.html#l153"><code>lib&#x2F;middleware.js:153</code></a>
+        <a href="../files/lib_middleware.js.html#l156"><code>lib&#x2F;middleware.js:156</code></a>
         
         </p>
 
@@ -473,7 +464,7 @@ it will not be able to overrule the default yui config for the app.</p>
             
         
         
-        <a href="../files/lib_middleware.js.html#l113"><code>lib&#x2F;middleware.js:113</code></a>
+        <a href="../files/lib_middleware.js.html#l101"><code>lib&#x2F;middleware.js:101</code></a>
         
         </p>
 
@@ -486,11 +477,24 @@ it will not be able to overrule the default yui config for the app.</p>
     <div class="description">
         <p>Exposes YUI into the client side. This middleware bundles
 <code>expyui.exposeConfig()</code> and <code>expyui.exposeSeed()</code> middleware.</p>
-<pre class="code prettyprint"><code>// using it for a mounted middleware
-app.use(expyui.expose());
+<pre class="code prettyprint"><code>var express = require(&#39;express&#39;),
+    expyui = require(&#39;express-yui&#39;),
+    app = express();
 
-// or using it as a route middleware
-app.get(&#39;/foo&#39;, expyui.expose());</code></pre>
+expyui.extend(app);
+
+// using it for a mounted middleware for all requests
+app.use(expyui.expose());</code></pre>
+<p>In the example above, the <code>state</code> of the app will be serialized
+per request, and can be used in the template to set up the client
+side to run YUI with the same configuration used on the server side.
+Here is an example of a handlebars template:</p>
+<pre class="code prettyprint"><code>&lt;script&gt;
+{{{state}}}
+app.yui.use(&#39;node&#39;, function (Y) {
+    Y.one(&#39;#content&#39;).setContent(&#39;&lt;p&gt;Ready!&lt;/p&gt;&#39;);
+});
+&lt;/script&gt;</code></pre>
 
     </div>
 
@@ -554,7 +558,7 @@ app.get(&#39;/foo&#39;, expyui.expose());</code></pre>
             
         
         
-        <a href="../files/lib_middleware.js.html#l44"><code>lib&#x2F;middleware.js:44</code></a>
+        <a href="../files/lib_middleware.js.html#l32"><code>lib&#x2F;middleware.js:32</code></a>
         
         </p>
 
@@ -635,7 +639,7 @@ automatically, which means you do not need to call it directly.</p>
             
         
         
-        <a href="../files/lib_middleware.js.html#l81"><code>lib&#x2F;middleware.js:81</code></a>
+        <a href="../files/lib_middleware.js.html#l69"><code>lib&#x2F;middleware.js:69</code></a>
         
         </p>
 
@@ -677,12 +681,119 @@ automatically, which means you do not need to call it directly.</p>
 </div>
 
                 
+                    <div id="method_ready" class="method item public inherited">
+    <h3 class="name"><code>ready</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>callback</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="../classes/Client.html#method_ready">client</a>:
+            
+        
+        
+        <a href="../files/lib_client.js.html#l213"><code>lib&#x2F;client.js:213</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p><p>Boots the application, rehydrate the app state and calls back to notify the
+<code>ready</code> state of the app.</p></p>
+<pre class="code prettyprint"><code>&lt;script&gt;{{{state}}}&lt;/script&gt;
+&lt;script&gt;
+app.yui.ready(function (err) {
+    if (err) {
+        throw err;
+    }
+    app.yui.use(&#39;foo&#39;, &#39;bar&#39;, function (Y) {
+        // do something!
+    });
+});
+&lt;/script&gt;</code></pre>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">callback</code>
+                        <span class="type">Function</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>when the app is ready. If an error occurr, the error object
+                    will be passed as the first argument of the callback function.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
                     <div id="method_static" class="method item public">
     <h3 class="name"><code>static</code></h3>
 
     
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>buildDirectory</code>
+                    
+                </li>
             
                 <li class="arg">
                     
@@ -696,7 +807,7 @@ automatically, which means you do not need to call it directly.</p>
 
     
         <span class="returns-inline">
-            <span class="type">Function</span>
+            <span class="type">Object</span>
         </span>
     
 
@@ -725,7 +836,7 @@ automatically, which means you do not need to call it directly.</p>
             
         
         
-        <a href="../files/lib_middleware.js.html#l203"><code>lib&#x2F;middleware.js:203</code></a>
+        <a href="../files/lib_middleware.js.html#l206"><code>lib&#x2F;middleware.js:206</code></a>
         
         </p>
 
@@ -738,7 +849,12 @@ automatically, which means you do not need to call it directly.</p>
     <div class="description">
         <p>Serves YUI Modules as static assets. All registered groups and core will be
 served from app origin.</p>
-<pre class="code prettyprint"><code>app.use(expyui.static());</code></pre>
+<pre class="code prettyprint"><code>app.use(expyui.static(__dirname + &#39;/build&#39;));</code></pre>
+<p>The example above behaves very similar to <code>express.static()</code> middleware, but
+it adds some sugar to also server YUI core modules as synthetic files, so you
+can combine yui core modules with app specific modules for better performance.
+If also adds some extra headers to avoid caching static files in a browser
+when nodejs is running in debug mode to facilitate development.</p>
 
     </div>
 
@@ -747,6 +863,22 @@ served from app origin.</p>
             <h4>Parameters:</h4>
 
             <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">buildDirectory</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>fullpath to locator build directory</p>
+
+                    </div>
+
+                    
+                </li>
             
                 <li class="param">
                     
@@ -775,13 +907,78 @@ served from app origin.</p>
             <div class="returns-description">
                 
                     
-                        <span class="type">Function</span>:
+                        <span class="type">Object</span>:
                     
-                    <p>express middleware</p>
+                    <p>express app that can be mounted into another express app.</p>
 
                 
             </div>
         </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_use" class="method item public inherited">
+    <h3 class="name"><code>use</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="../classes/Client.html#method_use">client</a>:
+            
+        
+        
+        <a href="../files/lib_client.js.html#l192"><code>lib&#x2F;client.js:192</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Attaches the seed into the head, then creates a YUI Instance and attaches
+<code>modules</code> into it. This is equivalent to <code>YUI().use()</code> after getting the seed
+ready. This method is a bootstrap implementation for the library, and the way
+you use this in your templates, is by doing this:</p>
+<pre class="code prettyprint"><code>&lt;script&gt;{{{state}}}&lt;/script&gt;
+&lt;script&gt;
+app.yui.use(&#39;foo&#39;, &#39;bar&#39;, function (Y) {
+    // do something!
+});
+&lt;/script&gt;</code></pre>
+<p>Where <code>state</code> defines the state of the express app, and <code>app.yui</code> defines
+the helpers that <code>express-yui</code> brings into the client side.</p>
+
+    </div>
+
+    
+
     
 
     

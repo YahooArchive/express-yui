@@ -41,11 +41,9 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="../classes/cdn.html">cdn</a></li>
+                <li><a href="../classes/client.html">client</a></li>
             
-                <li><a href="../classes/groups.html">groups</a></li>
-            
-                <li><a href="../classes/loader.html">loader</a></li>
+                <li><a href="../classes/ExpressYUI.html">ExpressYUI</a></li>
             
                 <li><a href="../classes/middleware.html">middleware</a></li>
             
@@ -55,11 +53,7 @@
             
                 <li><a href="../classes/server.html">server</a></li>
             
-                <li><a href="../classes/shifter.html">shifter</a></li>
-            
-                <li><a href="../classes/View.html">View</a></li>
-            
-                <li><a href="../classes/view.html">view</a></li>
+                <li><a href="../classes/utils.html">utils</a></li>
             
                 <li><a href="../classes/yui.html">yui</a></li>
             
@@ -67,31 +61,21 @@
 
             <ul id="api-modules" class="apis modules">
             
-                <li><a href="../modules/cdn.html">cdn</a></li>
-            
-                <li><a href="../modules/client.html">client</a></li>
-            
                 <li><a href="../modules/express-yui.html">express-yui</a></li>
             
-                <li><a href="../modules/groups.html">groups</a></li>
+                <li><a href="../modules/express-yui_lib_client.html">express-yui/lib/client</a></li>
             
-                <li><a href="../modules/loader.html">loader</a></li>
+                <li><a href="../modules/express-yui_lib_middleware.html">express-yui/lib/middleware</a></li>
             
-                <li><a href="../modules/middleware.html">middleware</a></li>
+                <li><a href="../modules/express-yui_lib_origin.html">express-yui/lib/origin</a></li>
             
-                <li><a href="../modules/origin.html">origin</a></li>
+                <li><a href="../modules/express-yui_lib_seed.html">express-yui/lib/seed</a></li>
             
-                <li><a href="../modules/seed.html">seed</a></li>
+                <li><a href="../modules/express-yui_lib_server.html">express-yui/lib/server</a></li>
             
-                <li><a href="../modules/server.html">server</a></li>
+                <li><a href="../modules/express-yui_lib_utils.html">express-yui/lib/utils</a></li>
             
-                <li><a href="../modules/shifter.html">shifter</a></li>
-            
-                <li><a href="../modules/utils.html">utils</a></li>
-            
-                <li><a href="../modules/view.html">view</a></li>
-            
-                <li><a href="../modules/yui.html">yui</a></li>
+                <li><a href="../modules/express-yui_lib_yui.html">express-yui/lib/yui</a></li>
             
             </ul>
         </div>
@@ -141,41 +125,27 @@
 /*jslint node:true, nomen: true */
 
 /**
-The &#x60;express-yui&#x60; middleware provides the foundation and some basic
-features to attach information into the &#x60;res.locals&#x60; object
-that could be used to boot &#x60;YUI&#x60; in the client runtime.
+Provides the class foundation of the &#x60;app.yui&#x60; object.
 
-@module express-yui
+@module express-yui/lib/yui
 **/
 
 &#x27;use strict&#x27;;
 
-var expstate = require(&#x27;express-state&#x27;),
-    middleware = require(&#x27;./middleware&#x27;),
-
-    // sub-modules
-    cdn     = require(&#x27;./cdn&#x27;),
+var // sub-modules
     seed    = require(&#x27;./seed&#x27;),
     origin  = require(&#x27;./origin&#x27;),
-    groups  = require(&#x27;./groups&#x27;),
-    shifter = require(&#x27;./shifter&#x27;),
-    loader  = require(&#x27;./loader&#x27;),
     server  = require(&#x27;./server&#x27;),
-    view    = require(&#x27;./view&#x27;),
 
     // utilities
     utils = require(&#x27;./utils&#x27;),
     debug = require(&#x27;debug&#x27;)(&#x27;express:yui&#x27;);
 
 /**
-The &#x60;express-yui&#x60; extension provides the foundation and some basic
-features to attach information into the &#x60;res.locals&#x60; object
-that could be used to boot &#x60;YUI&#x60; in the client runtime.
-
-When the &#x60;&quot;seed&quot;&#x60; sub-module is used, it will automatically
-mix itself into &#x60;app.yui.expose()&#x60;, and it exposes a local variable
-in a form of an array of object with the information to
-build the script tag or tags that forms the seed:
+The &#x60;express-yui/lib/yui&#x60; exports the class used to create the &#x60;app.yui&#x60;
+member that will be attached to the express app instance. This member
+provides a set of functionalities to control the YUI version to be used
+on the client as well as on the server.
 
 The following is an example of how these features can be used:
 
@@ -184,14 +154,19 @@ The following is an example of how these features can be used:
         app = express();
 
     expyui.extend(app);
+
     // Set some basic configs
     app.yui.applyConfig({
         fetchCSS: false
     });
+
     // Call expose middleware when a route match.
     app.get(&#x27;/index.html&#x27;, expyui.expose(), anotherRoute);
 
-In the example above, the &#x60;state&#x60; of the app will be serialized
+In the example above, you can see that right after extending the
+&#x60;app&#x60; with &#x60;expyui.extend()&#x60; a new member is available under &#x60;app.yui&#x60;,
+and it enable us to configure YUI in any way we want.
+Also, the &#x60;state&#x60; of the app will be serialized
 per request, and can be used in the template to set up the client
 side to run YUI with the same configuration used on the server side.
 Here is an example of a handlebars template:
@@ -209,13 +184,15 @@ appropiated settings generated by &#x60;expose&#x60; middleware.
 @class yui
 @static
 @constructor
-@uses *express, *express-expose, utils, cdn, seed, origin, groups, shifter, loader, server, view
+@uses utils, seed, origin, server
 */
-function ExpressYUIExtension(app) {
+function YUIClass(app) {
     var YUI;
 
     this._app = app;
     this._config = {};
+    this._clientModules = {};
+    this._serverModules = {};
 
     try {
         YUI = require(&#x27;yui&#x27; + (utils.debugMode ? &#x27;/debug&#x27; : &#x27;&#x27;));
@@ -230,56 +207,19 @@ function ExpressYUIExtension(app) {
     debug(&#x27;Using yui@&#x27; + this.version + &#x27; from [&#x27; + this.path + &#x27;] in &#x27; +
             (utils.debugMode ? &#x27;debug&#x27; : &#x27;production&#x27;) + &#x27; mode.&#x27;);
 
-    // default configuration based on version and assuming default CDN
+    // default configuration based on version
     this._config = {
-        version: this.version,
-        base: &quot;http://yui.yahooapis.com/&quot; + this.version + &quot;/&quot;,
-        comboBase: &quot;http://yui.yahooapis.com/combo?&quot;,
-        comboSep: &quot;&amp;&quot;,
-        root: this.version + &quot;/&quot;,
-        filter: (utils.debugMode ? &#x27;debug&#x27; : &#x27;min&#x27;),
-        combine: !utils.debugMode
+        version: this.version
     };
+    // setting some basic values
+    app.set(&#x27;yui default base&#x27;, app.get(&#x27;yui default base&#x27;) || &quot;/&quot;);
+    app.set(&#x27;yui default root&#x27;, app.get(&#x27;yui default root&#x27;) || &quot;/&quot;);
+    app.set(&#x27;yui combo config&#x27;, app.get(&#x27;yui combo config&#x27;) || utils.DEFAULT_COMBO_CONFIG);
+    // assuming default CDN
+    this.setCoreFromCDN();
 }
 
-ExpressYUIExtension.prototype = {
-
-    /**
-    Turns on debug mode for YUI Loader by setting
-    &#x60;debug=true&#x60;, &#x60;logLevel=&quot;debug&quot;&#x60;, &#x60;combine=false&#x60; and &#x60;filter=&quot;debug&quot;&#x60;
-    into the static configuration.
-
-        app.yui.debugMode();
-
-    @method debugMode
-    @public
-    @deprecated in favor of &#x60;expressYUI.debug()&#x60;
-    @param {Object} config optional object to overrule
-    specific settings when in debug mode.
-
-        @param {boolean} config.combine default to &#x60;false&#x60;
-        @param {boolean} config.debug default to &#x60;true&#x60;
-        @param {string}  config.logLevel default to &#x60;&quot;debug&quot;&#x60;
-        @param {string}  config.filter default to &#x60;&quot;debug&quot;&#x60;
-
-    @chainable
-    **/
-    debugMode: function (config) {
-
-        console.warn(&#x27;&#x60;app.yui.debugMode()&#x60; is now deprecated, &#x27; +
-                &#x27; use &#x60;expressYUI.debug()&#x60; middleware instead.&#x27;);
-
-        // storing static config
-        this.config({
-            combine: false,
-            debug: true,
-            filter: &#x27;debug&#x27;,
-            logLevel: &#x27;debug&#x27;,
-            useBrowserConsole: true
-        }, config);
-
-        return this;
-    },
+YUIClass.prototype = {
 
     /**
     Extends the static configuration with the supplier
@@ -327,58 +267,44 @@ ExpressYUIExtension.prototype = {
         }
 
         return this._config;
+    },
+
+    /**
+    Set up a default group in loader that represents the
+    core yui modules to be loaded from YUI CDN.
+
+        app.yui.setCoreFromCDN();
+
+    @method setCoreFromCDN
+    @public
+    @param {Object} loaderConfig Optional loader configuration
+    objects that, if passed, will be mix with the default
+    configuration for yui CDN.
+    @chainable
+    **/
+    setCoreFromCDN: function (loaderConfig) {
+
+        var config = this.config(),
+            version = this.version;
+
+        utils.extend(config, {
+            base: &quot;http://yui.yahooapis.com/&quot; + version + &quot;/&quot;,
+            comboBase: &quot;http://yui.yahooapis.com/combo?&quot;,
+            comboSep: &quot;&amp;&quot;,
+            root: version + &quot;/&quot;,
+            filter: (utils.debugMode ? &#x27;debug&#x27; : &#x27;min&#x27;),
+            combine: !utils.debugMode
+        }, loaderConfig);
+
+        return this;
+
     }
 
 };
 
-utils.extend(ExpressYUIExtension.prototype, cdn, seed, origin, groups, shifter, loader, server, view);
+utils.extend(YUIClass.prototype, seed, origin, server);
 
-// exposing middleware as members of the constructor
-// exposing &#x60;augment&#x60; and &#x60;extend&#x60; methods to hook into a custom express or express app
-module.exports = utils.extend(ExpressYUIExtension, middleware, {
-
-    /**
-    Deprecated method to augment an express application instance with &#x60;express-yui&#x60; functionalities.
-
-    @method augment
-    @deprecated
-    @static
-    @public
-    @param {Object} app express app instance to be extended with the &#x60;yui&#x60; member.
-    @return {object} express app instance
-    **/
-    augment: function (app) {
-
-        console.warn(&#x27;&#x60;expyui.augment(app)&#x60; is now deprecated, &#x27; +
-                &#x27; use &#x60;expyui.extend(app)&#x60; instead.&#x27;);
-
-        return this.extend(app);
-    },
-
-    /**
-    Extends an express application instance with &#x60;express-yui&#x60; functionalities.
-
-    @method extend
-    @static
-    @public
-    @param {Object} app express app instance to be extended with the &#x60;yui&#x60; member.
-    @return {object} express app instance
-    **/
-    extend: function (app) {
-
-        if (app[&#x27;@yui&#x27;]) { return app; }
-
-        // Brand.
-        Object.defineProperty(app, &#x27;@yui&#x27;, {value: true});
-        // expose requirements.
-        expstate.extend(app);
-        // adding the &#x60;yui&#x60; member.
-        app.yui = new ExpressYUIExtension(app);
-
-        return app;
-    }
-
-});
+module.exports = YUIClass;
 
     </pre>
 </div>

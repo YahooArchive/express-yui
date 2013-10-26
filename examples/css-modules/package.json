@@ -6,9 +6,10 @@
     "main": "app.js",
     "dependencies": {
         "express": "*",
-        "express-yui": "*",
-        "locator": "~0.3.0",
+        "express-view": "*",
+        "locator": "~0.3.6",
         "locator-handlebars": "*",
-        "yui": "~3.11.0"
+        "locator-yui": "*",
+        "yui": ">=3.12.0"
     }
 }

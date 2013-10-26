@@ -41,11 +41,9 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="../classes/cdn.html">cdn</a></li>
+                <li><a href="../classes/client.html">client</a></li>
             
-                <li><a href="../classes/groups.html">groups</a></li>
-            
-                <li><a href="../classes/loader.html">loader</a></li>
+                <li><a href="../classes/ExpressYUI.html">ExpressYUI</a></li>
             
                 <li><a href="../classes/middleware.html">middleware</a></li>
             
@@ -55,11 +53,7 @@
             
                 <li><a href="../classes/server.html">server</a></li>
             
-                <li><a href="../classes/shifter.html">shifter</a></li>
-            
-                <li><a href="../classes/View.html">View</a></li>
-            
-                <li><a href="../classes/view.html">view</a></li>
+                <li><a href="../classes/utils.html">utils</a></li>
             
                 <li><a href="../classes/yui.html">yui</a></li>
             
@@ -67,31 +61,21 @@
 
             <ul id="api-modules" class="apis modules">
             
-                <li><a href="../modules/cdn.html">cdn</a></li>
-            
-                <li><a href="../modules/client.html">client</a></li>
-            
                 <li><a href="../modules/express-yui.html">express-yui</a></li>
             
-                <li><a href="../modules/groups.html">groups</a></li>
+                <li><a href="../modules/express-yui_lib_client.html">express-yui/lib/client</a></li>
             
-                <li><a href="../modules/loader.html">loader</a></li>
+                <li><a href="../modules/express-yui_lib_middleware.html">express-yui/lib/middleware</a></li>
             
-                <li><a href="../modules/middleware.html">middleware</a></li>
+                <li><a href="../modules/express-yui_lib_origin.html">express-yui/lib/origin</a></li>
             
-                <li><a href="../modules/origin.html">origin</a></li>
+                <li><a href="../modules/express-yui_lib_seed.html">express-yui/lib/seed</a></li>
             
-                <li><a href="../modules/seed.html">seed</a></li>
+                <li><a href="../modules/express-yui_lib_server.html">express-yui/lib/server</a></li>
             
-                <li><a href="../modules/server.html">server</a></li>
+                <li><a href="../modules/express-yui_lib_utils.html">express-yui/lib/utils</a></li>
             
-                <li><a href="../modules/shifter.html">shifter</a></li>
-            
-                <li><a href="../modules/utils.html">utils</a></li>
-            
-                <li><a href="../modules/view.html">view</a></li>
-            
-                <li><a href="../modules/yui.html">yui</a></li>
+                <li><a href="../modules/express-yui_lib_yui.html">express-yui/lib/yui</a></li>
             
             </ul>
         </div>
@@ -140,16 +124,23 @@
 
 /*jslint node:true, nomen: true */
 
-&#x27;use strict&#x27;;
-
 /**
 Utility functions used across &#x60;express-yui&#x60; components.
 
-@module express-yui
-@submodule utils
+@module express-yui/lib/utils
 **/
 
-var NODE_ENV   = process.env.NODE_ENV || &#x27;development&#x27;;
+&#x27;use strict&#x27;;
+
+var NODE_ENV = process.env.NODE_ENV || &#x27;development&#x27;,
+    RE_TRAILING_SLASH = /\/$/;
+
+/**
+Exports few utility methods and constants for &#x60;express-yui&#x60; components.
+
+@class utils
+@static
+*/
 
 /**
 Extends object with properties from other objects.
@@ -162,6 +153,7 @@ Extends object with properties from other objects.
     // a =&gt; { foo: &#x27;bar&#x27;, bar: &#x27;baz&#x27;, baz: &#x27;xyz&#x27; }
 
 @method extend
+@static
 @param {Object} obj the receiver object to be extended
 @param {Object*} supplier objects
 @return {Object} The extended object
@@ -186,6 +178,7 @@ exports.extend = function (obj) {
 Deep clone of an object.
 
 @method clone
+@static
 @param {Object} oldObj the origal object to be cloned
 @return {Object} The cloned object
 **/
@@ -222,6 +215,7 @@ This is specially useful to optimize the function before serializing it to send
 it to the client side as a js blob.
 
 @method minifyFunction
+@static
 @param {Function} fn the function to minify
 @return {Function} the minified function
 **/
@@ -242,37 +236,35 @@ exports.minifyFunction = function (fn) {
 };
 
 /**
-Test if &#x60;fn&#x60; is a function. This is useful to distinguish functions from objects.
+Utility method to use the loader base and add the folder name that represents
+a group to complete the new base and root value for each custom group.
 
-@method isFunction
-@param {Object|Function} fn the function to be tested
-@return {Boolean} &#x60;true&#x60; if &#x60;fn&#x60; is a function, &#x60;false&#x60; otherwise
+    utils.joinURLFolder(&#x27;http://foo.com/bar&#x27;, &#x27;baz&#x27;);  // =&gt; http://foo.com/bar/baz/
+    utils.joinURLFolder(&#x27;https://foo.com/bar&#x27;, &#x27;baz&#x27;); // =&gt; https://foo.com/bar/baz/
+    utils.joinURLFolder(&#x27;//foo.com/bar/&#x27;, &#x27;baz&#x27;);      // =&gt; //foo.com/bar/baz/
+    utils.joinURLFolder(&#x27;/bar&#x27;, &#x27;baz&#x27;);                // =&gt; /bar/baz/
+
+@method joinURLFolder
+@static
+@param {string} url the url that should get the new segment added at the end
+@return {string} folderName the string that represents the segment to be added
+@return {string} the new url
 **/
-exports.isFunction = function (fn) {
-    return !!(fn &amp;&amp; (Object.prototype.toString.call(fn) === &#x27;[object Function]&#x27;) &amp;&amp; fn.toString);
-};
-
-/**
-Test if &#x60;re&#x60; is a regular expression.
-
-@method isRegExp
-@param {Object|Function} re the regular express to be tested
-@return {Boolean} &#x60;true&#x60; if &#x60;re&#x60; is a regular express, &#x60;false&#x60; otherwise
-**/
-exports.isRegExp = function (re) {
-    return !!(re &amp;&amp; (Object.prototype.toString.call(re) === &#x27;[object RegExp]&#x27;));
+exports.joinURLFolder = function (url, folderName) {
+    return (url || &#x27;&#x27;).replace(RE_TRAILING_SLASH, &#x27;&#x27;) + &#x27;/&#x27; + folderName + &#x27;/&#x27;;
 };
 
 /**
 The default combo handler configuration for app origin.
 
 @property DEFAULT_COMBO_CONFIG
+@static
 @type {Object}
 **/
 exports.DEFAULT_COMBO_CONFIG = {
     maxURLLength: 1024,
-    comboBase: &quot;/combo~&quot;,
-    comboSep: &quot;~&quot;
+    comboBase: &quot;/combo?&quot;,
+    comboSep: &quot;&amp;&quot;
 };
 
 /**
@@ -280,6 +272,7 @@ Whether the app is running in debug mode or not. True if nodejs is running
 in development mode.
 
 @property debugMode
+@static
 @type {Boolean}
 **/
 exports.debugMode = (NODE_ENV === &#x27;development&#x27;);

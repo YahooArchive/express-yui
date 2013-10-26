@@ -13,10 +13,9 @@ var YUITest = require('yuitest'),
     OA = YUITest.ObjectAssert,
     mockery = require('mockery'),
     mockYUI,
-    mockExpress,
-    mockExpressState,
+    mockExpressApp,
     suite,
-    ExpressYUI,
+    YUIClass,
     configFn;
 
 mockYUI = {
@@ -27,14 +26,13 @@ mockYUI = {
         version: '1.0'
     }
 };
-mockExpress = {
-    application: {
-        defaultConfiguration: function () {}
-    }
-};
-mockExpressState = {
-    extend: function (app) {
-        return app;
+mockExpressApp = {
+    _data: {},
+    get: function (name) {
+        return this._data[name];
+    },
+    set: function (name, value) {
+        this._data[name] = value;
     }
 };
 
@@ -46,32 +44,29 @@ suite.add(new YUITest.TestCase({
     setUp: function () {
         mockery.registerMock('yui', mockYUI);
         mockery.registerMock('yui/debug', mockYUI);
-        mockery.registerMock('express', mockExpress);
-        mockery.registerMock('express-state', mockExpressState);
         mockery.enable({
             warnOnReplace: false,
             warnOnUnregistered: false
         });
-        ExpressYUI = require('../../lib/yui.js');
+        YUIClass = require('../../lib/yui.js');
+        mockExpressApp._data = {};
     },
 
     tearDown: function () {
         mockery.deregisterMock('yui');
         mockery.deregisterMock('yui/debug');
-        mockery.deregisterMock('express');
-        mockery.deregisterMock('express-state');
         mockery.disable();
     },
 
     "test constructor": function () {
-        var obj = new ExpressYUI({});
+        var obj = new YUIClass(mockExpressApp);
         A.areEqual('/foo/bar', obj.path, 'wrong path of YUI');
         A.areEqual('1.0', obj.version, 'wrong version of YUI');
     },
 
     "test config": function () {
         var out,
-            obj = new ExpressYUI({});
+            obj = new YUIClass(mockExpressApp);
 
         out = obj.config({
             root: '/myroot',
@@ -101,43 +96,44 @@ suite.add(new YUITest.TestCase({
         A.areEqual('$', out.comboSep, 'wrong comboSep, should not be overruled');
     },
 
-    "test debugMode": function () {
-        var obj = new ExpressYUI({}),
-            out;
-
-        A.areSame(obj, obj.debugMode(), 'debugMode should be chainable');
-        out = obj.config();
-        A.isTrue(out.debug);
-        A.areEqual('debug', out.filter);
-        A.areEqual('debug', out.logLevel);
-        A.isTrue(out.useBrowserConsole);
-
-        obj.debugMode({debug: false, filter: 'raw'});
-        out = obj.config();
-        A.isFalse(out.debug, 'debug should be overrulled');
-        A.areEqual('raw', out.filter, 'filter should be overrulled');
-    },
-
     "test applyConfig": function () {
-        var obj = new ExpressYUI({});
+        var obj = new YUIClass(mockExpressApp);
 
         A.areSame(obj, obj.applyConfig({foo: 'bar'}), 'applyConfig should be chainable');
 
         A.areEqual('bar', obj.config().foo, 'applyConfig should set config.foo');
     },
 
-    "test extend": function () {
-        var app = {},
-            result;
-        result = ExpressYUI.extend(app);
-        A.isObject(app.yui, 'express app was not extended correctly');
-        A.areSame(result, app, 'extend shoud return the express app');
+    "test setCoreFromCDN": function () {
+        var mid,
+            obj = new YUIClass(mockExpressApp),
+            c = {
+                baz: 1
+            };
 
-        // already augmented app
-        app.yui = 1;
-        result = ExpressYUI.extend(app);
-        A.areSame(1, app.yui, 'already extended app should not be extended again');
-        A.areSame(result, app, 'extend shoud return the express app');
+        A.isFunction(obj.setCoreFromCDN);
+
+        obj.version = '3.9'; // from yui()
+        obj.config = function () {
+            return c;
+        };
+
+        mid = obj.setCoreFromCDN({
+            foo: 'bar'
+        });
+
+        OA.areEqual({
+            "baz": 1,
+            "base": "http://yui.yahooapis.com/3.9/",
+            "comboBase": "http://yui.yahooapis.com/combo?",
+            "comboSep": "&",
+            "root": "3.9/",
+            "filter": "debug",
+            "combine": false,
+            "foo": "bar"
+        }, c, 'wrong loader config');
+
+        A.areEqual(obj, mid, 'cdn.setCoreFromCDN() should be chainable');
     }
 
 }));

@@ -42,15 +42,15 @@ app.configure('production', function () {
 });
 
 // registering groups
-app.yui.registerGroup('group1', './build-group1');
-app.yui.registerGroup('group2', './build-group2');
+app.yui.registerGroup('group1', './build/group1', 'loader-group1');
+app.yui.registerGroup('group2', './build/group2', 'loader-group2');
 
 // template engine
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
 // serving static yui modules
-app.use(expyui['static']({
+app.use(expyui['static'](__dirname + '/build', {
     maxAge: 100
 }));
 

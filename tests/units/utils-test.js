@@ -45,38 +45,6 @@ suite.add(new YUITest.TestCase({
         A.areEqual(src.a, dest.a, 'cloned dest.a object is different from source');
         OA.areEqual(src.b, dest.b, 'cloned dest.b object is different from source');
         OA.areEqual(src.c[0], dest.c[0], 'cloned dest.c object is different from source');
-    },
-
-    'test isFunction': function () {
-        A.isFunction(utils.isFunction);
-        // good
-        A.isTrue(utils.isFunction(function(){}), 'function(){}');
-        // bad
-        A.isFalse(utils.isFunction(/(blue|red)/), '/(blue|red)/');
-        A.isFalse(utils.isFunction(new RegExp('foo')), 'new RegExp()');
-        A.isFalse(utils.isFunction({}), '{}');
-        A.isFalse(utils.isFunction(null), 'null');
-        A.isFalse(utils.isFunction(false), 'false');
-        A.isFalse(utils.isFunction(undefined), 'undefined');
-        A.isFalse(utils.isFunction(0), '0');
-        A.isFalse(utils.isFunction(1), '1');
-        A.isFalse(utils.isFunction('string'), 'string');
-    },
-
-    'test isRegExp': function () {
-        A.isFunction(utils.isRegExp);
-        // good
-        A.isTrue(utils.isRegExp(/(blue|red)/), '/(blue|red)/');
-        A.isTrue(utils.isRegExp(new RegExp('foo')), 'new RegExp()');
-        // bad
-        A.isFalse(utils.isRegExp(function(){}), 'function(){}');
-        A.isFalse(utils.isRegExp({}), '{}');
-        A.isFalse(utils.isRegExp(null), 'null');
-        A.isFalse(utils.isRegExp(false), 'false');
-        A.isFalse(utils.isRegExp(undefined), 'undefined');
-        A.isFalse(utils.isRegExp(0), '0');
-        A.isFalse(utils.isRegExp(1), '1');
-        A.isFalse(utils.isRegExp('string'), 'string');
     }
 
 }));

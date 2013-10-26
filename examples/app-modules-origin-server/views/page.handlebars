@@ -17,7 +17,7 @@
     <script>{{{state}}}</script>
     <script>
     app.yui.use('autocomplete', 'bar', 'xyz', 'slider', function (Y) {
-        Y.one('#content').setContent('<p>Ready!</p>');
+        Y.one('#content').setContent( Y.bar ? '<p>Ready!</p>' : '<p>Failed!</p>' );
     });
     </script>
 </body>

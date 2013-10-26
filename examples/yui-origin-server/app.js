@@ -23,7 +23,7 @@ app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
 // serving static yui modules
-app.use(expyui['static']({
+app.use(expyui['static'](__dirname, {
     maxAge: 100
 }));
 

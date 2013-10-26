@@ -7,13 +7,13 @@ YUI.add('binder-index', function (Y) {
     Y.Binders = {
         index: {
             update: function (node, data) {
-                var fooContent = Y.Template._cache['demo/foo'](data);
+                var fooContent = Y.Template.get('demo/foo')(data);
                 node.setContent(fooContent);
             }
         }
     };
 
 }, '', {
-    requires: ['node', 'demo-templates-foo'],
+    requires: ['node', 'template-base', 'demo-template-foo'],
     affinity: 'client'
 });
