@@ -162,12 +162,12 @@ module.exports = {
 
         if (bundle.yui) {
             if (bundle.yui.client &amp;&amp; bundle.yui.metaModuleName) {
-                // add the meta module into the core structure
-                // to make sure it gets attached to Y upfront on the client side
-                this.registerGroup(bundle.name, bundle.buildDirectory, bundle.yui.metaModuleName);
                 // storing client modules
                 // - we don&#x27;t own it, locator does it
                 utils.extend(this._clientModules, utils.clone(bundle.yui.client) || {});
+                // add the meta module into the core structure
+                // to make sure it gets attached to Y upfront on the client side
+                this.registerGroup(bundle.name, bundle.buildDirectory, bundle.yui.metaModuleName);
             }
             if (bundle.yui.server) {
                 debug(&#x27;Registering group &quot;%s&quot; for server side, and using it from &quot;%s&quot;&#x27;,

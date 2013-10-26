@@ -266,6 +266,14 @@ module.exports = {
         debug(&#x27;Registering group &quot;%s&quot; and provisioning it for the &#x27; +
               &#x27;client side with meta module &quot;%s&quot;&#x27;, groupName, metaModuleName);
 
+        // defining the meta module as a client side module if needed.
+        // this helps to use &#x60;express-yui&#x60; without calling &#x60;registerBundle()&#x60;
+        if (!this._clientModules[metaModuleName]) {
+            this._clientModules[metaModuleName] = {
+                group: groupName
+            };
+        }
+
         config.groups = config.groups || {};
 
         // setting up the default group config
