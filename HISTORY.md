@@ -4,6 +4,11 @@ Express YUI Change History
 @NEXT@
 ------------------
 
+* adding lookup process when trying to resolve lang bundles thru `Y.Intl.get()` for the server side.
+
+1.0.0 (2013-09-26)
+------------------
+
 ## Important (non-backward compatible) changes:
 
 * __[!]__ moving `lib/view.js` into a separate component called `express-view`, which means that `app.yui.view()` is not longer available.
