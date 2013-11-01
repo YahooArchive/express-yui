@@ -70,6 +70,9 @@ suite.add(new YUITest.TestCase({
                 metaModuleName: 'loader-foo'
             }
         };
+        server._clientModules = {
+            foo: 2
+        };
         YUITest.Mock.expect(server, {
             method: 'registerGroup',
             args: ['bar', __dirname, 'loader-foo']
@@ -87,6 +90,9 @@ suite.add(new YUITest.TestCase({
                     bar: 2
                 }
             }
+        };
+        server._serverModules = {
+            bar: 1
         };
         YUITest.Mock.expect(server.YUI, {
             method: 'applyConfig',
