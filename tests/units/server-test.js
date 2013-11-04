@@ -65,20 +65,24 @@ suite.add(new YUITest.TestCase({
             buildDirectory: __dirname,
             yui: {
                 client: {
-                    foo: 1
+                    foo: {
+                        group: 'abc'
+                    }
                 },
                 metaModuleName: 'loader-foo'
             }
         };
         server._clientModules = {
-            foo: 2
+            foo: {
+                group: 'efg'
+            }
         };
         YUITest.Mock.expect(server, {
             method: 'registerGroup',
             args: ['bar', __dirname, 'loader-foo']
         });
         server.registerBundle(bundle);
-        A.areSame(1, server._clientModules.foo, 'internal registry with _clientModules was not successfully updated');
+        A.areSame('abc', server._clientModules.foo.group, 'internal registry with _clientModules was not successfully updated');
     },
 
     "test registerBundle with server stuff": function () {
@@ -87,19 +91,23 @@ suite.add(new YUITest.TestCase({
             buildDirectory: __dirname,
             yui: {
                 server: {
-                    bar: 2
+                    bar: {
+                        group: 'abc'
+                    }
                 }
             }
         };
         server._serverModules = {
-            bar: 1
+            bar: {
+                group: 'efg'
+            }
         };
         YUITest.Mock.expect(server.YUI, {
             method: 'applyConfig',
             args: [YUITest.Mock.Value.Object]
         });
         server.registerBundle(bundle);
-        A.areSame(2, server._serverModules.bar, 'internal registry with _serverModules was not successfully updated');
+        A.areSame('abc', server._serverModules.bar.group, 'internal registry with _serverModules was not successfully updated');
     },
 
     "test use": function () {
