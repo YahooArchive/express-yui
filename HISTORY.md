@@ -4,6 +4,11 @@ Express YUI Change History
 @NEXT@
 ------------------
 
+* add debugging messages to log when name collision happens while express-yui tries to add those modules into clientModules or serverModules collection.
+
+1.0.0 (2013-10-26)
+------------------
+
 ## Important (non-backward compatible) changes:
 
 * __[!]__ moving `lib/view.js` into a separate component called `express-view`, which means that `app.yui.view()` is not longer available.
@@ -27,7 +32,6 @@ Express YUI Change History
 * feature pairity between server and client. You can, and should, use `app.yui.ready()` on the server as well to wait for YUI to be ready before serving traffic. This method has the same signature than the client version and on the server it is bound to the locator object to fulfill its internal `ready` promise.
 * `app.yui.registerGroup()` signature changed. The optional 3rd argument is not longer a filesystem path to the meta module, but just the meta module name produced by `locator-yui`.
 * `app.yui.registerModules()` was removed. Modules will be registered automatically thru `locator-yui` or you can do it manually thru the protected registries `app.yui._clientModules` and `app.yui._serverModules`, or you can explore `app.yui.registerBundle()` method.
-* add debugging messages to log when name collision happens while express-yui tries to add those modules into clientModules or serverModules collection.
 
 ## Patching yui loader to support:
 
