@@ -4,6 +4,11 @@ Express YUI Change History
 @NEXT@
 ------------------
 
+* add debugging messages to log when name collision happens while express-yui tries to add those modules into clientModules or serverModules collection.
+
+1.0.0 (2013-10-26)
+------------------
+
 ## Important (non-backward compatible) changes:
 
 * __[!]__ moving `lib/view.js` into a separate component called `express-view`, which means that `app.yui.view()` is not longer available.
