@@ -4,7 +4,7 @@
 * See the accompanying LICENSE file for terms.
 */
 
-/*jslint node:true, nomen:true, stupid: true*/
+/*jslint node:true, nomen:true*/
 
 "use strict";
 
