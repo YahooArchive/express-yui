@@ -130,7 +130,7 @@ suite.add(new YUITest.TestCase({
             "comboSep": "&",
             "root": "3.9/",
             "filter": (utils.debugMode ? 'debug' : 'min'),
-            "combine": false,
+            "combine": !utils.debugMode,
             "foo": "bar"
         }, c, 'wrong loader config');
 
