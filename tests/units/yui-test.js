@@ -12,7 +12,6 @@ var YUITest = require('yuitest'),
     A = YUITest.Assert,
     OA = YUITest.ObjectAssert,
     mockery = require('mockery'),
-    utils = require('../../lib/utils.js'),
     mockYUI,
     mockExpressApp,
     suite,
@@ -129,8 +128,8 @@ suite.add(new YUITest.TestCase({
             "comboBase": "http://yui.yahooapis.com/combo?",
             "comboSep": "&",
             "root": "3.9/",
-            "filter": (utils.debugMode ? 'debug' : 'min'),
-            "combine": !utils.debugMode,
+            "filter": c.filter,
+            "combine": c.combine,
             "foo": "bar"
         }, c, 'wrong loader config');
 
