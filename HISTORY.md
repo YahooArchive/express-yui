@@ -5,6 +5,7 @@ Express YUI Change History
 ------------------
 
 * add debugging messages to log when name collision happens while express-yui tries to add those modules into clientModules or serverModules collection.
+* PR #38: Fix jshint npm script to work on Windows
 
 1.0.0 (2013-10-26)
 ------------------
