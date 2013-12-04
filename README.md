@@ -254,6 +254,6 @@ See the [LICENSE file][] for license text and copyright information.
 Contribute
 ----------
 
-See the [CONTRIBUTE file][] for info.
+See the [CONTRIBUTING file][] for info.
 
-[CONTRIBUTE file]: https://github.com/yahoo/express-yui/blob/master/CONTRIBUTE.md
+[CONTRIBUTING file]: https://github.com/yahoo/express-yui/blob/master/CONTRIBUTING.md
