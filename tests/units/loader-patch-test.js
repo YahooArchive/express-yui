@@ -38,15 +38,7 @@ suite.add(new YUITest.TestCase({
         context = null;
     },
 
-    'test patchClient read': function () {
-        Assert.areSame(
-            context.config().patches,
-            patch.patchClient.call(context),
-            'Failed to read client patches'
-        );
-    },
-
-    'test patchClient write': function () {
+    'test patchClient': function () {
         var prev = context.config().patches,
             next = [];
 
@@ -74,15 +66,7 @@ suite.add(new YUITest.TestCase({
         context = null;
     },
 
-    'test patchServer read': function () {
-        Assert.areSame(
-            context._patches,
-            patch.patchServer.call(context),
-            'Failed to read server patches'
-        );
-    },
-
-    'test patchServer write': function () {
+    'test patchServer': function () {
         var prev = context._patches,
             next = [];
 
