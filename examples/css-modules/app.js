@@ -36,8 +36,7 @@ app.get('/', expyui.expose(), function (req, res, next) {
 // locator plugins
 loca.plug(new LocatorHandlebars({ format: 'yui' }))
     .plug(new LocatorYUI({
-        // TODO: fix cssproc (if you have a deep route like /foo/bar, images will not load)
-        // cssproc: '/' // path to prefix every url() in the css files
+        cssproc: '/' // path to prefix every url() in the css files
     }))
     .parseBundle(__dirname);
 
