@@ -39,14 +39,15 @@ suite.add(new YUITest.TestCase({
     },
 
     'test patchClient': function () {
-        var prev = context.config().patches,
+        var patches = context.config().patches,
+            prev = patches.length,
             next = [];
 
-        patch.patchClient.call(context, next);
-        Assert.areNotSame(prev, context.config().patches, 'Failed to change default clientside patches');
+        patch.patchClient.apply(context, [function firstPatch() {}]);
+        Assert.areEqual(prev + 1, patches.length, 'Failed to add one clientside patches');
 
-        patch.patchClient.call(context, prev);
-        Assert.areSame(prev, context.config().patches, 'Failed to revert default clientside patches');
+        patch.patchClient.apply(context, [function secondPatch() {}, function thridPatch() {}]);
+        Assert.areEqual(prev + 3, patches.length, 'Failed to add multiple clientside patches');
     }
 
 }));
@@ -67,14 +68,15 @@ suite.add(new YUITest.TestCase({
     },
 
     'test patchServer': function () {
-        var prev = context._patches,
+        var patches = context._patches,
+            prev = patches.length,
             next = [];
 
-        patch.patchServer.call(context, next);
-        Assert.areNotSame(prev, context._patches, 'Failed to change default serverside patches');
+        patch.patchServer.apply(context, [function firstPatch() {}]);
+        Assert.areEqual(prev + 1, patches.length, 'Failed to add one serverside patches');
 
-        patch.patchServer.call(context, prev);
-        Assert.areSame(prev, context._patches, 'Failed to revert default serverside patches');
+        patch.patchServer.apply(context, [function secondPatch() {}, function thridPatch() {}]);
+        Assert.areEqual(prev + 3, patches.length, 'Failed to add multiple serverside patches');
     }
 
 }));
