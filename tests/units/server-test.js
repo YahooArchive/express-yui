@@ -9,10 +9,11 @@
 "use strict";
 
 var YUITest = require('yuitest'),
+    mockery = require('mockery'),
     A = YUITest.Assert,
     OA = YUITest.ObjectAssert,
     suite,
-    server = require('../../lib/server.js');
+    server;
 
 suite = new YUITest.TestSuite("expres-yui server suite");
 
@@ -26,6 +27,12 @@ suite.add(new YUITest.TestCase({
     },
 
     setUp: function () {
+        mockery.enable({
+            useCleanCache: true,
+            warnOnUnregistered: false
+        });
+
+        server = require('../../lib/server.js');
         server._clientModules = {};
         server._serverModules = {};
         server.YUI = {};
@@ -42,10 +49,8 @@ suite.add(new YUITest.TestCase({
     },
 
     tearDown: function () {
-        // unregister mocks
-        delete server.config;
-        delete server.registerGroup;
-        delete server._app;
+        server = null;
+        mockery.disable();
     },
 
     "test constructor": function () {
@@ -164,6 +169,64 @@ suite.add(new YUITest.TestCase({
         result = server.use('foo', 'baz', 'bar');
         A.areSame(Y, result);
         A.areSame(Y, server._Y, 'private _Y used by other internal methods was not exposed');
+
+        YUITest.Mock.verify(server);
+        YUITest.Mock.verify(Y);
+    },
+
+    "test hook for patching loader": function () {
+        var Y = YUITest.Mock(),
+            newUse = function () {
+                used = 'useCalled';
+            },
+            used = 'useNotCalled',
+            result;
+
+        YUITest.Mock.expect(server, {
+            method: 'config',
+            args: [],
+            callCount: 1,
+            run: function () {
+                return {
+                    groups: {
+                        'foo': {
+                            more: 1
+                        }
+                    }
+                };
+            }
+        });
+
+        YUITest.Mock.expect(server, {
+            method: 'YUI',
+            callCount: 1,
+            args: [YUITest.Mock.Value.Object],
+            run: function (c) {
+                A.isTrue(c.useSync, 'useSync is required when running on the server');
+                return Y;
+            }
+        });
+
+        server._app.set('locator', {
+            getRootBundle: function () {}
+        });
+
+        server.YUI.applyConfig = function () {};
+
+        server._patches = [
+            function (Y) {
+                Y.use = newUse;
+                // This `use` should be invoked after patching occurs
+                A.areSame('useNotCalled', used);
+            }
+        ];
+
+        result = server.use('foo', function (Y) {
+            // The patch should have been applied
+            A.areEqual(newUse, Y.use);
+            // The `use` statement should have been invoked
+            A.areSame('useCalled', used);
+        });
 
         YUITest.Mock.verify(server);
         YUITest.Mock.verify(Y);

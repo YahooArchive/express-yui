@@ -4,6 +4,10 @@ Express YUI Change History
 @NEXT@
 ------------------
 
+* add api to allow patching the YUI instance before the loader `use` statement
+    * `app.yui.patchServer([...])` for patching the server instance
+    * `app.yui.patchClient([...])` for patching the client instance
+
 1.0.1 (2013-12-04)
 ------------------
 
