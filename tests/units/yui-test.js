@@ -15,8 +15,7 @@ var YUITest = require('yuitest'),
     mockYUI,
     mockExpressApp,
     suite,
-    YUIClass,
-    configFn;
+    YUIClass;
 
 mockYUI = {
     path: function () {
@@ -46,7 +45,8 @@ suite.add(new YUITest.TestCase({
         mockery.registerMock('yui/debug', mockYUI);
         mockery.enable({
             warnOnReplace: false,
-            warnOnUnregistered: false
+            warnOnUnregistered: false,
+            useCleanCache: true
         });
         YUIClass = require('../../lib/yui.js');
         mockExpressApp._data = {};
