@@ -7,6 +7,7 @@ Express YUI Change History
 * add api to allow patching the YUI instance before the loader `use` statement
     * `app.yui.patchServer([...])` for patching the server instance
     * `app.yui.patchClient([...])` for patching the client instance
+    * `app.yui.patch([...])` for patching both the client and server instances
 
 1.0.1 (2013-12-04)
 ------------------
