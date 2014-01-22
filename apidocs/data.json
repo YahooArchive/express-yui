@@ -6,6 +6,51 @@
         "url": "https://github.com/yahoo/express-yui"
     },
     "files": {
+        "lib/patches/lang-bundles-requires.js": {
+            "name": "lib/patches/lang-bundles-requires.js",
+            "modules": {
+                "express-yui/lib/patches/lang-bundles-requires": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/patches/optional-requires.js": {
+            "name": "lib/patches/optional-requires.js",
+            "modules": {
+                "express-yui/lib/patches/optional-requires": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/patches/server-intl-get.js": {
+            "name": "lib/patches/server-intl-get.js",
+            "modules": {
+                "express-yui/lib/patches/server-intl-get": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/patches/server-template-get.js": {
+            "name": "lib/patches/server-template-get.js",
+            "modules": {
+                "express-yui/lib/patches/server-template-get": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/patches/templates-requires.js": {
+            "name": "lib/patches/templates-requires.js",
+            "modules": {
+                "express-yui/lib/patches/templates-bundles-requires": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
         "lib/client.js": {
             "name": "lib/client.js",
             "modules": {
@@ -24,6 +69,17 @@
             },
             "classes": {
                 "ExpressYUI": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/loader-patch.js": {
+            "name": "lib/loader-patch.js",
+            "modules": {
+                "express-yui/lib/loader-patches": 1
+            },
+            "classes": {
+                "loader-patch": 1
             },
             "fors": {},
             "namespaces": {}
@@ -96,6 +152,61 @@
         }
     },
     "modules": {
+        "express-yui/lib/patches/lang-bundles-requires": {
+            "name": "express-yui/lib/patches/lang-bundles-requires",
+            "submodules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "lib/patches/lang-bundles-requires.js",
+            "line": 9,
+            "description": "Patches `Y.Loader` to support `langBundles`, which enables you to\nrequire language bundles easily while define modules.\n\nYou can write your modules like this:\n\n    YUI.add('name', function (Y) {\n        // module code...\n    }, '0.1', { requires: [], langBundles: ['foo', 'bar'] });\n\nAnd you can enable the patch like this:\n\n    app.yui.patch(require('express-yui/lib/patches/lang-bundles-requires'));\n\nThis will guarantee, that the language bundles denotated by file `lang/foo` and\n`lang/bar` will be loaded. Of course, they will be loaded based on the transpiler\noutput, which generates a more complex module name. If you don't use this patch, you will\nhave to use the full name of the generated modules to require them manually in\nthe `requires` list."
+        },
+        "express-yui/lib/patches/optional-requires": {
+            "name": "express-yui/lib/patches/optional-requires",
+            "submodules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "lib/patches/optional-requires.js",
+            "line": 9,
+            "description": "Patches `Y.Loader` to support `optionalRequires`, which enables you to\nrequire modules that might not be available in a runtime, and avoid to\nthrow when that happens.\n\nThis helps when it comes to define modules that are only available on\nthe server or client, while other modules that are common can require\nthem as optionals.\n\n    app.yui.patch(require('express-yui/lib/patches/optional-requires'));\n\nNote that the `optional` implementation in YUI does not cover this case,\nand it only covers the case where the module was required or not by another\nmodule in the `use` statement, which is not quite the same."
+        },
+        "express-yui/lib/patches/server-intl-get": {
+            "name": "express-yui/lib/patches/server-intl-get",
+            "submodules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "lib/patches/server-intl-get.js",
+            "line": 9,
+            "description": "Patches `Y.Intl.get` to use the language bundles produced by\n`locator-lang` plugin, and will be available thru locator's bundle\nobjects on the server side. You can apply this patch like this:\n\n    app.yui.patchServer(require('express-yui/lib/patches/server-intl-get'));\n\nThen you can use this in your program:\n\n    Y.Intl.get('foo');\n\nThis will resolve `foo` as a language bundle from the default locator\nbundle, which is normally a file in `lang/foo.json` or `lang/foo.yrb`\nthat was transpiled into a module by `locator-lang`."
+        },
+        "express-yui/lib/patches/server-template-get": {
+            "name": "express-yui/lib/patches/server-template-get",
+            "submodules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "lib/patches/server-template-get.js",
+            "line": 9,
+            "description": "Patches `Y.Template.get` to use the templates produced by\n`locator-handlebars` or any other similar plugin, and will be available\nthru locator's bundle objects on the server side.\n\n    app.yui.patchServer(require('express-yui/lib/patches/server-template-get'));\n\nThen you can use this in your program:\n\n    Y.Template.get('foo');\n\nThis will resolve `foo` as a template from the default locator\nbundle, which is normally a file in `templates/foo.handlebars` or any other template\nengine that is available, and that it was transpiled into a module by `locator-handlebars`."
+        },
+        "express-yui/lib/patches/templates-bundles-requires": {
+            "name": "express-yui/lib/patches/templates-bundles-requires",
+            "submodules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "lib/patches/templates-requires.js",
+            "line": 9,
+            "description": "Patches `Y.Loader` to support `templates` requirements, which enables you to\nrequire templates easily without having to know the name of the module\ngenerated by the build transpiler/plugin/task while define modules.\n\nYou can write your modules like this:\n\n    YUI.add('name', function (Y) {\n        // module code...\n    }, '0.1', { requires: [], templates: ['foo'] });\n\nAnd you can enable the patch like this:\n\n    app.yui.patch(require('express-yui/lib/patches/templates-bundles-requires'));\n\nThis will guarantee, that the template denotated by the logical name `foo`\nwill be loaded. Of course, it will be loaded based on the transpiler\noutput, which generates a more complex module name. If you don't use this patch, you will\nhave to use the full name of the generated module."
+        },
         "express-yui/lib/client": {
             "name": "express-yui/lib/client",
             "submodules": {},
@@ -121,6 +232,19 @@
             "file": "lib/index.js",
             "line": 35,
             "description": "The `express-yui` module implements an express extension to provide\nyui capabilities to express applications."
+        },
+        "express-yui/lib/loader-patches": {
+            "name": "express-yui/lib/loader-patches",
+            "submodules": {},
+            "classes": {
+                "loader-patch": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "lib/loader-patch.js",
+            "line": 16,
+            "description": "Provides hooks to patch the YUI loader on both the server and/or client."
         },
         "express-yui/lib/middleware": {
             "name": "express-yui/lib/middleware",
@@ -197,7 +321,7 @@
             "namespaces": {},
             "tag": "module",
             "file": "lib/yui.js",
-            "line": 26,
+            "line": 28,
             "description": "Provides the class foundation of the `app.yui` object."
         }
     },
@@ -240,6 +364,23 @@
             "uses": [
                 "middleware"
             ]
+        },
+        "loader-patch": {
+            "name": "loader-patch",
+            "shortname": "loader-patch",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [
+                "express-yui/lib/yui"
+            ],
+            "module": "express-yui/lib/loader-patches",
+            "namespace": "",
+            "file": "lib/loader-patch.js",
+            "line": 16,
+            "description": "Provides hooks to patch the YUI loader on both the server and/or client.\nIt will facilitate try new things and patches without requiring to wait\nfor YUI to be released. Here is an example:\n\n    app.yui.patch(require('express-yui/lib/patches/optional-requires'));\n\nIn the example above, one of the default patches shipped with with\n`express-yui`, is executed on the server and client to patch the\nYUI Loader to support a new type of metadata called `optionalRequires`,\nwhich provides an easy way to define requirements for a module that are\nnot avialable in all runtimes.",
+            "static": 1
         },
         "middleware": {
             "name": "middleware",
@@ -363,7 +504,7 @@
             "module": "express-yui/lib/yui",
             "namespace": "",
             "file": "lib/yui.js",
-            "line": 26,
+            "line": 28,
             "description": "The `express-yui/lib/yui` exports the class used to create the `app.yui`\nmember that will be attached to the express app instance. This member\nprovides a set of functionalities to control the YUI version to be used\non the client as well as on the server.\n\nThe following is an example of how these features can be used:\n\n    var express = require('express'),\n        expyui = require('express-yui'),\n        app = express();\n\n    expyui.extend(app);\n\n    // Set some basic configs\n    app.yui.applyConfig({\n        fetchCSS: false\n    });\n\n    // Call expose middleware when a route match.\n    app.get('/index.html', expyui.expose(), anotherRoute);\n\nIn the example above, you can see that right after extending the\n`app` with `expyui.extend()` a new member is available under `app.yui`,\nand it enable us to configure YUI in any way we want.\nAlso, the `state` of the app will be serialized\nper request, and can be used in the template to set up the client\nside to run YUI with the same configuration used on the server side.\nHere is an example of a handlebars template:\n\n    <script>\n    {{{state}}}\n    app.yui.use('node', function (Y) {\n        Y.one('#content').setContent('<p>Ready!</p>');\n    });\n    </script>\n\nIn this particular case, `state` will hold all the\nappropiated settings generated by `expose` middleware.",
             "static": 1,
             "is_constructor": 1,
@@ -378,7 +519,7 @@
     "classitems": [
         {
             "file": "lib/client.js",
-            "line": 192,
+            "line": 149,
             "description": "Attaches the seed into the head, then creates a YUI Instance and attaches\n`modules` into it. This is equivalent to `YUI().use()` after getting the seed\nready. This method is a bootstrap implementation for the library, and the way\nyou use this in your templates, is by doing this:\n\n    <script>{{{state}}}</script>\n    <script>\n    app.yui.use('foo', 'bar', function (Y) {\n        // do something!\n    });\n    </script>\n\nWhere `state` defines the state of the express app, and `app.yui` defines\nthe helpers that `express-yui` brings into the client side.",
             "itemtype": "method",
             "name": "use",
@@ -389,7 +530,7 @@
         },
         {
             "file": "lib/client.js",
-            "line": 213,
+            "line": 170,
             "description": "Boots the application, rehydrate the app state and calls back to notify the\n`ready` state of the app.\n\n    <script>{{{state}}}</script>\n    <script>\n    app.yui.ready(function (err) {\n        if (err) {\n            throw err;\n        }\n        app.yui.use('foo', 'bar', function (Y) {\n            // do something!\n        });\n    });\n    </script>",
             "itemtype": "method",
             "name": "ready",
@@ -427,6 +568,60 @@
             },
             "class": "ExpressYUI",
             "module": "express-yui"
+        },
+        {
+            "file": "lib/loader-patch.js",
+            "line": 35,
+            "description": "Adds patches that will be applied to the YUI instance\nbefore the initial `use` statement on the client side.\n\n    app.yui.patchClient(require('express-yui/lib/patches/templates-requires'));",
+            "itemtype": "method",
+            "name": "patchClient",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "patch",
+                    "description": "Each argument represent a patch to be applied to the client runtime",
+                    "type": "Function*"
+                }
+            ],
+            "class": "loader-patch",
+            "module": "express-yui/lib/loader-patches"
+        },
+        {
+            "file": "lib/loader-patch.js",
+            "line": 50,
+            "description": "Adds patches that will be applied to the YUI instance\nbefore the initial `use` statement on the server side.\n\n    app.yui.patchServer(require('express-yui/lib/patches/server-template-get'));",
+            "itemtype": "method",
+            "name": "patchServer",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "patch",
+                    "description": "Each argument represent a patch to be applied to the server runtime",
+                    "type": "Function*"
+                }
+            ],
+            "class": "loader-patch",
+            "module": "express-yui/lib/loader-patches"
+        },
+        {
+            "file": "lib/loader-patch.js",
+            "line": 65,
+            "description": "Adds patches that will be applied to the YUI instance\nbefore the initial `use` statement on the server side and client.\nHere is an example of how to use this:\n\n    app.yui.patch(require('express-yui/lib/patches/optional-requires'));",
+            "itemtype": "method",
+            "name": "patch",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "patch",
+                    "description": "Each argument represent a patch to be applied",
+                    "type": "Function*"
+                }
+            ],
+            "class": "loader-patch",
+            "module": "express-yui/lib/loader-patches"
         },
         {
             "file": "lib/middleware.js",
@@ -853,40 +1048,7 @@
         },
         {
             "file": "lib/server.js",
-            "line": 82,
-            "description": "Patches `Y.Loader` to support `optionalRequires`, which enables you\nto require modules that might not be available in a runtime, and avoid\nto throw when that happens.",
-            "itemtype": "method",
-            "name": "_patchLoader",
-            "access": "protected",
-            "tagname": "",
-            "class": "server",
-            "module": "express-yui/lib/server"
-        },
-        {
-            "file": "lib/server.js",
-            "line": 115,
-            "description": "Patches `Y.Template.get` to use the templates produced by\n`locator-handlebars` or any other similar plugin, and will be available thru locator's bundle\nobjects.",
-            "itemtype": "method",
-            "name": "_patchTemplate",
-            "access": "protected",
-            "tagname": "",
-            "class": "server",
-            "module": "express-yui/lib/server"
-        },
-        {
-            "file": "lib/server.js",
-            "line": 153,
-            "description": "Patches `Y.Intl.get` to use the language bundles produced by\n`locator-lang` plugin, and will be available thru locator's bundle\nobjects.",
-            "itemtype": "method",
-            "name": "_patchIntl",
-            "access": "protected",
-            "tagname": "",
-            "class": "server",
-            "module": "express-yui/lib/server"
-        },
-        {
-            "file": "lib/server.js",
-            "line": 197,
+            "line": 101,
             "description": "Waits for the app to be ready, including the YUI instance to notify back that the\n`ready` state of the app was reached by calling the `callback`. The ready state is\nbound to the locator instance mounted into the express app thru `app.set('locator', locator);`\nand depending on `app.get('locator').ready.then()` promise result, the ready state\nwill be reached or not.\n\n    app.yui.ready(function (err) {\n        if (err) {\n            throw err;\n        }\n        // do something!\n    });",
             "itemtype": "method",
             "name": "ready",
@@ -904,7 +1066,7 @@
         },
         {
             "file": "lib/server.js",
-            "line": 244,
+            "line": 148,
             "description": "Creates a YUI Instance, and wraps the call to `Y.use()` to work appropiatly on\nthe server side. The `use` method can be called once the `ready` state is achieved\nthru `app.yui.ready()`.\n\n    app.yui.ready(function (err) {\n        if (err) {\n            throw err;\n        }\n        app.yui.use('json-stringify', function (Y) {\n            Y.JSON.stringify({ entry: 'value' });\n        });\n    });",
             "itemtype": "method",
             "name": "use",
@@ -1030,7 +1192,7 @@
         },
         {
             "file": "lib/yui.js",
-            "line": 106,
+            "line": 114,
             "description": "Extends the static configuration with the supplier\nobject(s). You can use it like this:\n\n    // Disable CSS computations\n    app.yui.applyConfig({\n        fetchCSS: false\n    });",
             "itemtype": "method",
             "name": "applyConfig",
@@ -1049,7 +1211,7 @@
         },
         {
             "file": "lib/yui.js",
-            "line": 128,
+            "line": 136,
             "description": "Extends the static configuration with the supplier object(s)\nor returns the current static configuration reference. This\nconfiguration is static, and attached to the server object.\nOnce you call `yui.expose()` middleware for the first time,\nthis configuration becomes inmutable.",
             "itemtype": "method",
             "name": "config",
@@ -1071,7 +1233,7 @@
         },
         {
             "file": "lib/yui.js",
-            "line": 154,
+            "line": 162,
             "description": "Set up a default group in loader that represents the\ncore yui modules to be loaded from YUI CDN.\n\n    app.yui.setCoreFromCDN();",
             "itemtype": "method",
             "name": "setCoreFromCDN",

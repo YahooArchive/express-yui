@@ -4,13 +4,22 @@ Express YUI Change History
 @NEXT@
 ------------------
 
+1.1.0 (2014-01-21)
+------------------
+
 * add api to allow patching the YUI instance before the loader `use` statement
-    * `app.yui.patchServer([...])` for patching the server instance
-    * `app.yui.patchClient([...])` for patching the client instance
-    * `app.yui.patch([...])` for patching both the client and server instances
+    * `app.yui.patchServer(patchFn)` for patching the server instance
+    * `app.yui.patchClient(patchFn)` for patching the client instance
+    * `app.yui.patch(patchFn, anotherFn)` for patching both the client and server instances
+    * all default patches are accesible thru: `require('express-yui/lib/patches/optional-requires')`
 * add default `logLevel` to be `warn` by default to avoid
 the masive amount of logs from yui core modules.
 
+## Important (non-backward compatible) changes:
+
+* __[!]__ Patches for loader to support `templates: []` and `Y.Template.get()` are disabled by default.
+* __[!]__ Patches for loader to support `langBundles: []` and `Y.Intl.get()` are disabled by default.
+* __[!]__ Patches for loader to support `optionalRequires: []` is disabled by default.
 
 1.0.1 (2013-12-04)
 ------------------

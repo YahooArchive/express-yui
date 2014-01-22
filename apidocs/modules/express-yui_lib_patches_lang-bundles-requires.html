@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>express-yui/lib/origin - express-yui API documentation</title>
+    <title>express-yui/lib/patches/lang-bundles-requires - express-yui API documentation</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -126,7 +126,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>express-yui_lib_origin Module</h1>
+                        <h1>express-yui_lib_patches_lang-bundles-requires Module</h1>
 <div class="box clearfix meta">
     
 
@@ -134,7 +134,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/lib_origin.js.html#l22"><code>lib&#x2F;origin.js:22</code></a>
+            Defined in: <a href="../files/lib_patches_lang-bundles-requires.js.html#l9"><code>lib&#x2F;patches&#x2F;lang-bundles-requires.js:9</code></a>
         </div>
     
 
@@ -144,8 +144,19 @@
 
 
 <div class="box intro">
-    <p>Provides a set of features to mutate the express app into an origin server for yui
-modules and static assets.</p>
+    <p>Patches <code>Y.Loader</code> to support <code>langBundles</code>, which enables you to
+require language bundles easily while define modules.</p>
+<p>You can write your modules like this:</p>
+<pre class="code prettyprint"><code>YUI.add(&#39;name&#39;, function (Y) {
+    // module code...
+}, &#39;0.1&#39;, { requires: [], langBundles: [&#39;foo&#39;, &#39;bar&#39;] });</code></pre>
+<p>And you can enable the patch like this:</p>
+<pre class="code prettyprint"><code>app.yui.patch(require(&#39;express-yui/lib/patches/lang-bundles-requires&#39;));</code></pre>
+<p>This will guarantee, that the language bundles denotated by file <code>lang/foo</code> and
+<code>lang/bar</code> will be loaded. Of course, they will be loaded based on the transpiler
+output, which generates a more complex module name. If you don&#39;t use this patch, you will
+have to use the full name of the generated modules to require them manually in
+the <code>requires</code> list.</p>
 
 </div>
 
@@ -153,18 +164,6 @@ modules and static assets.</p>
 
 <div class="yui3-g">
     <div class="yui3-u-1-2">
-        
-            <p>This module provides the following classes:</p>
-
-            <ul class="module-classes">
-            
-                <li class="module-class">
-                    <a href="../classes/origin.html">
-                        origin
-                    </a>
-                </li>
-            
-            </ul>
         
     </div>
 

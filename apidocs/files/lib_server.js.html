@@ -45,6 +45,8 @@
             
                 <li><a href="../classes/ExpressYUI.html">ExpressYUI</a></li>
             
+                <li><a href="../classes/loader-patch.html">loader-patch</a></li>
+            
                 <li><a href="../classes/middleware.html">middleware</a></li>
             
                 <li><a href="../classes/origin.html">origin</a></li>
@@ -65,9 +67,21 @@
             
                 <li><a href="../modules/express-yui_lib_client.html">express-yui/lib/client</a></li>
             
+                <li><a href="../modules/express-yui_lib_loader-patches.html">express-yui/lib/loader-patches</a></li>
+            
                 <li><a href="../modules/express-yui_lib_middleware.html">express-yui/lib/middleware</a></li>
             
                 <li><a href="../modules/express-yui_lib_origin.html">express-yui/lib/origin</a></li>
+            
+                <li><a href="../modules/express-yui_lib_patches_lang-bundles-requires.html">express-yui/lib/patches/lang-bundles-requires</a></li>
+            
+                <li><a href="../modules/express-yui_lib_patches_optional-requires.html">express-yui/lib/patches/optional-requires</a></li>
+            
+                <li><a href="../modules/express-yui_lib_patches_server-intl-get.html">express-yui/lib/patches/server-intl-get</a></li>
+            
+                <li><a href="../modules/express-yui_lib_patches_server-template-get.html">express-yui/lib/patches/server-template-get</a></li>
+            
+                <li><a href="../modules/express-yui_lib_patches_templates-bundles-requires.html">express-yui/lib/patches/templates-bundles-requires</a></li>
             
                 <li><a href="../modules/express-yui_lib_seed.html">express-yui/lib/seed</a></li>
             
@@ -158,13 +172,22 @@ module.exports = {
     **/
     registerBundle: function (bundle) {
         var groups = {},
-            modules;
+            modules,
+            key;
 
         if (bundle.yui) {
             if (bundle.yui.client &amp;&amp; bundle.yui.metaModuleName) {
                 // storing client modules
                 // - we don&#x27;t own it, locator does it
-                utils.extend(this._clientModules, utils.clone(bundle.yui.client) || {});
+                for (key in bundle.yui.client) {
+                    if (bundle.yui.client.hasOwnProperty(key)) {
+                        if (this._clientModules.hasOwnProperty(key) &amp;&amp; this._clientModules[key].group !== bundle.yui.client[key].group) {
+                            debug(&quot;Module name collision on the client: &#x27;%s&#x27; is used for both group &#x27;%s&#x27; and group &#x27;%s&#x27;&quot;,
+                                key, this._clientModules[key].group, bundle.yui.client[key].group);
+                        }
+                        this._clientModules[key] = utils.clone(bundle.yui.client[key]);
+                    }
+                }
                 // add the meta module into the core structure
                 // to make sure it gets attached to Y upfront on the client side
                 this.registerGroup(bundle.name, bundle.buildDirectory, bundle.yui.metaModuleName);
@@ -182,7 +205,17 @@ module.exports = {
                 modules = utils.clone(bundle.yui.server);
                 // storing server modules
                 // - we don&#x27;t own it, locator does it
-                utils.extend(this._serverModules, modules || {});
+
+                for (key in modules) {
+                    if (modules.hasOwnProperty(key)) {
+                        if (this._serverModules.hasOwnProperty(key) &amp;&amp; this._serverModules[key].group !== modules[key].group) {
+                            debug(&quot;Module name collision on the server: &#x27;%s&#x27; is used for both group &#x27;%s&#x27; and group &#x27;%s&#x27;&quot;,
+                                key, this._serverModules[key].group, modules[key].group);
+                        }
+                        this._serverModules[key] = modules[key];
+                    }
+                }
+
                 // applying the new group config and modules globally and to the current Y instance when possible
                 this.YUI.applyConfig({ groups: groups });
                 this.YUI.applyConfig({ modules: modules });
@@ -195,121 +228,6 @@ module.exports = {
         }
 
         return this;
-    },
-
-    /**
-    Patches &#x60;Y.Loader&#x60; to support &#x60;optionalRequires&#x60;, which enables you
-    to require modules that might not be available in a runtime, and avoid
-    to throw when that happens.
-
-    @method _patchLoader
-    @protected
-    **/
-    _patchLoader: function () {
-        var getRequires = this._Y.Env._loader.getRequires;
-        this._Y.Env._loader.getRequires = function (mod) {
-            var i, m;
-            if (!mod) {
-                return [];
-            }
-            if (mod._parsed) {
-                return mod.expanded || [];
-            }
-            mod.requires = mod.requires || [];
-            // expanding requirements with optional requires
-            if (mod.optionalRequires) {
-                for (i = 0; i &lt; mod.optionalRequires.length; i += 1) {
-                    m = this.getModule(mod.optionalRequires[i]);
-                    if (m) {
-                        mod.requires.push(m.name);
-                    }
-                }
-            }
-            // mod.templates and mod.langBundles are not used on the server side
-            return getRequires.apply(this, arguments);
-        };
-    },
-
-    /**
-    Patches &#x60;Y.Template.get&#x60; to use the templates produced by
-    &#x60;locator-handlebars&#x60; or any other similar plugin, and will be available thru locator&#x27;s bundle
-    objects.
-
-    @method _patchTemplate
-    @protected
-    **/
-    _patchTemplate: function () {
-        // monkey patching Y.Template
-        var locator = this._app.get(&#x27;locator&#x27;),
-            // looking in the root bundle (hermes has only one bundle)
-            // that&#x27;s the most common use-case where the app bundle holds all templates
-            rootBundle = locator.getRootBundle(),
-            originalTemplateGet = this._Y.use(&#x27;template-base&#x27;).Template.get;
-
-        this._Y.Template.get = function (name) {
-            var pos = name.indexOf(&#x27;/&#x27;),
-                bundleName,
-                bundle,
-                template = name;
-            if (pos &gt; 0) {
-                bundleName = name.slice(0, pos);
-                template = name.slice(pos + 1, name.length);
-            }
-            bundle = bundleName ? locator.getBundle(bundleName) : rootBundle;
-            if (bundle.template &amp;&amp; bundle.template[template]) {
-                return bundle.template[template];
-            }
-            // if the template is not in the specified bundle, look for a global/root template
-            if (bundle !== rootBundle &amp;&amp; rootBundle.template &amp;&amp; rootBundle.template[name]) {
-                return rootBundle.template[name];
-            }
-            // falling back to the original implementation
-            return originalTemplateGet.apply(this, arguments);
-        };
-    },
-
-    /**
-    Patches &#x60;Y.Intl.get&#x60; to use the language bundles produced by
-    &#x60;locator-lang&#x60; plugin, and will be available thru locator&#x27;s bundle
-    objects.
-
-    @method _patchIntl
-    @protected
-    **/
-    _patchIntl: function () {
-        // monkey patching Y.Intl
-        var locator = this._app.get(&#x27;locator&#x27;),
-            // looking in the root bundle (hermes has only one bundle)
-            // that&#x27;s the most common use-case where the app bundle holds all lang bundles
-            rootBundle = locator.getRootBundle(),
-            originalInltGet = this._Y.use(&#x27;intl&#x27;).Intl.get;
-        this._Y.Intl.get = function (name, key, lang) {
-            var pos = name.indexOf(&#x27;/&#x27;),
-                bundleName,
-                bundle,
-                langBundle = name;
-
-            function output(entries) {
-                // returning a specific key or all entries (todo: should be make a copy?)
-                return (key ? entries[key] : entries);
-            }
-
-            if (pos &gt; 0) {
-                bundleName = name.slice(0, pos);
-                langBundle = name.slice(pos + 1, name.length);
-            }
-            bundle = bundleName ? locator.getBundle(bundleName) : rootBundle;
-            if (bundle.lang &amp;&amp; bundle.lang[lang] &amp;&amp; bundle.lang[lang][langBundle]) {
-                return output(bundle.lang[lang][langBundle]);
-            }
-            // if the lang bundle is not in the specified bundle, look for a global/root lang bundle
-            if (bundle !== rootBundle &amp;&amp; rootBundle.lang &amp;&amp; rootBundle.lang[lang] &amp;&amp; rootBundle.lang[lang][name]) {
-                return output(rootBundle.lang[lang][name]);
-            }
-
-            // fallbacking back to the original implementation
-            return originalInltGet.apply(this, arguments);
-        };
     },
 
     /**
@@ -407,10 +325,13 @@ module.exports = {
                     }
                 }
             });
-            // patching Y
-            this._patchLoader();
-            this._patchTemplate();
-            this._patchIntl();
+
+            // patching serverside Y
+            if (this._patches &amp;&amp; this._patches.length) {
+                this._patches.forEach(function (patch) {
+                    patch(Y);
+                }, this);
+            }
         }
 
         // attaching modules

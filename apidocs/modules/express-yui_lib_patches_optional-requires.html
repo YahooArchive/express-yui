@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>express-yui/lib/origin - express-yui API documentation</title>
+    <title>express-yui/lib/patches/optional-requires - express-yui API documentation</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -126,7 +126,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>express-yui_lib_origin Module</h1>
+                        <h1>express-yui_lib_patches_optional-requires Module</h1>
 <div class="box clearfix meta">
     
 
@@ -134,7 +134,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/lib_origin.js.html#l22"><code>lib&#x2F;origin.js:22</code></a>
+            Defined in: <a href="../files/lib_patches_optional-requires.js.html#l9"><code>lib&#x2F;patches&#x2F;optional-requires.js:9</code></a>
         </div>
     
 
@@ -144,8 +144,16 @@
 
 
 <div class="box intro">
-    <p>Provides a set of features to mutate the express app into an origin server for yui
-modules and static assets.</p>
+    <p>Patches <code>Y.Loader</code> to support <code>optionalRequires</code>, which enables you to
+require modules that might not be available in a runtime, and avoid to
+throw when that happens.</p>
+<p>This helps when it comes to define modules that are only available on
+the server or client, while other modules that are common can require
+them as optionals.</p>
+<pre class="code prettyprint"><code>app.yui.patch(require(&#39;express-yui/lib/patches/optional-requires&#39;));</code></pre>
+<p>Note that the <code>optional</code> implementation in YUI does not cover this case,
+and it only covers the case where the module was required or not by another
+module in the <code>use</code> statement, which is not quite the same.</p>
 
 </div>
 
@@ -153,18 +161,6 @@ modules and static assets.</p>
 
 <div class="yui3-g">
     <div class="yui3-u-1-2">
-        
-            <p>This module provides the following classes:</p>
-
-            <ul class="module-classes">
-            
-                <li class="module-class">
-                    <a href="../classes/origin.html">
-                        origin
-                    </a>
-                </li>
-            
-            </ul>
         
     </div>
 

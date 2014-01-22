@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>express-yui/lib/origin - express-yui API documentation</title>
+    <title>lib/patches/server-intl-get.js - express-yui API documentation</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -126,51 +126,73 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>express-yui_lib_origin Module</h1>
-<div class="box clearfix meta">
-    
+                        <h1 class="file-heading">File: lib/patches/server-intl-get.js</h1>
 
-    
+<div class="file">
+    <pre class="code prettyprint linenums">
+/*
+ * Copyright (c) 2013, Yahoo! Inc.  All rights reserved.
+ * Copyrights licensed under the New BSD License.
+ * See the accompanying LICENSE file for terms.
+ */
 
-    
-        <div class="foundat">
-            Defined in: <a href="../files/lib_origin.js.html#l22"><code>lib&#x2F;origin.js:22</code></a>
-        </div>
-    
+/*jslint node:true, nomen: true */
 
-    
-</div>
+/**
+Patches &#x60;Y.Intl.get&#x60; to use the language bundles produced by
+&#x60;locator-lang&#x60; plugin, and will be available thru locator&#x27;s bundle
+objects on the server side. You can apply this patch like this:
 
+    app.yui.patchServer(require(&#x27;express-yui/lib/patches/server-intl-get&#x27;));
 
+Then you can use this in your program:
 
-<div class="box intro">
-    <p>Provides a set of features to mutate the express app into an origin server for yui
-modules and static assets.</p>
+    Y.Intl.get(&#x27;foo&#x27;);
 
-</div>
+This will resolve &#x60;foo&#x60; as a language bundle from the default locator
+bundle, which is normally a file in &#x60;lang/foo.json&#x60; or &#x60;lang/foo.yrb&#x60;
+that was transpiled into a module by &#x60;locator-lang&#x60;.
 
+@module express-yui/lib/patches/server-intl-get
+**/
+module.exports = function patchIntlGet(Y) {
+    // monkey patching Y.Intl
+    var locator = this._app.get(&#x27;locator&#x27;),
+        // looking in the root bundle (hermes has only one bundle)
+        // that&#x27;s the most common use-case where the app bundle holds all lang bundles
+        rootBundle = locator.getRootBundle(),
+        originalInltGet = Y.use(&#x27;intl&#x27;).Intl.get;
 
+    Y.Intl.get = function (name, key, lang) {
+        var pos = name.indexOf(&#x27;/&#x27;),
+            bundleName,
+            bundle,
+            langBundle = name;
 
-<div class="yui3-g">
-    <div class="yui3-u-1-2">
-        
-            <p>This module provides the following classes:</p>
+        function output(entries) {
+            // returning a specific key or all entries (todo: should be make a copy?)
+            return (key ? entries[key] : entries);
+        }
 
-            <ul class="module-classes">
-            
-                <li class="module-class">
-                    <a href="../classes/origin.html">
-                        origin
-                    </a>
-                </li>
-            
-            </ul>
-        
-    </div>
+        if (pos &gt; 0) {
+            bundleName = name.slice(0, pos);
+            langBundle = name.slice(pos + 1, name.length);
+        }
+        bundle = bundleName ? locator.getBundle(bundleName) : rootBundle;
+        if (bundle.lang &amp;&amp; bundle.lang[lang] &amp;&amp; bundle.lang[lang][langBundle]) {
+            return output(bundle.lang[lang][langBundle]);
+        }
+        // if the lang bundle is not in the specified bundle, look for a global/root lang bundle
+        if (bundle !== rootBundle &amp;&amp; rootBundle.lang &amp;&amp; rootBundle.lang[lang] &amp;&amp; rootBundle.lang[lang][name]) {
+            return output(rootBundle.lang[lang][name]);
+        }
 
-    <div class="yui3-u-1-2">
-        
-    </div>
+        // fallbacking back to the original implementation
+        return originalInltGet.apply(this, arguments);
+    };
+};
+
+    </pre>
 </div>
 
                     </div>

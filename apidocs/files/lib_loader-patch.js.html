@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>express-yui/lib/origin - express-yui API documentation</title>
+    <title>lib/loader-patch.js - express-yui API documentation</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -126,51 +126,93 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>express-yui_lib_origin Module</h1>
-<div class="box clearfix meta">
-    
+                        <h1 class="file-heading">File: lib/loader-patch.js</h1>
 
-    
+<div class="file">
+    <pre class="code prettyprint linenums">
+/*
+ * Copyright (c) 2013, Yahoo! Inc.  All rights reserved.
+ * Copyrights licensed under the New BSD License.
+ * See the accompanying LICENSE file for terms.
+ */
 
-    
-        <div class="foundat">
-            Defined in: <a href="../files/lib_origin.js.html#l22"><code>lib&#x2F;origin.js:22</code></a>
-        </div>
-    
+/*jslint node:true, nomen: true */
 
-    
-</div>
+/**
+Provides hooks to patch the YUI loader on both the server and/or client.
+@module express-yui/lib/loader-patches
+**/
 
+&#x27;use strict&#x27;;
 
+/**
+Provides hooks to patch the YUI loader on both the server and/or client.
+It will facilitate try new things and patches without requiring to wait
+for YUI to be released. Here is an example:
 
-<div class="box intro">
-    <p>Provides a set of features to mutate the express app into an origin server for yui
-modules and static assets.</p>
+    app.yui.patch(require(&#x27;express-yui/lib/patches/optional-requires&#x27;));
 
-</div>
+In the example above, one of the default patches shipped with with
+&#x60;express-yui&#x60;, is executed on the server and client to patch the
+YUI Loader to support a new type of metadata called &#x60;optionalRequires&#x60;,
+which provides an easy way to define requirements for a module that are
+not avialable in all runtimes.
 
+@class loader-patch
+@static
+@extensionfor express-yui/lib/yui
+*/
+module.exports = {
 
+    /**
+    Adds patches that will be applied to the YUI instance
+    before the initial &#x60;use&#x60; statement on the client side.
 
-<div class="yui3-g">
-    <div class="yui3-u-1-2">
-        
-            <p>This module provides the following classes:</p>
+        app.yui.patchClient(require(&#x27;express-yui/lib/patches/templates-requires&#x27;));
 
-            <ul class="module-classes">
-            
-                <li class="module-class">
-                    <a href="../classes/origin.html">
-                        origin
-                    </a>
-                </li>
-            
-            </ul>
-        
-    </div>
+    @method patchClient
+    @public
+    @param {Function*} patch Each argument represent a patch to be applied to the client runtime
+    **/
+    patchClient: function () {
+        var patches = this.config().patches;
+        patches.push.apply(patches, arguments);
+    },
 
-    <div class="yui3-u-1-2">
-        
-    </div>
+    /**
+    Adds patches that will be applied to the YUI instance
+    before the initial &#x60;use&#x60; statement on the server side.
+
+        app.yui.patchServer(require(&#x27;express-yui/lib/patches/server-template-get&#x27;));
+
+    @method patchServer
+    @public
+    @param {Function*} patch Each argument represent a patch to be applied to the server runtime
+    **/
+    patchServer: function () {
+        var patches = this._patches;
+        patches.push.apply(patches, arguments);
+    },
+
+    /**
+    Adds patches that will be applied to the YUI instance
+    before the initial &#x60;use&#x60; statement on the server side and client.
+    Here is an example of how to use this:
+
+        app.yui.patch(require(&#x27;express-yui/lib/patches/optional-requires&#x27;));
+
+    @method patch
+    @public
+    @param {Function*} patch Each argument represent a patch to be applied
+    **/
+    patch: function () {
+        this.patchClient.apply(this, arguments);
+        this.patchServer.apply(this, arguments);
+    }
+
+};
+
+    </pre>
 </div>
 
                     </div>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>server - express-yui API documentation</title>
+    <title>loader-patch - express-yui API documentation</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -126,32 +126,21 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>server Class</h1>
+                        <h1>loader-patch Class</h1>
 <div class="box meta">
-    
-        <div class="uses">
-            Uses
-            <ul class="inline commas">
-                
-                    <li><a href="*path.html">*path</a></li>
-                
-                    <li><a href="utils.html">utils</a></li>
-                
-            </ul>
-        </div>
     
 
     
 
     
         <div class="foundat">
-            Defined in: <a href="../files/lib_server.js.html#l22"><code>lib&#x2F;server.js:22</code></a>
+            Defined in: <a href="../files/lib_loader-patch.js.html#l16"><code>lib&#x2F;loader-patch.js:16</code></a>
         </div>
     
 
     
         
-            Module: <a href="../modules/express-yui_lib_server.html">express-yui/lib/server</a>
+            Module: <a href="../modules/express-yui_lib_loader-patches.html">express-yui/lib/loader-patches</a>
         
     
 
@@ -161,7 +150,15 @@
 
 
 <div class="box intro">
-    <p>Provides a set of features to control a YUI instance on the server side.</p>
+    <p>Provides hooks to patch the YUI loader on both the server and/or client.
+It will facilitate try new things and patches without requiring to wait
+for YUI to be released. Here is an example:</p>
+<pre class="code prettyprint"><code>app.yui.patch(require(&#39;express-yui/lib/patches/optional-requires&#39;));</code></pre>
+<p>In the example above, one of the default patches shipped with with
+<code>express-yui</code>, is executed on the server and client to patch the
+YUI Loader to support a new type of metadata called <code>optionalRequires</code>,
+which provides an easy way to define requirements for a module that are
+not avialable in all runtimes.</p>
 
 </div>
 
@@ -190,21 +187,21 @@
                     <ul class="index-list methods">
                         
                             <li class="index-item method public">
-                                <a href="#method_ready">ready</a>
+                                <a href="#method_patch">patch</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item method public">
-                                <a href="#method_registerBundle">registerBundle</a>
+                                <a href="#method_patchClient">patchClient</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item method public">
-                                <a href="#method_use">use</a>
+                                <a href="#method_patchServer">patchServer</a>
 
                                 
                                 
@@ -226,8 +223,8 @@
                 <h2 class="off-left">Methods</h2>
 
                 
-                    <div id="method_ready" class="method item public">
-    <h3 class="name"><code>ready</code></h3>
+                    <div id="method_patch" class="method item public">
+    <h3 class="name"><code>patch</code></h3>
 
     
         <div class="args">
@@ -235,7 +232,7 @@
             
                 <li class="arg">
                     
-                        <code>callback</code>
+                        <code>patch</code>
                     
                 </li>
             
@@ -270,7 +267,7 @@
             
         
         
-        <a href="../files/lib_server.js.html#l101"><code>lib&#x2F;server.js:101</code></a>
+        <a href="../files/lib_loader-patch.js.html#l65"><code>lib&#x2F;loader-patch.js:65</code></a>
         
         </p>
 
@@ -281,17 +278,10 @@
     </div>
 
     <div class="description">
-        <p>Waits for the app to be ready, including the YUI instance to notify back that the
-<code>ready</code> state of the app was reached by calling the <code>callback</code>. The ready state is
-bound to the locator instance mounted into the express app thru <code>app.set(&#39;locator&#39;, locator);</code>
-and depending on <code>app.get(&#39;locator&#39;).ready.then()</code> promise result, the ready state
-will be reached or not.</p>
-<pre class="code prettyprint"><code>app.yui.ready(function (err) {
-    if (err) {
-        throw err;
-    }
-    // do something!
-});</code></pre>
+        <p>Adds patches that will be applied to the YUI instance
+before the initial <code>use</code> statement on the server side and client.
+Here is an example of how to use this:</p>
+<pre class="code prettyprint"><code>app.yui.patch(require(&#39;express-yui/lib/patches/optional-requires&#39;));</code></pre>
 
     </div>
 
@@ -303,15 +293,14 @@ will be reached or not.</p>
             
                 <li class="param">
                     
-                        <code class="param-name">callback</code>
+                        <code class="param-name">patch</code>
                         <span class="type">Function</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>when the app is ready. If an error occurr, the error object
-                    will be passed as the first argument of the callback function.</p>
+                        <p>Each argument represent a patch to be applied</p>
 
                     </div>
 
@@ -328,8 +317,8 @@ will be reached or not.</p>
 </div>
 
                 
-                    <div id="method_registerBundle" class="method item public">
-    <h3 class="name"><code>registerBundle</code></h3>
+                    <div id="method_patchClient" class="method item public">
+    <h3 class="name"><code>patchClient</code></h3>
 
     
         <div class="args">
@@ -337,7 +326,7 @@ will be reached or not.</p>
             
                 <li class="arg">
                     
-                        <code>bundle</code>
+                        <code>patch</code>
                     
                 </li>
             
@@ -358,8 +347,6 @@ will be reached or not.</p>
     
 
     
-        <span class="flag chainable">chainable</span>
-    
 
     
 
@@ -374,7 +361,7 @@ will be reached or not.</p>
             
         
         
-        <a href="../files/lib_server.js.html#l32"><code>lib&#x2F;server.js:32</code></a>
+        <a href="../files/lib_loader-patch.js.html#l35"><code>lib&#x2F;loader-patch.js:35</code></a>
         
         </p>
 
@@ -385,8 +372,9 @@ will be reached or not.</p>
     </div>
 
     <div class="description">
-        <p>Create a synthetic group off the bundle renference to register its modules
-into the server and/or client Y instance so they can be used thru <code>app.yui.use()</code>.</p>
+        <p>Adds patches that will be applied to the YUI instance
+before the initial <code>use</code> statement on the client side.</p>
+<pre class="code prettyprint"><code>app.yui.patchClient(require(&#39;express-yui/lib/patches/templates-requires&#39;));</code></pre>
 
     </div>
 
@@ -398,14 +386,14 @@ into the server and/or client Y instance so they can be used thru <code>app.yui.
             
                 <li class="param">
                     
-                        <code class="param-name">bundle</code>
-                        <span class="type">Object</span>
+                        <code class="param-name">patch</code>
+                        <span class="type">Function</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>A locator bundle reference.</p>
+                        <p>Each argument represent a patch to be applied to the client runtime</p>
 
                     </div>
 
@@ -422,17 +410,23 @@ into the server and/or client Y instance so they can be used thru <code>app.yui.
 </div>
 
                 
-                    <div id="method_use" class="method item public">
-    <h3 class="name"><code>use</code></h3>
+                    <div id="method_patchServer" class="method item public">
+    <h3 class="name"><code>patchServer</code></h3>
 
     
-        <span class="paren">()</span>
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>patch</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
     
 
-    
-        <span class="returns-inline">
-            <span class="type">Object</span>
-        </span>
     
 
     
@@ -460,7 +454,7 @@ into the server and/or client Y instance so they can be used thru <code>app.yui.
             
         
         
-        <a href="../files/lib_server.js.html#l148"><code>lib&#x2F;server.js:148</code></a>
+        <a href="../files/lib_loader-patch.js.html#l50"><code>lib&#x2F;loader-patch.js:50</code></a>
         
         </p>
 
@@ -471,36 +465,38 @@ into the server and/or client Y instance so they can be used thru <code>app.yui.
     </div>
 
     <div class="description">
-        <p>Creates a YUI Instance, and wraps the call to <code>Y.use()</code> to work appropiatly on
-the server side. The <code>use</code> method can be called once the <code>ready</code> state is achieved
-thru <code>app.yui.ready()</code>.</p>
-<pre class="code prettyprint"><code>app.yui.ready(function (err) {
-    if (err) {
-        throw err;
-    }
-    app.yui.use(&#39;json-stringify&#39;, function (Y) {
-        Y.JSON.stringify({ entry: &#39;value&#39; });
-    });
-});</code></pre>
+        <p>Adds patches that will be applied to the YUI instance
+before the initial <code>use</code> statement on the server side.</p>
+<pre class="code prettyprint"><code>app.yui.patchServer(require(&#39;express-yui/lib/patches/server-template-get&#39;));</code></pre>
 
     </div>
 
     
+        <div class="params">
+            <h4>Parameters:</h4>
 
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
+            <ul class="params-list">
+            
+                <li class="param">
                     
-                        <span class="type">Object</span>:
+                        <code class="param-name">patch</code>
+                        <span class="type">Function</span>
                     
-                    <p>Y instance</p>
 
-                
-            </div>
+                    
+
+                    <div class="param-description">
+                        <p>Each argument represent a patch to be applied to the server runtime</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
         </div>
+    
+
     
 
     

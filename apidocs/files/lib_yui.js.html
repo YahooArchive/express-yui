@@ -45,6 +45,8 @@
             
                 <li><a href="../classes/ExpressYUI.html">ExpressYUI</a></li>
             
+                <li><a href="../classes/loader-patch.html">loader-patch</a></li>
+            
                 <li><a href="../classes/middleware.html">middleware</a></li>
             
                 <li><a href="../classes/origin.html">origin</a></li>
@@ -65,9 +67,21 @@
             
                 <li><a href="../modules/express-yui_lib_client.html">express-yui/lib/client</a></li>
             
+                <li><a href="../modules/express-yui_lib_loader-patches.html">express-yui/lib/loader-patches</a></li>
+            
                 <li><a href="../modules/express-yui_lib_middleware.html">express-yui/lib/middleware</a></li>
             
                 <li><a href="../modules/express-yui_lib_origin.html">express-yui/lib/origin</a></li>
+            
+                <li><a href="../modules/express-yui_lib_patches_lang-bundles-requires.html">express-yui/lib/patches/lang-bundles-requires</a></li>
+            
+                <li><a href="../modules/express-yui_lib_patches_optional-requires.html">express-yui/lib/patches/optional-requires</a></li>
+            
+                <li><a href="../modules/express-yui_lib_patches_server-intl-get.html">express-yui/lib/patches/server-intl-get</a></li>
+            
+                <li><a href="../modules/express-yui_lib_patches_server-template-get.html">express-yui/lib/patches/server-template-get</a></li>
+            
+                <li><a href="../modules/express-yui_lib_patches_templates-bundles-requires.html">express-yui/lib/patches/templates-bundles-requires</a></li>
             
                 <li><a href="../modules/express-yui_lib_seed.html">express-yui/lib/seed</a></li>
             
@@ -136,10 +150,12 @@ var // sub-modules
     seed    = require(&#x27;./seed&#x27;),
     origin  = require(&#x27;./origin&#x27;),
     server  = require(&#x27;./server&#x27;),
+    patch   = require(&#x27;./loader-patch&#x27;),
 
     // utilities
     utils = require(&#x27;./utils&#x27;),
     debug = require(&#x27;debug&#x27;)(&#x27;express:yui&#x27;);
+
 
 /**
 The &#x60;express-yui/lib/yui&#x60; exports the class used to create the &#x60;app.yui&#x60;
@@ -217,6 +233,12 @@ function YUIClass(app) {
     app.set(&#x27;yui combo config&#x27;, app.get(&#x27;yui combo config&#x27;) || utils.DEFAULT_COMBO_CONFIG);
     // assuming default CDN
     this.setCoreFromCDN();
+
+    // Default clientside patches
+    this._config.patches = [];
+
+    // Default serverside patches
+    this._patches = [];
 }
 
 YUIClass.prototype = {
@@ -293,6 +315,7 @@ YUIClass.prototype = {
             comboSep: &quot;&amp;&quot;,
             root: version + &quot;/&quot;,
             filter: (utils.debugMode ? &#x27;debug&#x27; : &#x27;min&#x27;),
+            logLevel: (utils.debugMode ? &#x27;warn&#x27; : &#x27;error&#x27;),
             combine: !utils.debugMode
         }, loaderConfig);
 
@@ -302,7 +325,7 @@ YUIClass.prototype = {
 
 };
 
-utils.extend(YUIClass.prototype, seed, origin, server);
+utils.extend(YUIClass.prototype, seed, origin, server, patch);
 
 module.exports = YUIClass;
 

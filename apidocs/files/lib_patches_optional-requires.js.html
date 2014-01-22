@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>express-yui/lib/origin - express-yui API documentation</title>
+    <title>lib/patches/optional-requires.js - express-yui API documentation</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -126,51 +126,60 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>express-yui_lib_origin Module</h1>
-<div class="box clearfix meta">
-    
+                        <h1 class="file-heading">File: lib/patches/optional-requires.js</h1>
 
-    
+<div class="file">
+    <pre class="code prettyprint linenums">
+/*
+ * Copyright (c) 2013, Yahoo! Inc.  All rights reserved.
+ * Copyrights licensed under the New BSD License.
+ * See the accompanying LICENSE file for terms.
+ */
 
-    
-        <div class="foundat">
-            Defined in: <a href="../files/lib_origin.js.html#l22"><code>lib&#x2F;origin.js:22</code></a>
-        </div>
-    
+/*jslint node:true, nomen: true */
 
-    
-</div>
+/**
+Patches &#x60;Y.Loader&#x60; to support &#x60;optionalRequires&#x60;, which enables you to
+require modules that might not be available in a runtime, and avoid to
+throw when that happens.
 
+This helps when it comes to define modules that are only available on
+the server or client, while other modules that are common can require
+them as optionals.
 
+    app.yui.patch(require(&#x27;express-yui/lib/patches/optional-requires&#x27;));
 
-<div class="box intro">
-    <p>Provides a set of features to mutate the express app into an origin server for yui
-modules and static assets.</p>
+Note that the &#x60;optional&#x60; implementation in YUI does not cover this case,
+and it only covers the case where the module was required or not by another
+module in the &#x60;use&#x60; statement, which is not quite the same.
 
-</div>
+@module express-yui/lib/patches/optional-requires
+**/
+module.exports = function (Y) {
+    var getRequires = Y.Env._loader.getRequires;
+    Y.Env._loader.getRequires = function (mod) {
+        var i, m;
+        if (!mod) {
+            return [];
+        }
+        if (mod._parsed) {
+            return mod.expanded || [];
+        }
+        mod.requires = mod.requires || [];
+        // expanding requirements with optional requires
+        if (mod.optionalRequires) {
+            for (i = 0; i &lt; mod.optionalRequires.length; i += 1) {
+                m = this.getModule(mod.optionalRequires[i]);
+                if (m) {
+                    mod.requires.push(m.name);
+                }
+            }
+        }
+        return getRequires.apply(this, arguments);
+    };
+};
 
-
-
-<div class="yui3-g">
-    <div class="yui3-u-1-2">
-        
-            <p>This module provides the following classes:</p>
-
-            <ul class="module-classes">
-            
-                <li class="module-class">
-                    <a href="../classes/origin.html">
-                        origin
-                    </a>
-                </li>
-            
-            </ul>
-        
-    </div>
-
-    <div class="yui3-u-1-2">
-        
-    </div>
+    </pre>
 </div>
 
                     </div>
