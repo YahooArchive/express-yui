@@ -8,6 +8,9 @@ Express YUI Change History
     * `app.yui.patchServer([...])` for patching the server instance
     * `app.yui.patchClient([...])` for patching the client instance
     * `app.yui.patch([...])` for patching both the client and server instances
+* add default `logLevel` to be `warn` by default to avoid
+the masive amount of logs from yui core modules.
+
 
 1.0.1 (2013-12-04)
 ------------------

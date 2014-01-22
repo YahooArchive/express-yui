@@ -129,6 +129,7 @@ suite.add(new YUITest.TestCase({
             "comboSep": "&",
             "root": "3.9/",
             "filter": c.filter,
+            "logLevel": c.logLevel,
             "combine": c.combine,
             "foo": "bar"
         }, c, 'wrong loader config');
