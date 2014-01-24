@@ -12,7 +12,7 @@
         "npm" : ">=1.2.10"
     },
     "dependencies": {
-        "express-state": "~1.0.1",
+        "express-state": "~1.1.0",
         "debug": "*"
     },
     "peerDependencies": {
