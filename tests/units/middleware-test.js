@@ -62,9 +62,25 @@ suite.add(new YUITest.TestCase({
 
     "test exposeSeed": function () {
         var mid,
-            req = { app: { yui: { } } },
-            res = { locals: { } },
+            config,
+            req,
+            res,
             nextCalled = false;
+
+        config = {
+            root: '/foo/bar',
+            extendedCore: [ 'my-module' ]
+        };
+
+        Object.defineProperty(config, '__modified__', {
+            writable: true,
+            value   : true
+        });
+
+        req = { app: { yui: { config: function () {
+            return config;
+        } } } };
+        res = { locals: { yui: { } } };
 
         YUITest.Mock.expect(req.app.yui, {
             method: 'getSeedUrls',
@@ -74,9 +90,9 @@ suite.add(new YUITest.TestCase({
             }
         });
 
-        YUITest.Mock.expect(res, {
+        YUITest.Mock.expect(req.app, {
             method: 'expose',
-            args: [YUITest.Mock.Value.Any, 'window.YUI_config.seed'],
+            args: [YUITest.Mock.Value.Any, 'window.YUI_config.seed', YUITest.Mock.Value.Object],
             run: function (seed) {
                 // [ 'url1',
                 //      'url2' ]
@@ -110,10 +126,17 @@ suite.add(new YUITest.TestCase({
             configFn,
             mid,
             called = false,
-            config = {
-                root: '/foo/bar',
-                extendedCore: [ 'my-module' ]
-            };
+            config;
+
+        config = {
+            root: '/foo/bar',
+            extendedCore: [ 'my-module' ]
+        };
+
+        Object.defineProperty(config, '__modified__', {
+            writable: true,
+            value   : true
+        });
 
         fixture = '(function(){YUI.Env.core.push.apply(YUI.Env.core,["my-module"]);YUI.applyConfig({"root":"/foo/bar","extendedCore":["my-module"]});}())';
         req = { app: { yui: { config: function () {
@@ -121,13 +144,13 @@ suite.add(new YUITest.TestCase({
         } } } };
         res = { locals: { yui: { } } };
 
-        YUITest.Mock.expect(res, {
+        YUITest.Mock.expect(req.app, {
             method: 'expose',
-            args: [YUITest.Mock.Value.Object, YUITest.Mock.Value.String],
+            args: [YUITest.Mock.Value.Object, YUITest.Mock.Value.String, YUITest.Mock.Value.Object],
             callCount: 2,
             run: function (data, ns) {
                 if (ns === 'window.YUI_config') {
-                    console.log(data);
+                    // console.log(data);
                     A.areEqual(config, data, 'exposed data should');
                 } else {
                     A.areEqual('window.app.yui', ns, 'exposed data should');
