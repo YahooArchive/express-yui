@@ -72,11 +72,6 @@ suite.add(new YUITest.TestCase({
             extendedCore: [ 'my-module' ]
         };
 
-        Object.defineProperty(config, '__modified__', {
-            writable: true,
-            value   : true
-        });
-
         req = { app: { yui: { config: function () {
             return config;
         } } } };
@@ -132,11 +127,6 @@ suite.add(new YUITest.TestCase({
             root: '/foo/bar',
             extendedCore: [ 'my-module' ]
         };
-
-        Object.defineProperty(config, '__modified__', {
-            writable: true,
-            value   : true
-        });
 
         fixture = '(function(){YUI.Env.core.push.apply(YUI.Env.core,["my-module"]);YUI.applyConfig({"root":"/foo/bar","extendedCore":["my-module"]});}())';
         req = { app: { yui: { config: function () {

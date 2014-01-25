@@ -60,11 +60,6 @@ suite.add(new YUITest.TestCase({
                 bar: 2
             };
 
-        Object.defineProperty(c, '__modified__', {
-            writable: true,
-            value   : true
-        });
-
         // setting up the basic config
         origin._app.set('yui default base', '/static/');
         origin._app.set('yui default root', '/static/');
@@ -96,11 +91,6 @@ suite.add(new YUITest.TestCase({
             c = {
                 foo: 1
             };
-
-        Object.defineProperty(c, '__modified__', {
-            writable: true,
-            value   : true
-        });
 
         origin.config = function () { return c; };
 
