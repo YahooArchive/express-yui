@@ -127,7 +127,6 @@ suite.add(new YUITest.TestCase({
             callCount: 2,
             run: function (data, ns) {
                 if (ns === 'window.YUI_config') {
-                    console.log(data);
                     A.areEqual(config, data, 'exposed data should');
                 } else {
                     A.areEqual('window.app.yui', ns, 'exposed data should');
