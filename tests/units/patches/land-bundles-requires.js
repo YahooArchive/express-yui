@@ -10,12 +10,12 @@
 
 var YUITest = require('yuitest'),
     Assert  = YUITest.Assert,
-    patch   = require('../../lib/patches/lang-bundles-requires.js'),
+    patch   = require('../../../lib/patches/lang-bundles-requires.js'),
     Y,
     loader,
     suite;
 
-suite = new YUITest.TestSuite('patches: lang-bundles-requires test suite');
+suite = new YUITest.TestSuite('patches/lang-bundles-requires test suite');
 
 suite.add(new YUITest.TestCase({
     name: 'Y.config.lang tests',
