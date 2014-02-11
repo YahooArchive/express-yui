@@ -4,6 +4,15 @@ Express YUI Change History
 @NEXT@
 ------------------
 
+1.1.1 (2014-02-11)
+------------------
+
+* `patches` does not rely on `locator` info anymore, yui modules instead.
+* remove the server `Y.Template.get` patch
+* server and client feature parity for all patches that are common
+* adding cache layer for all patches (e.g.: `mod.templatesExpanded`)
+* normalizing patches to receive `Y` and `loader` in case the patch requires to run before the loader gets ready.
+
 1.1.0 (2014-01-21)
 ------------------
 
