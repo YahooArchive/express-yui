@@ -20,7 +20,6 @@ YUI.add("yuidoc-meta", function(Y) {
         "express-yui_lib_patches_lang-bundles-requires",
         "express-yui_lib_patches_optional-requires",
         "express-yui_lib_patches_server-intl-get",
-        "express-yui_lib_patches_server-template-get",
         "express-yui_lib_patches_templates-requires",
         "express-yui_lib_seed",
         "express-yui_lib_server",
@@ -61,17 +60,12 @@ YUI.add("yuidoc-meta", function(Y) {
         {
             "displayName": "express-yui/lib/patches/optional-requires",
             "name": "express-yui_lib_patches_optional-requires",
-            "description": "Patches `Y.Loader` to support `optionalRequires`, which enables you to\nrequire modules that might not be available in a runtime, and avoid to\nthrow when that happens.\n\nThis helps when it comes to define modules that are only available on\nthe server or client, while other modules that are common can require\nthem as optionals.\n\n    app.yui.patch(require('express-yui/lib/patches/optional-requires'));\n\nNote that the `optional` implementation in YUI does not cover this case,\nand it only covers the case where the module was required or not by another\nmodule in the `use` statement, which is not quite the same."
+            "description": "Patches `Y.Loader` to support `optionalRequires`, which enables you to\nrequire modules that might not be available in a runtime, and avoid to\nthrow when that happens.\n\n!IMPORTANT/TODO: this patch can be removed once we get [PR1629][] merged\ninto YUI.\n[PR1629]: https://github.com/yui/yui3/pull/1629\n\nIt also add support for modules that are essencially polyfills,\nthis means that some modules can only be used if the test is passed first\notherwise they should be ignored.\n\nThis helps when it comes to define modules that are only available on\nthe server or client, or polyfills, while other modules that are common can require\nthem as optionals.\n\n    app.yui.patch(require('express-yui/lib/patches/optional-requires'));\n\nWhen this patch is applied, you can add a new entry called `test` in the\nmetas for a module, this entry is a functions. If the test fails, the module\nwill be automatically discarded.\n\nNote that the `optional` implementation in YUI does not cover this case,\nand it only covers the case where the module was required or not by another\nmodule in the `use` statement, which is not quite the same."
         },
         {
             "displayName": "express-yui/lib/patches/server-intl-get",
             "name": "express-yui_lib_patches_server-intl-get",
-            "description": "Patches `Y.Intl.get` to use the language bundles produced by\n`locator-lang` plugin, and will be available thru locator's bundle\nobjects on the server side. You can apply this patch like this:\n\n    app.yui.patchServer(require('express-yui/lib/patches/server-intl-get'));\n\nThen you can use this in your program:\n\n    Y.Intl.get('foo');\n\nThis will resolve `foo` as a language bundle from the default locator\nbundle, which is normally a file in `lang/foo.json` or `lang/foo.yrb`\nthat was transpiled into a module by `locator-lang`."
-        },
-        {
-            "displayName": "express-yui/lib/patches/server-template-get",
-            "name": "express-yui_lib_patches_server-template-get",
-            "description": "Patches `Y.Template.get` to use the templates produced by\n`locator-handlebars` or any other similar plugin, and will be available\nthru locator's bundle objects on the server side.\n\n    app.yui.patchServer(require('express-yui/lib/patches/server-template-get'));\n\nThen you can use this in your program:\n\n    Y.Template.get('foo');\n\nThis will resolve `foo` as a template from the default locator\nbundle, which is normally a file in `templates/foo.handlebars` or any other template\nengine that is available, and that it was transpiled into a module by `locator-handlebars`."
+            "description": "Patches `Y.Intl.get` to use the language bundles produced by\n`locator-lang` plugin, and will be available thru locator's bundle\nobjects on the server side. You can apply this patch like this:\n\n    app.yui.patchServer(require('express-yui/lib/patches/server-intl-get'));\n\nThen you can use this in your program:\n\n    Y.Intl.get('<bundleName>/foo');\n\nThis will resolve `foo` as a language bundle from the bundle specified by name,\nwhich is normally a file in `lang/foo.json` or `lang/foo.yrb`\nthat was transpiled into a module by `locator-lang`."
         },
         {
             "displayName": "express-yui/lib/patches/templates-requires",

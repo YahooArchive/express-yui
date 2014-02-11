@@ -79,8 +79,6 @@
             
                 <li><a href="../modules/express-yui_lib_patches_server-intl-get.html">express-yui/lib/patches/server-intl-get</a></li>
             
-                <li><a href="../modules/express-yui_lib_patches_server-template-get.html">express-yui/lib/patches/server-template-get</a></li>
-            
                 <li><a href="../modules/express-yui_lib_patches_templates-requires.html">express-yui/lib/patches/templates-requires</a></li>
             
                 <li><a href="../modules/express-yui_lib_seed.html">express-yui/lib/seed</a></li>
@@ -147,47 +145,29 @@ objects on the server side. You can apply this patch like this:
 
 Then you can use this in your program:
 
-    Y.Intl.get(&#x27;foo&#x27;);
+    Y.Intl.get(&#x27;&lt;bundleName&gt;/foo&#x27;);
 
-This will resolve &#x60;foo&#x60; as a language bundle from the default locator
-bundle, which is normally a file in &#x60;lang/foo.json&#x60; or &#x60;lang/foo.yrb&#x60;
+This will resolve &#x60;foo&#x60; as a language bundle from the bundle specified by name,
+which is normally a file in &#x60;lang/foo.json&#x60; or &#x60;lang/foo.yrb&#x60;
 that was transpiled into a module by &#x60;locator-lang&#x60;.
 
 @module express-yui/lib/patches/server-intl-get
 **/
-module.exports = function patchIntlGet(Y) {
-    // monkey patching Y.Intl
-    var locator = this._app.get(&#x27;locator&#x27;),
-        // looking in the root bundle (hermes has only one bundle)
-        // that&#x27;s the most common use-case where the app bundle holds all lang bundles
-        rootBundle = locator.getRootBundle(),
-        originalInltGet = Y.use(&#x27;intl&#x27;).Intl.get;
-
+module.exports = function patchIntlGet(Y, loader) {
+    // monkey patching Y.Intl.get
+    var originalInltGet = Y.use(&#x27;intl&#x27;).Intl.get,
+        checked = {}; // internal hash for perf reasons since &#x60;loader.getModule()&#x60; might be expensive
     Y.Intl.get = function (name, key, lang) {
-        var pos = name.indexOf(&#x27;/&#x27;),
-            bundleName,
-            bundle,
-            langBundle = name;
-
-        function output(entries) {
-            // returning a specific key or all entries (todo: should be make a copy?)
-            return (key ? entries[key] : entries);
+        var modName, i,
+            locales = (typeof lang === &#x27;string&#x27; ? [lang] : (lang || [])).concat();
+        for (i = 0; i &lt; locales.length; i += 1) {
+            // infering the name of the module from the lang bundle name
+            modName = name.replace(&#x27;/&#x27;, &#x27;-lang-&#x27;) + &#x27;_&#x27; + locales[i].toLowerCase();
+            if (!checked[modName] &amp;&amp; loader.getModule(modName)) {
+                Y.use(modName); // useSync should be set
+            }
+            checked[modName] = true;
         }
-
-        if (pos &gt; 0) {
-            bundleName = name.slice(0, pos);
-            langBundle = name.slice(pos + 1, name.length);
-        }
-        bundle = bundleName ? locator.getBundle(bundleName) : rootBundle;
-        if (bundle.lang &amp;&amp; bundle.lang[lang] &amp;&amp; bundle.lang[lang][langBundle]) {
-            return output(bundle.lang[lang][langBundle]);
-        }
-        // if the lang bundle is not in the specified bundle, look for a global/root lang bundle
-        if (bundle !== rootBundle &amp;&amp; rootBundle.lang &amp;&amp; rootBundle.lang[lang] &amp;&amp; rootBundle.lang[lang][name]) {
-            return output(rootBundle.lang[lang][name]);
-        }
-
-        // fallbacking back to the original implementation
         return originalInltGet.apply(this, arguments);
     };
 };
