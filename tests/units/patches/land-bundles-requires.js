@@ -151,6 +151,18 @@ suite.add(new YUITest.TestCase({
         });
         Assert.areEqual([ 'intl', 'all-lang-bar_fr-fr', 'original', 'extra'].join(','), r.join(','),
                 'fr-FR lang bundle should be picked');
+    },
+
+    'test simple langBundle with a mix array of langs': function () {
+        var p = patch(Y, loader);
+        Y.config.lang = ['fr-FR', 'cu-CU'];
+        var r = loader.getRequires({
+            name: 'foo',
+            group: 'all',
+            langBundles: ['bar']
+        });
+        Assert.areEqual([ 'intl', 'all-lang-bar_fr-fr', 'intl', 'all-lang-bar', 'original', 'extra'].join(','), r.join(','),
+                'fr-FR and default lang bundle should be picked due to the missing bundle in cu-CU');
     }
 
 }));
