@@ -4,6 +4,9 @@ Express YUI Change History
 @NEXT@
 ------------------
 
+1.1.2 (2014-02-13)
+------------------
+
 * default lang bundle should be used if a custom lang bundle is not available
 
 1.1.1 (2014-02-11)
