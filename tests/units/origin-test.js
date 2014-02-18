@@ -59,6 +59,7 @@ suite.add(new YUITest.TestCase({
             c = {
                 bar: 2
             };
+
         // setting up the basic config
         origin._app.set('yui default base', '/static/');
         origin._app.set('yui default root', '/static/');

@@ -4,6 +4,10 @@ Express YUI Change History
 @NEXT@
 ------------------
 
+* __[!]__ Leverage express-state's `cache` option to improve `expose()` performance.
+  If changes to the YUI configuration need to be made after the first request, the
+  app's YUI config now _must_ be re-exposed.
+
 1.1.2 (2014-02-13)
 ------------------
 
