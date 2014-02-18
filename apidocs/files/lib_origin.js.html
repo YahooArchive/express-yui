@@ -200,9 +200,7 @@ module.exports = {
             config = this.config(),
             yuiDir = &#x27;yui-&#x27; + this.version;
 
-        loaderConfig = loaderConfig || {};
-
-        loaderConfig = utils.extend(config, comboConfig, {
+        utils.extend(config, comboConfig, {
             base: utils.joinURLFolder(groupDefaultBase, yuiDir),
             root: utils.joinURLFolder(groupDefaultRoot, yuiDir)
         }, loaderConfig);

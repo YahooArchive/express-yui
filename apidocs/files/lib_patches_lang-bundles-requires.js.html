@@ -161,7 +161,7 @@ the &#x60;requires&#x60; list.
 module.exports = function patchLangBundlesRequires(Y, loader) {
     var getRequires = loader.getRequires;
     loader.getRequires = function (mod) {
-        var i, j, m, name, mods,
+        var i, j, m, name, mods, loadDefaultBundle,
             locales = Y.config.lang || [],
             r = getRequires.apply(this, arguments);
         // expanding requirements with optional requires
@@ -170,14 +170,19 @@ module.exports = function patchLangBundlesRequires(Y, loader) {
             locales = typeof locales === &#x27;string&#x27; ? [locales] : locales.concat();
             for (i = 0; i &lt; mod.langBundles.length; i += 1) {
                 mods = [];
+                loadDefaultBundle = false;
                 name = mod.group + &#x27;-lang-&#x27; + mod.langBundles[i];
                 for (j = 0; j &lt; locales.length; j += 1) {
                     m = this.getModule(name + &#x27;_&#x27; + locales[j].toLowerCase());
                     if (m) {
                         mods.push(m);
+                    } else {
+                        // if one of the requested locales is missing,
+                        // the default lang should be fetched
+                        loadDefaultBundle = true;
                     }
                 }
-                if (!mods.length) {
+                if (!mods.length || loadDefaultBundle) {
                     // falling back to the default lang bundle when needed
                     m = this.getModule(name);
                     if (m) {

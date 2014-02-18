@@ -137,7 +137,7 @@
 /*jslint node:true, nomen: true */
 
 /**
-Provides some basic features to expose yui configurations information thru &#x60;res.expose()&#x60;
+Provides some basic features to expose yui configurations information through &#x60;app.expose()&#x60;
 that could be used to boot &#x60;YUI&#x60; in the client runtime. It also provide some sugar to
 expose static assests that are YUI related.
 
@@ -160,7 +160,7 @@ Exports few middleware.
 module.exports = {
 
     /**
-    Exposes the yui configuration into &#x60;res.locals.state&#x60;. It also
+    Exposes the yui configuration into &#x60;app.locals.state&#x60;. It also
     exposes the &#x60;express-yui&#x60; wrapper for YUI on the client so you can
     access &#x60;app.yui.*&#x60; on the client side just like you do on the server
     side. The client wrapper includes &#x60;app.yui.ready()&#x60; and &#x60;app.yui.use()&#x60;
@@ -184,11 +184,11 @@ module.exports = {
             if (!yui_config &amp;&amp; req.app &amp;&amp; req.app.yui) {
                 // one time operation to compute the initial configuration
                 yui_config = configCache = req.app.yui.config();
-            }
 
-            // exposing the &#x60;YUI_config&#x60;
-            res.expose(yui_config, &#x27;window.YUI_config&#x27;);
-            res.expose(client, &#x27;window.app.yui&#x27;);
+                // exposing the &#x60;YUI_config&#x60;
+                req.app.expose(yui_config, &#x27;window.YUI_config&#x27;, {cache: true});
+                req.app.expose(client, &#x27;window.app.yui&#x27;, {cache: true});
+            }
 
             next();
 
@@ -197,7 +197,7 @@ module.exports = {
     },
 
     /**
-    Expose the seed information into &#x60;res.locals.state&#x60;. This seed is
+    Expose the seed information into &#x60;app.locals.state&#x60;. This seed is
     an array of urls based on the call to &#x60;app.yui.seed()&#x60;, which is
     going to be used by the client bootstrap code to inject YUI into
     the page.
@@ -210,17 +210,22 @@ module.exports = {
     **/
     exposeSeed: function () {
 
-        var seedCache;
+        var configCache,
+            seedCache;
 
         return function (req, res, next) {
 
-            var yui_seed = seedCache;
+            var yui_config = configCache,
+                yui_seed   = seedCache;
 
-            if (!yui_seed &amp;&amp; req.app &amp;&amp; req.app.yui) {
+            // if app.yui exists, we can expose the configuration
+            if (!(yui_config || yui_seed) &amp;&amp; req.app &amp;&amp; req.app.yui) {
+                // one time operation to compute the initial configuration and seed.
+                yui_config = configCache = req.app.yui.config();
                 yui_seed = seedCache = req.app.yui.getSeedUrls();
-            }
 
-            res.expose(yui_seed, &#x27;window.YUI_config.seed&#x27;);
+                req.app.expose(yui_seed, &#x27;window.YUI_config.seed&#x27;, {cache: true});
+            }
 
             next();
 
@@ -235,14 +240,14 @@ module.exports = {
         var express = require(&#x27;express&#x27;),
             expyui = require(&#x27;express-yui&#x27;),
             app = express();
-    
+
         expyui.extend(app);
 
         // using it for a mounted middleware for all requests
         app.use(expyui.expose());
 
-    In the example above, the &#x60;state&#x60; of the app will be serialized
-    per request, and can be used in the template to set up the client
+    In the example above, the &#x60;state&#x60; of the app will be serialized *once*, on
+    the first request, and can be used in the template to set up the client
     side to run YUI with the same configuration used on the server side.
     Here is an example of a handlebars template:
 
@@ -284,18 +289,16 @@ module.exports = {
     },
 
     /**
-    Forces a request to use yui in debug mode with combine disabled.
+    Forces a request to use yui in debug mode with combine disabled. This exposes
+    YUI configuration overrides per request on &#x60;res.locals.state&#x60; (which inherits
+    from &#x60;app.locals.state&#x60;.)
 
-        // exposing yui into the client side thru &#x60;state&#x60; object
+        // exposing yui into the client side through &#x60;state&#x60; object
         app.use(expyui.expose());
         // using yui in debug mode when node runs in debug mode with custom filter
         if (app.get(&#x27;env&#x27;) === &#x27;development&#x27;) {
             app.use(expyui.debug({filter: &#x27;raw&#x27;}));
         }
-
-    Note: the &#x60;expyui.debug()&#x60; middleware only works if it is called
-    after the regular &#x60;expyui.expose()&#x60; middleware was called, otherwise
-    it will not be able to overrule the default yui config for the app.
 
     More details about the yui debug mode settings
     [in the YUI API Docs](http://yuilibrary.com/yui/docs/api/classes/config.html).

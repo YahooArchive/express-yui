@@ -45,7 +45,7 @@ YUI.add("yuidoc-meta", function(Y) {
         {
             "displayName": "express-yui/lib/middleware",
             "name": "express-yui_lib_middleware",
-            "description": "Provides some basic features to expose yui configurations information thru `res.expose()`\nthat could be used to boot `YUI` in the client runtime. It also provide some sugar to\nexpose static assests that are YUI related."
+            "description": "Provides some basic features to expose yui configurations information through `app.expose()`\nthat could be used to boot `YUI` in the client runtime. It also provide some sugar to\nexpose static assests that are YUI related."
         },
         {
             "displayName": "express-yui/lib/origin",

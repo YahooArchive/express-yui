@@ -237,7 +237,7 @@
             "tag": "module",
             "file": "lib/middleware.js",
             "line": 22,
-            "description": "Provides some basic features to expose yui configurations information thru `res.expose()`\nthat could be used to boot `YUI` in the client runtime. It also provide some sugar to\nexpose static assests that are YUI related."
+            "description": "Provides some basic features to expose yui configurations information through `app.expose()`\nthat could be used to boot `YUI` in the client runtime. It also provide some sugar to\nexpose static assests that are YUI related."
         },
         "express-yui/lib/origin": {
             "name": "express-yui/lib/origin",
@@ -569,7 +569,7 @@
         },
         {
             "file": "lib/loader-patch.js",
-            "line": 50,
+            "line": 52,
             "description": "Adds patches that will be applied to the YUI instance\nbefore the initial `use` statement on the server side.\n\n    app.yui.patchServer(require('express-yui/lib/patches/server-intl-get'));",
             "itemtype": "method",
             "name": "patchServer",
@@ -587,7 +587,7 @@
         },
         {
             "file": "lib/loader-patch.js",
-            "line": 65,
+            "line": 67,
             "description": "Adds patches that will be applied to the YUI instance\nbefore the initial `use` statement on the server side and client.\nHere is an example of how to use this:\n\n    app.yui.patch(require('express-yui/lib/patches/optional-requires'));",
             "itemtype": "method",
             "name": "patch",
@@ -606,7 +606,7 @@
         {
             "file": "lib/middleware.js",
             "line": 32,
-            "description": "Exposes the yui configuration into `res.locals.state`. It also\nexposes the `express-yui` wrapper for YUI on the client so you can\naccess `app.yui.*` on the client side just like you do on the server\nside. The client wrapper includes `app.yui.ready()` and `app.yui.use()`\nwith the corresponding bootstraping code to inject YUI into the page.\nThis middleware will be invoked by `expyui.expose()` middleware\nautomatically, which means you do not need to call it directly.",
+            "description": "Exposes the yui configuration into `app.locals.state`. It also\nexposes the `express-yui` wrapper for YUI on the client so you can\naccess `app.yui.*` on the client side just like you do on the server\nside. The client wrapper includes `app.yui.ready()` and `app.yui.use()`\nwith the corresponding bootstraping code to inject YUI into the page.\nThis middleware will be invoked by `expyui.expose()` middleware\nautomatically, which means you do not need to call it directly.",
             "itemtype": "method",
             "name": "exposeConfig",
             "access": "protected",
@@ -621,7 +621,7 @@
         {
             "file": "lib/middleware.js",
             "line": 69,
-            "description": "Expose the seed information into `res.locals.state`. This seed is\nan array of urls based on the call to `app.yui.seed()`, which is\ngoing to be used by the client bootstrap code to inject YUI into\nthe page.\nThis middleware will be invoked by `expyui.expose()` middleware\nautomatically, which means you do not need to call it directly.",
+            "description": "Expose the seed information into `app.locals.state`. This seed is\nan array of urls based on the call to `app.yui.seed()`, which is\ngoing to be used by the client bootstrap code to inject YUI into\nthe page.\nThis middleware will be invoked by `expyui.expose()` middleware\nautomatically, which means you do not need to call it directly.",
             "itemtype": "method",
             "name": "exposeSeed",
             "access": "protected",
@@ -635,8 +635,8 @@
         },
         {
             "file": "lib/middleware.js",
-            "line": 101,
-            "description": "Exposes YUI into the client side. This middleware bundles\n`expyui.exposeConfig()` and `expyui.exposeSeed()` middleware.\n\n    var express = require('express'),\n        expyui = require('express-yui'),\n        app = express();\n\n    expyui.extend(app);\n\n    // using it for a mounted middleware for all requests\n    app.use(expyui.expose());\n\nIn the example above, the `state` of the app will be serialized\nper request, and can be used in the template to set up the client\nside to run YUI with the same configuration used on the server side.\nHere is an example of a handlebars template:\n\n    <script>\n    {{{state}}}\n    app.yui.use('node', function (Y) {\n        Y.one('#content').setContent('<p>Ready!</p>');\n    });\n    </script>",
+            "line": 106,
+            "description": "Exposes YUI into the client side. This middleware bundles\n`expyui.exposeConfig()` and `expyui.exposeSeed()` middleware.\n\n    var express = require('express'),\n        expyui = require('express-yui'),\n        app = express();\n\n    expyui.extend(app);\n\n    // using it for a mounted middleware for all requests\n    app.use(expyui.expose());\n\nIn the example above, the `state` of the app will be serialized *once*, on\nthe first request, and can be used in the template to set up the client\nside to run YUI with the same configuration used on the server side.\nHere is an example of a handlebars template:\n\n    <script>\n    {{{state}}}\n    app.yui.use('node', function (Y) {\n        Y.one('#content').setContent('<p>Ready!</p>');\n    });\n    </script>",
             "itemtype": "method",
             "name": "expose",
             "access": "public",
@@ -650,8 +650,8 @@
         },
         {
             "file": "lib/middleware.js",
-            "line": 156,
-            "description": "Forces a request to use yui in debug mode with combine disabled.\n\n    // exposing yui into the client side thru `state` object\n    app.use(expyui.expose());\n    // using yui in debug mode when node runs in debug mode with custom filter\n    if (app.get('env') === 'development') {\n        app.use(expyui.debug({filter: 'raw'}));\n    }\n\nNote: the `expyui.debug()` middleware only works if it is called\nafter the regular `expyui.expose()` middleware was called, otherwise\nit will not be able to overrule the default yui config for the app.\n\nMore details about the yui debug mode settings\n[in the YUI API Docs](http://yuilibrary.com/yui/docs/api/classes/config.html).",
+            "line": 161,
+            "description": "Forces a request to use yui in debug mode with combine disabled. This exposes\nYUI configuration overrides per request on `res.locals.state` (which inherits\nfrom `app.locals.state`.)\n\n    // exposing yui into the client side through `state` object\n    app.use(expyui.expose());\n    // using yui in debug mode when node runs in debug mode with custom filter\n    if (app.get('env') === 'development') {\n        app.use(expyui.debug({filter: 'raw'}));\n    }\n\nMore details about the yui debug mode settings\n[in the YUI API Docs](http://yuilibrary.com/yui/docs/api/classes/config.html).",
             "itemtype": "method",
             "name": "debug",
             "access": "public",
@@ -694,7 +694,7 @@
         },
         {
             "file": "lib/middleware.js",
-            "line": 206,
+            "line": 209,
             "description": "Serves YUI Modules as static assets. All registered groups and core will be\nserved from app origin.\n\n    app.use(expyui.static(__dirname + '/build'));\n\nThe example above behaves very similar to `express.static()` middleware, but\nit adds some sugar to also server YUI core modules as synthetic files, so you\ncan combine yui core modules with app specific modules for better performance.\nIf also adds some extra headers to avoid caching static files in a browser\nwhen nodejs is running in debug mode to facilitate development.",
             "itemtype": "method",
             "name": "static",
@@ -740,7 +740,7 @@
         },
         {
             "file": "lib/origin.js",
-            "line": 84,
+            "line": 82,
             "description": "Set a custom loader configuration for the group.\n\nHere is an example of how to use it.\n\n    app.yui.applyGroupConfig('app', {\n        maxURLLength: 2048,\n        comboBase: \"/combo?\"\n        comboSep: \"&\"\n    });",
             "itemtype": "method",
             "name": "applyGroupConfig",
@@ -764,7 +764,7 @@
         },
         {
             "file": "lib/origin.js",
-            "line": 117,
+            "line": 115,
             "description": "Register a group by defining the group configuration for the loader.\nGroups can be served from origin app or from CDN by calling `applyGroupConfig`\nor by setting `yui default base`, `yui default root` and `yui combo config` thru\n`app.set()`.\n\nHere is an example on how to use it, assuming that the YUI metadata are\nlocated in the `build` directory under the app root.\n\n    app.yui.registerGroup('app', __dirname + '/build', 'loader-app');",
             "itemtype": "method",
             "name": "registerGroup",
@@ -1172,7 +1172,7 @@
         },
         {
             "file": "lib/yui.js",
-            "line": 114,
+            "line": 115,
             "description": "Extends the static configuration with the supplier\nobject(s). You can use it like this:\n\n    // Disable CSS computations\n    app.yui.applyConfig({\n        fetchCSS: false\n    });",
             "itemtype": "method",
             "name": "applyConfig",
@@ -1191,7 +1191,7 @@
         },
         {
             "file": "lib/yui.js",
-            "line": 136,
+            "line": 137,
             "description": "Extends the static configuration with the supplier object(s)\nor returns the current static configuration reference. This\nconfiguration is static, and attached to the server object.\nOnce you call `yui.expose()` middleware for the first time,\nthis configuration becomes inmutable.",
             "itemtype": "method",
             "name": "config",
@@ -1213,7 +1213,7 @@
         },
         {
             "file": "lib/yui.js",
-            "line": 162,
+            "line": 163,
             "description": "Set up a default group in loader that represents the\ncore yui modules to be loaded from YUI CDN.\n\n    app.yui.setCoreFromCDN();",
             "itemtype": "method",
             "name": "setCoreFromCDN",

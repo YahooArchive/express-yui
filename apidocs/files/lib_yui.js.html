@@ -225,6 +225,7 @@ function YUIClass(app) {
     this._config = {
         version: this.version
     };
+
     // setting some basic values
     app.set(&#x27;yui default base&#x27;, app.get(&#x27;yui default base&#x27;) || &quot;/&quot;);
     app.set(&#x27;yui default root&#x27;, app.get(&#x27;yui default root&#x27;) || &quot;/&quot;);
@@ -283,7 +284,7 @@ YUIClass.prototype = {
         // Mix in current &#x60;arguments&#x60; into &#x60;this._config&#x60;
         if (args.length) {
             args.unshift(this._config);
-            utils.extend.apply(utils, args);
+            utils.extend.apply(null, args);
         }
 
         return this._config;
@@ -306,6 +307,8 @@ YUIClass.prototype = {
 
         var config = this.config(),
             version = this.version;
+
+        // TODO: This should mutate through an API.
 
         utils.extend(config, {
             base: &quot;http://yui.yahooapis.com/&quot; + version + &quot;/&quot;,
