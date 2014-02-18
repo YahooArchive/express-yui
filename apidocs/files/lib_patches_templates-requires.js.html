@@ -79,8 +79,6 @@
             
                 <li><a href="../modules/express-yui_lib_patches_server-intl-get.html">express-yui/lib/patches/server-intl-get</a></li>
             
-                <li><a href="../modules/express-yui_lib_patches_server-template-get.html">express-yui/lib/patches/server-template-get</a></li>
-            
                 <li><a href="../modules/express-yui_lib_patches_templates-requires.html">express-yui/lib/patches/templates-requires</a></li>
             
                 <li><a href="../modules/express-yui_lib_seed.html">express-yui/lib/seed</a></li>
@@ -160,27 +158,27 @@ have to use the full name of the generated module.
 
 @module express-yui/lib/patches/templates-requires
 **/
-module.exports = function (Y) {
-    var getRequires = Y.Env._loader.getRequires;
-    Y.Env._loader.getRequires = function (mod) {
-        var i, m;
-        if (!mod) {
-            return [];
-        }
-        if (mod._parsed) {
-            return mod.expanded || [];
-        }
-        mod.requires = mod.requires || [];
-        // expanding requirements with templates
-        if (mod.templates) {
-            for (i = 0; i &lt; mod.templates.length; i += 1) {
+module.exports = function patchTemplatesRequires(Y, loader) {
+    var getRequires = loader.getRequires;
+    loader.getRequires = function (mod) {
+        var i, len, m,
+            r = getRequires.apply(this, arguments);
+        // expanding requirements with templates required
+        if (mod.templates &amp;&amp; !mod.templatesExpanded) {
+            len = mod.templates.length;
+            mod.templatesExpanded = [];
+            for (i = 0; i &lt; len; i += 1) {
                 m = this.getModule(mod.group + &#x27;-template-&#x27; + mod.templates[i]);
                 if (m) {
-                    mod.requires.push(m.name);
+                    mod.templatesExpanded = mod.templatesExpanded.concat(this.getRequires(m), [m.name]);
+                } else {
+                    throw new Error(&#x27;Invalid template [&#x27; + mod.templates[i] + &#x27;], module [&#x27; +
+                            mod.group + &#x27;-template-&#x27; + mod.templates[i] + &#x27;] is not registered.&#x27;);
                 }
             }
         }
-        return getRequires.apply(this, arguments);
+        return mod.templatesExpanded &amp;&amp; mod.templatesExpanded.length ?
+                [].concat(mod.templatesExpanded, r) : r;
     };
 };
 

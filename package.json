@@ -1,7 +1,7 @@
 {
     "name": "express-yui",
     "description": "Express extension for YUI Applications",
-    "version": "1.1.0",
+    "version": "1.1.2",
     "homepage": "https://github.com/yahoo/express-yui",
     "author": "Caridy Patino <caridy@yahoo-inc.com> (http://github.com/caridy)",
     "contributors": [
@@ -55,9 +55,9 @@
         "url": "https://github.com/yahoo/express-yui/issues"
     },
     "scripts": {
-        "pretest": "jshint {lib,tests/units}/*.js",
-        "test": "node ./node_modules/ytestrunner/lib/cli.js -c --include tests/units/**/*.js",
-        "unit": "node ./node_modules/ytestrunner/lib/cli.js --include tests/units/**/*.js",
+        "pretest": "jshint --config ./node_modules/yui-lint/jshint.json ./lib/",
+        "test": "node ./node_modules/ytestrunner/lib/cli.js -c --include tests/units/**/**/*.js",
+        "unit": "node ./node_modules/ytestrunner/lib/cli.js --include tests/units/**/**/*.js",
         "lint": "jshint --config ./node_modules/yui-lint/jshint.json ./lib/",
         "docs": "node ./node_modules/.bin/yuidoc --config ./conf/yuidoc.json ./lib"
     }

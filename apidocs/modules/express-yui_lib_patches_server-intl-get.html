@@ -79,8 +79,6 @@
             
                 <li><a href="../modules/express-yui_lib_patches_server-intl-get.html">express-yui/lib/patches/server-intl-get</a></li>
             
-                <li><a href="../modules/express-yui_lib_patches_server-template-get.html">express-yui/lib/patches/server-template-get</a></li>
-            
                 <li><a href="../modules/express-yui_lib_patches_templates-requires.html">express-yui/lib/patches/templates-requires</a></li>
             
                 <li><a href="../modules/express-yui_lib_seed.html">express-yui/lib/seed</a></li>
@@ -149,9 +147,9 @@
 objects on the server side. You can apply this patch like this:</p>
 <pre class="code prettyprint"><code>app.yui.patchServer(require(&#39;express-yui/lib/patches/server-intl-get&#39;));</code></pre>
 <p>Then you can use this in your program:</p>
-<pre class="code prettyprint"><code>Y.Intl.get(&#39;foo&#39;);</code></pre>
-<p>This will resolve <code>foo</code> as a language bundle from the default locator
-bundle, which is normally a file in <code>lang/foo.json</code> or <code>lang/foo.yrb</code>
+<pre class="code prettyprint"><code>Y.Intl.get(&#39;&lt;bundleName&gt;/foo&#39;);</code></pre>
+<p>This will resolve <code>foo</code> as a language bundle from the bundle specified by name,
+which is normally a file in <code>lang/foo.json</code> or <code>lang/foo.yrb</code>
 that was transpiled into a module by <code>locator-lang</code>.</p>
 
 </div>

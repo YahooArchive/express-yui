@@ -79,8 +79,6 @@
             
                 <li><a href="../modules/express-yui_lib_patches_server-intl-get.html">express-yui/lib/patches/server-intl-get</a></li>
             
-                <li><a href="../modules/express-yui_lib_patches_server-template-get.html">express-yui/lib/patches/server-template-get</a></li>
-            
                 <li><a href="../modules/express-yui_lib_patches_templates-requires.html">express-yui/lib/patches/templates-requires</a></li>
             
                 <li><a href="../modules/express-yui_lib_seed.html">express-yui/lib/seed</a></li>
@@ -147,10 +145,18 @@
     <p>Patches <code>Y.Loader</code> to support <code>optionalRequires</code>, which enables you to
 require modules that might not be available in a runtime, and avoid to
 throw when that happens.</p>
+<p>!IMPORTANT/TODO: this patch can be removed once we get <a href="https://github.com/yui/yui3/pull/1629">PR1629</a> merged
+into YUI.</p>
+<p>It also add support for modules that are essencially polyfills,
+this means that some modules can only be used if the test is passed first
+otherwise they should be ignored.</p>
 <p>This helps when it comes to define modules that are only available on
-the server or client, while other modules that are common can require
+the server or client, or polyfills, while other modules that are common can require
 them as optionals.</p>
 <pre class="code prettyprint"><code>app.yui.patch(require(&#39;express-yui/lib/patches/optional-requires&#39;));</code></pre>
+<p>When this patch is applied, you can add a new entry called <code>test</code> in the
+metas for a module, this entry is a functions. If the test fails, the module
+will be automatically discarded.</p>
 <p>Note that the <code>optional</code> implementation in YUI does not cover this case,
 and it only covers the case where the module was required or not by another
 module in the <code>use</code> statement, which is not quite the same.</p>

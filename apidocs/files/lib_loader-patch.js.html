@@ -79,8 +79,6 @@
             
                 <li><a href="../modules/express-yui_lib_patches_server-intl-get.html">express-yui/lib/patches/server-intl-get</a></li>
             
-                <li><a href="../modules/express-yui_lib_patches_server-template-get.html">express-yui/lib/patches/server-template-get</a></li>
-            
                 <li><a href="../modules/express-yui_lib_patches_templates-requires.html">express-yui/lib/patches/templates-requires</a></li>
             
                 <li><a href="../modules/express-yui_lib_seed.html">express-yui/lib/seed</a></li>
@@ -183,7 +181,7 @@ module.exports = {
     Adds patches that will be applied to the YUI instance
     before the initial &#x60;use&#x60; statement on the server side.
 
-        app.yui.patchServer(require(&#x27;express-yui/lib/patches/server-template-get&#x27;));
+        app.yui.patchServer(require(&#x27;express-yui/lib/patches/server-intl-get&#x27;));
 
     @method patchServer
     @public

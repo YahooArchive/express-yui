@@ -203,6 +203,7 @@ suite.add(new YUITest.TestCase({
             args: [YUITest.Mock.Value.Object],
             run: function (c) {
                 A.isTrue(c.useSync, 'useSync is required when running on the server');
+                Y.Env = {};
                 return Y;
             }
         });
