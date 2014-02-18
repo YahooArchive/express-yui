@@ -53,7 +53,7 @@ methods include utility methods and express middleware.
 
 Here is an example of how to extend an `express` app with `express-yui`:
 
-```
+```js
 var express = require('express'),
     expyui = require('express-yui'),
     app = express();
@@ -76,7 +76,7 @@ To expose the state of the app (which includes the computed yui configuration
 based on the configuration defined through the express app instance), you can
 call the `expose` middleware for any particular route:
 
-```
+```js
 var express = require('express'),
     expyui = require('express-yui'),
     app = express();
@@ -93,7 +93,7 @@ can be used in your templates as a javascript blob that sets up the page to run
 YUI with some very specific settings coming from the server. If you use `handlebars`
 you will do this:
 
-```
+```html
 <script>{{{state}}}</script>
 <script>
 app.yui.ready(function () {
@@ -104,13 +104,17 @@ app.yui.ready(function () {
 
 And this is really the only thing you need to do in your templates to get YUI ready to roll!
 
+**Note:** In order to be efficient by default, once the first request comes in
+the `expose()` middleware will cache the state of the YUI config for the app.
+This means if it needs to be mutated on a per-request basies, it must be re-exposed.
+
 
 ### Using the locator plugin to build the app
 
 `express-yui` provides many features, but the real power of this package can be seen when
 using it in conjunction with the [locator][] component and the [locator-yui][] plugin.
 
-```
+```js
 var express = require('express'),
     expyui = require('express-yui'),
     LocatorClass = require('locator'),
@@ -161,7 +165,7 @@ Using modules on the server is exactly the same that using them on the client th
 `app.yui.use()` statement. Here is an example of the use of yql module to load the
 weather forecast and passing the result into the template:
 
-```
+```js
 app.get('/forecast', expyui.expose(), function (req, res, next) {
     req.app.yui.use('yql', function (Y) {
         Y.YQL('select * from weather.forecast where location=90210', function(r) {
@@ -191,7 +195,7 @@ on the precompiled version. Check this example to see this in action:
 Ideally, you will use a CDN to serve all static assets for your application, but your
 express app is perfectly capable to do so, and even serve as origin server for your CDN.
 
-```
+```js
 app.yui.setCoreFromAppOrigin();
 app.use(expyui.static(__dirname + '/build'));
 ```
@@ -213,7 +217,7 @@ sure you set the proper configuration for all groups so loader can know about th
 
 Here is the example:
 
-```
+```js
 app.set('yui default base', 'http://mycdn.com/path/to/build/');
 app.set('yui combo config', {
     comboBase: 'http://mycdn.com/path/to/combo?',
