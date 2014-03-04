@@ -137,7 +137,7 @@ suite.add(new YUITest.TestCase({
                 };
             }
         });
-        Y.use = function () {
+        Y.require = function () {
             Array.prototype.slice(arguments).forEach(function (name) {
                 attachedModules[name] = true;
             });
@@ -176,10 +176,10 @@ suite.add(new YUITest.TestCase({
 
     "test hook for patching loader": function () {
         var Y = YUITest.Mock(),
-            newUse = function () {
-                used = 'useCalled';
+            newRequire = function () {
+                called = 'called';
             },
-            used = 'useNotCalled',
+            called = 'notCalled',
             result;
 
         YUITest.Mock.expect(server, {
@@ -216,17 +216,17 @@ suite.add(new YUITest.TestCase({
 
         server._patches = [
             function (Y) {
-                Y.use = newUse;
+                Y.require = newRequire;
                 // This `use` should be invoked after patching occurs
-                A.areSame('useNotCalled', used);
+                A.areSame('notCalled', called);
             }
         ];
 
         result = server.use('foo', function (Y) {
             // The patch should have been applied
-            A.areEqual(newUse, Y.use);
+            A.areEqual(newRequire, Y.require);
             // The `use` statement should have been invoked
-            A.areSame('useCalled', used);
+            A.areSame('called', called);
         });
 
         YUITest.Mock.verify(server);
