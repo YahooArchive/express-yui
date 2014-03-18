@@ -4,6 +4,11 @@ Express YUI Change History
 @NEXT@
 ------------------
 
+1.3.0 (2014-03-18)
+------------------
+
+* [PR #51] Add support for Y.require() which requires YUI 3.15.0.
+
 1.2.0 (2014-02-18)
 ------------------
 
