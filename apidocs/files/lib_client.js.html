@@ -156,7 +156,7 @@ the application in the browser.
 @uses utils
 @extensionfor express-yui/lib/yui
 */
-function bootstrap() {
+function bootstrap(method, args) {
 
     var self = this,
         d = document,
@@ -167,7 +167,6 @@ function bootstrap() {
         pending = 0,
         // it is just a queue of pending &quot;use&quot; statements until YUI gets ready
         callback = [],
-        args = arguments,
         config = typeof YUI_config != &quot;undefined&quot; ? YUI_config : {};
 
     function flush() {
@@ -256,8 +255,8 @@ function bootstrap() {
                 }
             }
         }
-        // call use for arguments
-        self._Y.use.apply(self._Y, args);
+        // call use/require with arguments
+        self._Y[method].apply(self._Y, args);
     });
 
     // just in case YUI was injected manually in the page
@@ -294,8 +293,32 @@ module.exports = {
 
     @method use
     @public
+    @chainable
     **/
-    use: utils.minifyFunction(bootstrap), // optimizing before exposing it to the client side
+    use: utils.minifyFunction(function () {
+        return this._bootstrap(&#x27;use&#x27;, [].slice.call(arguments));
+    }),
+
+    /**
+    Like &#x60;app.yui.use()&#x60; but instead delegates to &#x60;YUI().require()&#x60; after
+    getting the seed ready. The callback passed to &#x60;require()&#x60; receives two
+    arguments, the &#x60;Y&#x60; object like &#x60;use()&#x60;, but also &#x60;imports&#x60; which holds all
+    of the exports from the required modules.
+
+        &lt;script&gt;{{{state}}}&lt;/script&gt;
+        &lt;script&gt;
+        app.yui.require(&#x27;foo&#x27;, &#x27;bar&#x27;, function (Y, imports) {
+            var Foo         = imports[&#x27;foo&#x27;],
+                namedExport = imports[&#x27;bar&#x27;].baz;
+        });
+        &lt;/script&gt;
+
+    @method require
+    @public
+    **/
+    require: utils.minifyFunction(function () {
+        this._bootstrap(&#x27;require&#x27;, [].slice.call(arguments));
+    }),
 
     /**
     Boots the application, rehydrate the app state and calls back to notify the
@@ -322,8 +345,17 @@ module.exports = {
         this.use(function () {
             callback();
         });
-    })
+    }),
 
+    /**
+    The internal bootstraping implementation.
+
+    @method _bootstrap
+    @param {String} method The method to call on &#x60;Y&#x60;, either &#x60;&quot;use&quot;&#x60; or &#x60;&quot;require&quot;&#x60;.
+    @param {Any[]} args Array of &#x60;arguments&#x60; to apply to the &#x60;Y&#x60; &#x60;method&#x60;.
+    @private
+    */
+    _bootstrap: utils.minifyFunction(bootstrap)
 };
 
     </pre>

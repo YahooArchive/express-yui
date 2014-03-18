@@ -202,6 +202,13 @@
                             </li>
                         
                             <li class="index-item method public">
+                                <a href="#method_require">require</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method public">
                                 <a href="#method_use">use</a>
 
                                 
@@ -420,6 +427,73 @@ into the server and/or client Y instance so they can be used thru <code>app.yui.
 </div>
 
                 
+                    <div id="method_require" class="method item public">
+    <h3 class="name"><code>require</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/lib_server.js.html#l148"><code>lib&#x2F;server.js:148</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Creates a YUI Instance, and wraps the call to <code>Y.require()</code> to work appropiatly on
+the server side. The <code>require</code> method can be called once the <code>ready</code> state is achieved
+thru <code>app.yui.ready()</code>.</p>
+<pre class="code prettyprint"><code>app.yui.ready(function (err) {
+    if (err) {
+        throw err;
+    }
+    app.yui.require(&#39;json-stringify&#39;, function (Y, imports) {
+        Y.JSON.stringify({ entry: &#39;value&#39; });
+    });
+});</code></pre>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
                     <div id="method_use" class="method item public">
     <h3 class="name"><code>use</code></h3>
 
@@ -458,7 +532,7 @@ into the server and/or client Y instance so they can be used thru <code>app.yui.
             
         
         
-        <a href="../files/lib_server.js.html#l148"><code>lib&#x2F;server.js:148</code></a>
+        <a href="../files/lib_server.js.html#l235"><code>lib&#x2F;server.js:235</code></a>
         
         </p>
 

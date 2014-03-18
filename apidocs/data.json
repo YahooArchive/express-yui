@@ -499,10 +499,22 @@
     "classitems": [
         {
             "file": "lib/client.js",
-            "line": 149,
+            "line": 148,
             "description": "Attaches the seed into the head, then creates a YUI Instance and attaches\n`modules` into it. This is equivalent to `YUI().use()` after getting the seed\nready. This method is a bootstrap implementation for the library, and the way\nyou use this in your templates, is by doing this:\n\n    <script>{{{state}}}</script>\n    <script>\n    app.yui.use('foo', 'bar', function (Y) {\n        // do something!\n    });\n    </script>\n\nWhere `state` defines the state of the express app, and `app.yui` defines\nthe helpers that `express-yui` brings into the client side.",
             "itemtype": "method",
             "name": "use",
+            "access": "public",
+            "tagname": "",
+            "chainable": 1,
+            "class": "client",
+            "module": "express-yui/lib/client"
+        },
+        {
+            "file": "lib/client.js",
+            "line": 172,
+            "description": "Like `app.yui.use()` but instead delegates to `YUI().require()` after\ngetting the seed ready. The callback passed to `require()` receives two\narguments, the `Y` object like `use()`, but also `imports` which holds all\nof the exports from the required modules.\n\n    <script>{{{state}}}</script>\n    <script>\n    app.yui.require('foo', 'bar', function (Y, imports) {\n        var Foo         = imports['foo'],\n            namedExport = imports['bar'].baz;\n    });\n    </script>",
+            "itemtype": "method",
+            "name": "require",
             "access": "public",
             "tagname": "",
             "class": "client",
@@ -510,7 +522,7 @@
         },
         {
             "file": "lib/client.js",
-            "line": 170,
+            "line": 193,
             "description": "Boots the application, rehydrate the app state and calls back to notify the\n`ready` state of the app.\n\n    <script>{{{state}}}</script>\n    <script>\n    app.yui.ready(function (err) {\n        if (err) {\n            throw err;\n        }\n        app.yui.use('foo', 'bar', function (Y) {\n            // do something!\n        });\n    });\n    </script>",
             "itemtype": "method",
             "name": "ready",
@@ -522,6 +534,29 @@
                 }
             ],
             "access": "public",
+            "tagname": "",
+            "class": "client",
+            "module": "express-yui/lib/client"
+        },
+        {
+            "file": "lib/client.js",
+            "line": 220,
+            "description": "The internal bootstraping implementation.",
+            "itemtype": "method",
+            "name": "_bootstrap",
+            "params": [
+                {
+                    "name": "method",
+                    "description": "The method to call on `Y`, either `\"use\"` or `\"require\"`.",
+                    "type": "String"
+                },
+                {
+                    "name": "args",
+                    "description": "Array of `arguments` to apply to the `Y` `method`.",
+                    "type": "Any[]"
+                }
+            ],
+            "access": "private",
             "tagname": "",
             "class": "client",
             "module": "express-yui/lib/client"
@@ -1047,6 +1082,17 @@
         {
             "file": "lib/server.js",
             "line": 148,
+            "description": "Creates a YUI Instance, and wraps the call to `Y.require()` to work appropiatly on\nthe server side. The `require` method can be called once the `ready` state is achieved\nthru `app.yui.ready()`.\n\n    app.yui.ready(function (err) {\n        if (err) {\n            throw err;\n        }\n        app.yui.require('json-stringify', function (Y, imports) {\n            Y.JSON.stringify({ entry: 'value' });\n        });\n    });",
+            "itemtype": "method",
+            "name": "require",
+            "access": "public",
+            "tagname": "",
+            "class": "server",
+            "module": "express-yui/lib/server"
+        },
+        {
+            "file": "lib/server.js",
+            "line": 235,
             "description": "Creates a YUI Instance, and wraps the call to `Y.use()` to work appropiatly on\nthe server side. The `use` method can be called once the `ready` state is achieved\nthru `app.yui.ready()`.\n\n    app.yui.ready(function (err) {\n        if (err) {\n            throw err;\n        }\n        app.yui.use('json-stringify', function (Y) {\n            Y.JSON.stringify({ entry: 'value' });\n        });\n    });",
             "itemtype": "method",
             "name": "use",

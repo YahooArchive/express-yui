@@ -276,28 +276,28 @@ module.exports = {
     },
 
     /**
-    Creates a YUI Instance, and wraps the call to &#x60;Y.use()&#x60; to work appropiatly on
-    the server side. The &#x60;use&#x60; method can be called once the &#x60;ready&#x60; state is achieved
+    Creates a YUI Instance, and wraps the call to &#x60;Y.require()&#x60; to work appropiatly on
+    the server side. The &#x60;require&#x60; method can be called once the &#x60;ready&#x60; state is achieved
     thru &#x60;app.yui.ready()&#x60;.
 
         app.yui.ready(function (err) {
             if (err) {
                 throw err;
             }
-            app.yui.use(&#x27;json-stringify&#x27;, function (Y) {
+            app.yui.require(&#x27;json-stringify&#x27;, function (Y, imports) {
                 Y.JSON.stringify({ entry: &#x27;value&#x27; });
             });
         });
 
-    @method use
+    @method require
     @public
-    @return {Object} Y instance
     **/
-    use: function () {
+    require: function () {
         var config = this.config(),
             Y = this._Y,
             modules,
-            callback;
+            callback,
+            imports;
 
         if (!Y) {
             config = utils.clone(config);
@@ -340,7 +340,10 @@ module.exports = {
         }
         if (modules.length) {
             try {
-                Y.use(modules);
+                Y.require(modules, function (Y, __imports__) {
+                    // capture imports in outer scope
+                    imports = __imports__;
+                });
             } catch (e) {
                 console.error(&#x27;error attaching modules: &#x27; + modules);
                 console.error(e);
@@ -349,11 +352,37 @@ module.exports = {
         }
 
         if (callback) {
-            callback(Y);
+            // support &#x60;use()&#x60; or &#x60;require()&#x60; callback signature
+            if (imports) {
+                callback(Y, imports);
+            } else {
+                callback(Y);
+            }
         }
 
-        return Y;
+    },
 
+    /**
+    Creates a YUI Instance, and wraps the call to &#x60;Y.use()&#x60; to work appropiatly on
+    the server side. The &#x60;use&#x60; method can be called once the &#x60;ready&#x60; state is achieved
+    thru &#x60;app.yui.ready()&#x60;.
+
+        app.yui.ready(function (err) {
+            if (err) {
+                throw err;
+            }
+            app.yui.use(&#x27;json-stringify&#x27;, function (Y) {
+                Y.JSON.stringify({ entry: &#x27;value&#x27; });
+            });
+        });
+
+    @method use
+    @public
+    @return {Object} Y instance
+    **/
+    use: function () {
+        this.require.apply(this, arguments);
+        return this._Y;
     }
 
 };
