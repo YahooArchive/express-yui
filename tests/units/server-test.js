@@ -273,8 +273,20 @@ suite.add(new YUITest.TestCase({
             A.isObject(err, 'the ready promise should be rejected');
             A.areSame(rejection, err, 'the promise rejection error should be propagated');
         });
-    }
+    },
 
+    "test ready returns a promise": function () {
+        var expected = 'locator#ready Promise';
+        server._app.set('locator', {
+            ready: {
+                then: function (fulfilled, rejected) {
+                    return expected;
+                }
+            }
+        });
+        var actual = server.ready(function () {});
+        A.areSame(expected, actual, 'ready should return a promise from locator#ready');
+    }
 }));
 
 YUITest.TestRunner.add(suite);
