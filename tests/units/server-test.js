@@ -12,7 +12,7 @@ var YUITest = require('yuitest'),
     mockery = require('mockery'),
     A = YUITest.Assert,
     OA = YUITest.ObjectAssert,
-    Promise = require('ypromise'),
+    Promise = global.Promise || require('ypromise'),
     suite,
     server;
 
