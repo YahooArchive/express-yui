@@ -4,6 +4,11 @@ Express YUI Change History
 @NEXT@
 ------------------
 
+1.3.1 (2014-03-24)
+------------------
+
+* Bugfix [PR #54] better error control for `app.yui.ready()`.
+
 1.3.0 (2014-03-18)
 ------------------
 

@@ -1,7 +1,7 @@
 {
     "name": "express-yui",
     "description": "Express extension for YUI Applications",
-    "version": "1.3.0",
+    "version": "1.3.1",
     "homepage": "https://github.com/yahoo/express-yui",
     "author": "Caridy Patino <caridy@yahoo-inc.com> (http://github.com/caridy)",
     "contributors": [
