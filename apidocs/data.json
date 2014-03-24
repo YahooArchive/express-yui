@@ -1081,7 +1081,7 @@
         },
         {
             "file": "lib/server.js",
-            "line": 148,
+            "line": 150,
             "description": "Creates a YUI Instance, and wraps the call to `Y.require()` to work appropiatly on\nthe server side. The `require` method can be called once the `ready` state is achieved\nthru `app.yui.ready()`.\n\n    app.yui.ready(function (err) {\n        if (err) {\n            throw err;\n        }\n        app.yui.require('json-stringify', function (Y, imports) {\n            Y.JSON.stringify({ entry: 'value' });\n        });\n    });",
             "itemtype": "method",
             "name": "require",
@@ -1092,7 +1092,7 @@
         },
         {
             "file": "lib/server.js",
-            "line": 235,
+            "line": 237,
             "description": "Creates a YUI Instance, and wraps the call to `Y.use()` to work appropiatly on\nthe server side. The `use` method can be called once the `ready` state is achieved\nthru `app.yui.ready()`.\n\n    app.yui.ready(function (err) {\n        if (err) {\n            throw err;\n        }\n        app.yui.use('json-stringify', function (Y) {\n            Y.JSON.stringify({ entry: 'value' });\n        });\n    });",
             "itemtype": "method",
             "name": "use",

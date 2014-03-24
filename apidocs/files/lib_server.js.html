@@ -257,22 +257,24 @@ module.exports = {
             throw new Error(&#x27;Locator instance should be mounted&#x27;);
         }
 
+        // there is a possibility that callback fails, so we trick it to
+        // outsource the execution of it to avoid calling it twice
+        function end() {
+            setTimeout.apply(null, [callback, 0].concat(Array.prototype.slice.apply(arguments)));
+        }
+
         locator.ready.then(function () {
             var bundleNames = locator.listBundleNames(),
                 bundle;
 
-            try {
-                bundleNames.forEach(function (bundleName) {
-                    bundle = locator.getBundle(bundleName);
-                    self.registerBundle(bundle);
-                });
-            } catch (e) {
-                callback(e);
-                return;
-            }
-            // we are now ready to receive traffic
-            callback();
-        }, callback);
+            bundleNames.forEach(function (bundleName) {
+                bundle = locator.getBundle(bundleName);
+                self.registerBundle(bundle);
+            });
+
+            end();
+
+        })[&quot;catch&quot;](end);
     },
 
     /**
