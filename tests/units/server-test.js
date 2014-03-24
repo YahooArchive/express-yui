@@ -12,6 +12,7 @@ var YUITest = require('yuitest'),
     mockery = require('mockery'),
     A = YUITest.Assert,
     OA = YUITest.ObjectAssert,
+    Promise = global.Promise || require('ypromise'),
     suite,
     server;
 
@@ -22,7 +23,8 @@ suite.add(new YUITest.TestCase({
 
     _should: {
         error: {
-            "test ready without locator": true
+            "test ready without locator": true,
+            "test error control when callback throw": true
         }
     },
 
@@ -239,6 +241,7 @@ suite.add(new YUITest.TestCase({
     },
 
     "test ready fulfilled": function () {
+        var test = this;
         server._app.set('locator', {
             getBundle: function (name) {
                 return {
@@ -249,30 +252,42 @@ suite.add(new YUITest.TestCase({
             listBundleNames: function () {
                 return ['foo', 'bar'];
             },
-            ready: {
-                then: function (fulfilled, rejected) {
-                    fulfilled();
-                }
-            }
+            ready: Promise.resolve()
         });
         server.ready(function (err) {
-            A.isUndefined(err, 'the ready promise should be fulfilled');
+            test.resume(function () {
+                A.isUndefined(err, 'the ready promise should be fulfilled');
+            });
         });
+        test.wait();
     },
 
     "test ready rejected": function () {
-        var rejection = new Error('this should be propagated');
+        var test = this,
+            rejection = new Error('this should be propagated');
         server._app.set('locator', {
-            ready: {
-                then: function (fulfilled, rejected) {
-                    rejected(rejection);
-                }
-            }
+            ready: Promise.reject(rejection)
         });
         server.ready(function (err) {
-            A.isObject(err, 'the ready promise should be rejected');
-            A.areSame(rejection, err, 'the promise rejection error should be propagated');
+            test.resume(function () {
+                A.isObject(err, 'the ready promise should be rejected');
+                A.areSame(rejection, err, 'the promise rejection error should be propagated');
+            });
         });
+        test.wait();
+    },
+
+    "test error control when callback throw": function () {
+        var test = this;
+        server._app.set('locator', {
+            ready: Promise.resolve()
+        });
+        server.ready(function (err) {
+            test.resume(function () {
+                throw new Error('this should be propagated');
+            });
+        });
+        test.wait();
     }
 
 }));
