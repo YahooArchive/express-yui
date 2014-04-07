@@ -4,6 +4,11 @@ Express YUI Change History
 @NEXT@
 ------------------
 
+1.3.2 (2014-04-07)
+------------------
+
+* Bugfix [PR #57] support for multiple calls to `app.yui.use()` and `app.yui.ready()`.
+
 1.3.1 (2014-03-24)
 ------------------
 
