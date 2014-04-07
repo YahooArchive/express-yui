@@ -163,8 +163,6 @@ function bootstrap(method, args) {
         head = d.getElementsByTagName(&#x27;head&#x27;)[0],
         // Some basic browser sniffing...
         ie = /MSIE/.test(navigator.userAgent),
-        // number of seed parts that are still pending
-        pending = 0,
         // it is just a queue of pending &quot;use&quot; statements until YUI gets ready
         callback = [],
         config = typeof YUI_config != &quot;undefined&quot; ? YUI_config : {};
@@ -183,8 +181,8 @@ function bootstrap(method, args) {
     }
 
     function decrementRequestPending() {
-        pending--;
-        if (pending &lt;= 0) {
+        self._pending--;
+        if (self._pending &lt;= 0) {
             setTimeout(flush, 0);
         } else {
             // in case there is any remaining script to be loaded
@@ -221,9 +219,11 @@ function bootstrap(method, args) {
             l = seed.length,
             i, node;
 
-        pending = pending || seed.length;
-        // flagging the injection process to avoid duplicated entries
-        self._injected = true;
+        if (!self._injected) {
+            // flagging the injection process to avoid duplicated entries
+            self._injected = true;
+            self._pending = seed.length;
+        }
 
         // appending every file from seed collection into the header
         for (i = 0; i &lt; l; i++) {
@@ -265,9 +265,9 @@ function bootstrap(method, args) {
     if (!self.YUI &amp;&amp; !self._injected) {
         // attach seed and wait for it to finish to flush the callback
         load();
-    } else if (pending &lt;= 0) {
-        // everything is ready, just flush
-        flush();
+    } else if (self._pending &lt;= 0) {
+        // everything is ready, just flush on the next tick
+        setTimeout(flush, 0);
     } // else do nothing, the current pending job will take care of flushing callback
 
     return this; // chaining
