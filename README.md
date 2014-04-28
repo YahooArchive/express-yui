@@ -114,6 +114,9 @@ This means if it needs to be mutated on a per-request basies, it must be re-expo
 `express-yui` provides many features, but the real power of this package can be seen when
 using it in conjunction with the [locator][] component and the [locator-yui][] plugin.
 
+[locator]: https://github.com/yahoo/locator
+[locator-yui]: https://github.com/yahoo/locator-yui
+
 ```js
 var express = require('express'),
     expyui = require('express-yui'),
