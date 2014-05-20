@@ -14,10 +14,10 @@ Express YUI
 Goals & Design
 --------------
 
-This compontent extends express by adding a new `app.yui` member to the express
-application. It is responsible for controlling and exposing both the yui
-configuration and the application state on the client side as well has
-controlling the yui instance on the server.
+This component extends Express by adding a new `app.yui` member to the Express
+application. It is responsible for controlling and exposing both the YUI
+configuration and the application state on the client side as well as
+controlling the YUI instance on the server.
 
 
 Installation
@@ -33,23 +33,21 @@ $ npm install express-yui
 Features
 --------
 
-### Features
-
- * control yui config and seed modules per request.
- * provide basic configurations for cdn, debug, and other common conditions in yui.
- * provide middleware to serve `static` assets from origin server.
- * provide middleware to `expose` the app `state` object with the yui config and seed urls.
+ * Control YUI config and seed modules per request.
+ * Provide basic configurations for CDN, debugging, and other common conditions in YUI.
+ * Provide middleware to serve `static` assets from origin server.
+ * Provide middleware to `expose` the app `state` object with the YUI config and seed URLs.
 
 Usage
 -----
 
-### Extending express functionalities
+### Extending Express functionality
 
 `express-yui` is a conventional `express` extension, which means it will extend
-the functionalities provided on `express` by augmenting the express app instance
+functionality provided in `express` by augmenting the Express app instance
 with a new member called `yui`. At the same time, `express-yui` provides a set of
 static methods that you can call directly off the `express-yui` module. These
-methods include utility methods and express middleware.
+methods include utility methods and Express middleware.
 
 Here is an example of how to extend an `express` app with `express-yui`:
 
@@ -72,9 +70,9 @@ instance after extending the `express` app.
 
 ### Exposing app state into client
 
-To expose the state of the app (which includes the computed yui configuration
-based on the configuration defined through the express app instance), you can
-call the `expose` middleware for any particular route:
+To expose the state of the app (which includes the computed YUI configuration
+based on the configuration defined through the Express app instance), you can
+call the `expose` middleware for any route:
 
 ```js
 var express = require('express'),
@@ -155,17 +153,17 @@ app.yui.ready(function (err) {
 });
 ```
 
-As a result, any yui module under the `__dirname` folder or any npm dependency marked as
+As a result, any YUI module under the `__dirname` folder or any npm dependency marked as
 a locator bundle will be built by the `locator-yui` plugin, and become automatically
 available on the client, and potentially on the server as well. This means you
-no longer need to manually define loader metadata or any kind of yui config to load those
+no longer need to manually define loader metadata or any kind of YUI config to load those
 modules, and `express-yui` will be capable to handle almost everthing for you.
 
 
-### Using yui modules on the server side
+### Using YUI modules on the server side
 
-Using modules on the server is exactly the same that using them on the client thru
-`app.yui.use()` statement. Here is an example of the use of yql module to load the
+Using modules on the server is exactly the same that using them on the client through
+`app.yui.use()` statement. Here is an example of the use of YQL module to load the
 weather forecast and passing the result into the template:
 
 ```js
@@ -196,7 +194,7 @@ on the precompiled version. Check this example to see this in action:
 ### Serving static assets from app origin
 
 Ideally, you will use a CDN to serve all static assets for your application, but your
-express app is perfectly capable to do so, and even serve as origin server for your CDN.
+Express app is perfectly capable of doing so, and even serving as the origin server for your CDN.
 
 ```js
 app.yui.setCoreFromAppOrigin();
@@ -204,13 +202,13 @@ app.use(expyui.static(__dirname + '/build'));
 ```
 
 With this configuration, a group called `foo` with version `1.2.3`, and `yui`
-version `3.11.0`, it will produce urls like these:
+version `3.11.0`, it will produce URLs like these:
 
   * /yui-3.11.0/yui-base/yui-base-min.js
   * /foo-1.2.3/bar/bar-min.js
 
-Any of those urls will be valid because `express-yui` static method produces an express app
-that can be mounted under your express application to serve yui core modules and application
+Any of those URLs will be valid because `express-yui` static method produces an Express app
+that can be mounted under your Express application to serve YUI core modules and application
 specific modules (modules compiled by [locator][] into the `build` folder).
 
 ### Serving static assets from CDN
@@ -242,7 +240,7 @@ With this configuration, a group called `foo` with version `1.2.3` will produce 
 API Docs
 --------
 
-You can find the [API Docs][] under `apidocs` folder, and you can browse it thru this url:
+You can find the [API Docs][] under `apidocs` folder, and you can browse it through this URL:
 
 * http://rawgithub.com/yahoo/express-yui/master/apidocs/index.html
 
