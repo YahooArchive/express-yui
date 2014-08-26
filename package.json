@@ -12,15 +12,15 @@
         "npm" : ">=1.2.10"
     },
     "dependencies": {
-        "express-state": "~1.1.1",
+        "express-state": "~1.2.0",
         "debug": "*"
     },
     "peerDependencies": {
-        "express": "3.x",
+        "express": ">=3.x",
         "yui": "^3.15.0"
     },
     "devDependencies": {
-        "express": "3.x",
+        "express": "4.x",
         "express3-handlebars": "*",
         "jshint": "~1.1.0",
         "locator": "~0.3.0",

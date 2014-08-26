@@ -9,7 +9,7 @@ var express = require('express'),
 
 expyui.extend(app);
 
-app.configure('development', function () {
+if ('development' === app.get('env')) {
 
     // when using `expyui.debug()` middleware you will get debug,
     // filter and logLevel set accordingly or customized
@@ -20,9 +20,8 @@ app.configure('development', function () {
         // any special loader group configuration
     });
 
-});
-
-app.configure('production', function () {
+}
+else {
 
     // to get YUI Core modules from the app origin.
     app.yui.setCoreFromAppOrigin();
@@ -37,7 +36,7 @@ app.configure('production', function () {
         root: 'app/'
     });
 
-});
+}
 
 // registering the group information for a group named `metas`,
 // corresponding to the `./build` folder and exposing metas

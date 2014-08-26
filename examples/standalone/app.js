@@ -14,15 +14,14 @@ expyui.extend(app);
 // to speed up the booting process
 app.yui.seed(['yui', 'json-stringify']);
 
-app.configure('development', function () {
+if ('development' === app.get('env')) {
 
     // In development, we can get YUI from app origin
     // to facilitate development.
     app.yui.setCoreFromAppOrigin();
 
-});
-
-app.configure('production', function () {
+}
+else {
 
     // In production, get YUI from CDN.
     app.yui.setCoreFromCDN();
@@ -39,7 +38,7 @@ app.configure('production', function () {
         combine: false
     });
 
-});
+}
 
 // registering groups
 app.yui.registerGroup('group1', './build/group1', 'loader-group1');
