@@ -9,12 +9,12 @@ var express = require('express'),
 
 expyui.extend(app);
 
-app.configure('development', function () {
+if ('development' === app.get('env')) {
     // when using `expyui.debug()` middleware you will get debug,
     // filter and logLevel set accordingly at the app level.
     // In this case, `raw` version instead of `debug`.
     app.use(expyui.debug({ filter: 'raw' }));
-});
+}
 
 app.yui.setCoreFromAppOrigin();
 
