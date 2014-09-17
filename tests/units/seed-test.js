@@ -234,8 +234,57 @@ suite.add(new YUITest.TestCase({
         A.areEqual('/app-base/cssfoo/cssfoo-min.css',
                     urls[1],
                     'urls[1] does not match');
-    }
+    },
 
+    "test buildCSSUrls() with combine": function () {
+      var yui_config;
+
+      yui_config = {
+          base: '/app/',
+          root: '/app/',
+          combine: true,
+          comboBase: 'http://foo.bar/combo?',
+          comboSep: '~'
+      };
+      seed.config = function () {
+          return yui_config;
+      };
+      seed._clientModules = { };
+
+      var urls = seed.buildCSSUrls('cssbase', 'cssfoo');
+
+      A.areEqual(1, urls.length, '1 css expected');
+      A.areEqual('http://foo.bar/combo?/app/cssbase/cssbase-min.css~/app/cssfoo/cssfoo-min.css',
+                  urls[0],
+                  'urls[0] does not match');
+    },
+
+    "test buildCSSUrls() with combine and maxURLLength": function () {
+      var yui_config;
+
+      yui_config = {
+          base: '/app/',
+          root: '/app/',
+          combine: true,
+          comboBase: 'http://foo.bar/combo?',
+          comboSep: '~',
+          maxURLLength: 60 // intentionally break
+      };
+      seed.config = function () {
+          return yui_config;
+      };
+      seed._clientModules = { };
+
+      var urls = seed.buildCSSUrls('cssbase', 'cssfoo');
+
+      A.areEqual(2, urls.length, '2 css expected');
+      A.areEqual('http://foo.bar/combo?/app/cssbase/cssbase-min.css',
+                  urls[0],
+                  'urls[0] does not match');
+      A.areEqual('http://foo.bar/combo?/app/cssfoo/cssfoo-min.css',
+                  urls[1],
+                  'urls[1] does not match');
+    }
 }));
 
 YUITest.TestRunner.add(suite);
