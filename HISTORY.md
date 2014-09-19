@@ -4,10 +4,15 @@ Express YUI Change History
 @NEXT@
 ------------------
 
-1.3.3 (2014-09-19)
+1.4.1 (2014-09-19)
 ------------------
 
 * Bugfix [PR #65] applying `maxURLLength` rules to the seed url.
+
+1.4.0 (2014-08-25)
+------------------
+
+* This release just adds support for Express 4 (and maintains support for Express 3).
 
 1.3.2 (2014-04-07)
 ------------------
