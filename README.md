@@ -1,3 +1,5 @@
+![This repository has been deprecated](http://l.yimg.com/pv/static/img/deprecated.png)
+
 Express YUI
 ===========
 
