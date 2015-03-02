@@ -101,6 +101,10 @@ suite.add(new YUITest.TestCase({
                             'seed[1] does not match');
             }
         });
+        YUITest.Mock.expect(req.app, {
+            method: 'prepClient',
+            args: [YUITest.Mock.Value.Any]
+        });
 
         mid = middleware.exposeSeed();
         mid(req, res, function () {

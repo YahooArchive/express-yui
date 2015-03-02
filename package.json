@@ -33,7 +33,8 @@
         "yui-lint": "~0.1.3",
         "yuitest": "0.7.x",
         "yuidocjs": ">=0.3.46",
-        "ypromise": "^0.2.3"
+        "ypromise": "^0.2.3",
+        "express-prep-client": "*"
     },
     "main": "./lib/",
     "keywords": [
